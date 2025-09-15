@@ -95,11 +95,11 @@ export class AdminAssignTestComponent implements OnInit {
       } catch (err) {
         console.error('Error parsing authData cookie:', err);
         swal.fire('Session Error', 'Invalid session data. Please login again.', 'error');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/Home']);
       }
     } else {
       swal.fire('Session Expired', 'Please login again to continue.', 'warning');
-      this.router.navigate(['/login']);
+      this.router.navigate(['/Home']);
     }
   }
 
@@ -188,7 +188,7 @@ export class AdminAssignTestComponent implements OnInit {
 isAlreadyAssigned(row: any): boolean {
   return this.assignedTests.some(test =>
     test.bookingId === row.bookingId &&
-    test.instrumentId === row.instrumentId &&
+    // test.instrumentId === row.instrumentId &&
     test.returnMessage !== 'No Details'
   );
 }
@@ -364,5 +364,8 @@ isAlreadyAssigned(row: any): boolean {
       }
     });
   }
+getTotalRecords(): number {
+  return this.tmpsAllBookingTestsData ? this.tmpsAllBookingTestsData.length : 0;
+}
 
 }

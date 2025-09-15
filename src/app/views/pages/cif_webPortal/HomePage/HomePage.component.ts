@@ -36,10 +36,10 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.getAllInstruments();
     this.chunkedEvents = this.chunkArray(this.events, 3);
-    const size = 3;
-    for (let i = 0; i < this.upcomingEvents.length; i += size) {
-      this.upcomingEventsChunks.push(this.upcomingEvents.slice(i, i + size));
-    }
+    // const size = 3;
+    // for (let i = 0; i < this.upcomingEvents.length; i += size) {
+    //   this.upcomingEventsChunks.push(this.upcomingEvents.slice(i, i + size));
+    // }
   }
   openSampleInstructions() {
     swal.fire({
@@ -202,51 +202,53 @@ export class HomePageComponent implements OnInit {
     this.show = !this.show;
   } 
 
-upcomingEvents = [
-  {
-    id: 1,
-    title: "Workshop on Advanced Microscopy",
-    date: new Date("2025-09-25"),
-    imageUrl: "/assets/events/microscopy.jpg",
-    shortDescription: "Explore cutting-edge microscopy techniques."
-  },
-  {
-    id: 2,
-    title: "National Seminar on Materials Science",
-    date: new Date("2025-10-10"),
-    imageUrl: "/assets/events/materials.jpg",
-    shortDescription: "Top researchers discuss future of materials."
-  },
-  {
-    id: 3,
-    title: "Hands-on Training in NMR Spectroscopy",
-    date: new Date("2025-11-05"),
-    imageUrl: "/assets/events/nmr.jpg",
-    shortDescription: "Practical training for students & researchers."
-  },
-  {
-    id: 4,
-    title: "Workshop on Data Science in Research",
-    date: new Date("2025-11-20"),
-    imageUrl: "/assets/events/datascience.jpg",
-    shortDescription: "Learn AI and ML applications in research."
-  },
-  {
-    id: 5,
-    title: "National Conference on Chemistry",
-    date: new Date("2025-12-01"),
-    imageUrl: "/assets/events/chemistry.jpg",
-    shortDescription: "Discover new frontiers in chemistry."
-  }
-];
+  
+// logic for upcoming events 
+// upcomingEvents = [
+//   {
+//     id: 1,
+//     title: "Workshop on Advanced Microscopy",
+//     date: new Date("2025-09-25"),
+//     imageUrl: "/assets/events/microscopy.jpg",
+//     shortDescription: "Explore cutting-edge microscopy techniques."
+//   },
+//   {
+//     id: 2,
+//     title: "National Seminar on Materials Science",
+//     date: new Date("2025-10-10"),
+//     imageUrl: "/assets/events/materials.jpg",
+//     shortDescription: "Top researchers discuss future of materials."
+//   },
+//   {
+//     id: 3,
+//     title: "Hands-on Training in NMR Spectroscopy",
+//     date: new Date("2025-11-05"),
+//     imageUrl: "/assets/events/nmr.jpg",
+//     shortDescription: "Practical training for students & researchers."
+//   },
+//   {
+//     id: 4,
+//     title: "Workshop on Data Science in Research",
+//     date: new Date("2025-11-20"),
+//     imageUrl: "/assets/events/datascience.jpg",
+//     shortDescription: "Learn AI and ML applications in research."
+//   },
+//   {
+//     id: 5,
+//     title: "National Conference on Chemistry",
+//     date: new Date("2025-12-01"),
+//     imageUrl: "/assets/events/chemistry.jpg",
+//     shortDescription: "Discover new frontiers in chemistry."
+//   }
+// ];
 
-// Split into chunks of 3
-upcomingEventsChunks: any[][] = [];
+// // Split into chunks of 3
+// upcomingEventsChunks: any[][] = [];
  
 
-goToEvent(eventId: number) {
-  this.router.navigate(['/events', eventId]);
-}
+// goToEvent(eventId: number) {
+//   this.router.navigate(['/events', eventId]);
+// }
 
 
 }

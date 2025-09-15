@@ -10,19 +10,42 @@
             <div class="card-body">
                 <hr />
                 <div class="row d-flex justify-content-center">
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="mb-3">
                             <button (click)="exportToExcel()" class="btn btn-dark "
                                 [disabled]="tmpsUserDetailsData.length ===0">Export to
                                 Excel</button>
                         </div>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-3">
                         <div class="mb-3 text-center">
-                            <Label class="fs-4 ">All User Details </Label>
+                            <Label class="fs-4 ">Select User Type </Label>
                         </div>
                     </div>
-                    <div class="col-sm-5 mb-4 ">
+                     <div class="col-sm-3">
+                         
+                        <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
+                            bindValue="value" placeholder="-- Select Status --" class="w-100">
+                            <!-- Custom Option Template -->
+                            <ng-template ng-option-tmp let-item="item">
+                                <span *ngIf="item.value === ''" class="text-danger">-- All --</span>
+                                <span *ngIf="item.value === '400000'" class="badge bg-success">Internal User</span>
+                                <span *ngIf="item.value === '400001'" class="badge bg-danger">External User</span>                                                               
+                                <span *ngIf="item.value === '400002'" class="badge bg-danger">Industry User</span>                                                               
+                            </ng-template>
+                    
+                            <!-- Custom Selected Item Template -->
+                            <ng-template ng-label-tmp let-item="item">
+                            <span *ngIf="item.value === ''" class="text-danger">-- All --</span>
+                                <span *ngIf="item.value === '400000'" class="badge bg-success">Internal User</span>                                
+                                <span *ngIf="item.value === '400001'" class="badge bg-danger">External User</span> 
+                                <span *ngIf="item.value === '400002'" class="badge bg-danger">Industry User</span>                                                                                              
+                            </ng-template>
+                        </ng-select>
+                    
+                    
+                    </div>
+                    <div class="col-sm-3 mb-4 ">
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
                             class="form-control " placeholder="Search" aria-label="Search"
                             aria-describedby="basic-addon1" />
@@ -40,6 +63,7 @@
                                     <th class="text-dark">Department </th>
                                     <th class="text-dark">School Name</th>
                                     <th class="text-dark">Supervisor Name </th>
+                                    <th class="text-dark">Registration/UMS Id</th>
                                     <!-- <th class="text-dark">Designation</th>
                                     <th class="text-dark">State</th> -->
                                     <th class="text-dark">User Role </th>
@@ -60,9 +84,8 @@
                                             UserDetailsDataRow.departmentName :'NA'}}</td>
                                         <td class="fw-bold">{{UserDetailsDataRow.organisation!= null?
                                             UserDetailsDataRow.organisation:'NA'}}</td>
-                                        <td class="fw-bold">
-                                            {{UserDetailsDataRow.supervisorName.length>0?UserDetailsDataRow.supervisorName:
-                                            'NA'}} </td>
+                                        <td class="fw-bold"> {{UserDetailsDataRow.supervisorName.length>0?UserDetailsDataRow.supervisorName: 'NA'}} </td>
+                                        <td class="fw-bold"> {{UserDetailsDataRow.idProofNumber>0?UserDetailsDataRow.idProofNumber: 'NA'}} </td>
                                         <!-- <td class="fw-bold"> {{UserDetailsDataRow.designation != null?
                                             UserDetailsDataRow.designation:'NA'}}</td>
                                         <td class="fw-bold">{{ UserDetailsDataRow.stateName!= null ?

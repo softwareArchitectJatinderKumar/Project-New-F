@@ -51,28 +51,24 @@
                             placeholder="Search Your Text Here" aria-label="Search" aria-describedby="basic-addon1" />
                     </div>
                 </div>
+                    <div class="row">
+                        <div class="m-1" >
+                            <!-- <span class="text-dark m-3 fs-5 p-2 fw-bolder " style="border:1px solid #ef7d00;">Record Count:-  {{getTotalPages() }}</span> -->
+
+                             <span class="text-dark m-3 fs-5 p-2 fw-bolder " style="border:1px solid #ef7d00;"> Record Count: {{ getTotalRecords() }} | Total Pages: {{ getTotalPages() }}</span>
+
+                        </div>
+                    </div>
                 <ng-container *ngIf="tmpsAllBookingTestsData.length > 0; else noRecords">
-                    <div class="table-responsive mt-4 mb-4">
+                    <div class="table-responsive bg-dark-yellow mt-4 mb-4">
                         <table id="AdminAssignTest" #table>
                             <thead>
-                                <!-- <tr>
-                                    <th class="fw-bolder">Candidate Name</th>
-                                    <th class="fw-bolder">Candidate Email</th>
-                                    <th class="fw-bolder">Instrument Name</th>
-                                    <th class="fw-bolder">Number of Samples</th>
-                                    <th class="fw-bolder">Request Sheet</th>
-                                    <th class="fw-bolder">Request Date</th>
-                                    <th class="fw-bolder">Payment Status</th>
-                                    <th class="fw-bolder">Amount</th>
-                                    <th class="fw-bolder">Payment Date</th>
-                                    <th class="fw-bolder">Assign Action</th>
-                                </tr> -->
                                 <tr>
                                     <th class="form-label fw-bolder">   Booking Id</th>
                                     <th class="form-label fw-bolder">   Instrument Name</th>
                                     <th class="form-label fw-bolder">   Sample Count</th>
                                     <th class="form-label fw-bolder">   Total Charges </th>
-                                    <th class="fw-bold fw-bolder">      Request Sheet</th>
+                                    <th class="form-label fw-bolder">   Request Sheet</th>
                                     <th class="form-label fw-bolder">   Request Date</th>
                                     <th class="form-label fw-bolder">   Candidate Id</th>
                                     <th class="form-label fw-bolder">   Candidate Name</th>
@@ -118,14 +114,21 @@
                                         </td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow?.paymentDate && AllBookingTestsDataRow?.paymentDate!='null' ? (AllBookingTestsDataRow?.paymentDate): '-NA-'}}
                                         </td>
-                                        <td class="fw-bold ">
+                                        <ng-container *ngIf="AllBookingTestsDataRow.assignedUserId>0; else Assigned">
+                                        <td class="fw-bold " >
                                             <!-- <button class="btn btn-dark" (click)="openPaymentModal(AllBookingTestsDataRow)">Assign</button> -->
                                             <button class="btn btn-dark"
                                                 (click)="openPaymentModal(AllBookingTestsDataRow)"
-                                                [disabled]="isAlreadyAssigned(AllBookingTestsDataRow)">
+                                                [disabled]="AllBookingTestsDataRow.assignedUserId>0">
                                                 Assign
                                             </button>
                                         </td>
+                                         </ng-container>
+                                        <ng-template #Assigned>
+                                            <td class="ms-4">
+                                                <span class="badge text-bg-info ms-3 fs-5 ">Already Assigned </span>
+                                            </td>
+                                        </ng-template>
                                     </tr>
                                 </ng-container>
                             </tbody>

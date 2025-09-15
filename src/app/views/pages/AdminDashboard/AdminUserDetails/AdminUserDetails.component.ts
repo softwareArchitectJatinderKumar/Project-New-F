@@ -400,4 +400,24 @@ export class AdminUserDetailsComponent implements OnInit {
       'error'
     );
   }
+  originalData: any[] = []; // Loaded from API
+  filteredData: any[] = [];
+  selectedStatus: string = '';
+
+  filterData(): void {
+    if (this.selectedStatus === '') {
+      this.tmpsUserDetailsData = [...this.UserDetailsData]; // Show all data
+    }    else {
+      this.tmpsUserDetailsData = this.UserDetailsData.filter(item => item.userRole === this.selectedStatus);
+    }
+    this.currentPage = 1; // Reset to first page after filtering
+  }
+
+  statusOptions = [
+    { label: 'All', value: '' }, 
+    { label: 'Internal User', value: '400000' },
+    { label: 'External User', value: '400001' },
+    { label: 'Industry User', value: '400002' },
+    
+  ];
 }
