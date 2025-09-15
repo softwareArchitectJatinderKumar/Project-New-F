@@ -1,0 +1,246 @@
+<app-StaffMenu></app-StaffMenu>
+
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Loading, please wait...</div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <hr />
+    <div class="d-flex justify-content-center">
+      <div class="row">
+        <label class="fs-2">My Uploaded Results</label>
+      </div>
+    </div>
+    <hr />
+  </div>
+</div>
+
+<div class="row" *ngIf="NoResults !== '' ; else NoData">
+  <div class="col-12 stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="row d-flex justify-content-center">
+          <div class="col-sm-2">
+            <div class="mb-3">
+              <button (click)="exportToExcel()" class="btn btn-dark" [disabled]="NoResults === 'No Details'">
+                Export to Excel
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-5 text-center">
+            <label class="fs-5">Results Uploaded Details</label>
+          </div>
+          <div class="col-sm-5 mb-4">
+            <input
+              [(ngModel)]="searchQuery"
+              (keyup)="search()"
+              [disabled]="NoResults === 'No Details'"
+              id="search"
+              type="text"
+              class="form-control"
+              placeholder="Search"
+              aria-label="Search"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+          <hr />
+        </div>
+        <hr />
+
+        <ng-container *ngIf="tmpsBookingData.length > 0; else noRecords">
+          <div class="table-responsive mt-4 mb-4">
+            <table id="BookingDetailsDataTable" #table class="table table-striped">
+              <thead>
+                <tr>
+                  <th class="form-label fw-bolder">User  Id</th>
+                  <th class="form-label fw-bolder">Booking Id</th>
+                  <th class="form-label fw-bolder">Instrument Name</th>
+                  <th class="fw-bold fw-bolder">Request Sheet</th>
+                  <th class="form-label fw-bolder">Request Date</th>
+                  <th class="form-label fw-bolder">Uploaded Result</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let BookingDataRow of getCurrentPageData()">
+                  <tr *ngIf="BookingDataRow.testUserId?.length > 0">
+                    <td class="fw-bold">{{ BookingDataRow.testUserId || 'NA' }}</td>
+                    <td class="fw-bold">{{ BookingDataRow.bookingId }}</td>
+                    <td class="fw-bold">{{ BookingDataRow.instrumentName }}</td>
+                    <td>
+                      <ng-container *ngIf="BookingDataRow.testSampleFile; else NoFile">
+                        <button class="btn btn-dark ms-3" (click)="downloadFile(BookingDataRow.testSampleFile)">
+                          View
+                        </button>
+                      </ng-container>
+                      <ng-template #NoFile>
+                        <span class="badge text-bg-info ms-3 fs-5">N/A</span>
+                      </ng-template>
+                    </td>
+                    <td class="fw-bold">{{ BookingDataRow.testDate }}</td>
+                    <td>
+                      <ng-container *ngIf="BookingDataRow.uploadedResult; else NoFiles">
+                        <button class="btn btn-dark ms-3" (click)="downloadFile(BookingDataRow.uploadedResult)">
+                          View
+                        </button>
+                      </ng-container>
+                      <ng-template #NoFiles>
+                        <span class="badge text-bg-info ms-3 fs-5">N/A</span>
+                      </ng-template>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+
+            <div class="pagination d-flex justify-content-center align-items-center">
+              <a (click)="prevPage()" [class.disabled]="currentPage === 1" class="btn btn-link">
+                <i class="mdi mdi-chevron-left fs-2"></i>
+              </a>
+              <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
+              <a (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()" class="btn btn-link">
+                <i class="mdi mdi-chevron-right fs-2"></i>
+              </a>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #noRecords>
+          <p class="fs-2 text-danger text-center">No Data Available.</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #NoData>
+  <div class="card">
+    <div class="card-body">
+      <div class="text-center">
+        <h3 class="fs-2 m-5 text-danger pt-5">No Result(s) Uploaded!</h3>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- <app-StaffMenu></app-StaffMenu>
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">Loading, please wait...</div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <hr />
+        <div class="d-flex justify-content-center">
+            <div class="row"><Label class="fs-2 "> My Uploaded Results </Label>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+<div class="row" *ngIf="NoResults!=''  ;else NoData">
+    <div class="col-12 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-sm-2">
+                        <div class="mb-3">
+                            <button (click)="exportToExcel()" class="btn btn-dark "
+                                [disabled]="NoResults=='No Details'">Export to
+                                Excel</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 text-center">
+                        <Label class="fs-5 ">  Results Uploaded Details </Label>
+                    </div>
+                    <div class="col-sm-5 mb-4 ">
+                        <input [(ngModel)]="searchQuery" (keyup)="search()" [disabled]="NoResults=='No Details'" id="search"
+                            type="text" class="form-control" placeholder="Search" aria-label="Search"
+                            aria-describedby="basic-addon1" />
+                    </div>
+                    <hr />
+                </div>
+                <hr/>
+                   
+                <ng-container *ngIf="tmpsBookingData.length > 0; else noRecords">
+                    <div class="table-responsive mt-4 mb-4">
+                        <table id="BookingDetailsDataTable" #table>
+                        <thead>
+                            <tr>
+                                <th class="form-label fw-bolder">User Id</th>
+                                <th class="form-label fw-bolder">Booking Id</th>
+                                <th class="form-label fw-bolder">Instrument Name</th>
+                                <th class="fw-bold fw-bolder">Request Sheet</th>
+                                <th class="form-label fw-bolder">Request Date</th>                                 
+                                <th class="form-label fw-bolder">Uploaded Result</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let BookingDataRow of getCurrentPageData(); let i = index">
+                                <tr *ngIf="BookingDataRow.testUserId.length>0;">
+                                    <td class="fw-bold "> {{BookingDataRow.testUserId?.length>0? BookingDataRow.testUserId: 'NA' }}</td>
+                                    <td class="fw-bold"> {{BookingDataRow.bookingId}}</td>
+                                    <td class="fw-bold"> {{BookingDataRow.instrumentName}}</td>
+                                    <ng-container *ngIf="BookingDataRow.testSampleFile; else NoFile">
+                                        <td>
+                                            <button class="btn-dark btn ms-3" (click)="downloadFile(BookingDataRow.testSampleFile)">
+                                                View
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <ng-template #NoFile>
+                                        <td class="ms-4">
+                                            <span class="badge text-bg-info ms-3 fs-5 "> N/A </span>
+                                        </td>
+                                    </ng-template>
+                                    <td class="fw-bold">{{ BookingDataRow.testDate }}</td>
+                                    <ng-container *ngIf="BookingDataRow.uploadedResult; else NoFiles">
+                                        <td>
+                                            <button class="btn-dark btn ms-3" (click)="downloadFile(BookingDataRow.uploadedResult)">
+                                                View
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                    <ng-template #NoFiles>
+                                        <td class="ms-4">
+                                            <span class="badge text-bg-info ms-3 fs-5 "> N/A </span>
+                                        </td>
+                                    </ng-template>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
+                                class="mdi mdi-chevron-left  fs-2"> </i> </a>
+                        <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
+                        <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
+                                class="mdi mdi-chevron-right  fs-2"> </i></a>
+                    </div>
+                    </div>
+                </ng-container>
+                <ng-template #noRecords>
+                    <p class="fs-2 text-danger text-center ">No Data Available.</p>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #NoData>
+    <div class="card">
+        <div class="card-body">
+            <div class="text-center ">
+                <h3 class="text-center fs-2 m-5 text-danger pt-5 "> No Result(s) Uploaded ! </h3>
+                <div class="row mt-4 mb-4">
+                    <div class="col-sm-12 text-center">
+                        <div class="mb-3 p-4">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template> -->
