@@ -53,37 +53,81 @@ export class StaffUploadedResultsComponent implements OnInit {
     );
   }
 
-  getUploadedResultsDetails(UID: any): void {
-    this.loadingIndicator = true;
-    const startTime = new Date().getTime();
+  // getUploadedResultsDetails(UID: any): void {
+  //   this.loadingIndicator = true;
+  //   const startTime = new Date().getTime();
 
-    this.CIFwebService.GetUploadedResultDetails(UID).subscribe({
-      next: response => {
-        if (response.item1 && response.item1.length > 0) {
-          this.BookingData = response.item1;
-          const firstRecord = response.item1[0];
-          this.NoResults = firstRecord.returnMessage || '';
+  //   this.CIFwebService.GetUploadedResultDetails(UID).subscribe({
+  //     next: response => {
+  //       if (response.item1 && response.item1.length > 0) {
+  //         this.BookingData = response.item1;
+  //         const firstRecord = response.item1[0];
+  //         this.NoResults = firstRecord.returnMessage || '';
+  //         console.log(JSON.stringify(this.BookingData))
+  //         this.tmpsBookingData = [...this.BookingData];
+  //       } else {
+  //         this.BookingData = [];
+  //         this.tmpsBookingData = [];
+  //         this.NoResults = 'No Details';
+  //       }
 
-          this.tmpsBookingData = [...this.BookingData];
-        } else {
-          this.BookingData = [];
-          this.tmpsBookingData = [];
-          this.NoResults = 'No Details';
-        }
+  //       const elapsed = new Date().getTime() - startTime;
+  //       const remainingDelay = Math.max(2500 - elapsed, 0);
 
-        const elapsed = new Date().getTime() - startTime;
-        const remainingDelay = Math.max(2500 - elapsed, 0);
+  //       setTimeout(() => {
+  //         this.loadingIndicator = false;
+  //       }, remainingDelay);
+  //     },
+  //     error: err => {
+  //       console.error(err);
+  //       this.loadingIndicator = false;
+  //     }
+  //   });
+  // }
 
-        setTimeout(() => {
-          this.loadingIndicator = false;
-        }, remainingDelay);
-      },
-      error: err => {
-        console.error(err);
-        this.loadingIndicator = false;
+getUploadedResultsDetails(UID: any): void {
+  this.loadingIndicator = true;
+  const startTime = new Date().getTime();
+
+  this.CIFwebService.GetUploadedResultDetails(UID).subscribe({
+    next: response => {
+      let data: any[] = [];
+
+      // If API gives array
+      if (Array.isArray(response)) {
+        data = response;
       }
-    });
-  }
+      // If API gives object with item1 array
+      else if (response.item1 && Array.isArray(response.item1)) {
+        data = response.item1;
+      }
+      // If API gives single object
+      else if (response && typeof response === 'object') {
+        data = [response];
+      }
+
+      if (data.length > 0) {
+        this.BookingData = data;
+        this.tmpsBookingData = [...data];
+        this.NoResults = '';
+      } else {
+        this.BookingData = [];
+        this.tmpsBookingData = [];
+        this.NoResults = 'No Details';
+      }
+
+      const elapsed = new Date().getTime() - startTime;
+      const remainingDelay = Math.max(2500 - elapsed, 0);
+      setTimeout(() => {
+        this.loadingIndicator = false;
+      }, remainingDelay);
+    },
+    error: err => {
+      console.error(err);
+      this.loadingIndicator = false;
+    }
+  });
+}
 
   getTotalPages(): number {
     return Math.ceil(this.tmpsBookingData.length / this.itemsPerPage);

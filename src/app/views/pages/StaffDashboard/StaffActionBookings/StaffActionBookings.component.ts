@@ -115,6 +115,7 @@ export class StaffActionBookingsComponent implements OnInit {
           this.NoResults = firstRecord.returnMessage;
             this.dataSource = response.item1;
             this.tmpsBookingData = response.item1;
+            console.log(JSON.stringify(this.tmpsBookingData))
             this.originalData = [...this.BookingData];  
             this.headHtmlData = this.tmpsBookingData[0];
             this.columns = Object.keys(this.tmpsBookingData[0]);
@@ -246,41 +247,44 @@ export class StaffActionBookingsComponent implements OnInit {
       formData.append('CreatedBy', this.user_Email);
       formData.append('FilePath', this.fileName);
       formData.append('File', this.FileData);
-      this.CIFwebService.CIFResultsUploads(formData).subscribe({
-        next: (data: any) => {
-          const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
-          const returnId = data.item1[0]['ReturnId'];
 
-          if (result === 'Success' && returnId !== '0') {
-            Swal.fire({
-              title: 'Uploaded Successfully!',
-              icon: 'success'
-            }).then(() => {
-              window.location.reload();
-            });
-          } else {
-            Swal.fire({
-              title: 'Already Uploaded Results for this Test',
-              icon: 'error'
-            }).then(() => {
-              window.location.reload();
-            });
-          }
-          const elapsed = new Date().getTime() - startTime;
-          const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+         console.log("Upload data Results:");
+    formData.forEach((value, key) => console.log(`${key}: ${value}`));
+      // this.CIFwebService.CIFResultsUploads(formData).subscribe({
+      //   next: (data: any) => {
+      //     const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
+      //     const returnId = data.item1[0]['ReturnId'];
 
-          setTimeout(() => {
-            this.loadingIndicator = false;
-          }, remainingDelay);
-        },
-        error: () => {
-          Swal.fire({
-            title: 'Error',
-            text: 'Failed to Upload.',
-            icon: 'error'
-          });
-        }
-      });
+      //     if (result === 'Success' && returnId !== '0') {
+      //       Swal.fire({
+      //         title: 'Uploaded Successfully!',
+      //         icon: 'success'
+      //       }).then(() => {
+      //         window.location.reload();
+      //       });
+      //     } else {
+      //       Swal.fire({
+      //         title: 'Already Uploaded Results for this Test',
+      //         icon: 'error'
+      //       }).then(() => {
+      //         window.location.reload();
+      //       });
+      //     }
+      //     const elapsed = new Date().getTime() - startTime;
+      //     const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+
+      //     setTimeout(() => {
+      //       this.loadingIndicator = false;
+      //     }, remainingDelay);
+      //   },
+      //   error: () => {
+      //     Swal.fire({
+      //       title: 'Error',
+      //       text: 'Failed to Upload.',
+      //       icon: 'error'
+      //     });
+      //   }
+      // });
     }
     else {
       Swal.fire({

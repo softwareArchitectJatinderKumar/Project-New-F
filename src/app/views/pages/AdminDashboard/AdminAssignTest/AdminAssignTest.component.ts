@@ -35,7 +35,7 @@ export class AdminAssignTestComponent implements OnInit {
   searchQuery: string = '';
 
   BookingCase: any;
-  AssignedTo: any;
+  AssignedTo: any = '';
   InstrumentId: any;
   loadingIndicator = false;
 
@@ -43,19 +43,20 @@ export class AdminAssignTestComponent implements OnInit {
   UserRole: string = '';
   user_Email: string = '';
   candidateName: string = '';
-//https://files.lpu.in/umsweb/Journal/
-  // serverUrl: string = 'https://files.lpu.in/umsweb/MOUDocuments/';
-  serverUrl: string = 'https://files.lpu.in/umsweb/CIFDocuments/';
+  serverUrl: string = 'https://files.lpu.in/umswebDocuments/';
   supervisorName: any;
   departmentName: any;
+
+  // Pagination record size options
+  recordSizeOptions = [5, 10, 20, 50];
 
   constructor(
     private CIFwebService: LpuCIFWebService,
     private modalService: NgbModal,
     private router: Router,
-    private cookieService: CookieService  ) { }
+    private cookieService: CookieService) { }
 
-  ngOnInit(): void {  
+  ngOnInit(): void {
     const GetCookieData = this.cookieService.get('authData');
     const retrievedCookies = JSON.parse(GetCookieData);
     this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
@@ -63,21 +64,7 @@ export class AdminAssignTestComponent implements OnInit {
     this.supervisorName = retrievedCookies.SupervisorName;
     this.departmentName = retrievedCookies.DepartmentName;
     this.candidateName = retrievedCookies.CandidateName;
-    // if (GetCookieData) {
-      // const retrievedCookies = JSON.parse(GetCookieData);
-      // this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-      // this.user_Email = retrievedCookies.EmailId;
-      // this.supervisorName = retrievedCookies.SupervisorName;
-      // this.departmentName = retrievedCookies.DepartmentName;
-      // this.candidateName = retrievedCookies.CandidateName;
-    // } else {
-    //    swal.fire({
-    //     title: 'Login Failed ',
-    //     icon: 'warning',
-    //   });
-    //   this.router.navigate(['/Home']);
-    // }
-    // this.loadUserFromCookies();
+
     this.getAllPaymentDetails();
     this.getAllAssignedTest();
     this.getAllCifUserList();
@@ -114,21 +101,22 @@ export class AdminAssignTestComponent implements OnInit {
   }
 
   getAllPaymentDetails(): void {
-    this.loadingIndicator=true;
+    this.loadingIndicator = true;
     const startTime = new Date().getTime();
     this.CIFwebService.GetAllBookingTests().subscribe({
       next: (response) => {
         if (response.item1 && response.item1.length > 0) {
           this.AllBookingTestsData = response.item1;
-          this.originalData = [...this.AllBookingTestsData];  
+          this.originalData = [...this.AllBookingTestsData];
           this.dataSource = new MatTableDataSource(response.item1);
           this.tmpsAllBookingTestsData = response.item1;
+          // console.info(JSON.stringify(this.tmpsAllBookingTestsData))
           this.headHtmlData = response.item1[0];
         } else {
           this.AllBookingTestsData = [];
         }
         const elapsed = new Date().getTime() - startTime;
-        const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+        const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 1.5s
 
         setTimeout(() => {
           this.loadingIndicator = false;
@@ -140,8 +128,6 @@ export class AdminAssignTestComponent implements OnInit {
     });
   }
 
-  
-
   originalData: any[] = []; // Loaded from API
   filteredData: any[] = [];
   selectedStatus: string = '';
@@ -150,7 +136,7 @@ export class AdminAssignTestComponent implements OnInit {
     if (this.selectedStatus === '') {
       this.tmpsAllBookingTestsData = [...this.originalData]; // Show all data
     } else if (this.selectedStatus === 'null') {
-      this.tmpsAllBookingTestsData = this.originalData.filter(item => item.paymentStatus === null);
+      this.tmpsAllBookingTestsData = this.originalData.filter(item => item.paymentStatus === null || item.paymentStatus === 'null');
     } else {
       this.tmpsAllBookingTestsData = this.originalData.filter(item => item.paymentStatus === this.selectedStatus);
     }
@@ -158,13 +144,11 @@ export class AdminAssignTestComponent implements OnInit {
   }
 
   statusOptions = [
-    { label: 'All', value: '' }, 
+    { label: 'All', value: '' },
     { label: 'Success', value: 'success' },
     { label: 'Failure', value: 'failure' },
     { label: 'Pending', value: 'null' }
   ];
-  
-
 
   AllAssignedTest: any;
   getAllAssignedTest(): void {
@@ -172,26 +156,25 @@ export class AdminAssignTestComponent implements OnInit {
       next: (response) => {
         if (response.item1 && response.item1.length > 0) {
           this.AllAssignedTest = response.item1;
-          // console.log("ASSIGNED"+JSON.stringify(this.AllAssignedTest));
         } else {
           this.AllAssignedTest = [];
         }
       },
       error: (err) => {
-        console.error('Failed to load booking tests:', err);
+        console.error('Failed to load assigned tests:', err);
       }
     });
   }
 
   assignedTests: any[] = []; // This should be filled from your assigned tests API
 
-isAlreadyAssigned(row: any): boolean {
-  return this.assignedTests.some(test =>
-    test.bookingId === row.bookingId &&
-    // test.instrumentId === row.instrumentId &&
-    test.returnMessage !== 'No Details'
-  );
-}
+  isAlreadyAssigned(row: any): boolean {
+    return this.assignedTests.some(test =>
+      test.bookingId === row.bookingId &&
+      test.returnMessage !== 'No Details'
+    );
+  }
+
   getTotalPages(): number {
     return Math.ceil(this.tmpsAllBookingTestsData.length / this.itemsPerPage);
   }
@@ -215,18 +198,18 @@ isAlreadyAssigned(row: any): boolean {
 
   exportToExcel(): void {
     const exportedData = this.AllBookingTestsData.map(item => ({
-      BookingId         :item.bookingId,
-      InstrumentName    :item.instrumentName,
-      SampleCount       :item.noOfSamples,
-      TotalCharges    :item.totalCharges,
-      RequestDate   :item.bookingRequestDate,
+      BookingId: item.bookingId,
+      InstrumentName: item.instrumentName,
+      SampleCount: item.noOfSamples,
+      TotalCharges: item.totalCharges,
+      RequestDate: item.bookingRequestDate,
       EmailId: item.userEmailId,
-      CandidateName   :item.candidateName,
-      OrganisationName  :item.organisationName,
-      UserType          :item.userType,
-      PaymentStatus     :item.paymentStatus == 'success' ? 'Paid' : item?.paymentStatus == 'failure' ? 'Failed' : 'Pending' ,
-      PaymentDate       :item.paymentDate,
-      
+      CandidateName: item.candidateName,
+      OrganisationName: item.organisationName,
+      UserType: item.userRole,
+      PaymentStatus: item.paymentStatus == 'success' ? 'Paid' : item?.paymentStatus == 'failure' ? 'Failed' : 'Pending',
+      PaymentDate: item.paymentDate,
+      AssignedTo:item.assignedUserId
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportedData);
@@ -244,6 +227,7 @@ isAlreadyAssigned(row: any): boolean {
 
   openPaymentModal(item: any): void {
     this.BookingCase = item;
+    this.AssignedTo = ''; // Reset assigned staff selection on modal open
     this.modalService.open(this.viewDescModal2, { size: 'sm' }).result
       .then((result: string) => console.log('Modal closed:', result))
       .catch(() => { });
@@ -251,44 +235,49 @@ isAlreadyAssigned(row: any): boolean {
 
   onActivitySelected(event: any): void {
     this.AssignedTo = event.target.value;
-    // alert(this.AssignedTo)
   }
+
   VerifyData(AssignTest: any): void {
+    if (!this.AssignedTo) {
+      swal.fire('Select Staff', 'Please select a staff member to assign.', 'warning');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('BookingId', AssignTest.bookingId);
     formData.append('InstrumentId', AssignTest.instrumentId);
     formData.append('UserId', AssignTest.userEmailId);
     formData.append('AssignedTo', this.AssignedTo);
-  
+    console.log("Tests Assigned to :");
+    formData.forEach((value, key) => console.log(`${key}: ${value}`));
     this.CIFwebService.CIFAssignTestToStaff(formData).subscribe({
       next: (data: any) => {
         const result = data.item1?.[0]?.msg || '';
-  
-        // Define allowed keys
+
         const alertMap: Record<'Success' | 'Failed' | 'Default', { title: string; icon: any }> = {
           Success: { title: 'Action Planned Stored Successfully!', icon: 'success' },
           Failed: { title: 'Test is already Assigned', icon: 'error' },
           Default: { title: 'Something Went Wrong, Try again later', icon: 'error' }
         };
-  
-        // If result is not a valid key, fall back to 'Default'
+
         const alert = alertMap[result as keyof typeof alertMap] || alertMap.Default;
-  
-        swal.fire({ title: alert.title, icon: alert.icon }).then(() =>
-          // this.router.navigate(['/AssignTestCifA'])
-          window.location.reload()
-        );
+
+        swal.fire({ title: alert.title, icon: alert.icon }).then(() => {
+          this.modalService.dismissAll(); // Close modal
+          this.getAllPaymentDetails(); // Refresh booking tests
+          this.getAllAssignedTest(); // Refresh assigned tests
+        });
       },
       error: () => {
         swal.fire({
           title: 'Error',
           text: 'Failed to Upload.',
           icon: 'error'
-        }).then(() => window.location.reload());
+        }).then(() => this.modalService.dismissAll());
       }
     });
   }
-  
+
   search() {
     const query = this.searchQuery.toLowerCase();
     this.tmpsAllBookingTestsData = this.AllBookingTestsData.filter(item => {
@@ -310,7 +299,7 @@ isAlreadyAssigned(row: any): boolean {
     }
   }
 
-   AllCifUserList = [
+  AllCifUserList = [
     {
       uid: '24374',
       uiD_Name: 'Dr. Vijay Kumar'
@@ -349,7 +338,6 @@ isAlreadyAssigned(row: any): boolean {
     },
   ];
 
-  
   getAllCifUserList(): void {
     this.CIFwebService.GetAllUserLists().subscribe({
       next: (response) => {
@@ -364,8 +352,126 @@ isAlreadyAssigned(row: any): boolean {
       }
     });
   }
-getTotalRecords(): number {
-  return this.tmpsAllBookingTestsData ? this.tmpsAllBookingTestsData.length : 0;
+
+  getTotalRecords(): number {
+    return this.tmpsAllBookingTestsData ? this.tmpsAllBookingTestsData.length : 0;
+  }
+
+  // Handle record size dropdown change
+  onRecordSizeChange(event: any): void {
+    this.itemsPerPage = +event.target.value;
+    this.currentPage = 1; // Reset to first page
+  }
+
+
+
+
+
+  IsAssigned: string = '';
+  getAssignedData(): void {
+    if (this.IsAssigned === '') {
+      // Show all data
+      this.tmpsAllBookingTestsData = [...this.originalData];
+    } else if (this.IsAssigned === 'Assigned') {
+      // Filter items where assignedUser Id exists and is non-empty string
+      this.tmpsAllBookingTestsData = this.originalData.filter(item =>
+        item.assignedUserId && item.assignedUserId.trim().length > 0
+      );
+    } else if (this.IsAssigned === 'Pending') {
+      // Filter items where assignedUser Id is null, undefined, or empty string
+      this.tmpsAllBookingTestsData = this.originalData.filter(item =>
+        !item.assignedUserId || item.assignedUserId.trim().length === 0
+      );
+    } else {
+      // Default fallback: show all data
+      this.tmpsAllBookingTestsData = [...this.tmpsAllBookingTestsData];
+    }
+    this.currentPage = 1; // Reset to first page after filtering
+  }
+
+
+  assignedOptions = [
+    { label: 'All', value: '' },
+    { label: 'Assigned', value: 'Assigned' },
+    { label: 'Pending', value: 'Pending' }
+  ];
+
+hasAnySearchCriteria:any;
+  
+checkSearchCriteria(): void {
+  this.hasAnySearchCriteria = 
+    (this.selectedStatus && this.selectedStatus.trim() !== '') ||
+    (this.IsAssigned && this.IsAssigned.trim() !== '');
 }
 
+  advancedSearch = {
+    paymentType:'',
+    assignedTo:''
+
+  };
+
+  applyAdvancedSearch(): void {
+  this.tmpsAllBookingTestsData = this.originalData.filter(item => {
+    let matches = true;
+
+    // Filter by Payment Status
+    if (this.selectedStatus) {
+      if (this.selectedStatus === 'null') {
+        matches = matches && (!item.paymentStatus || item.paymentStatus === 'null');
+      } else {
+        matches = matches && (item.paymentStatus === this.selectedStatus);
+      }
+    }
+
+    // Filter by Assignment
+    if (this.IsAssigned) {
+      if (this.IsAssigned === 'Assigned') {
+        matches = matches && (item.assignedUserId && item.assignedUserId.trim().length > 0);
+      } else if (this.IsAssigned === 'Pending') {
+        matches = matches && (!item.assignedUserId || item.assignedUserId.trim().length === 0);
+      }
+    }
+
+    return matches;
+  });
+
+  // Sort results by bookingRequestDate (if present)
+  this.tmpsAllBookingTestsData.sort((a, b) => {
+    const dateA = a.bookingRequestDate ? new Date(a.bookingRequestDate).getTime() : 0;
+    const dateB = b.bookingRequestDate ? new Date(b.bookingRequestDate).getTime() : 0;
+    return dateA - dateB;
+  });
+
+  this.currentPage = 1; // Reset to first page
+}
+
+  
+resetAdvancedSearch(): void {
+  this.selectedStatus = '';
+  this.IsAssigned = '';
+  this.hasAnySearchCriteria = false;
+  this.tmpsAllBookingTestsData = [...this.originalData];
+  this.currentPage = 1;
+}
+
+  showAdvancedSearch = false ;
+  showDateSearch =false;
+   
+  toggleAdvancedSearch(): void {
+    this.showAdvancedSearch = !this.showAdvancedSearch;
+    if (!this.showAdvancedSearch) {
+      this.resetAdvancedSearch();
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+  
 }
