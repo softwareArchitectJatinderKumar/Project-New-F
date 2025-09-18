@@ -1,5 +1,4 @@
 <app-AdminDashboard></app-AdminDashboard>
-
 <div *ngIf="loadingIndicator" class="fullscreen-loader">
     <div class="loader-spinner"></div>
     <div class="loader-text">Loading, please wait...</div>
@@ -15,87 +14,91 @@
             <hr />
             <div class="card-body">
                 <div class="row d-flex justify-content-center align-items-center mt-4 mb-4">
-                    <div class="col-sm-3">
-                        <div class="mb-3 text-center">
-                            <button (click)="exportToExcel()" class="btn btn-dark"
-                                [disabled]="tmpsAllBookingTestsData.length == 0">
-                                Export to Excel
-                            </button>
-                        </div>
+                    <div class="col-sm-4 col-3 text-end">
+
+                        <button (click)="exportToExcel()" class="btn btn-dark"
+                            [disabled]="tmpsAllBookingTestsData.length == 0">
+                            Export to Excel
+                        </button>
+
                     </div>
 
-                    <div class="col-sm-3">
+                    <!-- <div class="col-sm-3">
                         <div class="mb-3 text-center">
                             <label class="fs-5">Search any Text</label>
                         </div>
+                    </div> -->
+                    <div class="col-sm-4 col-3  mb-4 mt-3 text-center">
+                        <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
+                            class="form-control w-50 " placeholder="Search Your Text Here" aria-label="Search"
+                            aria-describedby="basic-addon1" />
                     </div>
-                      <div class="col-sm-3 mb-4 mt-3">
-                        <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control"
-                            placeholder="Search Your Text Here" aria-label="Search" aria-describedby="basic-addon1" />
-                    </div>
-                     <div class="col-md-3">
-                        <button (click)="toggleAdvancedSearch()" class="btn btn-dark w-100">
+                    <div class="col-md-4 col-3 mb-4 mt-3">
+                        <button (click)="toggleAdvancedSearch()" class="btn btn-dark w-50">
                             {{ showAdvancedSearch ? 'Hide Advanced' : 'Advanced Search' }}
                         </button>
                     </div>
 
-           
 
-                  
+
+
                 </div>
-                <div *ngIf="showAdvancedSearch" class="row mb-3 p-3 d-flex justify-content-center align-items-center bg-light rounded">
+                <div *ngIf="showAdvancedSearch"
+                    class="row mb-3 p-3 d-flex justify-content-center align-items-center bg-light rounded">
 
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
-                          <ng-select [(ngModel)]="selectedStatus"   [items]="statusOptions"   (ngModelChange)="checkSearchCriteria()"
-                            bindLabel="label" bindValue="value" placeholder="-- Select Status --" class="w-100">
+                        <ng-select [(ngModel)]="selectedStatus" [items]="statusOptions"
+                            (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
+                            placeholder="-- Select Status --" class="w-100">
                             <ng-template ng-option-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All Payments--</span>
-                                <span *ngIf="item.value === 'success'" class="badge bg-success">Paid</span>
-                                <span *ngIf="item.value === 'failure'" class="badge bg-danger">Failure</span>
-                                <span *ngIf="item.value === 'null'" class="badge bg-warning text-dark">Pending</span>
+                                <span *ngIf="item.value === ''">-- All Payments--</span>
+                                <span *ngIf="item.value === 'success'">Paid</span>
+                                <span *ngIf="item.value === 'failure'">Failure</span>
+                                <span *ngIf="item.value === 'null'">Pending</span>
                             </ng-template>
 
                             <ng-template ng-label-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All Payemnts--</span>
-                                <span *ngIf="item.value === 'success'" class="badge bg-success">Success</span>
-                                <span *ngIf="item.value === 'failure'" class="badge bg-danger">Failure</span>
-                                <span *ngIf="item.value === 'null'" class="badge bg-warning text-dark">Pending</span>
+                                <span *ngIf="item.value === ''">-- All Payemnts--</span>
+                                <span *ngIf="item.value === 'success'">Success</span>
+                                <span *ngIf="item.value === 'failure'">Failure</span>
+                                <span *ngIf="item.value === 'null'">Pending</span>
                             </ng-template>
                         </ng-select>
                     </div>
 
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
-                        <ng-select [(ngModel)]="IsAssigned"   [items]="assignedOptions"   (ngModelChange)="checkSearchCriteria()"
-                            bindLabel="label" bindValue="value" placeholder="-- Select --" class="w-100">
+                        <ng-select [(ngModel)]="IsAssigned" [items]="assignedOptions"
+                            (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
+                            placeholder="-- Select --" class="w-100">
                             <ng-template ng-option-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All Tests--</span>
-                                <span *ngIf="item.value === 'Assigned'" class="badge bg-success">Already Assigned</span>
-                                <span *ngIf="item.value === 'Pending'" class="badge bg-danger">Pending </span>                                
+                                <span *ngIf="item.value === ''">-- All Tests--</span>
+                                <span *ngIf="item.value === 'Assigned'">All Assigned</span>
+                                <span *ngIf="item.value === 'Pending'">Not Assigned </span>
                             </ng-template>
 
                             <ng-template ng-label-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All Tests--</span>
-                                    <span *ngIf="item.value === 'Assigned'" class="badge bg-success">Already Assigned</span>
-                                <span *ngIf="item.value === 'Pending'" class="badge bg-danger">Pending </span>     
+                                <span *ngIf="item.value === ''">-- All Tests--</span>
+                                <span *ngIf="item.value === 'Assigned'">All Assigned</span>
+                                <span *ngIf="item.value === 'Pending'">Not Assigned </span>
                             </ng-template>
                         </ng-select>
                     </div>
-                   
-                   
 
-                    <div class="row d-flex justify-content-center align-items-center" >
-                    <div class="col-6 col-md-3 mt-2">
-                        <button (click)="applyAdvancedSearch()" class="btn btn-dark w-100"
-                            [disabled]="!hasAnySearchCriteria" [class.btn-disabled]="!hasAnySearchCriteria">
-                            Apply Filters
-                        </button>
-                    </div>
 
-                    <div class="col-6 col-md-3 mt-2">
-                        <button (click)="resetAdvancedSearch()" class="btn btn-dark w-100">
-                            Reset Filters
-                        </button>
-                    </div>
+
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <div class="col-6 col-md-3 mt-2">
+                            <button (click)="applyAdvancedSearch()" class="btn btn-dark w-100"
+                                [disabled]="!hasAnySearchCriteria" [class.btn-disabled]="!hasAnySearchCriteria">
+                                Apply Filters
+                            </button>
+                        </div>
+
+                        <div class="col-6 col-md-3 mt-2">
+                            <button (click)="resetAdvancedSearch()" class="btn btn-dark w-100">
+                                Reset Filters
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="row m-4 p-2 ">
@@ -177,7 +180,8 @@
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.organisationName }}</td>
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.userRole }}</td>
                                         <td>
-                                            <span class="badge" [ngClass]="{
+                                            <span class="badge"
+                                                [ngClass]="{
                           'bg-success': AllBookingTestsDataRow?.paymentStatus == 'success',
                           'bg-danger': AllBookingTestsDataRow?.paymentStatus == 'failure',
                           'bg-warning text-dark': !AllBookingTestsDataRow?.paymentStatus || AllBookingTestsDataRow?.paymentStatus == 'null' }">
@@ -203,15 +207,20 @@
                                             <td class="fw-bold">
                                                 <button class="btn btn-dark"
                                                     (click)="openPaymentModal(AllBookingTestsDataRow)">
-                                                    Assign
+                                                    Assign Staff
                                                 </button>
                                             </td>
                                         </ng-container>
                                         <ng-template #Assigned>
                                             <td class="ms-4">
-                                                <span class="badge text-bg-info ms-3 fs-5">Already Assigned </span>
-                                                <span
-                                                    class="badge text-bg-info ms-3 fs-5">{{AllBookingTestsDataRow.assignedUserId}}</span>
+                                                <!-- <span class="badge text-bg-info ms-3 fs-5">Already Assigned </span> -->
+                                                
+                                                <button class="btn btn-primary "
+                                                (click)="openEditModal(AllBookingTestsDataRow)">
+                                                Modify Staff 
+                                                <!-- <i class="bi bi-pencil-square"></i>  -->
+                                            </button> <br/>
+                                            <span class="badge text-bg-info m-2 fs-5">Assinged to : - {{AllBookingTestsDataRow.assignedUserId}}</span><br/>
                                             </td>
                                         </ng-template>
                                     </tr>
@@ -232,7 +241,8 @@
                             </div>
                             <div class="col-sm-2">
                                 <label for="recordSize" class="form-label fs-5">Records per page</label>
-                                <select id="recordSize" class="p-2 m-3 btn btn-outline-primary " style="width: 20% !important;" (change)="onRecordSizeChange($event)"
+                                <select id="recordSize" class="p-2 m-3 btn btn-outline-primary "
+                                    style="width: 20% !important;" (change)="onRecordSizeChange($event)"
                                     [value]="itemsPerPage">
                                     <option *ngFor="let size of recordSizeOptions" [value]="size">{{ size }}</option>
                                 </select>
@@ -316,4 +326,60 @@
             </div>
         </div>
     </div>
+</ng-template>
+
+
+<ng-template #editEventModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Reassign Test Form</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+  <div class="modal-body">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-sm">
+                            <table id="dataTableAllClosedRemarks" class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="fs-5 text-dark">Booking Id</th>
+                                        <th class="fs-5 text-dark">Instrument Name</th>
+                                        <th class="fs-5 text-dark">Assign To</th>
+                                        <th class="fs-5 text-dark">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['bookingId'] }}</td>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['instrumentName'] }}</td>
+                                        <td class="fs-5 p-4" style="width: 20%;"> {{this.editEvent['assignedUserId']}}
+                                            <select id="staffName" (change)="onActivitySelected($event)"
+                                                class="col-12 p-2 form-control" required [(ngModel)]="AssignedTo"
+                                                name="staffName" #AssignedToModel="ngModel">
+                                                <option value="" selected>Select Staff</option>
+                                                <option *ngFor="let session of AllCifUserList" [value]="session.uid">
+                                                    {{ session.uiD_Name }}
+                                                </option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button type="submit" class="btn btn-dark me-2"
+                                                (click)="ReAssginStaff(editEvent)" [disabled]="!AssignedTo">
+                                                Assign New Staff
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+    </div>
+
 </ng-template>

@@ -34,16 +34,16 @@
                         <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions"
                             bindLabel="label" bindValue="value" placeholder="-- Select Payment Type --" class="w-100">
                             <ng-template ng-option-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All --</span>
-                                <span *ngIf="item.value === 'success'" class="badge bg-success">Paid</span>
-                                <span *ngIf="item.value === 'failure'" class="badge bg-danger">Failure</span>
-                                <span *ngIf="item.value === 'null'" class="badge bg-warning text-dark">Pending</span>
+                                  <span *ngIf="item.value === ''"  >-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'" >Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'" >Failed Payments</span>
+                                <span *ngIf="item.value === 'null'" >Pending Payments</span>
                             </ng-template>
                             <ng-template ng-label-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All --</span>
-                                <span *ngIf="item.value === 'success'" class="badge bg-success">Success</span>
-                                <span *ngIf="item.value === 'failure'" class="badge bg-danger">Failure</span>
-                                <span *ngIf="item.value === 'null'" class="badge bg-warning text-dark">Pending</span>
+                                  <span *ngIf="item.value === ''" >-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'" >Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'" >Failed Payments</span>
+                                <span *ngIf="item.value === 'null'" >Pending Payments</span>
                             </ng-template>
                         </ng-select>
                     </div>
@@ -101,8 +101,8 @@
                                         <!-- <td class="fw-bold ">{{AllBookingTestsDataRow.bookingRequestDate }}</td> -->
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.userEmailId?.length>0 ? AllBookingTestsDataRow.userEmailId : 'Internal User' }}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.candidateName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.candidateName }}</td>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName}}</td>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.userRole}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.organisationName}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.userRole=='Guest User '? 'Internal User' : AllBookingTestsDataRow.userRole}}</td>
                                         <td>
                                             <span class="badge" [ngClass]="{'bg-success': AllBookingTestsDataRow?.paymentStatus == 'success', 'bg-danger': AllBookingTestsDataRow?.paymentStatus == 'failure', 'bg-warning text-dark': !AllBookingTestsDataRow?.paymentStatus || AllBookingTestsDataRow?.paymentStatus == 'null' }">
                                                 {{ AllBookingTestsDataRow?.paymentStatus == 'success' ? 'Paid' : AllBookingTestsDataRow?.paymentStatus == 'failure' ? 'Failed' : 'Pending' }}

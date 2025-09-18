@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import * as XLSX from 'xlsx';
 import swal from 'sweetalert2';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class AdminAssignTestComponent implements OnInit {
   headHtmlData: any[] = [];
 
   currentPage = 1;
-  itemsPerPage = 10;
+  itemsPerPage = 5;
   searchQuery: string = '';
 
   BookingCase: any;
@@ -52,7 +52,7 @@ export class AdminAssignTestComponent implements OnInit {
 
   constructor(
     private CIFwebService: LpuCIFWebService,
-    private modalService: NgbModal,
+    private modalService: NgbModal, private fb: FormBuilder,
     private router: Router,
     private cookieService: CookieService) { }
 
@@ -110,7 +110,6 @@ export class AdminAssignTestComponent implements OnInit {
           this.originalData = [...this.AllBookingTestsData];
           this.dataSource = new MatTableDataSource(response.item1);
           this.tmpsAllBookingTestsData = response.item1;
-          // console.info(JSON.stringify(this.tmpsAllBookingTestsData))
           this.headHtmlData = response.item1[0];
         } else {
           this.AllBookingTestsData = [];
@@ -465,11 +464,95 @@ resetAdvancedSearch(): void {
   }
 
 
+// 18 sept-25
+  @ViewChild('editEventModal') editEventModal: TemplateRef<any>;
+  editEvent: any = {};
+  selectedFile: File | null = null;
+
+  // Open modal and load selected event
+  // openEditModal(eventData: any) {
+  //   this.editEvent = { ...eventData }; // clone object
+  //   this.selectedFile = null;
+  //   this.modalService.open(this.editEventModal, { centered: true, size: 'lg' });
+  // }
+
+  openEditModal(eventData: any) {
+    this.editEvent = { ...eventData }; // clone object
+    
+    this.modalService.open(this.editEventModal, { centered: true, size: 'lg' });
+  }
+ 
+
+  
+    CIFTestReassignForm!: FormGroup; isForm1Submitted: boolean = false; isSubmitted = false;
+    isLoading: boolean = false;
+  
+    get form1() {
+      return this.CIFTestReassignForm.controls;
+    }
+  
+    LoadNewForm() {
+      this.CIFTestReassignForm = this.fb.group({
+        EventName: ['', Validators.required],
+        EventDate: ['', Validators.required],
+        EventDetails: ['', Validators.required],
+        ImageUrl: ['']
+      });
+    }
+    get isImageValid(): boolean {
+      // Valid if either a new file is selected or existing image URL is present
+      return !!this.selectedFile || !!this.editEvent?.imageUrl;
+    }
+    
+    // get isImageValid(): boolean {
+    //   // If editing and existing image present, valid
+    //   if (this.editEvent?.imageUrl) {
+    //     return true;
+    //   }
+    //   // Otherwise, require a selected file
+    //   return this.selectedFile != null;
+    // }
 
 
 
+ReAssginStaff(AssignTest: any): void {
+    if (!this.AssignedTo) {
+      swal.fire('Select Staff', 'Please select a staff member to assign.', 'warning');
+      return;
+    }
+    const formData = new FormData();
+    formData.append('BookingId', AssignTest.bookingId);
+    formData.append('UserId', AssignTest.userEmailId);
+    formData.append('AssignedTo', this.AssignedTo);
+    // console.log("Tests Assigned to :");
+    // formData.forEach((value, key) => console.log(`${key}: ${value}`));
+    this.CIFwebService.ReAssignTestToStaff(formData).subscribe({
+      next: (data: any) => {
+        const result = data.item1?.[0]?.msg || '';
 
+        const alertMap: Record<'Success' | 'Failed' | 'Default', { title: string; icon: any }> = {
+          Success: { title: 'Action Planned Stored Successfully!', icon: 'success' },
+          Failed: { title: 'Test is already Assigned', icon: 'error' },
+          Default: { title: 'Something Went Wrong, Try again later', icon: 'error' }
+        };
 
+        const alert = alertMap[result as keyof typeof alertMap] || alertMap.Default;
+
+        swal.fire({ title: alert.title, icon: alert.icon }).then(() => {
+          this.modalService.dismissAll(); // Close modal
+          this.getAllPaymentDetails(); // Refresh booking tests
+          this.getAllAssignedTest(); // Refresh assigned tests
+        });
+      },
+      error: () => {
+        swal.fire({
+          title: 'Error',
+          text: 'Failed to Upload.',
+          icon: 'error'
+        }).then(() => this.modalService.dismissAll());
+      }
+    });
+  }
 
 
 

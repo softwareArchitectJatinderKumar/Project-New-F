@@ -46,15 +46,15 @@ export class AdminActionBookingsComponent implements OnInit {
     'totalCharges', 'remarks', 'bookingRequestDate', //'bookingrequestDate'
   ];
   BookingCase: any;
-  BookingData: any[]=[];
+  BookingData: any[] = [];
   currentPage = 1;
   itemsPerPage = 10; //
-  tmpsBookingData: any[]=[];
+  tmpsBookingData: any[] = [];
   InstrumentId: any;
   UserRole: any;
   UserId: any;
   uploadEnabled: boolean;
-Remarks: any;
+  Remarks: any;
   serverUrl: string;
 
   constructor(
@@ -84,7 +84,7 @@ Remarks: any;
     this.getBookingDetails()
   }
 
-  searchQuery: string = ''; 
+  searchQuery: string = '';
 
   search() {
     const query = this.searchQuery.toLowerCase();
@@ -102,38 +102,67 @@ Remarks: any;
     }
     const searchTerm = this.searchQuery.toLowerCase();
     return this.BookingData.filter((booking: { instrumentName: string; analysisType: string; }) =>
-      booking.instrumentName.toLowerCase().includes(searchTerm) ||     booking.analysisType.toLowerCase().includes(searchTerm)
+      booking.instrumentName.toLowerCase().includes(searchTerm) || booking.analysisType.toLowerCase().includes(searchTerm)
     );
   }
   getBookingDetails() {
-    this.loadingIndicator=true;
-    const startTime = new Date().getTime();
-    this.CIFwebService.GetAllBookingTests().subscribe({
-      next: response => {
-        if (response.item1 && response.item1.length > 0) {
-          this.BookingData = response.item1;
-          this.dataSource = response.item1;
-          this.tmpsBookingData = response.item1;
-          this.originalData = [...this.BookingData];  
-          this.headHtmlData = this.tmpsBookingData[0];
-          this.columns = Object.keys(this.tmpsBookingData[0]);
-          this.columns = this.columns.filter((item: any) => item !== 'candidateName' && item !== 'userEmail' && item !== 'id' && item !== 'analysisId');
-          this.columns.push()
-        }
-        else {
-          this.BookingData = [];
-        }
-        const elapsed = new Date().getTime() - startTime;
-        const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
 
-        setTimeout(() => {
-          this.loadingIndicator = false;
-        }, remainingDelay);
+    this.loadingIndicator = true;
+    const startTime = Date.now();
+
+    this.CIFwebService.GetAllBookingTests().subscribe({
+      next: (response) => {
+        if (response?.item1?.length > 0) {
+          const filteredData = response.item1.filter(
+            (item: any) => !item.assignedUserId || item.assignedUserId === ''
+          );
+
+          this.BookingData = filteredData;
+          this.dataSource = filteredData;
+          this.tmpsBookingData = filteredData;
+          this.originalData = [...filteredData];
+
+          if (filteredData.length > 0) {
+            this.headHtmlData = filteredData[0];
+
+            // Exclude unwanted columns
+            this.columns = Object.keys(filteredData[0]).filter(
+              (col) =>
+                col !== 'candidateName' &&
+                col !== 'userEmail' &&
+                col !== 'id' &&
+                col !== 'analysisId'
+            );
+          } else {
+            this.headHtmlData = [];
+            this.columns = [];
+          }
+        } else {
+          this.BookingData = [];
+          // this.dataSource = [];
+          this.tmpsBookingData = [];
+          this.originalData = [];
+          // this.headHtmlData = null;
+          this.columns = [];
+        }
+
+        // maintain at least 1.5s loader
+        const elapsed = Date.now() - startTime;
+        const remainingDelay = Math.max(1500 - elapsed, 0);
+        setTimeout(() => (this.loadingIndicator = false), remainingDelay);
       },
-      error: err => {
-        console.log(err)
-      }
+      error: (err) => {
+        console.error('Error fetching booking data:', err);
+        this.BookingData = [];
+        // this.dataSource = [];
+        this.tmpsBookingData = [];
+        this.originalData = [];
+        this.headHtmlData = [];
+        this.columns = [];
+        this.loadingIndicator = false;
+      },
     });
+
   }
 
 
@@ -153,12 +182,22 @@ Remarks: any;
   }
 
   statusOptions = [
-    { label: 'All', value: '' }, 
+    { label: 'All', value: '' },
     { label: 'Success', value: 'success' },
     { label: 'Failure', value: 'failure' },
     { label: 'Pending', value: 'null' }
   ];
-  
+
+  getTotalRecords(): number {
+    return this.tmpsBookingData ? this.tmpsBookingData.length : 0;
+  }
+
+  // Handle record size dropdown change
+  onRecordSizeChange(event: any): void {
+    this.itemsPerPage = +event.target.value;
+    this.currentPage = 1; // Reset to first page
+  }
+
 
   getTotalPages() {
     return Math.ceil(this.tmpsBookingData.length / this.itemsPerPage);
@@ -186,22 +225,22 @@ Remarks: any;
     const fileName = 'AssignedResults_report.xlsx';
     const exportedData = this.BookingData.map(item => ({
       BookingId: item.bookingId,
-      InstrumentName: item.instrumentName,      
+      InstrumentName: item.instrumentName,
       EmailId: item.userEmailId,
       candidateName: item.candidateName,
-      OrganisationName:item.organisationName,
-      UserRole:item.userRole,
+      OrganisationName: item.organisationName,
+      UserRole: item.userRole,
       Samplecount: item.noOfSamples,
       PaymentAmount: item.totalCharges,
       RequestDate: item.bookingRequestDate,
-      PaymentStatus: item?.paymentStatus === 'success' ? 'Paid' :      item?.paymentStatus === 'failure' ? 'Failed' :      'Pending',
-      BookingDate: item.paymentDate ,
+      PaymentStatus: item?.paymentStatus === 'success' ? 'Paid' : item?.paymentStatus === 'failure' ? 'Failed' : 'Pending',
+      BookingDate: item.paymentDate,
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportedData);
 
     const wscols = [
-      { wpx: 280 }, { wpx: 280 }, { wpx: 280 },{ wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 },{ wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }
+      { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }, { wpx: 280 }
     ];
     ws['!cols'] = wscols;
 
@@ -223,7 +262,7 @@ Remarks: any;
   downloadFile(fileName: string): void {
     const url = this.serverUrl + fileName;
     window.open(url, '_blank');
-    }
+  }
   openPaymentModal(a: any) {
     this.BookingCase = a;
     this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
@@ -291,7 +330,7 @@ Remarks: any;
 
 
   onFileSelected(event: any): void {
-    this.fileStatus= false;
+    this.fileStatus = false;
     const reader = new FileReader();
     const target = event.target as HTMLInputElement;
     const file: File | null = (target.files as FileList)[0] || null;
@@ -343,6 +382,6 @@ Remarks: any;
   }
 
   UploadDocument() {
-    const formData = new FormData();   
+    const formData = new FormData();
   }
 }

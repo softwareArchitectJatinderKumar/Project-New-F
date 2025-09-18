@@ -18,7 +18,7 @@
 </div>
 
 <!-- Data Grid -->
-<div class="row" *ngIf="tmpsBookingData.length > 0; else NoData">
+<div class="row">
   <div class="col-12 stretch-card">
     <div class="card">
       <div class="card-body">
@@ -34,22 +34,28 @@
             <label class="fs-5 fw-bold">Results Uploaded Details</label>
           </div>
           <div class="col-sm-5">
-            <input
-              [(ngModel)]="searchQuery"
-              (keyup)="search()"
-              id="search"
-              type="text"
-              class="form-control"
-              placeholder="Search by any field..."
-              aria-label="Search"
-            />
+            <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control"
+              placeholder="Search by any field..." aria-label="Search" />
           </div>
         </div>
-
+        <div class="row m-4 p-2 ">
+          <span class="fs-3 themeClr" *ngIf=" searchQuery">
+            Search Result :- <span class="text-muted">Found {{ tmpsBookingData.length }}
+              Records</span>
+          </span>
+        </div>
+        <div class="row p-2">
+          <div class="m-2">
+            <span class="text-dark m-3 fs-5 p-2 fw-bolder" style="border:1px solid #ef7d00;">
+              Record Count: {{ getTotalRecords() }} | Total Pages: {{ getTotalPages() }}
+            </span>
+          </div>
+        </div>
         <!-- Table -->
-        <div class="table-responsive mt-3">
-          <table id="BookingDetailsDataTable" #table class="table table-striped table-bordered text-center align-middle">
-            <thead class="table-dark">
+        <div class="table-responsive mt-3" *ngIf="tmpsBookingData.length > 0; else NoData">
+          <table id="BookingDetailsDataTable" #table
+            >
+            <thead >
               <tr>
                 <th>User Id</th>
                 <th>Booking Id</th>

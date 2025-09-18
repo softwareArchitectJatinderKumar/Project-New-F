@@ -26,28 +26,21 @@
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <!-- <select class="form-select" [(ngModel)]="selectedStatus" (change)="filterData()">
-                                                                    <option value="">-- All --</option>
-                                                                    <option value="success">Success</option>
-                                                                    <option value="failure">Failure</option>
-                                                                    <option value="null">Pending</option>
-                                                                </select> -->
                         <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
-                            bindValue="value" placeholder="-- Select Status --" class="w-100">
-                            <!-- Custom Option Template -->
-                            <ng-template ng-option-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All --</span>
-                                <span *ngIf="item.value === 'success'" class="badge bg-success">Success</span>
-                                <span *ngIf="item.value === 'failure'" class="badge bg-danger">Failure</span>
-                                <span *ngIf="item.value === 'null'" class="badge bg-warning text-dark">Pending</span>
+                            bindValue="value" placeholder="-- Select Payment --" class="w-100">
+                             <ng-template ng-option-tmp let-item="item">
+                                 <span *ngIf="item.value === ''" >-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'" >Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'" >Failed Payments</span>
+                                <span *ngIf="item.value === 'null'" >Pending Payments</span>
                             </ng-template>
-                    
+                
                             <!-- Custom Selected Item Template -->
                             <ng-template ng-label-tmp let-item="item">
-                                <span *ngIf="item.value === ''" class="text-danger">-- All --</span>
-                                <span *ngIf="item.value === 'success'" class="badge bg-success">Success</span>
-                                <span *ngIf="item.value === 'failure'" class="badge bg-danger">Failure</span>
-                                <span *ngIf="item.value === 'null'" class="badge bg-warning text-dark">Pending</span>
+                                <span *ngIf="item.value === ''" >-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'" >Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'" >Failed Payments</span>
+                                <span *ngIf="item.value === 'null'" >Pending Payments</span>
                             </ng-template>
                         </ng-select>
                     
@@ -62,6 +55,19 @@
                     <hr />
                 </div>
                 <hr />
+                 <div class="row m-4 p-2 ">
+                    <span class="fs-3 themeClr" *ngIf=" searchQuery">
+                        Search Result :- <span class="text-muted">Found {{ tmpsAllPaymentData.length }}
+                            Records</span>
+                    </span>
+                </div>
+                <div class="row">
+                    <div class="m-1">
+                        <span class="text-dark m-3 fs-5 p-2 fw-bolder" style="border:1px solid #ef7d00;">
+                            Record Count: {{ getTotalRecords() }} | Total Pages: {{ getTotalPages() }}
+                        </span>
+                    </div>
+                </div>
                 <ng-container *ngIf="tmpsAllPaymentData.length > 0; else noRecords">
                     <div class="table-responsive mt-4 mb-4">
                         <table id="AdminPendingPayments" #table c>

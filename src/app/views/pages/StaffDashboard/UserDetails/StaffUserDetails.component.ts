@@ -53,17 +53,17 @@ export class StaffUserDetailsComponent implements OnInit {
     'totalCharges', 'remarks', 'bookingRequestDate', //'bookingrequestDate'
   ];
   BookingCase: any;
-  UserDetailsData: any[]=[];
+  UserDetailsData: any[] = [];
   currentPage = 1;
   itemsPerPage = 10; // 
-  tmpsUserDetailsData: any[]=[];
+  tmpsUserDetailsData: any[] = [];
   InstrumentId: any;
   UserRole: any;
   UserId: any;
   uploadEnabled: boolean;
   Remarks: any;
   candidateName: any;
-  
+
   constructor(
     private CIFwebService: LpuCIFWebService,
     private storageService: StorageService,
@@ -99,13 +99,13 @@ export class StaffUserDetailsComponent implements OnInit {
       return Object.values(item).some(val => {
         // Convert val to string and check if it matches the query
         const valString = String(val).toLowerCase();
-  
+
         // Check if the val is a userRole and map it to the corresponding page name
         let mappedRole = '';
         if (item.userRole) {
           // Ensure userRole is an array, if it's not, convert it to an array
           const rolesArray = Array.isArray(item.userRole) ? item.userRole : [item.userRole];
-  
+
           // Map the roles to their corresponding page names
           mappedRole = rolesArray.map((userRole: string) => {
             switch (userRole.trim()) {
@@ -120,58 +120,72 @@ export class StaffUserDetailsComponent implements OnInit {
             }
           }).join(' ').toLowerCase();
         }
-  
+
         // Check if the query matches either the regular field value or the mapped role
         return valString.includes(query) || mappedRole.includes(query);
       });
     });
   }
-  
-  
+
+
 
   get filteredUserDetailsData(): any[] {
     // If search query is empty, return all data
     if (!this.searchQuery.trim()) {
       return this.UserDetailsData;
-    }    
+    }
     const searchTerm = this.searchQuery.toLowerCase();
     return this.UserDetailsData.filter((booking: { instrumentName: string; analysisType: string; }) =>
-      booking.instrumentName.toLowerCase().includes(searchTerm) ||     booking.analysisType.toLowerCase().includes(searchTerm)       
+      booking.instrumentName.toLowerCase().includes(searchTerm) || booking.analysisType.toLowerCase().includes(searchTerm)
     );
   }
- showLoader = true;
+  showLoader = true;
   getBookingDetails() {
-    this.showLoader = true;
-    const startTime = new Date().getTime();
-    this.CIFwebService.GetAllUserData().subscribe({
-      next: response => {
-        if (response.item1 && response.item1.length > 0) {
-          this.UserDetailsData = response.item1;
-          this.dataSource = response.item1;
-          // console.log(" USER " + JSON.stringify(this.UserDetailsData))
-          this.tmpsUserDetailsData = response.item1;
-          this.headHtmlData = this.tmpsUserDetailsData[0];
-          this.columns = Object.keys(this.tmpsUserDetailsData[0]);
-          this.columns = this.columns.filter((item: any) => item !== 'candidateName' && item !== 'userEmail' && item !== 'id' && item !== 'analysisId');
-          this.columns.push()
-          this.loadingIndicator = false;          
-        }
-        else {
-          this.UserDetailsData = [];
-        }
-        const elapsed = new Date().getTime() - startTime;
-        const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+  this.showLoader = true;
+  const startTime = new Date().getTime();
 
-        setTimeout(() => {
-          this.showLoader = false;
-        }, remainingDelay);
-      },
-      error: err => {
-        console.log(err)
+  this.CIFwebService.GetAllUserData().subscribe({
+    next: response => {
+      if (response.item1 && response.item1.length > 0) {
+        this.UserDetailsData = response.item1;
+        this.originalData = [...response.item1];    
+        this.tmpsUserDetailsData = [...response.item1];
+
+        this.dataSource = response.item1;
+        console.log(" USER DATA", this.UserDetailsData);
+
+        this.headHtmlData = this.tmpsUserDetailsData[0];
+        this.columns = Object.keys(this.tmpsUserDetailsData[0]);
+        this.columns = this.columns.filter((item: any) =>
+          item !== 'candidateName' &&
+          item !== 'userEmail' &&
+          item !== 'id' &&
+          item !== 'analysisId'
+        );
+        this.loadingIndicator = false;
+      } else {
+        this.UserDetailsData = [];
+        this.originalData = [];
+        this.tmpsUserDetailsData = [];
       }
-    });
-  }
 
+      const elapsed = new Date().getTime() - startTime;
+      const remainingDelay = Math.max(1500 - elapsed, 0);
+
+      setTimeout(() => {
+        this.showLoader = false;
+      }, remainingDelay);
+    },
+    error: err => {
+      console.error(err);
+      this.showLoader = false;
+    }
+  });
+}
+
+  getTotalRecords(): number {
+    return this.tmpsUserDetailsData.length > 0 ? this.tmpsUserDetailsData.length : 0;
+  }
   getTotalPages() {
     return Math.ceil(this.tmpsUserDetailsData.length / this.itemsPerPage);
   }
@@ -193,7 +207,7 @@ export class StaffUserDetailsComponent implements OnInit {
       this.currentPage--;
     }
   }
-  
+
   exportToExcel(): void {
     const fileName = 'User_Details_report.xlsx';
     const exportedData = this.UserDetailsData.map(item => ({
@@ -203,15 +217,15 @@ export class StaffUserDetailsComponent implements OnInit {
       Department: item.departmentName,
       SchoolName: item.organisation,
       SupervisorName: item.supervisorName,
-      Designation: item.designation != null? item.designation:'NA',
-      Role: item.userRole != null 
-      ? item.userRole === '400000' 
-        ? 'Internal User' 
-        : item.userRole === '400001' 
-          ? 'External Acadmeia' 
-          : 'Industry User'
-      : 'N-A',
-       
+      Designation: item.designation != null ? item.designation : 'NA',
+      Role: item.userRole != null
+        ? item.userRole === '400000'
+          ? 'Internal User'
+          : item.userRole === '400001'
+            ? 'External Acadmeia'
+            : 'Industry User'
+        : 'N-A',
+
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportedData);
@@ -254,37 +268,37 @@ export class StaffUserDetailsComponent implements OnInit {
     formData.append('FilePath', this.fileName);
     formData.append('File', this.FileData);
     this.CIFwebService.CIFResultsUploads(formData).subscribe({
-        next: (data: any) => {
-            const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
-            const returnId = data.item1[0]['ReturnId'];
+      next: (data: any) => {
+        const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
+        const returnId = data.item1[0]['ReturnId'];
 
-            if (result === 'Success' && returnId !== '0') {
-                Swal.fire({
-                    title: 'Uploaded Successfully!',
-                    icon: 'success'
-                }).then(() => {
-                    window.location.reload();
-                });
-            } else {
-                Swal.fire({
-                    title: 'Already Uploaded Results for this Test',
-                    icon: 'error'
-                }).then(() => {
-                    window.location.reload();
-                });
-            }
-        },
-        error: (error: any) => {
-            Swal.fire({
-                title: 'Error',
-                text: 'Failed to Upload.',
-                icon: 'error'
-            });
+        if (result === 'Success' && returnId !== '0') {
+          Swal.fire({
+            title: 'Uploaded Successfully!',
+            icon: 'success'
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: 'Already Uploaded Results for this Test',
+            icon: 'error'
+          }).then(() => {
+            window.location.reload();
+          });
         }
+      },
+      error: (error: any) => {
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to Upload.',
+          icon: 'error'
+        });
+      }
     });
-}
+  }
 
-  
+
   onFileSelected(event: any): void {
     const reader = new FileReader();
     const target = event.target as HTMLInputElement;
@@ -333,7 +347,7 @@ export class StaffUserDetailsComponent implements OnInit {
         this.FileData = ssssArray[1];
         this.fileName = file.name;
 
-       
+
       };
     }
   }
@@ -341,6 +355,51 @@ export class StaffUserDetailsComponent implements OnInit {
   UploadDocument() {
 
     const formData = new FormData();
-    
+
   }
+
+  originalData: any[] = []; // Loaded from API
+  filteredData: any[] = [];
+  selectedStatus: string = '';
+
+  // filterData(): void {
+  //   alert(this.selectedStatus)
+  //   if (this.selectedStatus === '') {
+  //     this.tmpsUserDetailsData = [...this.originalData]; // Show all data
+  //   } else if (this.selectedStatus === '400000') {
+  //     this.tmpsUserDetailsData = this.originalData.filter(item => item.userRole == '400000' );
+  //   } if (this.selectedStatus === '400001') {
+  //     this.tmpsUserDetailsData = this.originalData.filter(item => item.userRole == '400001' );
+  //   } if (this.selectedStatus === '400002') {
+  //     this.tmpsUserDetailsData = this.originalData.filter(item => item.userRole == '400002' );
+  //   } 
+  //   this.currentPage = 1; // Reset to first page after filtering
+  // }
+
+  statusOptions = [
+    { label: 'All', value: '' },
+    { label: 'Internal', value: '400000' },
+    { label: 'External', value: '400001' },
+    { label: 'Industry', value: '400002' }
+  ];
+
+
+filterData(): void {
+  if (!this.selectedStatus || this.selectedStatus === '') {
+    this.tmpsUserDetailsData = [...this.originalData];
+  } else if (this.selectedStatus === 'null') {
+    this.tmpsUserDetailsData = this.originalData.filter(item =>
+      item.userRole == null || item.userRole === ''
+    );
+  } else {
+    this.tmpsUserDetailsData = this.originalData.filter(item =>
+      item.userRole === this.selectedStatus
+    );
+  }
+  this.currentPage = 1;
+}
+
+ 
+
+
 }

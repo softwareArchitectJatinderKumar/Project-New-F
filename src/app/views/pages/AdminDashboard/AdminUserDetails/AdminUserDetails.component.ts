@@ -176,7 +176,9 @@ export class AdminUserDetailsComponent implements OnInit {
       }
     });
   }
-
+    getTotalRecords(): number {
+    return this.tmpsUserDetailsData ? this.tmpsUserDetailsData.length : 0;
+  }
   getTotalPages() {
     return Math.ceil(this.tmpsUserDetailsData.length / this.itemsPerPage);
   }

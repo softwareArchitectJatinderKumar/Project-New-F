@@ -146,6 +146,9 @@ export class AdminPendingPaymentsComponent implements OnInit {
     });
   }
 
+    getTotalRecords(): number {
+    return this.tmpsAllPaymentData ? this.tmpsAllPaymentData.length : 0;
+  }
   getTotalPages() {
     return Math.ceil(this.tmpsAllPaymentData.length / this.itemsPerPage);
   }

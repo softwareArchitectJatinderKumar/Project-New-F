@@ -128,6 +128,9 @@ getUploadedResultsDetails(UID: any): void {
     }
   });
 }
+getTotalRecords():number {
+  return this.tmpsBookingData.length>0?this.tmpsBookingData.length:0
+}
 
   getTotalPages(): number {
     return Math.ceil(this.tmpsBookingData.length / this.itemsPerPage);

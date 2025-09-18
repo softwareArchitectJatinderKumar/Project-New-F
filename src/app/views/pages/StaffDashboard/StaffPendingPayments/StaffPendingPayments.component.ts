@@ -136,6 +136,9 @@ export class StaffPendingPaymentsComponent implements OnInit {
     });
   }
 
+  getTotalRecords(): number {
+    return this.tmpsAllPaymentData.length>0? this.tmpsAllPaymentData.length:0;
+  }
   getTotalPages() {
     return Math.ceil(this.tmpsAllPaymentData.length / this.itemsPerPage);
   }
