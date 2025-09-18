@@ -300,7 +300,7 @@ export class LpuCIFWebService {
   CIFAssignTestToStaff(dataSoft: FormData): Observable<any> {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken) // Added on 18-sep-25
     //.set('Authorization', 'Bearer ' + this.Localtoken)
     return this.http.post(
       //  'https://projectsapi.lpu.in/api/LpuCIF/CIFAssignTest', dataSoft, { headers }
@@ -675,4 +675,20 @@ export class LpuCIFWebService {
        AUTH_API + 'api/LpuCIF/CIUpdateUserDetails', UserData, { headers }
     ); 
   }
+
+
+
+  // Added on 18-sep025
+    ReAssignTestToStaff(dataSoft: FormData): Observable<any> {
+    let authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + authToken)
+    //.set('Authorization', 'Bearer ' + this.Localtoken)
+    return this.http.post(
+      //  'https://projectsapi.lpu.in/api/LpuCIF/CIFAssignTest', dataSoft, { headers }
+      //  'https://localhost:7125/api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
+        AUTH_API + 'api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
+    );
+  }
+
 }
