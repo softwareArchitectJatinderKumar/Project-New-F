@@ -152,7 +152,7 @@ export class StaffUserDetailsComponent implements OnInit {
         this.tmpsUserDetailsData = [...response.item1];
 
         this.dataSource = response.item1;
-        console.log(" USER DATA", this.UserDetailsData);
+        // console.log(" USER DATA", this.UserDetailsData);
 
         this.headHtmlData = this.tmpsUserDetailsData[0];
         this.columns = Object.keys(this.tmpsUserDetailsData[0]);

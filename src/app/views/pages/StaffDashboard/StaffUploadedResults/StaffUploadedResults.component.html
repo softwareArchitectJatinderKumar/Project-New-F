@@ -58,7 +58,10 @@
             <thead >
               <tr>
                 <th>User Id</th>
-                <th>Booking Id</th>
+                
+                <th>Registration Number</th>
+                <th>Mobile Number</th>
+                <th>BookingID</th>
                 <th>Instrument Name</th>
                 <th>Request Sheet</th>
                 <th>Request Date</th>
@@ -67,7 +70,9 @@
             </thead>
             <tbody>
               <tr *ngFor="let BookingDataRow of getCurrentPageData()">
-                <td class="fw-bold">{{ BookingDataRow.testUserId || 'NA' }}</td>
+                <td class="fw-bold">{{ BookingDataRow.testUserId || 'NA' }}</td>                
+                <td class="fw-bold">{{ BookingDataRow.IdProofNumber || 'NA' }}</td>
+                <td class="fw-bold">{{ BookingDataRow.mobileNumber || 'NA' }}</td>
                 <td class="fw-bold">{{ BookingDataRow.bookingId }}</td>
                 <td class="fw-bold">{{ BookingDataRow.instrumentName }}</td>
                 <td>

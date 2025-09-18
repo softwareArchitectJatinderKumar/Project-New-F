@@ -66,9 +66,11 @@
                                     <th class="form-label fw-bolder">Sample Count</th>
                                     <th class="form-label fw-bolder">Total Charges </th>
                                     <th class="fw-bold fw-bolder">Request Sheet</th>
-                                    <th class="form-label fw-bolder">Candidate Id</th>
                                     <th class="form-label fw-bolder">Candidate Name</th>
                                     <th class="form-label fw-bolder">Organisation Name</th>
+                                    <th class="form-label fw-bolder">Registration Number</th>
+                                    <th class="form-label fw-bolder">Mobile No</th>
+                                    <th class="form-label fw-bolder">User Id</th>
                                     <th class="form-label fw-bolder">User Type</th>
                                     <th class="form-label fw-bolder">Payment Status</th>
                                     <th class="form-label fw-bolder">Payment Date</th>
@@ -99,9 +101,11 @@
                                             </td>
                                         </ng-template>
                                         <!-- <td class="fw-bold ">{{AllBookingTestsDataRow.bookingRequestDate }}</td> -->
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.userEmailId?.length>0 ? AllBookingTestsDataRow.userEmailId : 'Internal User' }}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.candidateName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.candidateName }}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.organisationName}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.idProofNumber}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.mobileNumber}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.userRole=='Guest User '? 'Internal User' : AllBookingTestsDataRow.userId}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.userRole=='Guest User '? 'Internal User' : AllBookingTestsDataRow.userRole}}</td>
                                         <td>
                                             <span class="badge" [ngClass]="{'bg-success': AllBookingTestsDataRow?.paymentStatus == 'success', 'bg-danger': AllBookingTestsDataRow?.paymentStatus == 'failure', 'bg-warning text-dark': !AllBookingTestsDataRow?.paymentStatus || AllBookingTestsDataRow?.paymentStatus == 'null' }">

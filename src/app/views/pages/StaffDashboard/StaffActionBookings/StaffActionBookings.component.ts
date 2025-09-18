@@ -113,6 +113,7 @@ export class StaffActionBookingsComponent implements OnInit {
           this.BookingData = response.item1;
           const firstRecord = response.item1[0];
           this.NoResults = firstRecord.returnMessage;
+          console.log(JSON.stringify(this.BookingData))
             this.dataSource = response.item1;
             this.tmpsBookingData = response.item1;
             this.originalData = [...this.BookingData];  

@@ -55,7 +55,7 @@ export class UserProfile implements OnInit {
     this.CIFwebService.CIFGetUserDetails(retrievedCookies.EmailId).subscribe({
       next: (data) => {
         this.UserDetails = data.item1[0];
-        console.log('User  Details:', JSON.stringify( this.UserDetails));
+        // console.log('User  Details:', JSON.stringify( this.UserDetails));
 
         this.cifUserForm.patchValue({
           EmailId:        retrievedCookies.EmailId,

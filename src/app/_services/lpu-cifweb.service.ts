@@ -589,8 +589,9 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
-      AUTH_API + 'api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
-      // 'https://projectsapi.lpu.in/api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
+      // AUTH_API + 'api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
+      //  'https://localhost:7125/api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
+      'https://projectsapi.lpu.in/api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
     );   
   }
   GetAllUserLists(): Observable<any> {
