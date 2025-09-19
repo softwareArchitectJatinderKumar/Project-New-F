@@ -147,11 +147,12 @@ export class StaffUserDetailsComponent implements OnInit {
   this.CIFwebService.GetAllUserData().subscribe({
     next: response => {
       if (response.item1 && response.item1.length > 0) {
-        this.UserDetailsData = response.item1;
-        this.originalData = [...response.item1];    
-        this.tmpsUserDetailsData = [...response.item1];
+        // this.UserDetailsData = response.item1;
+        this.originalData =  this.tmpsUserDetailsData =this.UserDetailsData = response.item1.sort((a: any, b: any) => b.idProofNumber - a.idProofNumber);
+        // this.originalData = [...response.item1];    
+        // this.tmpsUserDetailsData = [...response.item1];
 
-        this.dataSource = response.item1;
+        // this.dataSource = response.item1;
         // console.log(" USER DATA", this.UserDetailsData);
 
         this.headHtmlData = this.tmpsUserDetailsData[0];

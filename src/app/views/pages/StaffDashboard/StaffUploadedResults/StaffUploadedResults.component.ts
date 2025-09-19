@@ -110,6 +110,7 @@ getUploadedResultsDetails(UID: any): void {
         this.BookingData = data;
         this.tmpsBookingData = [...data];
         this.NoResults = '';
+        console.log(JSON.stringify(this.BookingData))
       } else {
         this.BookingData = [];
         this.tmpsBookingData = [];

@@ -57,9 +57,9 @@
             >
             <thead >
               <tr>
-                <th>User Id</th>
-                
+                <th>User Email Id</th>                
                 <th>Registration Number</th>
+                <!-- <th>User Type</th> -->
                 <th>Mobile Number</th>
                 <th>BookingID</th>
                 <th>Instrument Name</th>
@@ -72,6 +72,7 @@
               <tr *ngFor="let BookingDataRow of getCurrentPageData()">
                 <td class="fw-bold">{{ BookingDataRow.testUserId || 'NA' }}</td>                
                 <td class="fw-bold">{{ BookingDataRow.IdProofNumber || 'NA' }}</td>
+                <!-- <td class="fw-bold ">{{BookingDataRow.userRole=='Guest User '? 'Internal User' : BookingDataRow.userRole}}</td> -->
                 <td class="fw-bold">{{ BookingDataRow.mobileNumber || 'NA' }}</td>
                 <td class="fw-bold">{{ BookingDataRow.bookingId }}</td>
                 <td class="fw-bold">{{ BookingDataRow.instrumentName }}</td>

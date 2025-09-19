@@ -115,7 +115,7 @@ export class UserProfile implements OnInit {
       formData.append("IdProofType", updatedData.IdProofType);
       formData.append("IdProofNumber", updatedData.IdProofNumber);
       formData.append("Address", updatedData.Address);
-      formData.append("User Email", updatedData.EmailId);
+      formData.append("UserEmail", updatedData.EmailId);
 
       this.CIFwebService.UpdateUserDetails(formData).subscribe({
         next: (data) => {

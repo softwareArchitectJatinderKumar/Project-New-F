@@ -98,7 +98,8 @@ export class StaffPendingPaymentsComponent implements OnInit {
     this.CIFwebService.GetAllPaymentDetails().subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
-          this.AllPaymentData = response.item1;
+          this.AllPaymentData = response.item1.sort((a: any, b: any) => b.bookingId - a.bookingId);
+          // this.AllPaymentData = response.item1;
           this.dataSource = response.item1;
           // console.log(JSON.stringify(this.dataSource))
           this.originalData = [...this.AllPaymentData];  
