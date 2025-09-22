@@ -454,13 +454,13 @@ export class LoginPageNComponent implements OnInit {
     formData.append("CandidateName", this.CandidateName,);
     formData.append("SupervisorName", this.SupervisorName);
     formData.append("MobileNumber", this.MobileNo);
-    formData.append("SchoolName", this.Department);
+    formData.append("SchoolName", 'LPU');
     formData.append("DepartmentName", this.DepartmentName);
     formData.append("IdProofType", 'UMS ID');
     formData.append("IdProofNumber", this.UserId);
     formData.append("UserType", this.UserRole);
     formData.append("Address", 'Internal User');
-    formData.append("PasswordText", btoa(this.SecretKey));
+    formData.append("PasswordText", this.SecretKey);
     // formData.forEach((value, key) => {
     //   console.log(key, value);
     // });

@@ -36,7 +36,7 @@ export class CifLoginPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cookieService.delete('InternalUser AuthData');
+    this.cookieService.delete('InternalUserAuthData');
     this.AuthSession.clearSession();
     this.loadForm();
   }
@@ -86,7 +86,7 @@ export class CifLoginPageComponent implements OnInit {
 
     const formValues = this.formdata.value;
     const uid = formValues.Email;
-    const password = formValues.password;
+    const password = encodeURIComponent(formValues.password); //encodeURIComponent(password);
     const userRoleX = parseInt(formValues.UserRoleS, 10);
 
     this.authoriseUser (uid, password, userRoleX);

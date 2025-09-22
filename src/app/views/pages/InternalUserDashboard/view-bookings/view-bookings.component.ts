@@ -34,6 +34,7 @@ export class ViewBookingsComponent implements OnInit {
   @ViewChild('viewDescModal') viewDescModal: TemplateRef<any>;
   @ViewChild('viewDescModal2') viewDescModal2: TemplateRef<any>;
   @ViewChild('ViewUpdateStatusModal') ViewUpdateStatusModal: TemplateRef<any>;
+  @ViewChild('UploadNewSampleFileModal') UploadNewSampleFileModal: TemplateRef<any>;
   dataSource: MatTableDataSource<any>;
 
   TypeId: any = 'CIF';
@@ -405,4 +406,114 @@ export class ViewBookingsComponent implements OnInit {
     });
   }
 
+UploadNewsampleFileData:any;
+
+  // logic to Upload and replace the  sample file 
+
+  OpenUploadNewSampleModal(BookinData:any){
+    this.UploadNewsampleFileData = BookinData;
+    this.modalService
+      .open(this.UploadNewSampleFileModal, { size: 'sm' })
+      .result.then((result: string) => {
+        console.log('Modal closed' + result);
+      })
+      .catch((res: any) => { });
+
+
+  }
+remarks:any='';
+ FileData: any; array: any[] = []; fileData: File; fileStatus: boolean = false;
+  fileName: string;
+  fileChosen: { [key: number]: boolean } = {};
+  uploadEnabled: boolean = false;
+    onFileSelected(event: any): void {
+    const reader = new FileReader();
+    const target = event.target as HTMLInputElement;
+    const file: File | null = (target.files as FileList)[0] || null;
+    if (file && file.size > 3148576) {
+      swal.fire({
+        title: 'File size exceeds 3MB. Please upload a smaller file.',
+        text: 'Invalid File size',
+        icon: 'warning'
+      });
+      target.value = '';
+      return;
+    }
+
+    const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
+    if (file && !fileNameRegex.test(file.name)) {
+      const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+
+      const modifiedFile = new File([file], validFileName, { type: file.type });
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(modifiedFile);
+      target.files = dataTransfer.files;
+
+      this.fileData = modifiedFile;
+      this.fileStatus = true;
+
+      reader.readAsDataURL(modifiedFile);
+      reader.onload = () => {
+        const ssss = reader.result as string;
+        const ssssArray = ssss.split(',');
+        this.FileData = ssssArray[1];
+        this.fileName = validFileName;
+      };
+      this.uploadEnabled = true;
+      return;
+    }
+
+    this.fileData = file;
+    this.fileStatus = true;
+    // alert(10);  
+    if (file) {
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const ssss = reader.result as string;
+        const ssssArray = ssss.split(',');
+        this.FileData = ssssArray[1];
+        this.fileName = file.name;
+        this.uploadEnabled = true;
+      };
+    }
+  }
+
+  UploadNewSampleFile(BookingCase: any) {
+    this.loadingIndicator = true;
+    const startTime = new Date().getTime();
+    const formData = new FormData();
+    formData.append('BookingId', BookingCase.id);
+    formData.append('UserEmailId', this.user_Email);
+    formData.append('Remarks', this.remarks);
+    formData.append('FilePath', this.fileName);
+    formData.append('File', this.FileData);
+    console.log("Uploading activity with data:");
+    formData.forEach((value, key) => console.log(`${key}: ${value}`));
+
+    this.CIFwebService.CallUploadNewSampleFile(formData).subscribe({
+      next: (data: any) => {
+        if (data?.item1?.length > 0) {
+          const result = data.item1[0]?.msg;
+          if (result === 'success') {
+            this.showAlert('Action Planned Stored Successfully!', 'success');
+          }
+        } else {
+          console.error("Unexpected API response format:", data);
+          this.showAlert('Server Error', 'error');
+        }
+      },
+      complete: () => {
+        const elapsed = new Date().getTime() - startTime;
+        const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 5s
+
+        setTimeout(() => {
+          this.loadingIndicator = false;
+        }, remainingDelay);
+      }
+    });
+  
+  }
+   private showAlert(title: string, icon: 'success' | 'error') {
+    swal.fire({ title, icon }).then(() => window.location.reload());
+  }
 }

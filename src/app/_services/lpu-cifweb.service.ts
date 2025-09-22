@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
+// const AUTH_API = 'https://localhost:7125/';
+// const AUTH_API_LOCAL = 'https://localhost:7125/';
+// const AUTH_API_LOCALS = 'https://localhost:7125/';
 const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
 const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
 const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
@@ -45,6 +48,7 @@ export class LpuCIFWebService {
       // .set('Authorization', 'Bearer ' + token)
       .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
+      //encodeURIComponent(password);
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetUserDataIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&UserRole=' + userRole,
       // AUTH_API_LOCAL + 'api/LpuCIF/GetUserDataIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&UserRole=' + userRole,
@@ -132,8 +136,8 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
     // .set('Content-Type', 'multipart/form-data');
     return this.http.post(
-      AUTH_API + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
-      // AUTH_API_LOCAL + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
+      // AUTH_API + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
+       'https://localhost:7125/api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
     );
   }
 
@@ -691,5 +695,18 @@ export class LpuCIFWebService {
         AUTH_API + 'api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
     );
   }
+
+
+  CallUploadNewSampleFile(dataSoft: FormData): Observable<any> {
+    let authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + authToken)
+    //.set('Authorization', 'Bearer ' + this.Localtoken)
+    return this.http.post(
+       'https://localhost:7125/api/LpuCIF/ReUploadSampleFile', dataSoft, { headers }
+        // AUTH_API + 'api/LpuCIF/ReUploadSampleFile', dataSoft, { headers }
+    );
+  }
+
 
 }
