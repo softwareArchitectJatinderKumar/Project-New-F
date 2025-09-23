@@ -113,7 +113,7 @@ export class StaffActionBookingsComponent implements OnInit {
           this.BookingData = response.item1;
           const firstRecord = response.item1[0];
           this.NoResults = firstRecord.returnMessage;
-          console.log(JSON.stringify(this.BookingData))
+          // console.log(JSON.stringify(this.BookingData))
             this.dataSource = response.item1;
             this.tmpsBookingData = response.item1;
             this.originalData = [...this.BookingData];  
@@ -248,43 +248,43 @@ export class StaffActionBookingsComponent implements OnInit {
       formData.append('FilePath', this.fileName);
       formData.append('File', this.FileData);
 
-         console.log("Upload data Results:");
-    formData.forEach((value, key) => console.log(`${key}: ${value}`));
-      // this.CIFwebService.CIFResultsUploads(formData).subscribe({
-      //   next: (data: any) => {
-      //     const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
-      //     const returnId = data.item1[0]['ReturnId'];
+    //      console.log("Upload data Results:");
+    // formData.forEach((value, key) => console.log(`${key}: ${value}`));
+      this.CIFwebService.CIFResultsUploads(formData).subscribe({
+        next: (data: any) => {
+          const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
+          const returnId = data.item1[0]['ReturnId'];
 
-      //     if (result === 'Success' && returnId !== '0') {
-      //       Swal.fire({
-      //         title: 'Uploaded Successfully!',
-      //         icon: 'success'
-      //       }).then(() => {
-      //         window.location.reload();
-      //       });
-      //     } else {
-      //       Swal.fire({
-      //         title: 'Already Uploaded Results for this Test',
-      //         icon: 'error'
-      //       }).then(() => {
-      //         window.location.reload();
-      //       });
-      //     }
-      //     const elapsed = new Date().getTime() - startTime;
-      //     const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+          if (result === 'Success' && returnId !== '0') {
+            Swal.fire({
+              title: 'Uploaded Successfully!',
+              icon: 'success'
+            }).then(() => {
+              window.location.reload();
+            });
+          } else {
+            Swal.fire({
+              title: 'Already Uploaded Results for this Test',
+              icon: 'error'
+            }).then(() => {
+              window.location.reload();
+            });
+          }
+          const elapsed = new Date().getTime() - startTime;
+          const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
 
-      //     setTimeout(() => {
-      //       this.loadingIndicator = false;
-      //     }, remainingDelay);
-      //   },
-      //   error: () => {
-      //     Swal.fire({
-      //       title: 'Error',
-      //       text: 'Failed to Upload.',
-      //       icon: 'error'
-      //     });
-      //   }
-      // });
+          setTimeout(() => {
+            this.loadingIndicator = false;
+          }, remainingDelay);
+        },
+        error: () => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to Upload.',
+            icon: 'error'
+          });
+        }
+      });
     }
     else {
       Swal.fire({
