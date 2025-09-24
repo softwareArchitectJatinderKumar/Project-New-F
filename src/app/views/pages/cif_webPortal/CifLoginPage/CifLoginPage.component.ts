@@ -33,10 +33,10 @@ export class CifLoginPageComponent implements OnInit {
     private AuthSession: LoginSessionService,
     private router: Router,
     private cookieService: CookieService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.cookieService.delete('InternalUser AuthData');
+    this.cookieService.delete('InternalUserAuthData');
     this.AuthSession.clearSession();
     this.loadForm();
   }
@@ -61,7 +61,7 @@ export class CifLoginPageComponent implements OnInit {
   }
 
   get userRole(): AbstractControl | null {
-    return this.formdata.get('User RoleS');
+    return this.formdata.get('UserRoleS');
   }
 
   togglePasswordVisibility(): void {
@@ -89,11 +89,22 @@ export class CifLoginPageComponent implements OnInit {
     const password = formValues.password;
     const userRoleX = parseInt(formValues.UserRoleS, 10);
 
-    this.authoriseUser (uid, password, userRoleX);
+    this.authoriseUser(uid, password, userRoleX);
   }
 
-  authoriseUser (Id: string, Key: string, Role: number): void {
-    this.CIFwebService.GetAuthoriseUserData(Id, Key, Role).subscribe({
+
+  authoriseUser(Id: string, Key: string, Role: any): void {
+    const loginData = {
+      Email: Id,           // Match C# property name
+      PasswordText: Key,   // Can include #, @, etc.
+      UserRole: Role
+    };
+    const formData = new FormData();
+    formData.append('Email', Id);
+    formData.append('PasswordText', Key);
+    formData.append('UserRole', Role);
+
+    this.CIFwebService.GetAuthoriseUserData(formData).subscribe({
       next: (response) => {
         if (response.item1 && response.item1.length > 0) {
           this.Email = response.item1[0].email;
@@ -145,7 +156,7 @@ export class CifLoginPageComponent implements OnInit {
   createToken(Id: string, response: any): void {
     this.authService.LoginJournalAccessTemp(Id).subscribe({
       next: (data) => {
-        this.storageService.saveUser (data);
+        this.storageService.saveUser(data);
         this.setUserData(response);
       },
       error: () => {
@@ -157,7 +168,6 @@ export class CifLoginPageComponent implements OnInit {
   setUserData(response: any): void {
     const user = response.item1[0];
     this.UserData = response.item1;
-
     const userCookiesData = {
       CandidateName: user.candidateName,
       UserId: user.emailId,
@@ -170,16 +180,24 @@ export class CifLoginPageComponent implements OnInit {
       SupervisorName: user.supervisorName,
       ProofNumber: btoa(user.idProofNumber),
       ProofName: user.idProofType,
-      PasswordText: btoa(user.passwordText)
+      // PasswordText: user.passwordText
     };
 
     this.cookieService.set('InternalUserAuthData', JSON.stringify(userCookiesData));
 
-    // Show terms and conditions modal
-    swal
-      .fire({
-        title: 'Terms & Conditions',
-        html: `
+    const passwordchanged = user['isPasswordUpdated']
+    if (passwordchanged != true) {
+      alert(passwordchanged + " " + this.UserData.isPasswordUpdated)
+      this.AuthSession.addToSession(this.UserData);
+      this.router.navigateByUrl('/SecurityIssue').then(() => {
+        window.location.reload();
+      });
+    } else {
+      // Show terms and conditions modal
+      swal
+        .fire({
+          title: 'Terms & Conditions',
+          html: `
           <div style="max-height: 400px; overflow-y: auto; text-align: left; padding: 10px;">
             <p>Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in</p>
             <p><strong>You specifically agree to all of the following undertakings:</strong></p>
@@ -194,33 +212,34 @@ export class CifLoginPageComponent implements OnInit {
             </ul>
           </div>
         `,
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, Agreed',
-        cancelButtonText: 'No',
-        customClass: { popup: 'swal-wide' }
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.AuthSession.addToSession(this.UserData);
-          this.router.navigateByUrl('/NewBookings').then(() => {
-            window.location.reload();
-          });
-        } else {
-          swal
-            .fire({
-              title: 'Agreement Required',
-              text: 'You must agree to proceed further.',
-              icon: 'warning'
-            })
-            .then(() => {
-              this.logoutUser ();
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, Agreed',
+          cancelButtonText: 'No',
+          customClass: { popup: 'swal-wide' }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.AuthSession.addToSession(this.UserData);
+            this.router.navigateByUrl('/NewBookings').then(() => {
+              window.location.reload();
             });
-        }
-      });
+          } else {
+            swal
+              .fire({
+                title: 'Agreement Required',
+                text: 'You must agree to proceed further.',
+                icon: 'warning'
+              })
+              .then(() => {
+                this.logoutUser();
+              });
+          }
+        });
+    }
   }
 
-  logoutUser (): void {
+  logoutUser(): void {
     this.cookieService.delete('InternalUserAuthData');
     this.AuthSession.clearSession();
     this.router.navigateByUrl('/Login');
@@ -494,7 +513,7 @@ export class CifLoginPageComponent implements OnInit {
 //           text: 'You must agree to proceed further.',
 //           icon: 'warning',
 //         }).then(() => {
-//           this.LogoutUser(); 
+//           this.LogoutUser();
 //         });
 //       }
 //     });

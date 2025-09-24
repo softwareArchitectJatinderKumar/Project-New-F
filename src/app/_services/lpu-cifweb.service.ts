@@ -39,19 +39,20 @@ export class LpuCIFWebService {
       AUTH_API_LOCAL + 'api/LpuCIF/GetStudentById?RegNo=' + regNo, { headers });
   }
 
-  GetAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any): Observable<any> {
-    let token = this.storageService.getUser();
-    let headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + token)
-      .set('Authorization', 'Bearer ' + this.authToken)
-      .set('Content-Type', 'application/json');
-    return this.http.get(
-      AUTH_API + 'api/LpuCIF/GetUserDataIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&UserRole=' + userRole,
-      // AUTH_API_LOCAL + 'api/LpuCIF/GetUserDataIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&UserRole=' + userRole,
-      { headers }
-    );
+  // GetAuthoriseUserData(UserEmail: any, secreatKeys: any, userRole: any): Observable<any> {
+  //   let token = this.storageService.getUser();
+  //   let headers = new HttpHeaders()
+  //     // .set('Authorization', 'Bearer ' + token)
+  //     .set('Authorization', 'Bearer ' + this.authToken)
+  //     .set('Content-Type', 'application/json');
+  //   return this.http.get(
+  //     // AUTH_API + 'api/LpuCIF/GetUserDataIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&UserRole=' + userRole,
+  //      'https://localhost:7125/api/LpuCIF/GetUserDataIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&UserRole=' + userRole,
+  //     { headers }
+  //   );
    
-  }
+  // }
+  
 
   GetAllBooksDetails(): Observable<any> {
     const httpOptions = {
@@ -114,28 +115,7 @@ export class LpuCIFWebService {
   //   );
   // }
 
-  NewUserSignUp(newUserData: FormData): Observable<any> {
-    let token = this.storageService.getUser();
-    // "Content-Type": "multipart/form-data"
-    let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
-    // .set('Content-Type', 'multipart/form-data');
-    return this.http.post(
-      AUTH_API + 'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
-      // AUTH_API_LOCAL + 'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
-    );// for new user account creatinng
-  }
-  NewUserRecord(newUserData: FormData): Observable<any> {
-    let token = this.storageService.getUser();
-    // "Content-Type": "multipart/form-data"
-    let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
-    // .set('Content-Type', 'multipart/form-data');
-    return this.http.post(
-      AUTH_API + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
-      // AUTH_API_LOCAL + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
-    );
-  }
+
 
 
 
@@ -368,10 +348,10 @@ export class LpuCIFWebService {
   CIFUpdateUserDetails(UpdateUserData: FormData): Observable<any> {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken)
     return this.http.post(
-      AUTH_API + 'api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
-      // AUTH_API_LOCAL + 'api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
+      // AUTH_API + 'api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
+     'https://localhost:7125/api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
     );
   }
 
@@ -690,6 +670,47 @@ export class LpuCIFWebService {
       //  'https://localhost:7125/api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
         AUTH_API + 'api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
     );
+  }
+
+
+
+  // New Logic for Login Page 
+
+GetAuthoriseUserData(loginData: FormData): Observable<any> {
+  const headers = new HttpHeaders()
+    .set('Authorization', 'Bearer ' + this.authToken)
+    // .set('Content-Type', 'application/json'); // correct for JSON
+
+  return this.http.post(
+    'https://localhost:7125/api/LpuCIF/GetUserDataIdWise',
+    loginData,
+    { headers }
+  );
+}
+// New Logic for Internal user login 
+  NewUserRecord(newUserData: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    // "Content-Type": "multipart/form-data"
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + this.authToken)
+    // .set('Content-Type', 'multipart/form-data');
+    return this.http.post(
+      'https://localhost:7125/api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
+      // AUTH_API_LOCAL + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
+    );
+  }
+
+
+    NewUserSignUp(newUserData: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    // "Content-Type": "multipart/form-data"
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + this.authToken)
+    // .set('Content-Type', 'multipart/form-data');
+    return this.http.post(
+     'https://localhost:7125/api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
+      //  AUTH_API +  'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
+    );// for new user account creatinng
   }
 
 }

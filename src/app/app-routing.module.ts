@@ -42,6 +42,10 @@ const routes: Routes = [
 // INTERNAL USER DASHBOARD START
 
 {
+  path:"SecurityIssue",
+  loadChildren: () => import('./views/pages/InternalUserDashboard/SecurePasswordChange/SecurePasswordChange.module').then(m => m.SecurePasswordChangeComponentModule),
+},
+{
   path:"UserProfiles",
   loadChildren: () => import('./views/pages/InternalUserDashboard/UserProfile/UserProfile.module').then(m => m.UserProfileModule),
 },

@@ -460,7 +460,7 @@ export class LoginPageNComponent implements OnInit {
     formData.append("IdProofNumber", this.UserId);
     formData.append("UserType", this.UserRole);
     formData.append("Address", 'Internal User');
-    formData.append("PasswordText", btoa(this.SecretKey));
+    formData.append("PasswordText", this.SecretKey);
     // formData.forEach((value, key) => {
     //   console.log(key, value);
     // });
