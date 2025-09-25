@@ -25,6 +25,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomePageTopBarComponent } from './HomePageTopBar.component';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { UpcomingEventsModule } from "../../UpcomingEvents/UpcomingEvents.module";
 
 @NgModule({
   declarations: [
@@ -34,7 +37,11 @@ import { HomePageTopBarComponent } from './HomePageTopBar.component';
     HomePageTopBarComponent  
   ],
   imports: [
-    CommonModule  
-  ]
+    CommonModule,
+    PerfectScrollbarModule,
+    NgbModule,
+    NgbCarouselModule,
+    UpcomingEventsModule
+]
 })
 export class HomePageTopBarModule {}

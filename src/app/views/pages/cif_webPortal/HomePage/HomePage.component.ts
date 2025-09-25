@@ -102,11 +102,13 @@ export class HomePageComponent implements OnInit {
         console.error(err);
       }
     });
+  
   }
  
 
   // added on 21-aug-25
   chunkedEvents: any[][] = [];
+  
 
   chunkArray(arr: any[], size: number): any[][] {
     return arr.reduce((acc, _, i) => 
@@ -201,7 +203,7 @@ export class HomePageComponent implements OnInit {
     this.showSearchForm = !this.showSearchForm;
     this.show = !this.show;
   } 
-
+  
   
 // logic for upcoming events 
 // upcomingEvents = [

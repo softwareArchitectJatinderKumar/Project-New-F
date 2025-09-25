@@ -1,0 +1,183 @@
+
+  <section class="section bg-dark-yellow">
+  <div class="container">
+    <div class="heading-wraper">
+      <div class="main-head">
+        <h2><span>Upcoming Events</span></h2>
+      </div>
+    </div>
+
+    <div class="marquee-wrapper">
+      <div class="marquee">
+        <div class="event-item" *ngFor="let event of allEvents">
+             <article class="event-card"><div class="event-info">
+                <strong>{{ event.eventName }}</strong>
+                <!-- <div>{{ event.eventDate }}</div> -->
+                <!-- <div>{{ event.eventDetails }}</div> -->
+             </div>
+            <button class="check-btn" (click)="goToEvent(event)">View Detail</button>
+        </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>  
+<!-- <main aria-label="Upcoming events" class="section">
+    <div class="container">
+        <header class="marquee-header">
+            <h2>Upcoming Events</h2>
+        </header>
+
+        <nav class="marquee-container" role="region" aria-live="polite" aria-atomic="true" aria-relevant="all">
+            <ul class="marquee-list" aria-label="List of upcoming events">
+                <li class="marquee-item" *ngFor="let event of allEvents" tabindex="0">
+                    <article class="event-card">
+                        <h3 class="event-title">{{ event.eventName }}</h3>
+                        <time class="event-date" [attr.datetime]="event.eventDateISO">{{ event.eventDate }}</time> -->
+                        <!-- <p class="event-details">{{ event.eventDetails }}</p> -->
+                        <!-- <button class="btn-check" (click)="goToEvent(event)">
+                            Check
+                        </button>
+                    </article>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</main> -->
+ <main aria-label="Upcoming events" class="vertical-marquee-wrapper bg-dark-yellow">
+<div class="container"> 
+  <header class="marquee-header">
+    <h2>Upcoming Events</h2>
+  </header>
+
+  <section class="vertical-marquee" role="region" aria-live="polite" aria-atomic="true" aria-relevant="all" tabindex="0">
+    <ul class="vertical-marquee-list m-4" aria-label="List of upcoming events">
+      <li class="vertical-marquee-item" *ngFor="let event of allEvents">
+        <article class="event-card" (click)="goToEvent(event)">
+          <h3 class="event-title">{{ event.eventName }}</h3>
+          <time class="event-date" [attr.datetime]="event.eventDateISO">{{ event.eventDate }}</time>
+          <p class="event-details">{{ event.eventDetails }}</p>
+          <button class="btn-dark w-20 " (click)="goToEvent(event)"  >
+            Check
+          </button>
+        </article>
+      </li>
+    </ul>
+  </section>
+  </div>
+</main>  
+
+<main aria-label="Upcoming events" class="vertical-marquee-wrapper bg-dark-yellow">
+    <div class="container p-4">
+        <header class="marquee-header">
+            <h2>Upcoming Events</h2>
+        </header>
+        <section class="vertical-marquee mb-5" role="region" aria-live="polite" aria-atomic="true" aria-relevant="all"
+            tabindex="0">
+            <ul class="vertical-marquee-list mt-5" aria-label="List of upcoming events">
+                <li class="vertical-marquee-item " *ngFor="let event of allEvents">
+                    <article class="eventX-card">
+                        <!-- Left Column: Text Info -->
+                        <div class="eventX-content">
+                            <h3 class="eventX-title">{{ event.eventName }} </h3>
+                            <time class="eventX-date" [attr.datetime]="event.eventDateISO">{{ event.eventDate }}</time>
+                            <!-- <p class="eventX-details">{{ event.eventDetails }}</p> -->
+
+                            <a href="#" (click)="goToEventC(event.eventId); $event.preventDefault()" class="btnX-check" >  View Details </a>
+                            <!-- <button class="btnX-check" (click)="goToEvent(event.id)"
+                                [attr.aria-label]="'Check details for ' + event.eventName">
+                                Check
+                            </button> -->
+                        </div>
+
+                        <!-- Right Column: Image -->
+                        <div class="eventX-image-wrapper">
+                            <img [src]="serverUrl + event.imageUrl" [alt]="event.eventName" class="event-image" />
+                        </div>
+                    </article>
+                </li>
+
+            </ul>
+        </section>
+    </div>
+</main>
+
+<!-- <section class="section bg-dark-yellow">
+    <div class="container">
+        <div class="heading-wraper">
+            <div class="main-head">
+                <h2>Upcoming Events</h2>
+                
+            </div>
+        </div>
+
+         
+        <div class="marquee-wrapper">
+            <div class="marquee-track">
+         
+                <div class="event-card" *ngFor="let event of allEvents">
+                    <div class="text-center">
+                        <img [src]="serverUrl + event.imageUrl" [alt]="event.eventName" class="img-fluid" />
+                        <div class="mt-4 mb-2">
+                            <strong class="d-block">{{ event.eventName }}</strong>
+                            {{ event.eventDate }}
+                        </div>
+                        <div class="mt-1 p-2">
+                            {{ event.eventDetails }}
+                        </div>
+                    </div>
+                </div>
+                 
+                <div class="event-card" *ngFor="let event of allEvents">
+                    <div class="text-center">
+                        <img [src]="serverUrl + event.imageUrl" [alt]="event.eventName" class="img-fluid" />
+                        <div class="mt-4 mb-2">
+                            <strong class="d-block">{{ event.eventName }}</strong>
+                            {{ event.eventDate }}
+                        </div>
+                        <div class="mt-1 p-2">
+                            {{ event.eventDetails }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> -->
+
+<!-- <section class="section bg-dark-yellow">
+    <div class="container">
+        <div class="heading-wraper">
+            <div class="main-head">
+                <h2>Upcoming Events</h2>
+                <div class="inner-testi-slider-nav">
+                    <button id="prev_event_slide" class="inner-testi-prev-arrow" (click)="carousel.prev()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
+                    </button>
+                    <button id="next_event_slide" class="inner-testi-next-arrow" (click)="carousel.next()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-right.svg" />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <ngb-carousel #carousel [interval]="66000" [pauseOnHover]="true" [showNavigationArrows]="false"
+            [showNavigationIndicators]="true">
+            <ng-template ngbSlide *ngFor="let group of chunkedEventsC">
+                <div class="row text-center">
+                    <div class="col-md-4" *ngFor="let event of group">
+                        <img [src]="this.serverUrl + event.imageUrl" [alt]="event.eventName" class="img-fluid" />
+                        <div class="mt-4 mb-2">
+                            <strong class="d-block">{{ event.eventName }}</strong>
+                            {{ event.eventDate }}
+                        </div>
+                        <div class="mt-1 p-2">
+                            {{ event.eventDetails }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+
+    </div>
+</section> -->

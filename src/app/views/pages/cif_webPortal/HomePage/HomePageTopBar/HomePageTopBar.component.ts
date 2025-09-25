@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter,HostListener, OnInit,Output,ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -17,6 +17,7 @@ import swal from 'sweetalert2';
 
 export class HomePageTopBarComponent implements OnInit {
   @Output() facilitiesClicked = new EventEmitter<void>();
+  serverUrl: any;
   onFacilitiesClick() {
     this.facilitiesClicked.emit();
   }
@@ -28,6 +29,8 @@ export class HomePageTopBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkScroll();
+    this.GetAllEventDetails();
+    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/'
   }
   openSampleInstructions() {
     swal.fire({
@@ -79,11 +82,11 @@ export class HomePageTopBarComponent implements OnInit {
   }
 
 
- 
+
   menuIconChanged = false;
   isFixedNav = false;
 
-  
+
 
   toggleMenuIcon(): void {
     this.menuIconChanged = !this.menuIconChanged;
@@ -112,4 +115,51 @@ export class HomePageTopBarComponent implements OnInit {
     }
   }
 
+
+  // added on 25-sep-25
+  ColumnMode = ColumnMode; columns: any; loadingIndicator = false;
+  chunkedEventsC: any[][] = [];
+  events = [];
+  chunkedEvents: any[][] = [];
+  allEvents: any = [];
+
+  chunkArray(arr: any[], size: number): any[][] {
+    return arr.reduce((acc, _, i) =>
+      (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
+  }
+
+  GetAllEventDetails(): void {
+    this.loadingIndicator = true;
+    const startTime = new Date().getTime();
+    this.CIFwebService.GetAllEventDetails().subscribe({
+      next: response => {
+        if (response.item1 && response.item1.length > 0) {
+          this.events = response.item1;
+        } else {
+          this.events = [];
+        }
+        // Update chunkedEvents after events are set
+        this.chunkedEventsC = this.chunkArray(this.events, 3);
+        this.allEvents = this.chunkedEventsC ? this.chunkedEventsC.flat() : [];
+        const elapsed = new Date().getTime() - startTime;
+        const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 2.5s
+
+        setTimeout(() => {
+          this.loadingIndicator = false;
+        }, remainingDelay);
+      },
+      error: err => {
+        this.loadingIndicator = false;
+        console.error(err);
+        // Fallback to static events and chunk them
+        this.events = [];
+        this.chunkedEventsC = this.chunkArray(this.events, 3);
+      }
+    });
+  }
+
+
+  goToEvent(eventId: number) {
+    this.router.navigate(['', eventId]);
+  }
 }

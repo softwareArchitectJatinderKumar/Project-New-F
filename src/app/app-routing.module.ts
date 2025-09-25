@@ -37,6 +37,14 @@ const routes: Routes = [
   loadChildren: () => import('./views/pages/cif_webPortal/recover-account/recover-account.module').then(m => m.RecoverAccountModule),
 },
 
+// {
+//   path: 'Events',
+//   loadChildren: () => import('./views/pages/cif_webPortal/UpcomingEventsDetails/UpcomingEventsDetails.module').then(m => m.UpcomingEventsDetailsModule),
+// },
+{
+  path: 'Events/:id',    
+  loadChildren: () => import('./views/pages/cif_webPortal/UpcomingEventsDetails/UpcomingEventsDetails.module').then(m => m.UpcomingEventsDetailsModule),
+},
 // Ended Common Pages
 
 // INTERNAL USER DASHBOARD START

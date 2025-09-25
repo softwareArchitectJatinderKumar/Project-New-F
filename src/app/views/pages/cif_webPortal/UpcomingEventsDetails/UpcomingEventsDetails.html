@@ -1,0 +1,45 @@
+<section class="section">
+    <div class="container">
+        <div class="heading-wraper mb-4">
+            <div class="main-head">
+                <h1> Upcoming Event {{eventName}} </h1>
+                <div class="call-action gap-3">
+                    <a (click)="goto('/Home')" class="link-btn">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/chevron-right.svg" alt="Icon">Home Page</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="instrument-grid" id="instrumentGrid">
+            <div class="instrument-block g-col-lg-3 g-col-6 d-grid" *ngFor="let Event of allEvents"
+                [ngClass]="{'selected-instrument': Event.eventId === this.EventId}">
+                <a class="instrument-link" href="javascript:void(0)" (click)="fetchSpecifications(Event.eventId)"
+                    data-is-active="instrument.isActive ? 'true' : 'false'}">
+                    {{Event.eventName}}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section bg-dark-yellow" [ngClass]="{'d-none': !EventId, 'bg-dark-yellow': EventId}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class=" mb-4">
+                    <div class="main-head ">
+                        <h2 id="InstrumentName">{{ eventName }}</h2>                      
+                      
+                    </div>
+                </div>
+              
+          
+                <div class="mb-5">
+                    <img [src]="serverUrl + ImageUrl" alt="Event Image" class="ImageSizes" />
+                </div>
+                <p [innerHTML]="eventName" style="text-align: justify; font-size: 1.2rem ; font-weight: 600; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" ></p>
+            </div>
+
+        </div>
+    </div>
+</section>
