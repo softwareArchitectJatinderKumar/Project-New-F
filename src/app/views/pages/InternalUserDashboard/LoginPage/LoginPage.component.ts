@@ -369,7 +369,7 @@ export class LoginPageNComponent implements OnInit {
             SupervisorName: this.SupervisorName,
             ProofNumber: this.MobileNo,
             ProofName: 'Mobile',
-            PasswordText: this.SecretKey,
+            // PasswordText: this.SecretKey,
           };
           this.cookieService.set('InternalUserAuthData', JSON.stringify(userCookiesData));
 

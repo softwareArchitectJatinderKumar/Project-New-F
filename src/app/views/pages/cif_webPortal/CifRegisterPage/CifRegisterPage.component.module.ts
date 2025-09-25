@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CifRegisterPageComponent } from './CifRegisterPage.component';
 import {} from './CifRegisterPage.component'
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ArchwizardModule } from 'angular-archwizard';
+import { HomePageModule } from '../HomePage/HomePage.module';
+import { HomePageTopBarModule } from '../HomePage/HomePageTopBar/HomePageTopBar.module';
  
 const routes: Routes = [
   {
@@ -26,7 +28,9 @@ const routes: Routes = [
     ArchwizardModule,
     ReactiveFormsModule,
     PerfectScrollbarModule,
-    NgbModule
+    NgbModule,
+    HomePageTopBarModule,
+    NgbCarouselModule
   ],
 })
  

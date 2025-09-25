@@ -7,6 +7,7 @@ import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArchwizardModule } from 'angular-archwizard';
+import { HomePageTopBarModule } from '../../cif_webPortal/HomePage/HomePageTopBar/HomePageTopBar.module';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
     ArchwizardModule,
     ReactiveFormsModule,
     PerfectScrollbarModule,
-    NgbModule
+    NgbModule,
+    HomePageTopBarModule
   ],
 })
 export class LoginPageNComponentModule { }

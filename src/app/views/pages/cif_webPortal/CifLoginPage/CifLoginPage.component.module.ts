@@ -5,7 +5,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { CifLoginPageComponent } from './CifLoginPage.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCarousel, NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HomePageTopBarModule } from '../HomePage/HomePageTopBar/HomePageTopBar.module';
+import { ArchwizardModule } from 'angular-archwizard';
 
 const routes: Routes = [
   {
@@ -22,7 +24,11 @@ const routes: Routes = [
     FormsModule,
     NgxDatatableModule,
     PerfectScrollbarModule,
-    NgbModule
+    NgbModule,
+    HomePageTopBarModule,
+    NgxDatatableModule,
+    ArchwizardModule,
+     NgbCarouselModule    ,
   ],
   // declarations: [CifLoginPageComponent]
 })
