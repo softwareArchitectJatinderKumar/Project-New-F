@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
-import { DOCUMENT } from '@angular/common';
+import { NgbCarousel } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-UpcomingEvents',
@@ -14,7 +14,13 @@ import { DOCUMENT } from '@angular/common';
 })
 
 export class UpcomingEventsComponent implements OnInit {
-    serverUrl:any;
+    serverUrl: any;
+
+    @ViewChild('ngbCarousel', { static: false }) carousel!: NgbCarousel;
+
+
+    // set to 0 to disable auto-slide, or ms (e.g. 5000)
+    autoSlideInterval = 15000;
     ngOnInit(): void {
         this.GetAllEventDetails();
         this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/'
@@ -80,14 +86,24 @@ export class UpcomingEventsComponent implements OnInit {
         this.router.navigateByUrl(`Home`);
     }
 
- goToEventC(eventId: any) {
-  console.log('Navigating to event with ID:', eventId);
-  if (!eventId) {
-    console.warn('Invalid event ID:', eventId);
-    return;
-  }
-  this.router.navigate(['/Events', eventId]);
-}
+    goToEventC(eventId: any) {
+        if (!eventId) {
+            return;
+        }
+        this.router.navigate(['/Events', eventId]);
+    }
 
+    // called by the template buttons
+    prev(): void {
+        if (this.carousel) {
+            this.carousel.prev();
+        }
+    }
+
+    next(): void {
+        if (this.carousel) {
+            this.carousel.next();
+        }
+    }
 
 }

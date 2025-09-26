@@ -10,6 +10,7 @@ import { ArchwizardModule } from 'angular-archwizard';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgbCarouselModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HomePageTopBarModule } from "./HomePageTopBar/HomePageTopBar.module";
+import { UpcomingEventsModule } from "../UpcomingEvents/UpcomingEvents.module";
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
     PerfectScrollbarModule,
     NgbModule,
     NgbCarouselModule,
-    HomePageTopBarModule
+    HomePageTopBarModule,
+    UpcomingEventsModule
 ],
 })
 export class HomePageModule { }
