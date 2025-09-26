@@ -128,7 +128,7 @@ export class LoginPageNComponent implements OnInit {
         this.EmployeeDetails = response.item1;
         this.CandidateName = this.EmployeeName = student.studentName;
         this.UserId = this.EmployeeCode = student.registerationNumber;
-        this.Department = student.schoolName ?? '';   // not in your sample JSON
+        this.Department = student.schoolName ?? 'LPU';   // not in your sample JSON
         this.DepartmentName = student.courseName ?? '';
         this.Designation = "Student";
         this.EmailId = student.officialEmail ?? student.studentEmail ?? '';
@@ -345,7 +345,7 @@ export class LoginPageNComponent implements OnInit {
           this.EmployeeDetails = response.item1;
           this.CandidateName = this.EmployeeName = response.item1[0].employeeName;
           this.UserId = this.EmployeeCode = response.item1[0].employeeCode;
-          this.Department = response.item1[0].department;
+          this.Department = 'LPU';//response.item1[0].department;
           this.DepartmentName = response.item1[0].departmentName;
           this.Designation = response.item1[0].department;
           this.EmailId = response.item1[0].email?.length > 3 ? response.item1[0].email : response.item1[0].officialEmailId;
@@ -454,7 +454,7 @@ export class LoginPageNComponent implements OnInit {
     formData.append("CandidateName", this.CandidateName,);
     formData.append("SupervisorName", this.SupervisorName);
     formData.append("MobileNumber", this.MobileNo);
-    formData.append("SchoolName", this.Department);
+    formData.append("SchoolName", 'LPU');
     formData.append("DepartmentName", this.DepartmentName);
     formData.append("IdProofType", 'UMS ID');
     formData.append("IdProofNumber", this.UserId);

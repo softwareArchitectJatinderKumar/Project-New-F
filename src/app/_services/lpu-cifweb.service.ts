@@ -350,8 +350,8 @@ export class LpuCIFWebService {
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + authToken)
     return this.http.post(
-      // AUTH_API + 'api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
-     'https://localhost:7125/api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
+      AUTH_API + 'api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
+    //  'https://localhost:7125/api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
     );
   }
 
@@ -682,9 +682,8 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
     // .set('Content-Type', 'application/json'); // correct for JSON
 
   return this.http.post(
-    'https://localhost:7125/api/LpuCIF/GetUserDataIdWise',
-    loginData,
-    { headers }
+    // 'https://localhost:7125/api/LpuCIF/GetUserDataIdWise',    loginData,    { headers }
+    AUTH_API_LOCAL +'api/LpuCIF/GetUserDataIdWise',    loginData,    { headers }
   );
 }
 // New Logic for Internal user login 
@@ -695,8 +694,8 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
       .set('Authorization', 'Bearer ' + this.authToken)
     // .set('Content-Type', 'multipart/form-data');
     return this.http.post(
-      'https://localhost:7125/api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
-      // AUTH_API_LOCAL + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
+      // 'https://localhost:7125/api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
+      AUTH_API_LOCAL + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
     );
   }
 
@@ -708,8 +707,8 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
       .set('Authorization', 'Bearer ' + this.authToken)
     // .set('Content-Type', 'multipart/form-data');
     return this.http.post(
-     'https://localhost:7125/api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
-      //  AUTH_API +  'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
+    //  'https://localhost:7125/api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
+       AUTH_API +  'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
     );// for new user account creatinng
   }
 
