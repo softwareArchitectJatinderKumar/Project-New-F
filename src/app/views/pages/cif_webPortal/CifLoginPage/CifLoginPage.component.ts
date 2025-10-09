@@ -37,7 +37,7 @@ export class CifLoginPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-       this.cookieService.delete('InternalUserAuthData');
+    this.cookieService.delete('InternalUserAuthData');
     this.AuthSession.clearSession();
     this.loadingIndicator = true;
     const startTime = new Date().getTime(); 

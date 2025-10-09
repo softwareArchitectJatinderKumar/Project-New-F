@@ -1,4 +1,15 @@
 <app-cif-menu-bar></app-cif-menu-bar>
+
+
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+    <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
+        <div class="custom-spinner-content text-center">
+            <img src="assets/images/spinner.gif" alt="Loading..." />
+            <p>Loading...</p>
+        </div>
+    </div>
+</div>
+
 <div class=" container BottomSpace "  >
     <div class="row" *ngIf="SamplesStatusData.length > 0 ;else NoData">
         <div class="col-12 stretch-card">

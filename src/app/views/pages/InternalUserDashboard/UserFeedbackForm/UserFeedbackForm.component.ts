@@ -15,7 +15,7 @@ import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 export class UserFeedbackFormComponent implements OnInit {
   UserSessionData: any; UserRole: any; UserId: any; user_Email: any; supervisorName: any; departmentName: any; candidateName: any;
   MobileNo: any;
-
+ loadingIndicator = false;
   feedbackForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
@@ -110,7 +110,16 @@ export class UserFeedbackFormComponent implements OnInit {
     this.candidateName = retrievedCookies.CandidateName;
     this.MobileNo = retrievedCookies.MobileNo;
     // console.log(retrievedCookies);
+      this.loadingIndicator = true;
+    const startTime = new Date().getTime();
     this.loadForm();
+
+       const elapsed = new Date().getTime() - startTime;
+        const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 5s
+
+        setTimeout(() => {
+          this.loadingIndicator = false;
+        }, remainingDelay);
   }
 
 }

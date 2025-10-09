@@ -33,7 +33,7 @@
   .marquee {
     display: flex;
     width: max-content;
-    animation: marqueeAnim 18s linear infinite;
+    animation: marqueeAnim 60s linear infinite;
   }
 
   
@@ -43,7 +43,7 @@
     box-shadow: 0 12px 8px rgb(0 0 0 / 0.12);
     display: flex;
     flex-direction: column;
-    // margin-right: 10rem;
+    margin: 1.9rem;
   }
 
   .event-title {

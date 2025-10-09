@@ -20,7 +20,7 @@ export class UpcomingEventsComponent implements OnInit {
 
 
     // set to 0 to disable auto-slide, or ms (e.g. 5000)
-    autoSlideInterval = 15000;
+    autoSlideInterval = 5000;
     ngOnInit(): void {
         this.GetAllEventDetails();
         this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/'
