@@ -6,7 +6,8 @@ import { AdminNewEventsDataComponent } from './AdminNewEventsData.component';
 import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AdminDashboardModule } from '../AdminDashboard/AdminDashboard.module'; // Import the menu bar module
+import { AdminDashboardModule } from '../AdminDashboard/AdminDashboard.module';
+import { UpcomingEventsModule } from "../../cif_webPortal/UpcomingEvents/UpcomingEvents.module"; // Import the menu bar module
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
     NgbModule,
     PerfectScrollbarModule,
     NgSelectModule,
-    AdminDashboardModule  
-  ]
+    AdminDashboardModule,
+    UpcomingEventsModule
+]
 })
 export class AdminNewEventsDataModule {}

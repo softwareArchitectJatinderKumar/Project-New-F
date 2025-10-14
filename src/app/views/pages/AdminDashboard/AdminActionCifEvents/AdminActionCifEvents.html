@@ -1,7 +1,15 @@
 <app-AdminDashboard></app-AdminDashboard>
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<!-- <div *ngIf="loadingIndicator" class="fullscreen-loader">
     <div class="loader-spinner"></div>
     <div class="loader-text">Loading, please wait...</div>
+</div> -->
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+    <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
+        <div class="custom-spinner-content text-center">
+            <img src="assets/images/spinner.gif" alt="Loading..." />
+            <p>Loading...</p>
+        </div>
+    </div>
 </div>
 <div class="row" *ngIf="InstrumentData.length > 0 ;else NoData">
     <div class="col-12 stretch-card">
@@ -35,7 +43,7 @@
                                     <th class="form-label ">Event Name</th>
                                     <th class="form-label">EventDate</th>
                                     <th class="form-label">EventDetils</th>
-                                    <th class="form-label">Image </th>
+                                    <th class="form-label">Edit </th>
                                     <th class="form-label ">Action </th>
                                 </tr>
                             </thead>
@@ -50,8 +58,8 @@
                                             <button class="btn btn-primary"
                                                 (click)="openEditModal(InstrumentDataRow)"><i
                                                     class="bi bi-pencil-square"></i> </button>
-                                            <button class="btn btn-danger" (click)="onSelectFile(InstrumentDataRow)">
-                                                View </button>
+                                            <!-- <button class="btn btn-danger" (click)="onSelectFile(InstrumentDataRow)">
+                                                View </button> -->
                                         </td>
                                         <td><button class="btn btn-danger"
                                                 (click)="DisapproveStatus(InstrumentDataRow)"> <i
@@ -134,7 +142,7 @@
                 </div>
             </fieldset>
 
-            <fieldset class="border p-3 mb-4">
+            <!-- <fieldset class="border p-3 mb-4">
                 <legend class="w-auto px-2">Image</legend>
                 <div class="row g-4 mb-4">
                     <div class="col-md-4">
@@ -147,7 +155,7 @@
                           
                     </div>
                 </div>
-            </fieldset>
+            </fieldset> -->
             <div class="d-flex justify-content-center">
                 <!-- <button type="submit" class="btn btn-primary px-5"
                                 [disabled]="CIFEventRegistration.invalid || isLoading">

@@ -1,8 +1,16 @@
 <app-AdminDashboard></app-AdminDashboard>
-<!-- Full Screen Loader -->
-<div *ngIf="showLoader" class="fullscreen-loader">
+ 
+<!-- <div *ngIf="showLoader" class="fullscreen-loader">
     <div class="loader-spinner"></div>
     <div class="loader-text">Fetching details, please wait...</div>
+</div> -->
+<div *ngIf="showLoader" class="fullscreen-loader">
+    <div class="custom-spinner-overlay" *ngIf="showLoader">
+        <div class="custom-spinner-content text-center">
+            <img src="assets/images/spinner.gif" alt="Loading..." />
+            <p>Loading...</p>
+        </div>
+    </div>
 </div>
 <div class="row" *ngIf="UserDetailsData.length > 0 ;else NoData">
     <div class="col-12 stretch-card">

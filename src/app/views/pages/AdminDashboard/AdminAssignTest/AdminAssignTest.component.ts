@@ -12,7 +12,7 @@ import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 @Component({
   selector: 'app-AdminAssignTest',
   templateUrl: './AdminAssignTest.component.html',
-  styleUrls: ['./AdminAssignTest.component.scss']
+  styleUrls: ['./AdminAssignTest.component.scss'],
 })
 export class AdminAssignTestComponent implements OnInit {
 
@@ -208,7 +208,7 @@ export class AdminAssignTestComponent implements OnInit {
       UserType: item.userRole,
       PaymentStatus: item.paymentStatus == 'success' ? 'Paid' : item?.paymentStatus == 'failure' ? 'Failed' : 'Pending',
       PaymentDate: item.paymentDate,
-      AssignedTo:item.assignedUserId
+      AssignedTo: item.assignedUserId
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportedData);
@@ -395,67 +395,67 @@ export class AdminAssignTestComponent implements OnInit {
     { label: 'Pending', value: 'Pending' }
   ];
 
-hasAnySearchCriteria:any;
-  
-checkSearchCriteria(): void {
-  this.hasAnySearchCriteria = 
-    (this.selectedStatus && this.selectedStatus.trim() !== '') ||
-    (this.IsAssigned && this.IsAssigned.trim() !== '');
-}
+  hasAnySearchCriteria: any;
+
+  checkSearchCriteria(): void {
+    this.hasAnySearchCriteria =
+      (this.selectedStatus && this.selectedStatus.trim() !== '') ||
+      (this.IsAssigned && this.IsAssigned.trim() !== '');
+  }
 
   advancedSearch = {
-    paymentType:'',
-    assignedTo:''
+    paymentType: '',
+    assignedTo: ''
 
   };
 
   applyAdvancedSearch(): void {
-  this.tmpsAllBookingTestsData = this.originalData.filter(item => {
-    let matches = true;
+    this.tmpsAllBookingTestsData = this.originalData.filter(item => {
+      let matches = true;
 
-    // Filter by Payment Status
-    if (this.selectedStatus) {
-      if (this.selectedStatus === 'null') {
-        matches = matches && (!item.paymentStatus || item.paymentStatus === 'null');
-      } else {
-        matches = matches && (item.paymentStatus === this.selectedStatus);
+      // Filter by Payment Status
+      if (this.selectedStatus) {
+        if (this.selectedStatus === 'null') {
+          matches = matches && (!item.paymentStatus || item.paymentStatus === 'null');
+        } else {
+          matches = matches && (item.paymentStatus === this.selectedStatus);
+        }
       }
-    }
 
-    // Filter by Assignment
-    if (this.IsAssigned) {
-      if (this.IsAssigned === 'Assigned') {
-        matches = matches && (item.assignedUserId && item.assignedUserId.trim().length > 0);
-      } else if (this.IsAssigned === 'Pending') {
-        matches = matches && (!item.assignedUserId || item.assignedUserId.trim().length === 0);
+      // Filter by Assignment
+      if (this.IsAssigned) {
+        if (this.IsAssigned === 'Assigned') {
+          matches = matches && (item.assignedUserId && item.assignedUserId.trim().length > 0);
+        } else if (this.IsAssigned === 'Pending') {
+          matches = matches && (!item.assignedUserId || item.assignedUserId.trim().length === 0);
+        }
       }
-    }
 
-    return matches;
-  });
+      return matches;
+    });
 
-  // Sort results by bookingRequestDate (if present)
-  this.tmpsAllBookingTestsData.sort((a, b) => {
-    const dateA = a.bookingRequestDate ? new Date(a.bookingRequestDate).getTime() : 0;
-    const dateB = b.bookingRequestDate ? new Date(b.bookingRequestDate).getTime() : 0;
-    return dateA - dateB;
-  });
+    // Sort results by bookingRequestDate (if present)
+    this.tmpsAllBookingTestsData.sort((a, b) => {
+      const dateA = a.bookingRequestDate ? new Date(a.bookingRequestDate).getTime() : 0;
+      const dateB = b.bookingRequestDate ? new Date(b.bookingRequestDate).getTime() : 0;
+      return dateA - dateB;
+    });
 
-  this.currentPage = 1; // Reset to first page
-}
+    this.currentPage = 1; // Reset to first page
+  }
 
-  
-resetAdvancedSearch(): void {
-  this.selectedStatus = '';
-  this.IsAssigned = '';
-  this.hasAnySearchCriteria = false;
-  this.tmpsAllBookingTestsData = [...this.originalData];
-  this.currentPage = 1;
-}
 
-  showAdvancedSearch = false ;
-  showDateSearch =false;
-   
+  resetAdvancedSearch(): void {
+    this.selectedStatus = '';
+    this.IsAssigned = '';
+    this.hasAnySearchCriteria = false;
+    this.tmpsAllBookingTestsData = [...this.originalData];
+    this.currentPage = 1;
+  }
+
+  showAdvancedSearch = false;
+  showDateSearch = false;
+
   toggleAdvancedSearch(): void {
     this.showAdvancedSearch = !this.showAdvancedSearch;
     if (!this.showAdvancedSearch) {
@@ -464,7 +464,7 @@ resetAdvancedSearch(): void {
   }
 
 
-// 18 sept-25
+  // 18 sept-25
   @ViewChild('editEventModal') editEventModal: TemplateRef<any>;
   editEvent: any = {};
   selectedFile: File | null = null;
@@ -478,50 +478,50 @@ resetAdvancedSearch(): void {
 
   openEditModal(eventData: any) {
     this.editEvent = { ...eventData }; // clone object
-    
+
     this.modalService.open(this.editEventModal, { centered: true, size: 'lg' });
   }
- 
-
-  
-    CIFTestReassignForm!: FormGroup; isForm1Submitted: boolean = false; isSubmitted = false;
-    isLoading: boolean = false;
-  
-    get form1() {
-      return this.CIFTestReassignForm.controls;
-    }
-  
-    LoadNewForm() {
-      this.CIFTestReassignForm = this.fb.group({
-        EventName: ['', Validators.required],
-        EventDate: ['', Validators.required],
-        EventDetails: ['', Validators.required],
-        ImageUrl: ['']
-      });
-    }
-    get isImageValid(): boolean {
-      // Valid if either a new file is selected or existing image URL is present
-      return !!this.selectedFile || !!this.editEvent?.imageUrl;
-    }
-    
-    // get isImageValid(): boolean {
-    //   // If editing and existing image present, valid
-    //   if (this.editEvent?.imageUrl) {
-    //     return true;
-    //   }
-    //   // Otherwise, require a selected file
-    //   return this.selectedFile != null;
-    // }
 
 
 
-ReAssginStaff(AssignTest: any): void {
+  CIFTestReassignForm!: FormGroup; isForm1Submitted: boolean = false; isSubmitted = false;
+  isLoading: boolean = false;
+
+  get form1() {
+    return this.CIFTestReassignForm.controls;
+  }
+
+  LoadNewForm() {
+    this.CIFTestReassignForm = this.fb.group({
+      EventName: ['', Validators.required],
+      EventDate: ['', Validators.required],
+      EventDetails: ['', Validators.required],
+      ImageUrl: ['']
+    });
+  }
+  get isImageValid(): boolean {
+    // Valid if either a new file is selected or existing image URL is present
+    return !!this.selectedFile || !!this.editEvent?.imageUrl;
+  }
+
+  // get isImageValid(): boolean {
+  //   // If editing and existing image present, valid
+  //   if (this.editEvent?.imageUrl) {
+  //     return true;
+  //   }
+  //   // Otherwise, require a selected file
+  //   return this.selectedFile != null;
+  // }
+
+
+
+  ReAssginStaff(AssignTest: any): void {
     if (!this.AssignedTo) {
       swal.fire('Select Staff', 'Please select a staff member to assign.', 'warning');
       return;
     }
     const formData = new FormData();
-    formData.append('BookingId', AssignTest.bookingId);
+    formData.append('RecordId', AssignTest.recordId);
     formData.append('UserId', AssignTest.userEmailId);
     formData.append('AssignedTo', this.AssignedTo);
     // console.log("Tests Assigned to :");
@@ -556,5 +556,5 @@ ReAssginStaff(AssignTest: any): void {
 
 
 
-  
+
 }

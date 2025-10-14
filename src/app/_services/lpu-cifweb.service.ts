@@ -5,6 +5,9 @@ import { StorageService } from './storage.service';
 const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
 const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
 const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
+// const AUTH_API = 'https://localhost:7125/';
+// const AUTH_API_LOCAL = 'https://localhost:7125/';
+// const AUTH_API_LOCALS = 'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,17 @@
 <app-AdminDashboard></app-AdminDashboard>
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<!-- <div *ngIf="loadingIndicator" class="fullscreen-loader">
     <div class="loader-spinner"></div>
     <div class="loader-text">Loading, please wait...</div>
-</div>
+</div> -->
 
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+    <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
+        <div class="custom-spinner-content text-center">
+            <img src="assets/images/spinner.gif" alt="Loading..." />
+            <p>Loading...</p>
+        </div>
+    </div>
+</div>
 <div class="row" *ngIf="AllBookingTestsData.length > 0; else NoData">
     <div class="col-12 stretch-card">
         <div class="card">
@@ -121,6 +129,7 @@
                             <thead>
                                 <tr>
                                     <th class="form-label fw-bolder">Booking Id</th>
+                                    <th class="form-label fw-bolder">Id</th>
                                     <th class="form-label fw-bolder">Instrument Name</th>
                                     <th class="form-label fw-bolder">Sample Count</th>
                                     <th class="form-label fw-bolder">Total Charges</th>
@@ -140,6 +149,7 @@
                                     *ngFor="let AllBookingTestsDataRow of getCurrentPageData(); let i = index">
                                     <tr>
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.newBookingId }}</td>
+                                        <td class="fw-bold">{{ AllBookingTestsDataRow.recordId }}</td>
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.instrumentName }}</td>
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.noOfSamples }}</td>
                                         <td class="fw-bold">
@@ -202,19 +212,18 @@
                                             : '-NA-'
                                             }}
                                         </td>
-                                        <ng-container
-                                            *ngIf="AllBookingTestsDataRow.assignedUserId?.length<=0; else Assigned">
-                                            <td class="fw-bold">
-                                                <button class="btn btn-dark"
-                                                    (click)="openPaymentModal(AllBookingTestsDataRow)">
+                                        <ng-container *ngIf="AllBookingTestsDataRow.assignedUserId?.length<=0; else Assigned">
+                                            <td class="fw-bold" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
+                                                <button class="btn btn-dark" (click)="openPaymentModal(AllBookingTestsDataRow)">
                                                     Assign Staff
                                                 </button>
                                             </td>
+                                            <ng-template #NA>
+                                                <td> <span class="badge bg-success">NA</span> </td>
+                                            </ng-template>
                                         </ng-container>
                                         <ng-template #Assigned>
-                                            <td class="ms-4">
-                                                <!-- <span class="badge text-bg-info ms-3 fs-5">Already Assigned </span> -->
-                                                
+                                            <td class="ms-4" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
                                                 <button class="btn btn-primary "
                                                 (click)="openEditModal(AllBookingTestsDataRow)">
                                                 Modify Staff 
@@ -222,6 +231,9 @@
                                             </button> <br/>
                                             <span class="badge text-bg-info m-2 fs-5">Assinged to : - {{AllBookingTestsDataRow.assignedUserId}}</span><br/>
                                             </td>
+                                             <ng-template #NA>
+                                                <td> <span class="badge bg-success">NA</span> </td>
+                                            </ng-template>
                                         </ng-template>
                                     </tr>
                                 </ng-container>
@@ -351,7 +363,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['bookingId'] }}</td>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['recordId'] }}</td>
                                         <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['instrumentName'] }}</td>
                                         <td class="fs-5 p-4" style="width: 20%;"> {{this.editEvent['assignedUserId']}}
                                             <select id="staffName" (change)="onActivitySelected($event)"

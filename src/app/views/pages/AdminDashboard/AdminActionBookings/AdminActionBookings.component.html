@@ -1,7 +1,16 @@
 <app-AdminDashboard></app-AdminDashboard>
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<!-- <div *ngIf="loadingIndicator" class="fullscreen-loader">
     <div class="loader-spinner"></div>
     <div class="loader-text">Loading, please wait...</div>
+</div> -->
+
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+    <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
+        <div class="custom-spinner-content text-center">
+            <img src="assets/images/spinner.gif" alt="Loading..." />
+            <p>Loading...</p>
+        </div>
+    </div>
 </div>
 <div class="row" *ngIf="BookingData.length > 0 ;else NoData">
     <div class="col-12 stretch-card">
@@ -67,6 +76,7 @@
                         <table id="BookingDetailsDataTable" #table>
                             <thead>
                                 <tr>
+                                    <th class="form-label fw-bolder">Id</th>
                                     <th class="form-label fw-bolder">Booking Id</th>
                                     <th class="form-label fw-bolder">Instrument Name</th>
                                     <th class="form-label fw-bolder">Sample Count</th>
@@ -85,7 +95,8 @@
                             <tbody>                             
                                 <ng-container *ngFor="let AllBookingTestsDataRow of getCurrentPageData(); let i = index">
                                     <tr>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.bookingId}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.recordId}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.newBookingId}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.instrumentName}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.noOfSamples}}</td>
                                         <td class="fw-bold"> {{AllBookingTestsDataRow?.totalCharges &&
@@ -111,15 +122,31 @@
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.userRole}}</td>
                                         <td>
-                                            <span class="badge" [ngClass]="{'bg-success': AllBookingTestsDataRow?.paymentStatus == 'success', 'bg-danger': AllBookingTestsDataRow?.paymentStatus == 'failure', 'bg-warning text-dark': !AllBookingTestsDataRow?.paymentStatus || AllBookingTestsDataRow?.paymentStatus == 'null' }">
-                                                {{ AllBookingTestsDataRow?.paymentStatus == 'success' ? 'Paid' : AllBookingTestsDataRow?.paymentStatus == 'failure' ? 'Failed' : 'Pending' }}
+                                            <span class="badge"
+                                                [ngClass]="{'bg-success': AllBookingTestsDataRow?.paymentStatus == 'success', 'bg-danger': AllBookingTestsDataRow?.paymentStatus == 'failure', 'bg-warning text-dark': !AllBookingTestsDataRow?.paymentStatus || AllBookingTestsDataRow?.paymentStatus == 'null' }">
+                                                {{ AllBookingTestsDataRow?.paymentStatus == 'success' ? 'Paid' : AllBookingTestsDataRow?.paymentStatus ==
+                                                'failure' ? 'Failed' : 'Pending' }}
                                             </span>
                                         </td>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow?.paymentDate && AllBookingTestsDataRow?.paymentDate!='null' ? (AllBookingTestsDataRow?.paymentDate): '-NA-'}}
+                                        <td class="fw-bold">
+                                            <span class="badge" [ngClass]="{
+                                              'bg-info': AllBookingTestsDataRow?.paymentDate && AllBookingTestsDataRow?.paymentDate !== 'null',
+                                              'bg-danger': !AllBookingTestsDataRow?.paymentDate || AllBookingTestsDataRow?.paymentDate === 'null'
+                                            }">
+                                                {{
+                                                AllBookingTestsDataRow?.paymentDate && AllBookingTestsDataRow?.paymentDate !== 'null'
+                                                ? AllBookingTestsDataRow?.paymentDate
+                                                : '-NA-'
+                                                }}
+                                            </span>
                                         </td>
-                                        <td class="fw-bold"><button class="btn btn-dark btn-sm"
-                                            (click)="openPaymentModal(AllBookingTestsDataRow)">Upload </button></td>
-                                    </tr>
+                                        
+                                        <td class="fw-bold" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA"><button
+                                                class="btn btn-dark btn-sm" (click)="openPaymentModal(AllBookingTestsDataRow)">Upload </button></td>
+                                        <ng-template #NA>
+                                            <td> <span class="badge bg-success">NA</span> </td>
+                                        </ng-template>
+                                        </tr>
                                 </ng-container>
                             </tbody>
                         </table>
