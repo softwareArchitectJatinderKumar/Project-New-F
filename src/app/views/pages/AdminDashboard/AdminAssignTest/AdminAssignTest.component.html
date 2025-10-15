@@ -8,7 +8,7 @@
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-            <p>Loading...</p>
+            <!-- <p>Loading...</p>-->  
         </div>
     </div>
 </div>
@@ -129,7 +129,7 @@
                             <thead>
                                 <tr>
                                     <th class="form-label fw-bolder">Booking Id</th>
-                                    <th class="form-label fw-bolder">Id</th>
+                                    <!-- <th class="form-label fw-bolder">Id</th> -->
                                     <th class="form-label fw-bolder">Instrument Name</th>
                                     <th class="form-label fw-bolder">Sample Count</th>
                                     <th class="form-label fw-bolder">Total Charges</th>
@@ -149,7 +149,7 @@
                                     *ngFor="let AllBookingTestsDataRow of getCurrentPageData(); let i = index">
                                     <tr>
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.newBookingId }}</td>
-                                        <td class="fw-bold">{{ AllBookingTestsDataRow.recordId }}</td>
+                                        <!-- <td class="fw-bold">{{ AllBookingTestsDataRow.recordId }}</td> -->
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.instrumentName }}</td>
                                         <td class="fw-bold">{{ AllBookingTestsDataRow.noOfSamples }}</td>
                                         <td class="fw-bold">

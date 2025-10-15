@@ -10,7 +10,7 @@ old loader
     <div class="custom-spinner-overlay" *ngIf="isLoading">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-            <p>Loading...</p>
+           <!-- <p>Loading...</p>-->
         </div>
     </div>
 </div>
@@ -246,12 +246,12 @@ old loader
                 </div>
             </div>
         </div>
-        <ngb-carousel #carousel [interval]="66000" [pauseOnHover]="true" [showNavigationArrows]="false"
+        <ngb-carousel #carousel [interval]="11000" [pauseOnHover]="true" [showNavigationArrows]="false"
             [showNavigationIndicators]="true">
             <ng-template ngbSlide *ngFor="let group of chunkedEvents">
                 <div class="row text-center">
                     <div class="col-md-4" *ngFor="let event of group">
-                        <img [src]="event.img" [alt]="event.title" class="img-fluid" />
+                        <img [src]="serverUrl+event.img" [alt]="event.title" class="img-fluid" />
                         <div class="mt-4 mb-2">
                             <strong class="d-block">{{ event.title }}</strong>
                             {{ event.date }}

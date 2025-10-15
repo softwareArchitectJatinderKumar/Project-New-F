@@ -114,49 +114,50 @@ export class HomePageComponent implements OnInit {
     return arr.reduce((acc, _, i) => 
       (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
   }
+  serverUrl: any='https://www.lpu.in/lpu-assets/images/cif/';
   events = [
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/summer-training-programme-2025.webp',
+      img: 'summer-training-programme-2025.webp',
       title: 'ANRF Sponsored Summer Training Programme',
       date: '(2 June - 11 July 2025)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/event-10.jpg',
+      img: 'event-10.jpg',
       title: 'Discovering the Crystalline and Nano world using X-ray Diffraction and Particle Size and Zeta Potential Analyzer: A National Workshop',
       date: '(24 – 26 April 2025)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/event-9.jpg',
+      img: 'event-9.jpg',
       title: 'National Workshop on Advance Research with Field Emission Scanning Electron Microscopy: Exploring the Nano-Structural Imaging',
       date: '(27 - 29 March 2025)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/event-7.jpg',
+      img: 'event-7.jpg',
       title: 'National Workshop on Advanced Chromatographic Techniques Theory & Applications',
       date: '(19 - 21 September, 2024)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/event-8.jpg',
+      img: 'event-8.jpg',
       title: 'SHORT-TERM COURSE on Advanced Materials analysis & Characterization Techniques: Hands-on-Training and Data Interpretation',
       date: '(09 – 13 December, 2024)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/event-1.jpg',
+      img: 'event-1.jpg',
       title: 'National workshop on X-Ray Diffraction and Particle Size Analyzer',
       date: '(26 - 27 April 2024)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/event-2.jpg',
+      img: 'event-2.jpg',
       title: 'Summer Training Programme',
       date: '(3 June - 13 July 2024)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/event-3.jpg',
+      img: 'event-3.jpg',
       title: 'Workshop on Field Emission Scanning Electron Microscope',
       date: '(29 - 30 March 2024)'
     },
     {
-      img: 'https://www.lpu.in/lpu-assets/images/cif/summer-training-programme-2025.webp',
+      img: 'summer-training-programme-2025.webp',
       title: 'ANRF Sponsored Summer Training Programme',
       date: '(2 June - 11 July 2025)'
     },    
