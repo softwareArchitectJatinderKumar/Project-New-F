@@ -134,7 +134,13 @@ export class LoginPageComponent implements OnInit {
 
 
   AuthoriseUser(Id: any, Key: any, Role: number): void{
-    this.CIFwebService.GetAuthoriseUserData(Id, Key, Role).subscribe({
+    // Build FormData to match LpuCIFWebService.GetAuthoriseUserData(formData)
+    const fd = new FormData();
+    fd.append('Email', Id);
+    fd.append('PasswordText', Key);
+    fd.append('UserRole', Role?.toString() ?? '');
+
+    this.CIFwebService.GetAuthoriseUserData(fd).subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
           this.UserData = response.item1;

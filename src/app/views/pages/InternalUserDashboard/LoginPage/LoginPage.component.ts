@@ -161,9 +161,6 @@ export class LoginPageNComponent implements OnInit {
 
         this.StoreInternalUserInDataBase().then(() => {
           if (this.storeResult == 1 || this.storeResult == 2) {
- 
-
-  
             swal.fire({
               title: 'Terms Conditions',
               text: 'Do you agree with terms Conditions?',

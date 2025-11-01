@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PendingPaymentsComponent } from './AdminPendingPayments.component';
+import { AdminPendingPaymentsComponent } from '../../AdminDashboard/AdminPendingPayments/AdminPendingPayments.component';
 
-describe('PendingPaymentsComponent', () => {
-  let component: PendingPaymentsComponent;
-  let fixture: ComponentFixture<PendingPaymentsComponent>;
+describe('AdminPendingPaymentsComponent', () => {
+  let component: AdminPendingPaymentsComponent;
+  let fixture: ComponentFixture<AdminPendingPaymentsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PendingPaymentsComponent ]
+      declarations: [ AdminPendingPaymentsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PendingPaymentsComponent);
+    fixture = TestBed.createComponent(AdminPendingPaymentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

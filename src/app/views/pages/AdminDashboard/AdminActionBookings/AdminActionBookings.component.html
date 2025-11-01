@@ -76,7 +76,7 @@
                         <table id="BookingDetailsDataTable" #table>
                             <thead>
                                 <tr>
-                                    <th class="form-label fw-bolder">Id</th>
+                                    <!-- <th class="form-label fw-bolder">Id</th> -->
                                     <th class="form-label fw-bolder">Booking Id</th>
                                     <th class="form-label fw-bolder">Instrument Name</th>
                                     <th class="form-label fw-bolder">Sample Count</th>
@@ -95,8 +95,9 @@
                             <tbody>                             
                                 <ng-container *ngFor="let AllBookingTestsDataRow of getCurrentPageData(); let i = index">
                                     <tr>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.recordId}}</td>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.newBookingId}}</td>
+                                        <!-- <td class="fw-bold ">{{AllBookingTestsDataRow.recordId}}</td> -->
+                                        <!-- <td class="fw-bold ">{{AllBookingTestsDataRow.newBookingId}}</td> -->
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.bookingId}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.instrumentName}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.noOfSamples}}</td>
                                         <td class="fw-bold"> {{AllBookingTestsDataRow?.totalCharges &&
