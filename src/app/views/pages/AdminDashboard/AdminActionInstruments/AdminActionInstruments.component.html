@@ -90,15 +90,15 @@
                                             </ng-template>
                                         </td>
                                         <td class="fw-bold ">
-                                            <button class="btn btn-dark btn-sm me-2"
-                                                (click)="OpenModalWindow(InstrumentDataRow)">Change Status</button>
-                                            <button class="btn btn-outline-primary btn-sm"
+                                            <button class="btn btn-dark btn-sm me-2" (click)="OpenModalWindow(InstrumentDataRow)">Change Status</button>
+                                            <button class="btn btn-dark btn-sm me-2" (click)="OpenReplaceModal(InstrumentDataRow)">Replace Excel Sheet</button>
+                                            <!-- <button class="btn btn-outline-primary btn-sm"
                                                 (click)="replace(InstrumentDataRow.instrumentExcelUrl)"
                                                 [disabled]="replacing">
                                                 <span *ngIf="replacing" class="spinner-border spinner-border-sm"
                                                     role="status" aria-hidden="true"></span>
                                                 &nbsp;Replace Template
-                                            </button>
+                                            </button> -->
                                         </td>
                                     </tr>
                                 </ng-container>
@@ -150,8 +150,9 @@
                                 <thead>
                                     <tr>
                                         <!-- <th class=" fs-5 ">User </th> -->
-                                        <th class=" fs-5 ">Booking Id </th>
+                                        <th class=" fs-5 ">Instrument Id </th>
                                         <th class=" fs-5 ">Instrument Name </th>
+                                        <th class=" fs-5 ">Existing File </th>
                                         <th class=" fs-5 ">Upload File </th>
                                         <th class=" fs-5 ">Upload Action </th>
                                     </tr>
@@ -162,22 +163,62 @@
                                     </form>
                                     <tr>
                                         <!-- <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.userEmailId != null || BookingCase.userEmailId !== 'undefined' ? BookingCase.userEmailId: 'NA' }}</td> -->
-                                        <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.bookingId}} </td>
+                                        <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.instrumentId}} </td>
                                         <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.instrumentName}} </td>
+                                        <td class=" fs-5 p-4 " style="width: 20%;"><a class="ms-2" [href]="BookingCase.instrumentExcelUrl"
+                                                target="_blank" *ngIf="BookingCase.instrumentExcelUrl?.length > 0; "> View Excel </a> </td>
+
+                                        
                                         <td class=" fs-5 ">
-                                            <input class="w-30" required type="file" id="File" name="File"
-                                                (change)="onFileSelected($event)" accept=".zip, .7z, .rar"
+                                            <input class="w-30" required type="file" id="File" name="File"  
+                                                (change)="onFileSelected($event)" accept=".xls, .xlsx"
                                                 #fileInput="ngModel" ngModel />
                                             <div class="col- mt-2"><span class=" themeClr"> Allowed Documents format Zip
-                                                    and of Max size 3MB </span></div>
+                                                    and of Max size 1MB </span></div>
 
                                         </td>
                                         <td><button type="submit" class="btn btn-primary me-2"
-                                                (click)="VerifyData(BookingCase);">Upload Result</button></td>
+                                                (click)="VerifyData(BookingCase);">Replace Sheet</button></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        
+        <div class="row" *ngIf="uploadedDataForDisplay && uploadedDataForDisplay.length > 0">
+            <div class="col-md-12 stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th *ngFor="let header of uploadedDataForDisplay[0]">{{ header }}</th>
+                                        <th>Error</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of uploadedDataForDisplay.slice(1); let rowIndex = index">
+                                        <td *ngFor="let cell of row; let cellIndex = index"
+                                            [ngClass]="{'text-danger': isError(rowIndex + 1, cellIndex)}">{{ cell }}
+                                        </td>
+                                        <td>
+                                            <span *ngIf="validationErrors[rowIndex + 1]" class="text-danger">
+                                                {{ validationErrors[rowIndex + 1] }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- <button class="btn btn-primary mt-3" (click)="confirmUpload()" [disabled]="hasErrors()">Confirm
+                            and
+                            Upload</button> -->
                     </div>
                 </div>
             </div>

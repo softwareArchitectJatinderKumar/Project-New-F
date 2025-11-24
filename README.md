@@ -69,3 +69,51 @@ added 303 packages, and audited 304 packages in 2m
 
 found 0 vulnerabilities
 Success! Created cif-app at D:\TaskList\CIF Angular Project\WebPro\cif-app -->
+
+
+
+<!-- git config --global --add safe.directory E:/2025/Projects/CIF -->
+
+<!-- https://github.com/softwareArchitectJatinderKumar/Project-New-F.git  
+
+
+Here are the essential Git commands to link a local project folder to a remote GitHub (or GitLab/Bitbucket) repository.
+
+✅ 1. Initialize Git in your project
+
+If your local folder is not yet a Git repository:
+
+git init
+
+✅ 2. Add all project files to Git
+git add .
+
+✅ 3. Commit the files
+git commit -m "Initial commit"
+
+✅ 4. Add the remote repository URL
+
+Replace with your repo URL:
+
+HTTPS
+git remote add origin https://github.com/USERNAME/REPO_NAME.git
+
+SSH
+git remote add origin git@github.com:USERNAME/REPO_NAME.git
+
+✅ 5. Push code to the remote repository
+First push (set upstream):
+git push -u origin main
+
+
+If your branch is master:
+
+git push -u origin master
+
+📝 Check Remote Linked Successfully
+git remote -v
+
+🔄 If remote already exists and you want to change it
+git remote remove origin
+git remote add origin https://github.com/USERNAME/REPO_NAME.git
+-->

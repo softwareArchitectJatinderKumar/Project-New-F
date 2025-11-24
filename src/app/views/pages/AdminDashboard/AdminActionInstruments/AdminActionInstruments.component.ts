@@ -31,6 +31,137 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./AdminActionInstruments.component.scss']
 })
 export class AdminActionInstrumentsComponent implements OnInit {
+  file: any; // The actual file object
+  uploadedDataRaw: any[] = []; // Raw data from Excel, used for sending to backend
+  uploadedDataForDisplay: any[] = []; // Formatted data for UI display
+  validationErrors: string[] = [];
+  errorCells: { rowIndex: number, cellIndex: number }[] = [];
+
+  OpenReplaceModal(a: any) {
+    this.BookingCase = a;
+    this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
+      (result: string) => {
+        console.log("Modal closed" + result);
+      }
+    ).catch((res: any) => { });
+
+  }
+
+
+  // Excel Upload Logic
+  onFileChange(event: any): void {
+    if (event.target.files.length > 0) {
+      this.file = event.target.files[0];
+      if (this.file) {
+        this.readExcelFile(this.file);
+      }
+    }
+  }
+
+  readExcelFile(file: any) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const data = e.target.result;
+      // when using readAsArrayBuffer, pass type: 'array'
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+
+      // Raw data for backend (dates as they are in Excel, will be formatted before sending)
+      this.uploadedDataRaw = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+      // Process data for display (format dates for UI)
+      this.processUploadedDataForDisplay(this.uploadedDataRaw);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  processUploadedDataForDisplay(rawData: any[]) {
+    if (!rawData || rawData.length === 0) {
+      this.uploadedDataForDisplay = [];
+      return;
+    }
+
+    // Copy headers (first row)
+    this.uploadedDataForDisplay = [rawData[0]];
+
+    // Process rows, starting from the second row (index 1)
+    for (let i = 1; i < rawData.length; i++) {
+      const row = rawData[i];   // <- was a typo ` [.rawData[i]]`
+      // ensure row is an array (sheet_to_json with header:1 returns arrays)
+      this.uploadedDataForDisplay.push(row);
+    }
+
+    // reset validation state
+    this.validationErrors = [];
+    this.errorCells = [];
+  }
+
+  hasErrors(): boolean {
+    return this.validationErrors.some(error => error.length > 0);
+  }
+  isError(rowIndex: number, cellIndex: number): boolean {
+    return this.errorCells.some(errorCell => errorCell.rowIndex === rowIndex && errorCell.cellIndex === cellIndex);
+  }
+
+  confirmUpload() {
+    if (this.hasErrors()) {
+      Swal.fire('Validation Error', 'Please correct the errors in the uploaded data before confirming.', 'error');
+      return;
+    }
+    // this.VerifyData();
+  }
+
+
+  VerifyData(InstrumentData: any) {
+    this.loadingIndicator = true;
+    const startTime = new Date().getTime();
+
+    if (!this.FileData || !this.fileName) {
+      swal.fire({ title: 'No file selected', icon: 'warning' });
+      this.loadingIndicator = false;
+      return;
+    }
+
+    // create a unique filename to avoid overwriting existing file on server
+    const extIndex = this.fileName.lastIndexOf('.');
+    const ext = extIndex >= 0 ? this.fileName.substring(extIndex) : '.xlsx';
+    const newFileName = `${InstrumentData.instrumentId}_${Date.now()}${ext}`;
+    alert('old filesss  ' + this.fileName + '  New File  names ' + newFileName)
+    const formData = new FormData();
+    formData.append('InstrumentId', InstrumentData.instrumentId);
+    formData.append('FilePath', this.fileName);   // send unique filename
+    formData.append('File', this.FileData);     // base64 payload expected by API
+    this.CIFwebService.ReplaceExcelSheetSample(formData).subscribe({
+      next: (data: any) => {
+        const result = data.item1 && data.item1.length > 0 ? data.item1[0].msg : null;
+
+        if (result && result.toLowerCase() === 'success') {
+          swal.fire({
+            title: 'Uploaded Successfully!',
+            icon: 'success'
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          swal.fire({
+            title: 'Error Occurred, Try Again Later',
+            text: 'API returned: ' + result,
+            icon: 'error'
+          });
+        }
+
+        const elapsed = new Date().getTime() - startTime;
+        const remainingDelay = Math.max(1500 - elapsed, 0);
+        setTimeout(() => (this.loadingIndicator = false), remainingDelay);
+      },
+
+      error: (err: any) => {
+        swal.fire({ title: 'Error', text: 'Failed to Upload.', icon: 'error' });
+        this.loadingIndicator = false;
+      }
+    });
+  }
   @ViewChild('ngSelectComponent') ngSelectComponent: NgSelectComponent;
   @ViewChild('ngSelectComponentStream') ngSelectComponentStream: NgSelectComponent;
   @ViewChild('verticalCenteredModal') verticalCenteredModal: TemplateRef<any>;
@@ -66,6 +197,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
   departmentName: any;
   candidateName: any;
 
+  serverUrl: any; // added on 22-*Nov-25
   constructor(
     private CIFwebService: LpuCIFWebService,
     private storageService: StorageService,
@@ -79,35 +211,24 @@ export class AdminActionInstrumentsComponent implements OnInit {
   user_Email: any;
   sessionData: any[] = [];
   getSessionDetails() {
-    //// debugger
+
     this.sessionData = this.AuthSession.getSession();
     for (const session of this.sessionData) {
       this.user_Email = session[0]['userEmail']
     }
   }
   ngOnInit(): void {
-    // this.getSessionDetails();
+    this.getSessionDetails();
+    this.serverUrl = 'http://172.19.2.52/umsweb/CIFDocuments/CIFSampleExcelSheets';
+    // this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets';
     const GetCookieData = this.cookieService.get('authData');
-      const retrievedCookies = JSON.parse(GetCookieData);
-      this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-      this.user_Email = retrievedCookies.EmailId;
-      this.supervisorName = retrievedCookies.SupervisorName;
-      this.departmentName = retrievedCookies.DepartmentName;
-      this.candidateName = retrievedCookies.CandidateName;
-    // if (GetCookieData) {
-    //   const retrievedCookies = JSON.parse(GetCookieData);
-    //   this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-    //   this.user_Email = retrievedCookies.EmailId;
-    //   this.supervisorName = retrievedCookies.SupervisorName;
-    //   this.departmentName = retrievedCookies.DepartmentName;
-    //   this.candidateName = retrievedCookies.CandidateName;
-    // } else {
-    //   swal.fire({
-    //     title: 'Login Failed ',
-    //     icon: 'warning',
-    //   });
-    //   this.router.navigate(['/Home']);
-    // }
+    const retrievedCookies = JSON.parse(GetCookieData);
+    this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
+    this.user_Email = retrievedCookies.EmailId;
+    this.supervisorName = retrievedCookies.SupervisorName;
+    this.departmentName = retrievedCookies.DepartmentName;
+    this.candidateName = retrievedCookies.CandidateName;
+
     this.GetAllInstruments()
   }
 
@@ -132,16 +253,14 @@ export class AdminActionInstrumentsComponent implements OnInit {
     this.CIFwebService.GetAllInstruments().subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
-          // Ensure each instrument row has an instrumentExcelUrl we can open from assets as a fallback.
           const mapped = (response.item1 || []).map((it: any) => {
             const row = { ...it };
-            // If backend already provides a full url, keep it.
             if (!row.instrumentExcelUrl || row.instrumentExcelUrl.length === 0) {
-              // If backend provided a filename field, use it; otherwise fall back to instrumentId.xlsx
               if (row.instrumentExcelName && row.instrumentExcelName.length > 0) {
                 row.instrumentExcelUrl = 'assets/CifDocumentsTemplates/' + row.instrumentExcelName;
               } else if (row.instrumentId) {
-                row.instrumentExcelUrl = 'assets/CifDocumentsTemplates/' + row.instrumentId + '.xlsx';
+                row.instrumentExcelUrl = this.serverUrl + '/' + row.instrumentId + '.xlsx';
+                // row.instrumentExcelUrl = 'assets/CifDocumentsTemplates/' + row.instrumentId + '.xlsx';
               } else {
                 row.instrumentExcelUrl = '';
               }
@@ -269,65 +388,18 @@ export class AdminActionInstrumentsComponent implements OnInit {
   }
 
 
-
-  VerifyData(InstrumentData: any) {
-    this.loadingIndicator = true;
-    const startTime = new Date().getTime();
-    const formData = new FormData();
-    formData.append('BookingId', InstrumentData.bookingId);
-    formData.append('UserEmailId', InstrumentData.userEmailId);
-    formData.append('UserId', this.UserId);
-    formData.append('Remarks', ' No Remarks from ' + this.UserId);
-    formData.append('FilePath', this.fileName);
-    formData.append('File', this.FileData);
-    // formData.forEach((value, key) => {
-    //   console.log(`${key}: ${value}`);
-    // });
-    this.CIFwebService.CIFResultsUploads(formData).subscribe({
-      next: (data: any) => {
-        const result = data.item1[0]['msg'];
-        if (result === 'success') {
-          swal.fire({
-            title: 'Uploaded Successfully!',
-            // text: '',
-            icon: 'success'
-          }).then(() => {
-            window.location.reload();
-          });
-        } else {
-          swal.fire({
-            title: 'Error Occured, Try Again Later',
-            icon: 'error'
-          });
-        }
-        const elapsed = new Date().getTime() - startTime;
-        const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
-
-        setTimeout(() => {
-          this.loadingIndicator = false;
-        }, remainingDelay);
-      },
-      error: (error: any) => {
-        swal.fire({
-          title: 'Error',
-          text: 'Failed to Upload.',
-          icon: 'error'
-        });
-      },
-      complete: () => {
-        window.location.reload();
-      }
-    });
-
-  }
-
   onFileSelected(event: any): void {
     const reader = new FileReader();
     const target = event.target as HTMLInputElement;
     const file: File | null = (target.files as FileList)[0] || null;
-    if (file && file.size > 3148576) {
+
+    if (!file) {
+      return;
+    }
+
+    if (file && file.size > 1148576) {
       swal.fire({
-        title: 'File size exceeds 3MB. Please upload a smaller file.',
+        title: 'File size exceeds 1MB. Please upload a smaller file.',
         text: 'Invalid File size',
         icon: 'warning'
       });
@@ -337,235 +409,102 @@ export class AdminActionInstrumentsComponent implements OnInit {
 
     const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
     if (file && !fileNameRegex.test(file.name)) {
+      // sanitize filename
       const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-
       const modifiedFile = new File([file], validFileName, { type: file.type });
       const dataTransfer = new DataTransfer();
       dataTransfer.items.add(modifiedFile);
       target.files = dataTransfer.files;
-
       this.fileData = modifiedFile;
       this.fileStatus = true;
 
+      // read base64 for upload
       reader.readAsDataURL(modifiedFile);
       reader.onload = () => {
         const ssss = reader.result as string;
         const ssssArray = ssss.split(',');
-        this.FileData = ssssArray[1];
+        this.FileData = ssssArray[1];    // base64 payload
         this.fileName = validFileName;
+        this.uploadEnabled = true;
+        // parse and preview Excel
+        this.readExcelFile(modifiedFile);
       };
-      this.uploadEnabled = true;
       return;
     }
 
+    // normal case
     this.fileData = file;
     this.fileStatus = true;
-    // alert(10);  
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        const ssss = reader.result as string;
-        const ssssArray = ssss.split(',');
-        this.FileData = ssssArray[1];
-        this.fileName = file.name;
 
-
-      };
-    }
+    // read base64 for upload and parse for preview
+    reader.readAsDataURL(file);
+    reader.onload = (ev) => {
+      const ssss = reader.result as string;
+      const ssssArray = ssss.split(',');
+      this.FileData = ssssArray[1]; // base64 payload
+      this.fileName = file.name;
+      this.uploadEnabled = true;
+      // parse and preview Excel (pass original File object)
+      this.readExcelFile(file);
+    };
   }
 
-async replace(targetUrl: string) {
-  try {
-    this.replacing = true;
-    const suggestedName = (targetUrl || '').split('/').pop() || 'template.xlsx';
+  async replace(targetUrl: string) {
+    try {
+      this.replacing = true;
+      const suggestedName = (targetUrl || '').split('/').pop() || 'template.xlsx';
 
-    // Assume the source is the file already stored in asset/DocumentTemplate folder
-    const sourceUrl = '/asset/DocumentTemplate/' + suggestedName;
-    const response = await fetch(sourceUrl);
-    if (!response.ok) {
-      throw new Error('Failed to fetch source file from ' + sourceUrl);
-    }
-    const sourceArrayBuffer = await response.arrayBuffer();
-
-    // Select the target file to replace using file picker
-    if ((window as any).showOpenFilePicker) {
-      try {
-        const [fileHandle] = await (window as any).showOpenFilePicker({
-          multiple: false,
-          types: [{
-            description: 'Excel Files',
-            accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] }
-          }]
-        });
-        const writable = await fileHandle.createWritable();
-        const uint8 = new Uint8Array(sourceArrayBuffer);
-        await writable.write(uint8);
-        await writable.close();
-        Swal.fire({ title: 'Replaced', text: `File replaced successfully`, icon: 'success' });
-        // reload to reflect changes
-        window.location.reload();
-      } catch (err) {
-        // user cancelled or error
-        console.error('Replace failed', err);
-        Swal.fire({ title: 'Error', text: 'Unable to replace the file', icon: 'error' });
+      // Assume the source is the file already stored in asset/DocumentTemplate folder
+      const sourceUrl = '/asset/DocumentTemplate/' + suggestedName;
+      const response = await fetch(sourceUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch source file from ' + sourceUrl);
       }
-    } else {
-      // Fallback: trigger browser download with the source content
-      const blob = new Blob([sourceArrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = suggestedName;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(blobUrl);
-      Swal.fire({ title: 'Download ready', text: `Please save the file as ${suggestedName} to replace the target in your project assets folder`, icon: 'info' });
+      const sourceArrayBuffer = await response.arrayBuffer();
+
+      // Select the target file to replace using file picker
+      if ((window as any).showOpenFilePicker) {
+        try {
+          const [fileHandle] = await (window as any).showOpenFilePicker({
+            multiple: false,
+            types: [{
+              description: 'Excel Files',
+              accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] }
+            }]
+          });
+          const writable = await fileHandle.createWritable();
+          const uint8 = new Uint8Array(sourceArrayBuffer);
+          await writable.write(uint8);
+          await writable.close();
+          Swal.fire({ title: 'Replaced', text: `File replaced successfully`, icon: 'success' });
+          // reload to reflect changes
+          window.location.reload();
+        } catch (err) {
+          // user cancelled or error
+          console.error('Replace failed', err);
+          Swal.fire({ title: 'Error', text: 'Unable to replace the file', icon: 'error' });
+        }
+      } else {
+        // Fallback: trigger browser download with the source content
+        const blob = new Blob([sourceArrayBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = suggestedName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+        Swal.fire({ title: 'Download ready', text: `Please save the file as ${suggestedName} to replace the target in your project assets folder`, icon: 'info' });
+      }
+    } catch (err) {
+      console.error('Replace error', err);
+      Swal.fire({ title: 'Error', text: 'An error occurred while replacing the file', icon: 'error' });
+    } finally {
+      this.replacing = false;
     }
-  } catch (err) {
-    console.error('Replace error', err);
-    Swal.fire({ title: 'Error', text: 'An error occurred while replacing the file', icon: 'error' });
-  } finally {
-    this.replacing = false;
   }
-}
-  /**
-   * Replace the template file for the given target URL.
-   * This uses the File System Access API when available:
-   * - First asks the admin to pick the source file (open picker fallback to input).
-   * - Then asks where to save (save picker) and writes the bytes there.
-   * If save picker is not available, triggers a download so the user can save the file manually.
-   */
-  // async replace(targetUrl: string) {
-  //   try {
-  //     this.replacing = true;
-  //     const suggestedName = (targetUrl || '').split('/').pop() || 'template.xlsx';
 
-  //     // Step 1: get the source file from the admin
-  //     let sourceFile: File | null = null;
-
-  //     // Prompt user to pick a source file (informational)
-  //     try { await Swal.fire({ title: 'Select source file', text: `Please choose the source file to replace ${suggestedName}`, icon: 'info', showConfirmButton: false, timer: 1400 }); } catch(e) { /* ignore */ }
-
-  //     if ((window as any).showOpenFilePicker) {
-  //       // modern API: show open picker
-  //       try {
-  //         const [fileHandle] = await (window as any).showOpenFilePicker({
-  //           multiple: false,
-  //           types: [{
-  //             description: 'Excel Files',
-  //             accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] }
-  //           }]
-  //         });
-  //         sourceFile = await fileHandle.getFile();
-  //         // Brief confirmation of the selected source file
-  //         if (sourceFile) {
-  //           try { await Swal.fire({ title: 'Source selected', text: `${sourceFile.name} — ${(sourceFile.size/1024).toFixed(1)} KB`, icon: 'success', showConfirmButton: false, timer: 1200 }); } catch(e) { /* ignore */ }
-  //         }
-  //       } catch (err) {
-  //         // user cancelled
-  //         return;
-  //       }
-  //     } else {
-  //       // fallback to input element (works everywhere)
-  //       try { await Swal.fire({ title: 'Select source file', text: `Please choose the source file to replace ${suggestedName}`, icon: 'info', showConfirmButton: false, timer: 1200 }); } catch(e) { /* ignore */ }
-  //       sourceFile = await new Promise<File | null>((resolve) => {
-  //         const input = document.createElement('input');
-  //         input.type = 'file';
-  //         input.accept = '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-  //         input.onchange = () => {
-  //           const f = (input.files && input.files[0]) || null;
-  //           resolve(f);
-  //         };
-  //         input.click();
-  //       });
-  //       if (!sourceFile) return; // cancelled
-  //       if (sourceFile) {
-  //         try { await Swal.fire({ title: 'Source selected', text: `${sourceFile.name} — ${(sourceFile.size/1024).toFixed(1)} KB`, icon: 'success', showConfirmButton: false, timer: 1200 }); } catch(e) { /* ignore */ }
-  //       }
-  //     }
-
-  //     // Step 2: write the file to destination (save picker) or trigger download as fallback
-  // if ((window as any).showSaveFilePicker) {
-  //       // Inform the user we will now ask for target/destination
-  //       try { await Swal.fire({ title: 'Select target (save)', text: `Now select the destination to overwrite ${suggestedName}`, icon: 'info', showConfirmButton: false, timer: 1100 }); } catch(e) { /* ignore */ }
-  //       try {
-  //         const opts = {
-  //           suggestedName,
-  //           types: [{
-  //             description: 'Excel Files',
-  //             accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] }
-  //           }]
-  //         };
-  //         const handle = await (window as any).showSaveFilePicker(opts);
-  //         let writable: any = null;
-  //         try {
-  //           writable = await handle.createWritable();
-  //           if (sourceFile) {
-  //             const arrayBuffer = await sourceFile.arrayBuffer();
-  //             const size = (arrayBuffer && arrayBuffer.byteLength) ? arrayBuffer.byteLength : 0;
-  //             console.log('Source file byteLength:', size);
-  //             if (!size) {
-  //               Swal.fire({ title: 'Empty file', text: 'The selected source file appears to be empty', icon: 'error' });
-  //               try { await writable.close(); } catch (e) { /* ignore */ }
-  //               return;
-  //             }
-
-  //             // Try writing a Uint8Array first (some implementations prefer BufferSource)
-  //             try {
-  //               const uint8 = new Uint8Array(arrayBuffer);
-  //               await writable.write(uint8);
-  //             } catch (writeErr) {
-  //               console.warn('write(uint8) failed, trying Blob write', writeErr);
-  //               // Fallback to Blob write
-  //               const blob = new Blob([arrayBuffer], { type: sourceFile.type || 'application/octet-stream' });
-  //               await writable.write(blob);
-  //             }
-  //           }
-  //           await writable.close();
-  //           Swal.fire({ title: 'Replaced', text: `${suggestedName} saved successfully`, icon: 'success' });
-  //           // clear any temporary file input elements
-  //           const inputs = document.querySelectorAll('input[type=file]');
-  //           inputs.forEach((el: any) => { try { el.value = ''; } catch (e) { /* ignore */ } });
-  //           // reload to reflect changes
-  //           window.location.reload();
-  //           return;
-  //         } finally {
-  //           // ensure closed in case of partial failures
-  //           try { if (writable && writable.close) await writable.close(); } catch (e) { /* ignore */ }
-  //         }
-  //       } catch (err) {
-  //         // user cancelled save picker or write failed
-  //         console.error('Save failed', err);
-  //         Swal.fire({ title: 'Save failed', text: 'Unable to write file via Save File Picker', icon: 'error' });
-  //         return;
-  //       }
-  //     }
-
-  //       // Fallback: trigger browser download with suggested name so user can manually save/overwrite
-  //     if (sourceFile) {
-  //       const blobUrl = URL.createObjectURL(sourceFile as Blob);
-  //       const a = document.createElement('a');
-  //       a.href = blobUrl;
-  //       a.download = suggestedName;
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       a.remove();
-  //       URL.revokeObjectURL(blobUrl);
-  //       Swal.fire({ title: 'Download ready', text: `Please save the file as ${suggestedName} into your project assets folder`, icon: 'info' }).then(() => {
-  //         // clear file inputs on fallback as well
-  //         const inputs = document.querySelectorAll('input[type=file]');
-  //         inputs.forEach((el: any) => { try { el.value = ''; } catch (e) { /* ignore */ } });
-  //       });
-  //     }
-  //   } catch (err) {
-  //     console.error('Replace error', err);
-  //     Swal.fire({ title: 'Error', text: 'An error occurred while replacing the file', icon: 'error' });
-  //   }
-  //   finally {
-  //     this.replacing = false;
-  //   }
-  // }
 
   UploadDocument() {
 

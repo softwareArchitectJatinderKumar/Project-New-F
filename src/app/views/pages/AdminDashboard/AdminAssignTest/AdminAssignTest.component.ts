@@ -335,6 +335,14 @@ export class AdminAssignTestComponent implements OnInit {
       uid: '33476',
       uiD_Name: 'Mr. Sanjeev Verma '
     },
+    {
+      uid: '34125',
+      uiD_Name: 'Dr. Puneet '
+    },
+    {
+      uid: '34228',
+      uiD_Name: 'Monika Kumari'
+    },
   ];
 
   getAllCifUserList(): void {

@@ -16,9 +16,6 @@ import swal from 'sweetalert2';
 })
 export class LPUTermsConditionsComponent implements OnInit {
   @ViewChild('facilitiesSection') facilitiesSection!: ElementRef;
-  // Method to scroll to the Facilities section
- 
- 
    
   gotoFacilities() {
     this.facilitiesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
@@ -129,7 +126,7 @@ export class LPUTermsConditionsComponent implements OnInit {
     {
       img: 'https://www.lpu.in/lpu-assets/images/cif/event-10.jpg',
       title: 'Discovering the Crystalline and Nano world using X-ray Diffraction and Particle Size and Zeta Potential Analyzer: A National Workshop',
-      date: '(24 – 26 April 2025)'
+      date: '(24 - 26 April 2025)'
     },
     {
       img: 'https://www.lpu.in/lpu-assets/images/cif/event-9.jpg',
@@ -144,7 +141,7 @@ export class LPUTermsConditionsComponent implements OnInit {
     {
       img: 'https://www.lpu.in/lpu-assets/images/cif/event-8.jpg',
       title: 'SHORT-TERM COURSE on Advanced Materials analysis & Characterization Techniques: Hands-on-Training and Data Interpretation',
-      date: '(09 – 13 December, 2024)'
+      date: '(09 - 13 December, 2024)'
     },
     {
       img: 'https://www.lpu.in/lpu-assets/images/cif/event-1.jpg',

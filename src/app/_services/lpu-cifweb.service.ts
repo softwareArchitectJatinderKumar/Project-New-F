@@ -351,7 +351,7 @@ export class LpuCIFWebService {
   CIFUpdateUserDetails(UpdateUserData: FormData): Observable<any> {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       AUTH_API + 'api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
     //  'https://localhost:7125/api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
@@ -670,8 +670,8 @@ export class LpuCIFWebService {
     //.set('Authorization', 'Bearer ' + this.Localtoken)
     return this.http.post(
       //  'https://projectsapi.lpu.in/api/LpuCIF/CIFAssignTest', dataSoft, { headers }
-       'https://localhost:7125/api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
-        // AUTH_API + 'api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
+      //  'https://localhost:7125/api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
+        AUTH_API + 'api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
     );
   }
 
@@ -712,6 +712,17 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
     return this.http.post(
     //  'https://localhost:7125/api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
        AUTH_API +  'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
+    );// for new user account creatinng
+  }
+
+
+    ReplaceExcelSheetSample(newUserData: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+    return this.http.post(
+    //  'https://localhost:7125/api/LpuCIF/ReplaceExcelSheetSample', newUserData, { headers }
+       AUTH_API +  'api/LpuCIF/ReplaceExcelSheetSample', newUserData, { headers }
     );// for new user account creatinng
   }
 
