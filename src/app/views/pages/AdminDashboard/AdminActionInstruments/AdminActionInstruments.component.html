@@ -59,11 +59,11 @@
                                         <td class="fw-bold "> {{InstrumentDataRow.instrumentName}}</td>
                                         <td class="fw-bold ">
 
-                                            <a class="ms-2" [href]="InstrumentDataRow.instrumentExcelUrl"
-                                                target="_blank"
-                                                *ngIf="InstrumentDataRow.instrumentExcelUrl?.length > 0; else noExcel">
-                                                View
-                                                Excel </a>
+                                            <!-- <a class="ms-2" [href]="InstrumentDataRow.instrumentExcelUrl" target="_blank"  *ngIf="InstrumentDataRow.instrumentExcelUrl?.length > 0; else noExcel">                                               View  Excel </a> -->
+                                            <a class="ms-2 btn btn-info m-2"  [href]="serverUrl + InstrumentDataRow.sampleExcelSheetUrl"target="_blank"  *ngIf="InstrumentDataRow.sampleExcelSheetUrl?.length > 0; else noExcel">                                               
+                                                <!-- View  Excel -->
+                                               <i class="bi bi-file-earmark-text fs-5"></i>
+                                             </a>
                                             <ng-template #noExcel> <span class="text-danger ms-2"> No Excel Uploaded
                                                 </span>
                                             </ng-template>
@@ -90,8 +90,14 @@
                                             </ng-template>
                                         </td>
                                         <td class="fw-bold ">
-                                            <button class="btn btn-dark btn-sm me-2" (click)="OpenModalWindow(InstrumentDataRow)">Change Status</button>
-                                            <button class="btn btn-dark btn-sm me-2" (click)="OpenReplaceModal(InstrumentDataRow)">Replace Excel Sheet</button>
+                                            <button class="btn btn-danger btn-sm me-2" (click)="OpenModalWindow(InstrumentDataRow)"> 
+                                                <i class="bi bi-arrow-counterclockwise"></i>
+                                            </button>
+                                            <button class="btn btn-warning btn-sm m-3" (click)="OpenReplaceModal(InstrumentDataRow)">
+                                                Replace Excel Sheet
+                                                <!-- <i class="bi bi-arrow-repeat"></i> -->
+                                                <i class="bi bi-upload fs-4 m-2 "></i>
+                                            </button>
                                             <!-- <button class="btn btn-outline-primary btn-sm"
                                                 (click)="replace(InstrumentDataRow.instrumentExcelUrl)"
                                                 [disabled]="replacing">

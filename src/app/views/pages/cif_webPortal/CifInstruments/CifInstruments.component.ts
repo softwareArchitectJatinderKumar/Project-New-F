@@ -109,6 +109,7 @@ export class CifInstrumentsComponent implements OnInit {
           this.cifInstrumentsDataData = response.item1;
           this.dataSource = response.item1;
           this.tmpscifInstrumentsDataData = response.item1;
+          // console.log(JSON.stringify(this.tmpscifInstrumentsDataData))
           this.headHtmlData = this.tmpscifInstrumentsDataData[0];
           this.columns = Object.keys(this.tmpscifInstrumentsDataData[0]);
           this.columns = this.columns.filter((item: any) => item !== 'ResultFile' && item !== 'userId' && item !== 'id' && item !== 'analysisId');

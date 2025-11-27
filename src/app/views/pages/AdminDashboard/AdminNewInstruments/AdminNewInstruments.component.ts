@@ -225,6 +225,7 @@ export class AdminNewInstrumentsComponent implements OnInit {
   }
   onSelect(a: any) {
     let aa = a;
+    // alert(JSON.stringify(aa))
     this.InstrumentId = aa['instrumentId'];
     this.InstrumentTitles = aa['instrumentName'];
     this.modalService.open(this.viewDescModal, { size: 'sm' }).result.then((result) => {
@@ -299,6 +300,7 @@ export class AdminNewInstrumentsComponent implements OnInit {
     if (this.fileChosen[Id]) {
       const formData = new FormData();
       formData.append('InstrumentId', Id);
+      formData.append('InstrumentName', this.InstrumentTitles);
       formData.append('IsActive', this.StatusInstrument);
       formData.append('FilePath', this.fileName);
       formData.append('File', this.FileDataX);

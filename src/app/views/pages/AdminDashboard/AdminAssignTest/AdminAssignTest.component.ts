@@ -110,6 +110,7 @@ export class AdminAssignTestComponent implements OnInit {
           this.originalData = [...this.AllBookingTestsData];
           this.dataSource = new MatTableDataSource(response.item1);
           this.tmpsAllBookingTestsData = response.item1;
+          console.log(JSON.stringify(this.tmpsAllBookingTestsData))
           this.headHtmlData = response.item1[0];
         } else {
           this.AllBookingTestsData = [];
@@ -247,8 +248,8 @@ export class AdminAssignTestComponent implements OnInit {
     formData.append('InstrumentId', AssignTest.instrumentId);
     formData.append('UserId', AssignTest.userEmailId);
     formData.append('AssignedTo', this.AssignedTo);
-    console.log("Tests Assigned to :");
-    formData.forEach((value, key) => console.log(`${key}: ${value}`));
+    // console.log("Tests Assigned to :");
+    // formData.forEach((value, key) => console.log(`${key}: ${value}`));
     this.CIFwebService.CIFAssignTestToStaff(formData).subscribe({
       next: (data: any) => {
         const result = data.item1?.[0]?.msg || '';
@@ -521,17 +522,24 @@ export class AdminAssignTestComponent implements OnInit {
   //   return this.selectedFile != null;
   // }
 
-
+AssignedToNew:any;
 
   ReAssginStaff(AssignTest: any): void {
-    if (!this.AssignedTo) {
+    if (!this.AssignedToNew) {
       swal.fire('Select Staff', 'Please select a staff member to assign.', 'warning');
       return;
     }
-    const formData = new FormData();
+    // const formData = new FormData();
+    // formData.append('RecordId', AssignTest.recordId);
+    // formData.append('UserId', AssignTest.userEmailId);
+    // formData.append('AssignedTo', this.AssignedTo);
+
+     const formData = new FormData();
     formData.append('RecordId', AssignTest.recordId);
+    formData.append('BookingId', AssignTest.bookingId);
+    formData.append('InstrumentId', AssignTest.instrumentId);
     formData.append('UserId', AssignTest.userEmailId);
-    formData.append('AssignedTo', this.AssignedTo);
+    formData.append('AssignedTo', this.AssignedToNew);
     // console.log("Tests Assigned to :");
     // formData.forEach((value, key) => console.log(`${key}: ${value}`));
     this.CIFwebService.ReAssignTestToStaff(formData).subscribe({

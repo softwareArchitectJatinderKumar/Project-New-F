@@ -367,8 +367,8 @@
                                         <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['instrumentName'] }}</td>
                                         <td class="fs-5 p-4" style="width: 20%;"> {{this.editEvent['assignedUserId']}}
                                             <select id="staffName" (change)="onActivitySelected($event)"
-                                                class="col-12 p-2 form-control" required [(ngModel)]="AssignedTo"
-                                                name="staffName" #AssignedToModel="ngModel">
+                                                class="col-12 p-2 form-control" required [(ngModel)]="AssignedToNew"
+                                                name="staffNameNew" #AssignedToModel="ngModel">
                                                 <option value="" selected>Select Staff</option>
                                                 <option *ngFor="let session of AllCifUserList" [value]="session.uid">
                                                     {{ session.uiD_Name }}

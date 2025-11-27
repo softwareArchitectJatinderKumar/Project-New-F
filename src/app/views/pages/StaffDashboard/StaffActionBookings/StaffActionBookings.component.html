@@ -20,9 +20,9 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-sm-3">
                         <div class="mb-3">
-                            <button (click)="exportToExcel()" class="btn btn-dark "
+                            <button (click)="exportToExcel()" class="btn btn-info "
                                 [disabled]="NoResults=='No Details'">Export to
-                                Excel</button>
+                                Excel  <i class="bi bi-download ms-3"></i></button>
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -68,6 +68,7 @@
                                     <th class="fw-bold fw-bolder">Request Sheet</th>
                                     <th class="form-label fw-bolder">Candidate Name</th>
                                     <th class="form-label fw-bolder">Organisation Name</th>
+                                    <th class="form-label fw-bolder">Department Name</th>
                                     <th class="form-label fw-bolder">Registration Number</th>
                                     <th class="form-label fw-bolder">Mobile No</th>
                                     <th class="form-label fw-bolder">User Email Id</th>
@@ -89,9 +90,10 @@
                                         </td>
                                         <ng-container *ngIf="AllBookingTestsDataRow.fileName; else NoFile">
                                             <td>
-                                                <button class="btn-dark btn ms-3"
+                                                <button class="btn-info btn ms-3"
                                                     (click)="downloadFile(AllBookingTestsDataRow.fileName)">
-                                                    View
+                                                     <i class="bi bi-download"></i>
+
                                                 </button>
                                             </td>
                                         </ng-container>
@@ -103,8 +105,9 @@
                                         <!-- <td class="fw-bold ">{{AllBookingTestsDataRow.bookingRequestDate }}</td> -->
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.candidateName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.candidateName }}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.organisationName}}</td>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.idProofNumber}}</td>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.mobileNumber}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.departmentName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.departmentName}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.idProofNumber?.length<1 ? 'Internal User' : AllBookingTestsDataRow.idProofNumber}}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.mobileNumber?.length<1 ? 'Internal User' : AllBookingTestsDataRow.mobileNumber}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.userRole=='Guest User '? 'Internal User' : AllBookingTestsDataRow.userId}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.userRole=='Guest User '? 'Internal User' : AllBookingTestsDataRow.userRole}}</td>
                                         <td>
@@ -114,8 +117,17 @@
                                         </td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow?.paymentDate && AllBookingTestsDataRow?.paymentDate!='null' ? (AllBookingTestsDataRow?.paymentDate): '-NA-'}}
                                         </td>
-                                        <td class="fw-bold"><button class="btn btn-dark btn-sm"
-                                            (click)="openPaymentModal(AllBookingTestsDataRow)">Upload </button></td>
+                                        <!-- <td class="fw-bold"><button class="btn btn-dark btn-sm" (click)="openPaymentModal(AllBookingTestsDataRow)">Upload </button></td> -->
+                                            <td class="ms-4" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
+                                                <button class="btn btn-primary " (click)="openPaymentModal(AllBookingTestsDataRow)">
+                                                    <!-- Upload -->
+                                                 <i class="bi bi-upload"></i>
+
+                                                </button> <br />
+                                            </td>
+                                            <ng-template #NA>
+                                                <td> <span class="badge bg-success">NA</span> </td>
+                                            </ng-template>
                                     </tr>
                                 </ng-container>
                             </tbody>
