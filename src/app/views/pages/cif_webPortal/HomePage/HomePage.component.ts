@@ -85,7 +85,7 @@ export class HomePageComponent implements OnInit {
       next: response => {
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
-          this.tmpsInstrumentsDataData = response.item1.slice(0, 8);
+          this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
           this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
         } else {
           this.InstrumentsDataData = [];
@@ -117,6 +117,11 @@ export class HomePageComponent implements OnInit {
   serverUrl: any='https://www.lpu.in/lpu-assets/images/cif/';
   events = [
     {
+      img: 'short-term-course-2025.webp',
+      title: 'Short Term Course on Advanced Materials and Characterization: Theory & Applications',
+      date: '(03 November - 07 November, 2025)'
+    },
+    {
       img: 'summer-training-programme-2025.webp',
       title: 'ANRF Sponsored Summer Training Programme',
       date: '(2 June - 11 July 2025)'
@@ -124,7 +129,7 @@ export class HomePageComponent implements OnInit {
     {
       img: 'event-10.jpg',
       title: 'Discovering the Crystalline and Nano world using X-ray Diffraction and Particle Size and Zeta Potential Analyzer: A National Workshop',
-      date: '(24 – 26 April 2025)'
+      date: '(24 - 26 April 2025)'
     },
     {
       img: 'event-9.jpg',
@@ -139,7 +144,7 @@ export class HomePageComponent implements OnInit {
     {
       img: 'event-8.jpg',
       title: 'SHORT-TERM COURSE on Advanced Materials analysis & Characterization Techniques: Hands-on-Training and Data Interpretation',
-      date: '(09 – 13 December, 2024)'
+      date: '(09 - 13 December, 2024)'
     },
     {
       img: 'event-1.jpg',

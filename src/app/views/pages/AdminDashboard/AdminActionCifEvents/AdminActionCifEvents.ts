@@ -193,7 +193,7 @@ export class AdminActionCifEvents implements OnInit {
     });
   }
   private handleStatusChange(formData: FormData) {
-    this.CIFwebService.CIFUpdateEventsDetails(formData).subscribe((data: any) => {
+    this.CIFwebService.CIFUpdateEventsStatus(formData).subscribe((data: any) => {
       if (data.responseData === 'Cancel') {
         swal.fire(
           'No Change!',

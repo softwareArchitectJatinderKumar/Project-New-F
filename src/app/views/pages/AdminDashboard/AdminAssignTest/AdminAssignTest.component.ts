@@ -110,7 +110,7 @@ export class AdminAssignTestComponent implements OnInit {
           this.originalData = [...this.AllBookingTestsData];
           this.dataSource = new MatTableDataSource(response.item1);
           this.tmpsAllBookingTestsData = response.item1;
-          console.log(JSON.stringify(this.tmpsAllBookingTestsData))
+          // console.log(JSON.stringify(this.tmpsAllBookingTestsData))
           this.headHtmlData = response.item1[0];
         } else {
           this.AllBookingTestsData = [];

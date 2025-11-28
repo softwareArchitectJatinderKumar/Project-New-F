@@ -472,7 +472,7 @@ export class CifInstrumentsComponent implements OnInit {
       next: response => {
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
-          this.tmpsInstrumentsDataData = response.item1.slice(0, 8);
+          this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
           this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
         } else {
           this.InstrumentsDataData = [];

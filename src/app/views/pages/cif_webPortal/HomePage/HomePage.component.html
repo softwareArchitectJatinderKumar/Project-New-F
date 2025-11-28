@@ -106,7 +106,7 @@ old loader
                         loading="lazy" (load)="onImageLoad(i)" (error)="onImageError($event, i)" />
                 </div>
                 <div class="mb-5">
-                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id, InstrumentData.categoryId)"
+                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,15), InstrumentData.id, InstrumentData.categoryId)"
                         data-is-active="instrument.isActive ? 'true' : 'false'}">
                         {{InstrumentData.instrumentName}}
                     </a>

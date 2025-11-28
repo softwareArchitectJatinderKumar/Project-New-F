@@ -79,7 +79,7 @@ export class NewBookingsComponent implements OnInit {
   ) { }
   loadingIndicator: any;
   ngOnInit(): void {
-
+   this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/';
     const GetCookieData = this.cookieService.get('InternalUserAuthData');
     const retrievedCookies = JSON.parse(GetCookieData);
     this.UserRole = retrievedCookies.UserRole;
@@ -108,8 +108,6 @@ export class NewBookingsComponent implements OnInit {
   getDurationData(AnalysisId: any) {
     this.loadingIndicator=true;
     const startTime = new Date().getTime();
-
-
     this.CIFwebService.GetAnalysisData(AnalysisId, this.UserId).subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
@@ -121,7 +119,6 @@ export class NewBookingsComponent implements OnInit {
         }
         const elapsed = new Date().getTime() - startTime;
         const remainingDelay = Math.max(1000 - elapsed, 0); // wait at least 5s
-
         setTimeout(() => {
           this.loadingIndicator = false;
         }, remainingDelay);
@@ -367,32 +364,38 @@ export class NewBookingsComponent implements OnInit {
     });
   }
 
-
-
-  testClick(a: any): void {
-    const fileName = `${a}.xlsx`;
-    const fileUrl = `assets/CifDocumentsTemplates/${fileName}`;
-
-    // Check if the file exists
-    fetch(fileUrl, { method: 'HEAD' })
-      .then(response => {
-        if (response.ok) {
-          const link = document.createElement('a');
-          link.href = fileUrl;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } else {
-          // console.error('File not found:', fileUrl);
-          // alert('File not found');
-        }
-      })
-      .catch(() => {
-        // console.error('Error fetching the file:', error);
-        alert('Error downloading file');
-      });
+  testClick(a: any) {
+    let aa = a;
+    const fileName = this.serverUrl+`${a}.xlsx`;
+    window.open(fileName, '_blank');
   }
+
+  // testClick(a: any): void {
+  //   const fileName = `${a}.xlsx`;
+  //   alert(fileName)
+  //   // const fileUrl = `assets/CifDocumentsTemplates/${fileName}`;
+  //   const fileUrl =  this.serverUrl+fileName;
+
+  //   // Check if the file exists
+  //   fetch(fileUrl, { method: 'HEAD' })
+  //     .then(response => {
+  //       if (response.ok) {
+  //         const link = document.createElement('a');
+  //         link.href = fileUrl;
+  //         link.download = fileName;
+  //         document.body.appendChild(link);
+  //         link.click();
+  //         document.body.removeChild(link);
+  //       } else {
+  //         // console.error('File not found:', fileUrl);
+  //         // alert('File not found');
+  //       }
+  //     })
+  //     .catch(() => {
+  //       // console.error('Error fetching the file:', error);
+  //       alert('Error downloading file');
+  //     });
+  // }
 
   goToDetails() {
     if (this.Datagrid.length > 0) {

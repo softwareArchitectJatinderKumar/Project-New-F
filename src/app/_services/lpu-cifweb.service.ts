@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
-const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
-const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
-const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
-// const AUTH_API = 'https://localhost:7125/';
-// const AUTH_API_LOCAL = 'https://localhost:7125/';
-// const AUTH_API_LOCALS = 'https://localhost:7125/';
+// const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
+// const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
+// const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
+const AUTH_API = 'https://localhost:7125/';
+const AUTH_API_LOCAL = 'https://localhost:7125/';
+const AUTH_API_LOCALS = 'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -726,4 +726,14 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
     );// for new user account creatinng
   }
 
+
+    CIFUpdateEventsStatus(dataSoft: FormData): Observable<any> {
+    var authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      // .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    return this.http.post(
+      AUTH_API + 'api/LpuCIF/UpdateEventsStatus', dataSoft, { headers });
+      // 'https://localhost:7125/api/LpuCIF/UpdateCIFEventDetails', dataSoft, { headers });
+  }
 }
