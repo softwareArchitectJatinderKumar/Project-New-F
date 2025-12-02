@@ -102,11 +102,11 @@ old loader
                         role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
-                    <img [src]="InstrumentData.imageUrl" alt="{{InstrumentData.instrumentName}}" class="img-fluid"
+                    <img [src]="InstrumentData.imageUrl" alt="{{InstrumentData.instrumentName}}" class="img"
                         loading="lazy" (load)="onImageLoad(i)" (error)="onImageError($event, i)" />
                 </div>
                 <div class="mb-5">
-                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,15), InstrumentData.id, InstrumentData.categoryId)"
+                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,16), InstrumentData.id, InstrumentData.categoryId)"
                         data-is-active="instrument.isActive ? 'true' : 'false'}">
                         {{InstrumentData.instrumentName}}
                     </a>

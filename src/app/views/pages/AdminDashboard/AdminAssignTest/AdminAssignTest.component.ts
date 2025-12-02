@@ -57,14 +57,14 @@ export class AdminAssignTestComponent implements OnInit {
     private cookieService: CookieService) { }
 
   ngOnInit(): void {
-    const GetCookieData = this.cookieService.get('authData');
-    const retrievedCookies = JSON.parse(GetCookieData);
-    this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-    this.user_Email = retrievedCookies.EmailId;
-    this.supervisorName = retrievedCookies.SupervisorName;
-    this.departmentName = retrievedCookies.DepartmentName;
-    this.candidateName = retrievedCookies.CandidateName;
-
+    // const GetCookieData = this.cookieService.get('authData');
+    // const retrievedCookies = JSON.parse(GetCookieData);
+    // this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
+    // this.user_Email = retrievedCookies.EmailId;
+    // this.supervisorName = retrievedCookies.SupervisorName;
+    // this.departmentName = retrievedCookies.DepartmentName;
+    // this.candidateName = retrievedCookies.CandidateName;
+    this.loadUserFromCookies();
     this.getAllPaymentDetails();
     this.getAllAssignedTest();
     this.getAllCifUserList();
