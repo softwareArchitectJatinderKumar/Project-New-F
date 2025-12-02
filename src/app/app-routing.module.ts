@@ -171,6 +171,10 @@ const routes: Routes = [
 // Admin Dashboard
 
 {
+  path: "EventCrud",
+  loadChildren: () => import('./views/pages/AdminDashboard/EventsCrud/event-crud.module').then(m => m.EventsCrudComponentModule),
+},
+{
   path: "EventUploads",
   loadChildren: () => import('./views/pages/AdminDashboard/AdminNewEventsData/AdminNewEventsData.module').then(m => m.AdminNewEventsDataModule),
 },

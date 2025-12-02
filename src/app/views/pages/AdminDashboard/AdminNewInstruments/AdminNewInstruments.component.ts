@@ -105,20 +105,20 @@ export class AdminNewInstrumentsComponent implements OnInit {
     this.departmentName = retrievedCookies.DepartmentName;
     this.candidateName = retrievedCookies.CandidateName;
 
-    // if (GetCookieData) {
-    //   const retrievedCookies = JSON.parse(GetCookieData);
-    //   this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-    //   this.user_Email = retrievedCookies.EmailId;
-    //   this.supervisorName = retrievedCookies.SupervisorName;
-    //   this.departmentName = retrievedCookies.DepartmentName;
-    //   this.candidateName = retrievedCookies.CandidateName;
-    // } else {
-    //    swal.fire({
-    //     title: 'Login Failed ',
-    //     icon: 'warning',
-    //   });
-    //   this.router.navigate(['/Home']);
-    // }
+    if (GetCookieData) {
+      const retrievedCookies = JSON.parse(GetCookieData);
+      this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
+      this.user_Email = retrievedCookies.EmailId;
+      this.supervisorName = retrievedCookies.SupervisorName;
+      this.departmentName = retrievedCookies.DepartmentName;
+      this.candidateName = retrievedCookies.CandidateName;
+    } else {
+       swal.fire({
+        title: 'Login Failed ',
+        icon: 'warning',
+      });
+      this.router.navigate(['/Home']);
+    }
     this.getAllInstrumentsDetail();
     this.LoadForm();
   }
@@ -138,7 +138,7 @@ export class AdminNewInstrumentsComponent implements OnInit {
         this.columns = []; this.headHtmlData = [];
         this.headHtmlData = this.TempAllInstrumentsDetails[0];
         this.columns = Object.keys(this.TempAllInstrumentsDetails[0]);
-        this.columns = this.columns.filter((item: any) => item !== 'imageUrl' && item !== 'instrumentStatus' && item !== 'description' && item !== 'isActive' && item !== 'id' && item !== 'labId' && item !== 'labName' && item !== 'isHourly');
+        this.columns = this.columns.filter((item: any) => item !== 'imageUrl' && item !== 'sampleExcelSheetUrl' && item !== 'excelSheetUrl' &&  item !== 'instrumentStatus' && item !== 'description' && item !== 'isActive' && item !== 'id' && item !== 'labId' && item !== 'labName' && item !== 'isHourly');
         this.columns.push()
         
       }
@@ -187,6 +187,10 @@ export class AdminNewInstrumentsComponent implements OnInit {
   onSelectFile(a: any) {
     let aa = a;
     window.open(aa.imageUrl, '_blank');
+  }
+  onSelectSampleExcelFile(a: any) {
+    let aa = a;
+    window.open(aa.excelSheetUrl, '_blank');
   }
 
 

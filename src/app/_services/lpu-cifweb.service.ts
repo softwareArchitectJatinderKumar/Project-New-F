@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
+ import { EventModel } from '../_model/Event.model';
+ 
 // const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
 // const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
 // const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
@@ -735,5 +737,145 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
     return this.http.post(
       AUTH_API + 'api/LpuCIF/UpdateEventsStatus', dataSoft, { headers });
       // 'https://localhost:7125/api/LpuCIF/UpdateCIFEventDetails', dataSoft, { headers });
+  }
+
+
+
+
+
+
+
+  /**
+   * Helper function to prepare the FormData payload for the API.
+   * Your backend is expecting a [FromForm] CIFEventsDetailsModel.
+   */
+  private prepareFormData(event: EventModel, action: 'Insert' | 'Update' | 'Delete' | 'View'): FormData {
+    const formData = new FormData();
+
+    // Map the model fields to FormData
+    formData.append('Action', action);
+
+    // EventId is needed for all operations except 'Insert'
+    if (event.eventId !== null) {
+        formData.append('EventId', event.eventId.toString());
+    }
+
+    // Required fields for Insert/Update
+    if (action !== 'Delete' && action !== 'View') {
+        formData.append('EventName', event.eventName);
+        formData.append('EventDate', event.eventDate);
+        formData.append('EventCategory',event.eventCategory);
+        formData.append('EventDetails', event.eventDetails);
+        formData.append('ImageUrl', event.imageUrl);
+        // Add placeholders for other fields if required by your API contract
+        formData.append('EventFileData', event.eventFileData || '');
+        formData.append('DisapprovalReason', event.disapprovalReason || '');
+        formData.append('LoginName', event.LoginName || 'DefaultUser');
+    }
+
+    return formData;
+  }
+
+  // --- CRUD Operations ---
+
+  /**
+   * The unified function to handle all CRUD operations for Events.
+   * * @param data The FormData containing all event fields and the 'Action' parameter.
+   * @param action The specific action ('Insert', 'Update', 'Delete', 'View')
+   * @returns An Observable that resolves to the API response (e.g., success message or list of events).
+   */
+  EventsCrudOperation(data: FormData, action: 'Insert' | 'Update' | 'Delete' | 'View'): Observable<any> {
+      var authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      // .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    // Log the action being performed for debugging
+    console.log(`[Service] Calling EventsCrudOperation with Action: ${action}`);
+
+    // Since you are passing FormData (which includes the file data for Insert/Update),
+    // you MUST use an HTTP POST request, even for 'View' (GET equivalent) and 'Delete', 
+    // because your backend controller expects a [FromForm] body.
+    
+    return this.http.post<any>(
+       AUTH_API + 'api/LpuCIF/EventsCrudOperation',
+      // `${this.baseUrl}${this.eventsEndpoint}`, 
+      data,{ headers }
+    );
+
+    // NOTE on Headers: When posting FormData, Angular's HttpClient automatically sets 
+    // the Content-Type to 'multipart/form-data' with the correct boundary, which is 
+    // essential for file uploads. You should NOT set the Content-Type manually.
+  }
+
+  // You can optionally create wrappers for clarity:
+  // getEvents(data: FormData): Observable<any> {
+  //     return this.EventsCrudOperation(data, 'View');
+  // }
+  
+  // createEvent(data: FormData): Observable<any> {
+  //     return this.EventsCrudOperation(data, 'Insert');
+  // }
+  getEvents(): Observable<any> {
+     var authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      // .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    const viewEventModel: EventModel = {
+        eventId: 0,
+        eventName: '',
+        eventDate: '',
+        eventCategory: 'Upcoming', // Default value
+        eventDetails: '',
+        imageUrl: ''
+    };
+    // 2. Prepare FormData with Action='View'
+    const formData = this.prepareFormData(viewEventModel, 'View');
+
+        return this.http.post(
+      AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers });
+    // return this.http.post<EventModel[]>(this.apiUrl, formData);
+  }
+
+
+  createEvent(event: EventModel): Observable<any> {
+     var authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      // .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    const formData = this.prepareFormData(event, 'Insert');
+      return this.http.post(
+      AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers });
+    // return this.http.post<ApiResponse>(this.apiUrl, formData);
+  }
+
+  updateEvent(event: EventModel): Observable<any> {
+    var authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      // .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+
+    const formData = this.prepareFormData(event, 'Update');
+      return this.http.post(
+      AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers });
+    // return this.http.post<ApiResponse>(this.apiUrl, formData);
+  }
+
+  deleteEvent(eventId: number): Observable<any>{
+    var authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      // .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    const deleteEventModel: EventModel = {
+        eventId: eventId,
+        eventName: '',
+        eventDate: '',
+        eventCategory: 'Upcoming',
+        eventDetails: '',
+        imageUrl: ''
+    };
+    const formData = this.prepareFormData(deleteEventModel, 'Delete');
+     return this.http.post(
+      AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers });
+    // return this.http.post<ApiResponse>(this.apiUrl, formData);
   }
 }

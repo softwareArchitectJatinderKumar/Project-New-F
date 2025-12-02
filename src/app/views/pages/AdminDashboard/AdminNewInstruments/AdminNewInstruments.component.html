@@ -51,6 +51,19 @@
                     <ngx-datatable-column name="Download Image" [sortable]="false" prop="Id">
                         <ng-template let-row="row" let-value="value" let-rowIndex="rowIndex"
                             ngx-datatable-cell-template>
+                            <ng-container *ngIf="row.excelSheetUrl != null">
+                                <button class="btn btn-dark btn-sm" (click)="onSelectSampleExcelFile(row)">
+                                     <i class="text-center bi bi-file-earmark-text fs-5"></i>
+                                </button>
+                            </ng-container>
+                            <ng-container *ngIf="row.imageUrl == null">
+                                <span class="ms-3 text-danger">No File</span>
+                            </ng-container>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Download Image" [sortable]="false" prop="Id">
+                        <ng-template let-row="row" let-value="value" let-rowIndex="rowIndex"
+                            ngx-datatable-cell-template>
                             <ng-container *ngIf="row.imageUrl != null">
                                 <button class="btn btn-dark btn-sm" (click)="onSelectFile(row)">
                                     Download

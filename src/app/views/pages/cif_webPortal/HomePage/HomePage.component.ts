@@ -81,6 +81,7 @@ export class HomePageComponent implements OnInit {
   getAllInstruments(): void {
     this.loadingIndicator=true;
     const startTime = new Date().getTime();
+    //this.CIFwebService.GetAllInstruments().subscribe({
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
