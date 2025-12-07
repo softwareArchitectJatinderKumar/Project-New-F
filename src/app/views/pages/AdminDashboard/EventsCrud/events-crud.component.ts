@@ -25,8 +25,8 @@ export class EventsCrudComponent implements OnInit {
 
     // --- Form & State Management ---
     isLoginFailed: boolean = false; dynamicForm: FormGroup;
-    UserRole: any;          UserId: any;              uploadEnabled: boolean;     fileDataX: File;
-    supervisorName: any;    departmentName: any;      candidateName: any;          user_Email: any; sessionData: any[] = [];
+    UserRole: any; UserId: any; uploadEnabled: boolean; fileDataX: File;
+    supervisorName: any; departmentName: any; candidateName: any; user_Email: any; sessionData: any[] = [];
 
     eventForm!: FormGroup;
     isLoading: boolean = false;
@@ -44,7 +44,7 @@ export class EventsCrudComponent implements OnInit {
     // --- File Data (Using Base64 approach) ---
     EventFileData: string | null = null; // Stores Base64 content of the file
     EventFileName: string | null = null; // Stores the name of the file
-    
+
     // --- Search & Pagination ---
     searchTerm: string = '';
     pageSize: number = 10;
@@ -55,25 +55,25 @@ export class EventsCrudComponent implements OnInit {
 
     // Assuming a base URL for viewing images
     ServerUrl: string = 'https://files.lpu.in/umsweb/CIFDocuments/';
-    
+
     // Making the constant available in the template
     readonly MAX_FILE_SIZE_BYTES_MB = MAX_FILE_SIZE_BYTES / (1024 * 1024);
 
     constructor(
-        
-        private eventsService: LpuCIFWebService ,
-            private CIFwebService: LpuCIFWebService, private LpuCIFWebInstrumentService: LpuCIFWebService,
-            private fb: FormBuilder, private cdRef: ChangeDetectorRef,
-        
-            private formBuilder: FormBuilder,
-            @Inject(DOCUMENT) document: Document,
-            private modalService: NgbModal,
-            private AuthSession: LoginSessionService,
-            private router: Router, private route: ActivatedRoute,
-            private cookieService: CookieService
+
+        private eventsService: LpuCIFWebService,
+        private CIFwebService: LpuCIFWebService, private LpuCIFWebInstrumentService: LpuCIFWebService,
+        private fb: FormBuilder, private cdRef: ChangeDetectorRef,
+
+        private formBuilder: FormBuilder,
+        @Inject(DOCUMENT) document: Document,
+        private modalService: NgbModal,
+        private AuthSession: LoginSessionService,
+        private router: Router, private route: ActivatedRoute,
+        private cookieService: CookieService
     ) { }
 
-     ngOnInit(): void {
+    ngOnInit(): void {
         const GetCookieData = this.cookieService.get('authData');
         const retrievedCookies = JSON.parse(GetCookieData);
         this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
@@ -81,25 +81,25 @@ export class EventsCrudComponent implements OnInit {
         this.supervisorName = retrievedCookies.SupervisorName;
         this.departmentName = retrievedCookies.DepartmentName;
         this.candidateName = retrievedCookies.CandidateName;
-    
+
         if (GetCookieData) {
-          const retrievedCookies = JSON.parse(GetCookieData);
-          this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-          this.user_Email = retrievedCookies.EmailId;
-          this.supervisorName = retrievedCookies.SupervisorName;
-          this.departmentName = retrievedCookies.DepartmentName;
-          this.candidateName = retrievedCookies.CandidateName;
+            const retrievedCookies = JSON.parse(GetCookieData);
+            this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
+            this.user_Email = retrievedCookies.EmailId;
+            this.supervisorName = retrievedCookies.SupervisorName;
+            this.departmentName = retrievedCookies.DepartmentName;
+            this.candidateName = retrievedCookies.CandidateName;
         } else {
-           swal.fire({
-            title: 'Login Failed ',
-            icon: 'warning',
-          });
-          this.router.navigate(['/Home']);
+            swal.fire({
+                title: 'Login Failed ',
+                icon: 'warning',
+            });
+            this.router.navigate(['/Home']);
         }
-         this.initForm();
+        this.initForm();
         this.loadEvents();
-      }
-    
+    }
+
 
     // ngOnInit(): void {
     //     this.initForm();
@@ -222,6 +222,7 @@ export class EventsCrudComponent implements OnInit {
                 const deleteFormData = new FormData();
                 deleteFormData.append('Action', 'Delete');
                 deleteFormData.append('EventId', event.eventId.toString());
+                deleteFormData.append('EventName', event.eventName.toString());
                 // Add other required API fields if necessary (e.g., LoginName)
 
                 this.eventsService.EventsCrudOperation(deleteFormData, "Delete").pipe(
@@ -277,7 +278,7 @@ export class EventsCrudComponent implements OnInit {
             // 💡 FIX: Check the API return code for success or show a generic message
             tap((data: any) => {
                 const errorCode = data?.item1?.[0]?.['returnData'];
-                
+
                 if (errorCode > 0) {
                     Swal.fire({ title: 'Success', text: `Event ID ${this.currentEventId} updated successfully.`, icon: 'success' });
                 } else {
@@ -312,11 +313,8 @@ export class EventsCrudComponent implements OnInit {
 
                 if (errorCode > 0) {
                     Swal.fire({ title: 'Success', text: 'Event created successfully.', icon: 'success' });
-                } 
-                // You can add a specific error check here like:
-                // else if (errorCode === -1) {
-                //      Swal.fire({ title: 'Error', text: 'Max events limit reached.', icon: 'error' });
-                // }
+                }
+               
                 else {
                     // If the API call succeeded (no HTTP error), but the return code is 0 or negative (unknown failure)
                     Swal.fire({ title: 'Technical Issue', text: 'The server processed the request but returned an unexpected failure code.', icon: 'error' });
@@ -333,51 +331,7 @@ export class EventsCrudComponent implements OnInit {
             })
         ).subscribe();
     }
-    // updateEvent(): void {
-    //     const formData = this.prepareFormData('Update');
-
-    //     this.eventsService.EventsCrudOperation(formData, "Update").pipe(
-    //         tap(() => {
-    //             Swal.fire({ title: 'Success', text: `Event ID ${this.currentEventId} updated successfully.`, icon: 'success' });
-    //         }),
-    //         catchError(error => {
-    //             console.error('Update Error:', error);
-    //             Swal.fire({ title: 'Error', text: 'Failed to update event.', icon: 'error' });
-    //             return of(null);
-    //         }),
-    //         finalize(() => {
-    //             this.loadEvents();
-    //             this.resetForm();
-    //         })
-    //     ).subscribe();
-    // }
-
-    // /**
-    //  * CREATE Operation: Calls EventsCrudOperation with 'Insert' action.
-    //  */
-    // addNewEvent(): void {
-    //     const formData = this.prepareFormData('Insert');
-
-    //     this.eventsService.EventsCrudOperation(formData, 'Insert').pipe(
-    //         tap((data: any) => {
-    //             const success = data?.item1?.[0]?.['returnData'] > 0; // Assuming positive returnData is success
-    //             if (success) {
-    //                 Swal.fire({ title: 'Success', text: 'Event created successfully.', icon: 'success' });
-    //             } else {
-    //                 Swal.fire({ title: 'Technical Issue', text: 'An unexpected error occurred during insertion.', icon: 'error' });
-    //             }
-    //         }),
-    //         catchError(error => {
-    //             console.error('API Error:', error);
-    //             Swal.fire({ title: 'Error Occurred', text: 'Unable to complete the request.', icon: 'error' });
-    //             return of(null);
-    //         }),
-    //         finalize(() => {
-    //             this.loadEvents();
-    //             this.resetForm();
-    //         })
-    //     ).subscribe();
-    // }
+ 
 
     // --- Utility Functions (File Handling and Form Data Preparation) ---
 
