@@ -4,12 +4,12 @@ import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
  import { EventModel } from '../_model/Event.model';
  
-// const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
-// const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
-// const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
-const AUTH_API = 'https://localhost:7125/';
-const AUTH_API_LOCAL = 'https://localhost:7125/';
-const AUTH_API_LOCALS = 'https://localhost:7125/';
+const AUTH_API = 'https://projectsapi.lpu.in/';//'https://projectsapi.lpu.in/';
+const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
+const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/';
+// const AUTH_API = 'https://localhost:7125/';
+// const AUTH_API_LOCAL = 'https://localhost:7125/';
+// const AUTH_API_LOCALS = 'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -788,7 +788,7 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
       var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
     // Log the action being performed for debugging
     console.log(`[Service] Calling EventsCrudOperation with Action: ${action}`);
 
@@ -819,7 +819,7 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
      var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
     const viewEventModel: EventModel = {
         eventId: 0,
         eventName: '',
@@ -841,7 +841,7 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
      var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
     const formData = this.prepareFormData(event, 'Insert');
       return this.http.post(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers });
@@ -852,7 +852,7 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
 
     const formData = this.prepareFormData(event, 'Update');
       return this.http.post(
@@ -864,7 +864,7 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + authToken)
+      .set('Authorization', 'Bearer ' + this.authToken)
     const deleteEventModel: EventModel = {
         eventId: eventId,
         eventName: '',

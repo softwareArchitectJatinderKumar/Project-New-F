@@ -91,16 +91,20 @@ export class StaffUserLoginComponent implements OnInit {
           this.loadingIndicator = false;
           this.showNoDataFoundMessage = false;
           const AllallowedIds = [
-            { uid: '24374' },
-            { uid: '20362' },
-            { uid: '16477' },
-            { uid: '27727' },
-            { uid: '26918' },
-            { uid: '30694' },
-            { uid: '29159' },
-            { uid: '31691' },
-            { uid: '33476' },
-            { uid: '31309' },
+            { uid: '24374' },// vijay 
+            { uid: '20362' },// napoor
+            { uid: '25760' },// anju
+            { uid: '34228' },// monika
+            { uid: '34185' },//puneet
+            { uid: '16477' },// prashant
+            { uid: '27727' },// naperna
+            { uid: '27808' },// kamlesh
+            { uid: '26918' },// baljeet
+            { uid: '30694' },// Aman
+            { uid: '29159' },//
+            { uid: '31691' },// sameer 
+            { uid: '33476' },// sanjeev
+            { uid: '31309' },// jatinder
           ];
 
           const isAllowed = AllallowedIds.some(item => item.uid === this.EmployeeCode);
@@ -109,8 +113,6 @@ export class StaffUserLoginComponent implements OnInit {
             this.isLoginFailed = true;
             this.ErrMessage = 'Not Authorised.  This Dashboard is only for CIF Staff Members!';               
           } else {
-
-
             const userCookiesData = {
               CandidateName: this.CandidateName,
               UserId: this.UserId,
@@ -179,7 +181,7 @@ export class StaffUserLoginComponent implements OnInit {
     formData.append("MobileNumber", this.MobileNo);
     formData.append("SchoolName", this.Department);
     formData.append("DepartmentName", this.DepartmentName);
-    formData.append("IdProofType", 'UMS ID');
+    formData.append("IdProofType", 'UMSID');
     formData.append("IdProofNumber", this.UserId);
     formData.append("UserType", this.UserRole);
     formData.append("Address", 'Internal User');
