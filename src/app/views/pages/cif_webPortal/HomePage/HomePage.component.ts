@@ -1,16 +1,12 @@
+
 import { FormBuilder } from '@angular/forms';
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { DOCUMENT } from '@angular/common';
-import { EventModel } from 'src/app/_model/Event.model';
+ 
 import swal from 'sweetalert2';
-import { catchError, finalize, of, tap } from 'rxjs';
-
-const MIN_LOADING_TIME = 500;
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
-
 @Component({
   selector: 'app-HomePage',
   templateUrl: './HomePage.component.html',
@@ -18,6 +14,7 @@ const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 })
 export class HomePageComponent implements OnInit {
   @ViewChild('facilitiesSection') facilitiesSection!: ElementRef;
+  // Method to scroll to the Facilities section
   gotoFacilities() {
     this.facilitiesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
   }
@@ -28,17 +25,21 @@ export class HomePageComponent implements OnInit {
   Description: any; ImageUrl: any;
   ColumnMode = ColumnMode; columns: any; loadingIndicator = false; headHtmlData: any[] = []; p: any = 1; perPage: any = 5;
   @ViewChild('table') table: ElementRef;
-  loadingStates: boolean[] = []; ServerUrl: any; isLoading: boolean = true; loadedCount: number = 0;
+  loadingStates: boolean[] = [];  ServerUrl: any;   isLoading: boolean = true;  loadedCount: number = 0;
 
   constructor(
     private CIFwebService: LpuCIFWebService,
     private fb: FormBuilder, private cdRef: ChangeDetectorRef,
     @Inject(DOCUMENT) document: Document,
     private router: Router, private route: ActivatedRoute) { }
-
+ 
   ngOnInit(): void {
     this.getAllInstruments();
-    this.loadEvents();
+    this.chunkedEvents = this.chunkArray(this.events, 3);
+    // const size = 3;
+    // for (let i = 0; i < this.upcomingEvents.length; i += size) {
+    //   this.upcomingEventsChunks.push(this.upcomingEvents.slice(i, i + size));
+    // }
   }
   openSampleInstructions() {
     swal.fire({
@@ -57,9 +58,9 @@ export class HomePageComponent implements OnInit {
            </address>`,
       icon: 'info'
     });
-
-
-  }
+ 
+   
+ }
   goto(val: any): void {
     this.router.navigateByUrl(val);
   }
@@ -67,24 +68,25 @@ export class HomePageComponent implements OnInit {
     this.router.navigateByUrl(Sufix + '/' + name + '/' + Id + '/' + catId);
   }
   onImageLoad(index: number): void {
-    this.loadingStates[index] = false;
+    this.loadingStates[index] = false;  
   }
 
-
+  
 
   onImageError(event: any, index: number): void {
-    event.target.src = '/image.jpg';
+    event.target.src = '/image.jpg'; 
     this.loadingStates[index] = false;
   }
 
   getAllInstruments(): void {
-    this.loadingIndicator = true;
+    this.loadingIndicator=true;
     const startTime = new Date().getTime();
+    //this.CIFwebService.GetAllInstruments().subscribe({
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
-          this.tmpsInstrumentsDataData = response.item1.slice(0, response.item1.length);
+          this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
           this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
         } else {
           this.InstrumentsDataData = [];
@@ -101,18 +103,72 @@ export class HomePageComponent implements OnInit {
         console.error(err);
       }
     });
-
+  
   }
+ 
 
   // added on 21-aug-25
   chunkedEvents: any[][] = [];
-
+  
 
   chunkArray(arr: any[], size: number): any[][] {
-    return arr.reduce((acc, _, i) =>
+    return arr.reduce((acc, _, i) => 
       (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
   }
-  serverUrl: any = 'https://www.lpu.in/lpu-assets/images/cif/';//https://www.lpu.in/lpu-assets/images/cif/
+  serverUrl: any='https://www.lpu.in/lpu-assets/images/cif/';
+  events = [
+    {
+      img: 'Advanced-Materials-Characterization.webp',//short-term-course-2025.webp',
+      title: 'Short Term Course on Advanced Materials and Characterization: Theory & Applications',
+      date: '(03 November - 07 November, 2025)'
+    },
+    {
+      img: 'summer-training-programme-2025.webp',
+      title: 'ANRF Sponsored Summer Training Programme',
+      date: '(2 June - 11 July 2025)'
+    },
+    {
+      img: 'event-10.jpg',
+      title: 'Discovering the Crystalline and Nano world using X-ray Diffraction and Particle Size and Zeta Potential Analyzer: A National Workshop',
+      date: '(24 - 26 April 2025)'
+    },
+    {
+      img: 'event-9.jpg',
+      title: 'National Workshop on Advance Research with Field Emission Scanning Electron Microscopy: Exploring the Nano-Structural Imaging',
+      date: '(27 - 29 March 2025)'
+    },
+    {
+      img: 'event-7.jpg',
+      title: 'National Workshop on Advanced Chromatographic Techniques Theory & Applications',
+      date: '(19 - 21 September, 2024)'
+    },
+    {
+      img: 'event-8.jpg',
+      title: 'SHORT-TERM COURSE on Advanced Materials analysis & Characterization Techniques: Hands-on-Training and Data Interpretation',
+      date: '(09 - 13 December, 2024)'
+    },
+    {
+      img: 'event-1.jpg',
+      title: 'National workshop on X-Ray Diffraction and Particle Size Analyzer',
+      date: '(26 - 27 April 2024)'
+    },
+    {
+      img: 'event-2.jpg',
+      title: 'Summer Training Programme',
+      date: '(3 June - 13 July 2024)'
+    },
+    {
+      img: 'event-3.jpg',
+      title: 'Workshop on Field Emission Scanning Electron Microscope',
+      date: '(29 - 30 March 2024)'
+    },
+    {
+      img: 'summer-training-programme-2025.webp',
+      title: 'ANRF Sponsored Summer Training Programme',
+      date: '(2 June - 11 July 2025)'
+    },    
+  ];
+
   get eventGroups() {
     const groups = [];
     for (let i = 0; i < this.events.length; i += 3) {
@@ -121,10 +177,14 @@ export class HomePageComponent implements OnInit {
     return groups;
   }
 
+
+
+
   testClick(a: any): void {
     const fileName = `${a}.pdf`;
     const fileUrl = `assets/CifDocumentsTemplates/${fileName}`;
 
+    // Check if the file exists
     fetch(fileUrl, { method: 'HEAD' })
       .then(response => {
         if (response.ok) {
@@ -135,9 +195,12 @@ export class HomePageComponent implements OnInit {
           link.click();
           document.body.removeChild(link);
         } else {
+          // console.error('File not found:', fileUrl);
+          // alert('File not found');
         }
       })
       .catch(error => {
+        // console.error('Error fetching the file:', error);
         alert('Error downloading file');
       });
   }
@@ -146,98 +209,57 @@ export class HomePageComponent implements OnInit {
   toggleSearchForm() {
     this.showSearchForm = !this.showSearchForm;
     this.show = !this.show;
-  }
-    // --- Data Storage ---
-    events: EventModel[] = [];
-    categories = ['Upcoming', 'Happenings'];
+  } 
+  
+  
+// logic for upcoming events 
+// upcomingEvents = [
+//   {
+//     id: 1,
+//     title: "Workshop on Advanced Microscopy",
+//     date: new Date("2025-09-25"),
+//     imageUrl: "/assets/events/microscopy.jpg",
+//     shortDescription: "Explore cutting-edge microscopy techniques."
+//   },
+//   {
+//     id: 2,
+//     title: "National Seminar on Materials Science",
+//     date: new Date("2025-10-10"),
+//     imageUrl: "/assets/events/materials.jpg",
+//     shortDescription: "Top researchers discuss future of materials."
+//   },
+//   {
+//     id: 3,
+//     title: "Hands-on Training in NMR Spectroscopy",
+//     date: new Date("2025-11-05"),
+//     imageUrl: "/assets/events/nmr.jpg",
+//     shortDescription: "Practical training for students & researchers."
+//   },
+//   {
+//     id: 4,
+//     title: "Workshop on Data Science in Research",
+//     date: new Date("2025-11-20"),
+//     imageUrl: "/assets/events/datascience.jpg",
+//     shortDescription: "Learn AI and ML applications in research."
+//   },
+//   {
+//     id: 5,
+//     title: "National Conference on Chemistry",
+//     date: new Date("2025-12-01"),
+//     imageUrl: "/assets/events/chemistry.jpg",
+//     shortDescription: "Discover new frontiers in chemistry."
+//   }
+// ];
 
-    // --- Update Mode Management ---
-    currentEventId: number | null = null;
-    currentImageUrl: string | null = null;  
+// // Split into chunks of 3
+// upcomingEventsChunks: any[][] = [];
+ 
 
-    EventFileData: string | null = null; 
-    EventFileName: string | null = null; 
-
-    // --- Search & Pagination ---
-    searchTerm: string = '';
-    pageSize: number = 10;
-    totalItems: number = 0;
-    totalPages: number = 0;
-    paginatedEventsData: EventModel[] = [];
-
-    LpuserverUrl: string = 'https://files.lpu.in/umsweb/CIFDocuments/';
-
-    readonly MAX_FILE_SIZE_BYTES_MB = MAX_FILE_SIZE_BYTES / (1024 * 1024);
-
-  loadEvents(): void {
-    this.isLoading = true;
-    const startTime = Date.now();
-    // this.events = [];
-
-    const formData = new FormData();
-    formData.append('Action', 'View');  
-
-    this.CIFwebService.EventsCrudOperation(formData, 'View').pipe(
-      tap((response: any) => {
-        if (response?.item1?.length > 0) {
-          // 1. Filter events to only keep 'Happenings'
-          const allEvents = response.item1 as EventModel[];
-          this.events = allEvents.filter(event => event.eventCategory === 'Happenings');
-
-          // 2. Chunk the filtered events. Using size 3 for col-md-4 layout.
-          this.chunkedEvents = this.chunkArray(this.events, 3);
-          
-        } else {
-          this.events = [];
-          this.chunkedEvents = [];
-        }
-        // this.filterAndPaginate();
-      }),
-      catchError(error => {
-        console.error('Error fetching events:', error);
-        swal.fire({ title: 'Data Error', text: 'Failed to load event list.', icon: 'error' });
-        this.events = [];
-        this.chunkedEvents = [];
-        // this.filterAndPaginate();
-        return of(null);
-      }),
-      finalize(() => {
-        const elapsed = Date.now() - startTime;
-        const remaining = Math.max(MIN_LOADING_TIME - elapsed, 0);
-        setTimeout(() => this.isLoading = false, remaining);
-      })
-    ).subscribe();
-  }
+// goToEvent(eventId: number) {
+//   this.router.navigate(['/events', eventId]);
+// }
 
 
-   /**
-     * Filters the main data array by searchTerm and then slices it for the current page.
-     */
-    private filterAndPaginate(): void {
-        let filteredData = this.events;
-        const term = this.searchTerm.toLowerCase().trim();
-
-        if (term) {
-            filteredData = filteredData.filter(event =>
-                event.eventName.toLowerCase().includes(term) ||
-                event.eventDetails.toLowerCase().includes(term) ||
-                event.eventCategory.toLowerCase().includes(term)
-            );
-        }
-
-        this.totalItems = filteredData.length;
-        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-
-        if (this.currentPage > this.totalPages && this.totalPages > 0) {
-            this.currentPage = this.totalPages;
-        } else if (this.currentPage === 0 && this.totalPages > 0) {
-            this.currentPage = 1;
-        } else if (this.totalPages === 0) {
-            this.currentPage = 1;
-        }
-        const startIndex = (this.currentPage - 1) * this.pageSize;
-        this.paginatedEventsData = filteredData.slice(startIndex, startIndex + this.pageSize);
-    }
 }
 
 // import { FormBuilder } from '@angular/forms';
@@ -246,13 +268,8 @@ export class HomePageComponent implements OnInit {
 // import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 // import { ColumnMode } from '@swimlane/ngx-datatable';
 // import { DOCUMENT } from '@angular/common';
-// import { EventModel } from 'src/app/_model/Event.model'; // Assuming the EventModel is here
+
 // import swal from 'sweetalert2';
-// import { catchError, finalize, of, tap } from 'rxjs';
-
-// const MIN_LOADING_TIME = 1500;
-// const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
-
 // @Component({
 //   selector: 'app-HomePage',
 //   templateUrl: './HomePage.component.html',
@@ -260,6 +277,7 @@ export class HomePageComponent implements OnInit {
 // })
 // export class HomePageComponent implements OnInit {
 //   @ViewChild('facilitiesSection') facilitiesSection!: ElementRef;
+//   // Method to scroll to the Facilities section
 //   gotoFacilities() {
 //     this.facilitiesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
 //   }
@@ -271,7 +289,7 @@ export class HomePageComponent implements OnInit {
 //   ColumnMode = ColumnMode; columns: any; loadingIndicator = false; headHtmlData: any[] = []; p: any = 1; perPage: any = 5;
 //   @ViewChild('table') table: ElementRef;
 //   loadingStates: boolean[] = []; ServerUrl: any; isLoading: boolean = true; loadedCount: number = 0;
-
+//   events: any = [];
 //   constructor(
 //     private CIFwebService: LpuCIFWebService,
 //     private fb: FormBuilder, private cdRef: ChangeDetectorRef,
@@ -279,8 +297,10 @@ export class HomePageComponent implements OnInit {
 //     private router: Router, private route: ActivatedRoute) { }
 
 //   ngOnInit(): void {
+//     this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
 //     this.getAllInstruments();
-//     this.loadEvents();
+//     this.GetAllEventDetails()
+
 //   }
 //   openSampleInstructions() {
 //     swal.fire({
@@ -326,7 +346,7 @@ export class HomePageComponent implements OnInit {
 //       next: response => {
 //         if (response.item1 && response.item1.length > 0) {
 //           this.InstrumentsDataData = response.item1;
-//           this.tmpsInstrumentsDataData = response.item1.slice(0, response.item1.length);
+//           this.tmpsInstrumentsDataData = response.item1.slice(0, 8);
 //           this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
 //         } else {
 //           this.InstrumentsDataData = [];
@@ -343,18 +363,64 @@ export class HomePageComponent implements OnInit {
 //         console.error(err);
 //       }
 //     });
-
 //   }
+
 
 //   // added on 21-aug-25
 //   chunkedEvents: any[][] = [];
-
 
 //   chunkArray(arr: any[], size: number): any[][] {
 //     return arr.reduce((acc, _, i) =>
 //       (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
 //   }
-//   serverUrl: any = 'https://www.lpu.in/lpu-assets/images/cif/';//https://www.lpu.in/lpu-assets/images/cif/
+//   Staticevents = [
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/summer-training-programme-2025.webp',
+//       eventName: 'ANRF Sponsored Summer Training Programme',
+//       eventDate: '(2 June - 11 July 2025)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/event-10.jpg',
+//       eventName: 'Discovering the Crystalline and Nano world using X-ray Diffraction and Particle Size and Zeta Potential Analyzer: A National Workshop',
+//       eventDate: '(24 – 26 April 2025)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/event-9.jpg',
+//       eventName: 'National Workshop on Advance Research with Field Emission Scanning Electron Microscopy: Exploring the Nano-Structural Imaging',
+//       eventDate: '(27 - 29 March 2025)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/event-7.jpg',
+//       eventName: 'National Workshop on Advanced Chromatographic Techniques Theory & Applications',
+//       eventDate: '(19 - 21 September, 2024)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/event-8.jpg',
+//       eventName: 'SHORT-TERM COURSE on Advanced Materials analysis & Characterization Techniques: Hands-on-Training and Data Interpretation',
+//       eventDate: '(09 – 13 December, 2024)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/event-1.jpg',
+//       eventName: 'National workshop on X-Ray Diffraction and Particle Size Analyzer',
+//       eventDate: '(26 - 27 April 2024)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/event-2.jpg',
+//       eventName: 'Summer Training Programme',
+//       eventDate: '(3 June - 13 July 2024)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/event-3.jpg',
+//       eventName: 'Workshop on Field Emission Scanning Electron Microscope',
+//       eventDate: '(29 - 30 March 2024)'
+//     },
+//     {
+//       imageUrl: 'https://www.lpu.in/lpu-assets/images/cif/summer-training-programme-2025.webp',
+//       eventName: 'ANRF Sponsored Summer Training Programme',
+//       eventDate: '(2 June - 11 July 2025)'
+//     },
+//   ];
+
 //   get eventGroups() {
 //     const groups = [];
 //     for (let i = 0; i < this.events.length; i += 3) {
@@ -363,10 +429,14 @@ export class HomePageComponent implements OnInit {
 //     return groups;
 //   }
 
+
+
+
 //   testClick(a: any): void {
 //     const fileName = `${a}.pdf`;
 //     const fileUrl = `assets/CifDocumentsTemplates/${fileName}`;
 
+//     // Check if the file exists
 //     fetch(fileUrl, { method: 'HEAD' })
 //       .then(response => {
 //         if (response.ok) {
@@ -377,9 +447,12 @@ export class HomePageComponent implements OnInit {
 //           link.click();
 //           document.body.removeChild(link);
 //         } else {
+//           // console.error('File not found:', fileUrl);
+//           // alert('File not found');
 //         }
 //       })
 //       .catch(error => {
+//         // console.error('Error fetching the file:', error);
 //         alert('Error downloading file');
 //       });
 //   }
@@ -389,89 +462,35 @@ export class HomePageComponent implements OnInit {
 //     this.showSearchForm = !this.showSearchForm;
 //     this.show = !this.show;
 //   }
-//     // --- Data Storage ---
-//     events: EventModel[] = [];
-//     categories = ['Upcoming', 'Happenings'];
 
-//     // --- Update Mode Management ---
-//     currentEventId: number | null = null;
-//     currentImageUrl: string | null = null;  
-
-//     EventFileData: string | null = null; 
-//     EventFileName: string | null = null; 
-
-//     // --- Search & Pagination ---
-//     searchTerm: string = '';
-//     pageSize: number = 10;
-//     totalItems: number = 0;
-//     totalPages: number = 0;
-//     paginatedEventsData: EventModel[] = [];
-
-//     LpuserverUrl: string = 'https://files.lpu.in/umsweb/CIFDocuments/';
-
-//     readonly MAX_FILE_SIZE_BYTES_MB = MAX_FILE_SIZE_BYTES / (1024 * 1024);
-
-//   loadEvents(): void {
-//     this.isLoading = true;
-//     const startTime = Date.now();
-//     // this.events = [];
-
-//     const formData = new FormData();
-//     formData.append('Action', 'View');  
-
-//     this.CIFwebService.EventsCrudOperation(formData, 'View').pipe(
-//       tap((response: any) => {
-//         if (response?.item1?.length > 0) {
-//           this.events = response.item1 as EventModel[];
-//           console.log(JSON.stringify(this.events))
+//   GetAllEventDetails(): void {
+//     this.loadingIndicator = true;
+//     const startTime = new Date().getTime();
+//     this.CIFwebService.GetAllEventDetails().subscribe({
+//       next: response => {
+//         if (response.item1 && response.item1.length > 0) {
+//           this.events = response.item1;
 //         } else {
-//           this.events = [];
+//           this.events = this.Staticevents;
 //         }
-//          this.chunkedEvents = this.chunkArray(this.events, 5);
-//         // this.filterAndPaginate();
-//       }),
-//       catchError(error => {
-//         console.error('Error fetching events:', error);
-//         swal.fire({ title: 'Data Error', text: 'Failed to load event list.', icon: 'error' });
-//         this.events = [];
-//         // this.filterAndPaginate();
-//         return of(null);
-//       }),
-//       finalize(() => {
-//         const elapsed = Date.now() - startTime;
-//         const remaining = Math.max(MIN_LOADING_TIME - elapsed, 0);
-//         setTimeout(() => this.isLoading = false, remaining);
-//       })
-//     ).subscribe();
+//         // Update chunkedEvents after events are set
+//         this.chunkedEvents = this.chunkArray(this.events, 3);
+//         const elapsed = new Date().getTime() - startTime;
+//         const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 2.5s
+
+//         setTimeout(() => {
+//           this.loadingIndicator = false;
+//         }, remainingDelay);
+//       },
+//       error: err => {
+//         this.loadingIndicator = false;
+//         console.error(err);
+//         // Fallback to static events and chunk them
+//         this.events = this.Staticevents;
+//         this.chunkedEvents = this.chunkArray(this.events, 3);
+//       }
+//     });
 //   }
 
 
-//    /**
-//      * Filters the main data array by searchTerm and then slices it for the current page.
-//      */
-//     private filterAndPaginate(): void {
-//         let filteredData = this.events;
-//         const term = this.searchTerm.toLowerCase().trim();
-
-//         if (term) {
-//             filteredData = filteredData.filter(event =>
-//                 event.eventName.toLowerCase().includes(term) ||
-//                 event.eventDetails.toLowerCase().includes(term) ||
-//                 event.eventCategory.toLowerCase().includes(term)
-//             );
-//         }
-
-//         this.totalItems = filteredData.length;
-//         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-
-//         if (this.currentPage > this.totalPages && this.totalPages > 0) {
-//             this.currentPage = this.totalPages;
-//         } else if (this.currentPage === 0 && this.totalPages > 0) {
-//             this.currentPage = 1;
-//         } else if (this.totalPages === 0) {
-//             this.currentPage = 1;
-//         }
-//         const startIndex = (this.currentPage - 1) * this.pageSize;
-//         this.paginatedEventsData = filteredData.slice(startIndex, startIndex + this.pageSize);
-//     }
 // }

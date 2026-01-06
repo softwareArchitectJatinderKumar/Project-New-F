@@ -1,0 +1,174 @@
+<app-AdminDashboard></app-AdminDashboard>
+
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+    <div class="custom-spinner-content">
+        <img src="assets/images/spinner.gif" alt="Loading..." />
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center" *ngIf="formdata; else NoData">
+        <div class="col-12">
+            <div class="form-card">
+                <h2 class="section-title">Update Instrument <span>Pricing</span></h2>
+                
+                <form [formGroup]="formdata" (ngSubmit)="Addtogrid()">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label class="form-label">User Type</label>
+                            <select class="form-select" formControlName="UserRoleS" (change)="onUserTypeChange($event)">
+                                <option value="Select">-- Select Role --</option>
+                                <option value="400000">Internal User</option>
+                                <option value="400001">External Academia</option>
+                                <option value="400002">Industry User</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Instrument Name</label>
+                            <select class="form-select" formControlName="InstrumentName" (change)="onInstrumentChange($event)">
+                                <option value="Select">-- Select Instrument --</option>
+                                <option [value]="item.instrumentId + '-' + item.instrumentName" *ngFor="let item of InstrumentData">
+                                    {{item.instrumentName}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Analysis Type</label>
+                            <select class="form-select" formControlName="AnalysisId" (change)="onAnalysisTypeChange($event)">
+                                <option value="Select">-- Select Analysis Type --</option>
+                                <option [value]="a.analysisId" *ngFor="let a of AnalysisData">
+                                    {{a.analysisType}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Duration/Unit</label>
+                            <select class="form-select" formControlName="Duration" (change)="onDurationChange($event)">
+                                <option value="Select">-- Select Duration --</option>
+                                <option [value]="d.analysisId" *ngFor="let d of InstrumentsDuration">
+                                    {{d.typeName}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Current Market Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="text" class="form-control" formControlName="Charges" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Updated Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text border-warning">₹</span>
+                                <input type="number" class="form-control border-warning" formControlName="TotalAmount" placeholder="Enter new price">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 offset-md-8">
+                            <button type="submit" class="btn-update" [disabled]="formdata.invalid">
+                                <i class="fas fa-save me-2"></i> Update Price
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #NoData>
+    <div class="container text-center py-5">
+ 
+        <div class="no-data-container text-center">
+            <i class="fas fa-exclamation-circle"></i>
+            <h3>No Records Found</h3>
+            <p>Ensure you have appropriate permissions to view instrument data.</p>
+        </div>
+    </div>
+</ng-template>
+
+<!-- <app-AdminDashboard></app-AdminDashboard>
+
+<div *ngIf="loadingIndicator" class="fullscreen-loader">
+    <div class="custom-spinner-overlay">
+        <div class="custom-spinner-content text-center">
+            <img src="assets/images/spinner.gif" alt="Loading..." />
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="InstrumentData.length > 0 && formdata; else NoData">
+    <form [formGroup]="formdata" (ngSubmit)="Addtogrid()">
+        <div class="row p-3">
+            <div class="col-md-2 col-sm-6 mt-2">
+                <label class="form-label">User Type:</label>
+
+                <select class="form-select" formControlName="UserRoleS" (change)="getUser($event)">
+                    <option value="Select">Select Role</option>
+                    <option value="400000">Internal User</option>
+                    <option value="400001">External Academia</option>
+                    <option value="400002">Industry User</option>
+                </select>
+
+            </div>
+            <div class="col-md-3 col-sm-6 mt-2">
+                <label>Instrument Name:</label>
+                <select class="form-select" (change)="getAllAnalysis($event)" formControlName="InstrumentName">
+                    <option value="Select">Select Instrument</option>
+                    <option [value]="dropDown.instrumentId + '-' + dropDown.instrumentName"
+                        *ngFor="let dropDown of InstrumentData">
+                        {{dropDown.instrumentName}}</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mt-2">
+                <label class="form-label">Analysis Type:</label>
+                <select class="form-select" formControlName="AnalysisId" (change)="setAnalysisId($event)">
+                    <option value="Select">Select Analysis Type</option>
+                    <option [value]="dropDownA.analysisId" *ngFor="let dropDownA of AnalysisData">
+                        {{dropDownA.analysisType}}</option>
+                </select>
+            </div>
+
+
+            <div class="col-md-2 col-sm-6 mt-2">
+                <label class="form-label">Duration:</label>
+                <select class="form-select" formControlName="Duration" (change)="getPrice($event)">
+                    <option value="Select">Select Duration</option>
+                    <option *ngFor="let dropDownD of InstrumentsDuration" [value]="dropDownD.analysisId">
+                        {{dropDownD.typeName}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-md-2 col-sm-6 mt-2">
+                <label class="form-label">Current Price:</label> {{this.PriceValue}}
+                <input type="text" class="form-control" formControlName="Charges"  readonly >
+            </div>
+
+            <div class="col-md-2 col-sm-6 mt-2">
+                <label class="form-label">Provide Price to Update</label>
+                <input type="number" class="form-control" formControlName="TotalAmount" >
+            </div>
+
+            <div class="col-md-2 col-sm-6 mt-5">
+                <br>
+                <button type="submit" class="btn-dark btn" [disabled]="formdata.invalid">Next Step</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #NoData>
+    <div class="text-center mt-5">
+        <h3>No Instrument Found.</h3>
+    </div>
+</ng-template>
+
+  -->

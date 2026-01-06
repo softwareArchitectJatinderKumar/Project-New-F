@@ -193,6 +193,11 @@ const routes: Routes = [
     // component:AdminActionBookingsComponent
   },
   {
+    path: "AdminInstrumentPrice", 
+    loadChildren: () => import('./views/pages/AdminDashboard/AdminUpdateInstrumentPrices/AdminUpdateInstrumentPrice.module').then(m => m.AdminActionInstrumentsModule),
+    // component:AdminActionInstrumentsComponent
+  },
+  {
     path: "AdminInstrumentAction", 
     loadChildren: () => import('./views/pages/AdminDashboard/AdminActionInstruments/AdminActionInstruments.mdoule').then(m => m.AdminActionInstrumentsModule),
     // component:AdminActionInstrumentsComponent
