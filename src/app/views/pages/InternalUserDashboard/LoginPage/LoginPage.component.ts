@@ -16,7 +16,6 @@ import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
   selector: 'app-LoginPage',
   templateUrl: './LoginPage.component.html',
   styleUrls: ['./LoginPage.component.scss'],
-  // standalone: false
 })
 export class LoginPageNComponent implements OnInit {
   registrationNumber: any; regdId: any; DriveDropDown: any; showNoDataFoundMessage: boolean; UserData: any; isLoginFailed: boolean;
@@ -222,119 +221,7 @@ export class LoginPageNComponent implements OnInit {
     }
   });
 }
-
-
-  // getStudentById(regNo: any) {
-  //   this.CIFwebService.getStudentById(regNo).subscribe({
-  //     next: response => {
-  //       if (response.item1.length > 0) {
-  //         this.EmployeeDetails = response.item1;
-  //         this.CandidateName = this.EmployeeName = response.item1[0].studentName;
-  //         this.UserId = this.EmployeeCode = response.item1[0].registerationNumber;
-  //         this.Department = response.item1[0].schoolName;
-  //         this.DepartmentName = response.item1[0].courseName;
-  //         this.Designation = "Student";
-  //         this.EmailId = response.item1[0].officialEmail.length > 3 ? response.item1[0].officialEmail : response.item1[0].studentEmail;
-  //         this.MobileNo = response.item1[0].studentMobile;
-  //         this.UserRole = '400000';
-  //         this.SupervisorName = 'N-A';
-
-  //         this.loadingIndicator = false;
-  //         this.showNoDataFoundMessage = false;
-  //         this.isLoginFailed = false;
-  //         var DataX = this.formdata.value;
-  //         const userCookiesData = {
-  //           CandidateName: this.CandidateName,
-  //           UserId: this.UserId,
-  //           Department: this.Department,
-  //           DepartmentName: this.DepartmentName,
-  //           Designation: this.Designation,
-  //           EmailId: this.EmailId,
-  //           MobileNo: this.MobileNo,
-  //           UserRole: this.UserRole,
-  //           SupervisorName: this.SupervisorName,
-  //           ProofNumber: this.MobileNo,
-  //           ProofName: 'Mobile ',
-  //           PasswordText: this.SecretKey,
-  //         };
-  //         this.cookieService.set('InternalUserAuthData', JSON.stringify(userCookiesData));
-
-  //         this.AuthSession.addToSession(this.EmployeeDetails);
-
-  //         this.StoreInternalUserInDataBase().then(() => {
-  //           if (this.storeResult == 1 || this.storeResult == 2) {
-  //             swal.fire({
-  //               title: 'Terms Conditions',
-  //               text: 'Do you agree with terms Conditions?',
-  //               html: `
-  //               <div style="max-height: 450px; overflow-y: auto; text-align: left; padding: 10px;">
-  //                 <p>
-  //                   Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in
-  //                 </p>
-              
-  //                 <p style="font-weight: bold;">You specifically agree to all of the following undertakings:</p>
-              
-  //                 <ul style="list-style-type: disc; padding-left: 20px; font-size: 14px; line-height: 1.6;">
-  //                   <p style="margin-bottom: 8px;"> •  We agree to acknowledge CIF, LPU in our publications and thesis if the results from CIF instrumentation are incorporated/used in them. </p>
-  //                   <p style="margin-bottom: 8px;">• I/We undertake to abide by the safety, standard sample preparation guidelines and precautions during testing of samples.</p>
-  //                   <p style="margin-bottom: 8px;">• I/We do understand the possibility of samples getting damaged during handling and analysis. I/We shall not claim for any loss/damage of the sample submitted to CIF and agreed to resubmit the new sample requested by CIF for analysis.</p>
-  //                   <p style="margin-bottom: 8px;">• CIF, LPU reserves the rights to return the samples without performing analysis and will refund the analytical charges (after deduction of GST, if applicable) under special circumstances.</p>
-  //                   <p style="margin-bottom: 8px;">• I/we do agree to maintain the decorum during the visit in CIF labs for sample analysis and fully agreed that CIF has full right to take action, if decorum of CIF’s labs functionality is disturbed/hampered by me.</p>
-  //                   <p style="margin-bottom: 8px;">• CIF shall not take any responsibility about the analysis, interpretation and publication of data acquired by the end user.</p>
-  //                   <p style="margin-bottom: 8px;">• I/We hereby declare that the results of the analysis will not be used for the settlement of any legal issue.</p>
-  //                 </ul>
-  //               </div>
-  //             `,
-
-  //               customClass: {
-  //                 popup: 'swal-wide'
-  //               },
-  //               icon: 'success',
-  //               showCancelButton: true,
-  //               confirmButtonText: 'Yes, Agreed',
-  //               cancelButtonText: 'No',
-  //             }).then((result) => {
-  //               if (result.isConfirmed) {
-  //                 this.AuthSession.addToSession(this.UserData);
-  //                 this.router.navigateByUrl('/NewBookings').then(() => {
-  //                   window.location.reload();
-  //                 });
-  //               } else {
-  //                 swal.fire({
-  //                   title: 'Agreement Required',
-  //                   text: 'You must agree to proceed further.',
-  //                   icon: 'warning',
-  //                 }).then(() => {
-  //                   this.LogoutUser(); // implement this to clear session/cookies and redirect to login
-  //                 });
-  //               }
-  //             });
-  //           } else {
-  //             this.LoginFailed('Error in Login');
-  //           }
-  //         }).catch((err) => {
-  //           this.LoginFailed(err);
-  //         });
-         
-
-  //       } else {
-  //         this.EmployeeDetails = [];
-  //         this.showNoDataFoundMessage = true;
-  //         this.isLoginFailed = true;
-  //       }
-  //     },
-  //     error: err => {
-  //       this.LoginFailed(err);
-  //     }
-  //   });
-  //   swal.fire({
-  //     title: 'Login Failed',
-  //     text: 'Login details are Invalid!',
-  //     icon: 'warning',
-  //   }).then(() => {
-  //     window.location.reload();
-  //   });
-  // }
+ 
   GetEmployeeDetails() {
     this.mouDocumentsService.GetEmployeeDetails().subscribe({
       next: response => {

@@ -200,7 +200,7 @@ export class AdminUpdateInstrumentPrice implements OnInit {
                 email: this.user_Email
             });
             // alert(JSON.stringify(this.Datagrid))
-            console.log(JSON.stringify(this.Datagrid))
+            // console.log(JSON.stringify(this.Datagrid))
             swal.fire('Success', 'Price update added to list.', 'success');
         }
     }

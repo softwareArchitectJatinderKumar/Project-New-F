@@ -684,10 +684,7 @@ export class LpuCIFWebService {
 GetAuthoriseUserData(loginData: FormData): Observable<any> {
   const headers = new HttpHeaders()
     .set('Authorization', 'Bearer ' + this.authToken)
-    // .set('Content-Type', 'application/json'); // correct for JSON
-
   return this.http.post(
-    // 'https://localhost:7125/api/LpuCIF/GetUserDataIdWise',    loginData,    { headers }
     AUTH_API_LOCAL +'api/LpuCIF/GetUserDataIdWise',    loginData,    { headers }
   );
 }
