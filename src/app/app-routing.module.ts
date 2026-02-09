@@ -8,6 +8,10 @@ const routes: Routes = [
 // Normal or Common Pages
 
 {
+  path: 'NewInstrument',
+  loadChildren: () => import('./views/pages/AdminDashboard/AdminNewInstrumentDetails/add-instrument.module').then(m => m.AdminAddInstrumentComponentModule),
+},
+{
   path: 'ourInstruments',
   loadChildren: () => import('./views/pages/cif_webPortal/CifInstruments/CifInstruments.module').then(m => m.CifInstrumentsModule),
 },

@@ -204,7 +204,7 @@ export class CifLoginPageComponent implements OnInit {
 
     const passwordchanged = user['isPasswordUpdated']
     if (passwordchanged != true) {
-      alert(passwordchanged + " " + this.UserData.isPasswordUpdated)
+      // alert(passwordchanged + " " + this.UserData.isPasswordUpdated)
       this.AuthSession.addToSession(this.UserData);
       this.router.navigateByUrl('/SecurityIssue').then(() => {
         window.location.reload();

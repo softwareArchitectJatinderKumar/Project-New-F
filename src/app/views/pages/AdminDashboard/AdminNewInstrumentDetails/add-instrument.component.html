@@ -1,0 +1,153 @@
+<div class="wizard-wrapper container py-4">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white p-4">
+      <h3 class="mb-0">Instrument Registration <span>Wizard</span></h3>
+      <div class="progress-track mt-4">
+        <div class="step" [class.active]="currentStep === 1">1. Instrument</div>
+        <div class="step" [class.active]="currentStep === 2">2. Category</div>
+        <div class="step" [class.active]="currentStep === 3">3. Analyses</div>
+        <div class="step" [class.active]="currentStep === 4">4. Pricing</div>
+        <div class="step" [class.active]="currentStep === 5">5. Review</div>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <!-- Step 1: Instrument Details -->
+      <div *ngIf="currentStep === 1" [formGroup]="instrumentForm">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Instrument Name</label>
+            <input type="text" class="form-control" formControlName="InstrumentName">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Responsible User ID</label>
+            <input type="text" class="form-control" formControlName="ResponsibleUids" placeholder="Employee ID">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Allocated Target</label>
+            <input type="number" class="form-control" formControlName="TargetAllocated" placeholder="Target Amount">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Instrument Image</label>
+            <!-- <input type="file" class="form-control" (change)="onFileSelect($event)" accept="image/*"> -->
+            <input type="file" class="form-control" (change)="onFileSelected($event, 'InstrumentImage')" accept="image/*">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Sample Excel Sheet (.xlsx)</label>
+            <input type="file" class="form-control" (change)="onFileSelected($event, 'SampleExcelSheet')" accept=".xlsx, .xls">
+            <!-- <input type="file" class="form-control" (change)="onFileExcelSelect($event)" accept=".xlsx, .xls"> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Category Details -->
+      <div *ngIf="currentStep === 2" [formGroup]="instrumentForm">
+        <div class="col-12 mb-3">
+          <label class="form-label">Category Name</label>
+          <input type="text" class="form-control" formControlName="CategoryName">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Category Description</label>
+          <textarea class="form-control" rows="4" formControlName="CategoryDescription"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 3: Analyses -->
+      <div *ngIf="currentStep === 3" [formGroup]="analysisForm">
+        <div formArrayName="analyses" class="mb-3">
+          <div *ngFor="let item of analyses.controls; let i=index" [formGroupName]="i" class="d-flex gap-2 mb-2 bg-light p-2 rounded">
+            <input type="text" class="form-control" formControlName="AnalysisType" [placeholder]="'Analysis Name #' + (i+1)" (input)="refreshAnalysisNames()">
+            <button class="btn btn-outline-danger" type="button" (click)="removeAnalysis(i)" *ngIf="analyses.length > 1">×</button>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline-primary" type="button" (click)="addAnalysis()">+ Add Another Analysis</button>
+      </div>
+
+      <!-- Step 4: Pricing - Auto-generated combinations -->
+      <div *ngIf="currentStep === 4">
+        <div class="alert alert-info py-2 mb-3 small">
+          <strong>Info:</strong> Enter prices for all {{ getTotalCombinations() }} combinations.
+          <span class="badge bg-primary ms-2">{{ getFilledCombinations() }} / {{ getTotalCombinations() }} filled</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="bg-dark text-white">
+              <tr>
+                <th style="width: 40%;">Analysis Type</th>
+                <th style="width: 40%;">User Category</th>
+                <th style="width: 20%;">Price (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of pricingRows; let i = index">
+                <td>{{ row.analysisName }}</td>
+                <td>{{ row.userTypeName }}</td>
+                <td>
+                  <input type="number" class="form-control" 
+                         [ngModel]="row.price" 
+                         (ngModelChange)="updatePrice($event, row.analysisIndex, row.userTypeId)"
+                         placeholder="0" min="0">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Step 5: Review -->
+      <div *ngIf="currentStep === 5" class="review-pane">
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <img [src]="imagePreview" class="img-fluid rounded border mb-3" style="max-height: 200px;" alt="Instrument Image" *ngIf="imagePreview">
+            <div class="badge bg-success p-2">Instrument Ready for Save</div>
+            <div class="mt-2" *ngIf="instrumentExcelFileName">
+              <button class="btn btn-sm btn-outline-primary" type="button" (click)="viewExcel()">
+                <i class="bi bi-file-earmark-excel me-1"></i> View Excel
+              </button>
+              <div class="small text-muted mt-1">{{ instrumentExcelFileName }}</div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <table class="table table-sm border">
+              <tr class="table-light"><th colspan="2">Primary Details</th></tr>
+              <tr><td><strong>Instrument Name:</strong></td><td>{{instrumentForm.value.InstrumentName}}</td></tr>
+              <tr><td><strong>Responsible User:</strong></td><td>{{instrumentForm.value.ResponsibleUids}}</td></tr>
+              <tr><td><strong>Category:</strong></td><td>{{instrumentForm.value.CategoryName}}</td></tr>
+              <tr><td><strong>Cat. Description:</strong></td><td>{{instrumentForm.value.CategoryDescription}}</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <h6 class="mt-4 fw-bold text-orange">Analysis & Pricing Matrix</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover sm-table">
+            <thead class="bg-dark text-white">
+              <tr>
+                <th>Instrument Ref</th>
+                <th>Analysis Name</th>
+                <th>User Category</th>
+                <th>Set Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of pricingRows">
+                <td>{{instrumentForm.value.InstrumentName}}</td>
+                <td>{{row.analysisName}}</td>
+                <td>{{row.userTypeName}}</td>
+                <td class="fw-bold">₹ {{row.price}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer bg-white py-3 d-flex justify-content-between">
+      <button class="btn btn-secondary px-4" type="button" (click)="prevStep()" [disabled]="currentStep === 1">Back</button>
+      <button class="btn btn-primary px-4" type="button" (click)="nextStep()" *ngIf="currentStep < 4" [disabled]="!canProceedToStep(currentStep + 1)">Next</button>
+      <button class="btn btn-primary px-4" type="button" (click)="nextStep()" *ngIf="currentStep === 4" [disabled]="!isStep4Valid()">Next</button>
+      <button class="btn btn-success px-5 fw-bold" type="button" (click)="finalSubmit()" *ngIf="currentStep === 5">SAVE ALL</button>
+    </div>
+  </div>
+</div>

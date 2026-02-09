@@ -16,6 +16,9 @@ const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';//'https://localhost:7125/
 })
 
 export class LpuCIFWebService {
+post(endpoint: string, data: any): Observable<any> {
+    return this.http.post(`https://localhost:7125/api/LpuCIF/CIFNewInstrumentDetails/${endpoint}`, data);
+  }
   baseUrl = AUTH_API;
   FileData: string;
   fileName: string;
@@ -512,7 +515,7 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       AUTH_API_LOCAL + 'api/LpuCIF/UpdateInstrumentImage', dataSoft,
-      // AUTH_API_LOCAL + 'api/LpuCIF/CIFInstrumentUpdateData',dataSoft,
+      // AUTH_API_LOCAL + 'https://localhost:7125/api/LpuCIF/CIFInstrumentUpdateData',dataSoft,
       { headers }
     );
   }
@@ -875,4 +878,30 @@ GetAuthoriseUserData(loginData: FormData): Observable<any> {
       AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers });
     // return this.http.post<ApiResponse>(this.apiUrl, formData);
   }
+
+
+
+      CIFUpdatePrice(PriceDataLoad: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+    return this.http.post(
+    //  'https://localhost:7125/api/LpuCIF/ReplaceExcelSheetSample', newUserData, { headers }
+       AUTH_API +  'api/LpuCIF/CIFUpdatePrice', PriceDataLoad, { headers }
+    );// for new user account creatinng
+  }
+  
+
+
+    CIFNewInstrumentDetails(dataSoft: FormData): Observable<any> {
+    let authToken = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + this.authToken)
+    return this.http.post(
+      // AUTH_API_LOCAL + 'api/LpuCIF/UpdateInstrumentImage', dataSoft,
+      'https://localhost:7125/api/LpuCIF/CIFNewInstrumentDetails',dataSoft,
+      { headers }
+    );
+  }
+
 }
