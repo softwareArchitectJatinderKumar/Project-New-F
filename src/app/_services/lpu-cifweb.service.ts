@@ -28,7 +28,7 @@ export class LpuCIFWebService {
   // private authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJMUFVKb3VybmFsIiwibmJmIjoxNzM5MjU0OTYzLCJleHAiOjE3NzA3OTA5NjMsImlhdCI6MTczOTI1NDk2MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzEyNS8iLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyJ9.Ir-NM1QRF4MMr-hSvbMAhwv6Fzyhc3agCmn0TkqtwrM';
 
 
-  folderUrl = 'http://172.19.2.206/umsweb/webftp/CIFDocuments/';
+  folderUrl = 'https://files.lpu.in/umsweb/webftp/CIFDocuments/';
 
   getFolderUrl(): string {
     return this.folderUrl;
