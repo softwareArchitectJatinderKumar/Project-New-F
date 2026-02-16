@@ -24,6 +24,7 @@ export class InternalUserLoginComponent implements OnInit {
   showNoDataFoundMessage = false;
   loadingIndicator = false;
   storeResult = 0;
+  serverConnectionError = false;
 
   // User info
   CandidateName: any;
@@ -210,6 +211,13 @@ export class InternalUserLoginComponent implements OnInit {
 
     this.CIFwebService.NewUserRecord(formData).subscribe({
       next: (data) => {
+        // Check if response has error flag from service
+        if (data && data.error) {
+          this.serverConnectionError = true;
+          this.storeResult = -1;
+          return;
+        }
+
         const result = data.item1[0]['msg'];
         const errorCode = data.item1[0]['returnId'];
 

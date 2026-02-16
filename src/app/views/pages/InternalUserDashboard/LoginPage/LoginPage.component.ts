@@ -21,6 +21,7 @@ export class LoginPageNComponent implements OnInit {
   registrationNumber: any; regdId: any; DriveDropDown: any; showNoDataFoundMessage: boolean; UserData: any; isLoginFailed: boolean;
   EmployeeDetails: any; EmployeeName: any; EmployeeCode: any; Department: any; DepartmentName: any; loadingIndicator: boolean; CandidateName: any;
   UserId: any; Designation: any; EmailId: any; MobileNo: any; UserRole: any; SupervisorName: any; SecretKey: any; storeResult: number = 0;
+  serverConnectionError = false;
 
   showPassword: boolean = false;
   togglePasswordVisibility(): void {
@@ -351,6 +352,14 @@ export class LoginPageNComponent implements OnInit {
     return new Promise<void>((resolve, reject) => {
       this.CIFwebService.NewUserRecord(formData).subscribe({
         next: (data) => {
+          // Check if response has error flag from service
+          if (data && data.error) {
+            this.serverConnectionError = true;
+            this.storeResult = -1;
+            reject('Server connection error');
+            return;
+          }
+
           let result = data.item1[0]['msg'];
           let errorCode = data.item1[0]['returnId'];
 

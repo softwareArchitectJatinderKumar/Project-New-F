@@ -38,6 +38,9 @@ export class UpcomingEventsComponent implements OnInit {
     chunkedEventsC: any[][] = [];
     events = [];
     chunkedEvents: any[][] = [];
+    // Error handling properties
+    serverError = false;
+    errorMessage = '';
     allEvents: any = [];
 
     chunkArray(arr: any[], size: number): any[][] {
@@ -50,6 +53,14 @@ export class UpcomingEventsComponent implements OnInit {
         const startTime = new Date().getTime();
         this.CIFwebService.GetAllEventDetails().subscribe({
             next: response => {
+                // Check if response has error flag from service
+                if (response && response.error) {
+                    this.serverError = true;
+                    this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+                    this.loadingIndicator = false;
+                    return;
+                }
+
                 if (response.item1 && response.item1.length > 0) {
                     this.events = response.item1;
                 } else {
@@ -67,6 +78,8 @@ export class UpcomingEventsComponent implements OnInit {
             },
             error: err => {
                 this.loadingIndicator = false;
+                this.serverError = true;
+                this.errorMessage = 'Data Server Connection error , Try again later';
                 console.error(err);
                 // Fallback to static events and chunk them
                 this.events = [];

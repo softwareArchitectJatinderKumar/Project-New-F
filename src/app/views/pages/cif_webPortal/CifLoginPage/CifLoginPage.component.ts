@@ -21,6 +21,7 @@ export class CifLoginPageComponent implements OnInit {
   showPassword = false;
   loginError: string | null = null;
   isLoginFailed = false;
+  serverConnectionError = false;
 
   // User data after login
   UserData: any;
@@ -39,17 +40,17 @@ export class CifLoginPageComponent implements OnInit {
   ngOnInit(): void {
     this.cookieService.delete('InternalUserAuthData');
     this.AuthSession.clearSession();
-    this.loadingIndicator = true;
+    // Note: loadingIndicator is managed by getAllInstruments() call below
+    // to avoid race conditions between multiple loading timers
     const startTime = new Date().getTime();
 
     this.loadForm();
 
-
     const elapsed = new Date().getTime() - startTime;
-    const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+    const remainingDelay = Math.max(500 - elapsed, 0); // Small delay for form init
 
     setTimeout(() => {
-      this.loadingIndicator = false;
+      // loadingIndicator will be set by getAllInstruments()
     }, remainingDelay);
 
 
@@ -123,6 +124,17 @@ export class CifLoginPageComponent implements OnInit {
 
     this.CIFwebService.GetAuthoriseUserData(formData).subscribe({
       next: (response) => {
+        // Check if response has error flag from service
+        if (response && response.error) {
+          this.serverConnectionError = true;
+          this.loginError = response.message || 'Data Server Connection error , Try again later';
+          this.isLoginFailed = true;
+          this.formdata.reset();
+          this.formdata.patchValue({ UserRoleS: '' });
+          this.submitted = false;
+          return;
+        }
+        
         if (response.item1 && response.item1.length > 0) {
           this.Email = response.item1[0].email;
           this.UserData = response.item1;
@@ -309,6 +321,14 @@ export class CifLoginPageComponent implements OnInit {
     const startTime = new Date().getTime();
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
+        // Check if response has error flag from service
+        if (response && response.error) {
+          this.serverConnectionError = true;
+          this.loginError = response.message || 'Data Server Connection error , Try again later';
+          this.loadingIndicator = false;
+          return;
+        }
+
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
           this.tmpsInstrumentsDataData = response.item1.slice(0, 8);
@@ -325,6 +345,8 @@ export class CifLoginPageComponent implements OnInit {
       },
       error: err => {
         this.loadingIndicator = false;
+        this.serverConnectionError = true;
+        this.loginError = 'Data Server Connection error , Try again later';
         console.error(err);
       }
     });

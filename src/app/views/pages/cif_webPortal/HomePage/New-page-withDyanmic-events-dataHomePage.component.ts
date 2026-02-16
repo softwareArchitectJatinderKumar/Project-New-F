@@ -225,6 +225,9 @@ export class HomePageComponent implements OnInit {
   InstrumentId: any; instrumentName: any = ''; UserRole: any; UserId: any; uploadEnabled: boolean; Remarks: any; dataSource: any;
   Description: any; ImageUrl: any;
   ColumnMode = ColumnMode; columns: any; loadingIndicator = false; headHtmlData: any[] = []; p: any = 1; perPage: any = 5;
+  // Error handling properties
+  serverError = false;
+  errorMessage = '';
   @ViewChild('table') table: ElementRef;
   loadingStates: boolean[] = []; ServerUrl: any; isLoading: boolean = true; loadedCount: number = 0;
   events: any = [];
@@ -281,6 +284,15 @@ export class HomePageComponent implements OnInit {
     const startTime = new Date().getTime();
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
+        // Check if response has error flag from service
+        if (response && response.error) {
+          this.serverError = true;
+          this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+          this.loadingIndicator = false;
+          this.GetAllEventDetails();
+          return;
+        }
+
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
           this.tmpsInstrumentsDataData = response.item1.slice(0, 8);
@@ -297,10 +309,12 @@ export class HomePageComponent implements OnInit {
       },
       error: err => {
         this.loadingIndicator = false;
+        this.serverError = true;
+        this.errorMessage = 'Data Server Connection error , Try again later';
         console.error(err);
       }
     });
-        this.GetAllEventDetails();
+    this.GetAllEventDetails();
   }
 
 
@@ -406,6 +420,14 @@ export class HomePageComponent implements OnInit {
     const startTime = new Date().getTime();
     this.CIFwebService.GetAllEventDetails().subscribe({
       next: response => {
+        // Check if response has error flag from service
+        if (response && response.error) {
+          this.serverError = true;
+          this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+          this.loadingIndicator = false;
+          return;
+        }
+
         if (response.item1 && response.item1.length > 0) {
           this.events = response.item1;
         } else {
@@ -422,6 +444,8 @@ export class HomePageComponent implements OnInit {
       },
       error: err => {
         this.loadingIndicator = false;
+        this.serverError = true;
+        this.errorMessage = 'Data Server Connection error , Try again later';
         console.error(err);
         // Fallback to static events and chunk them
         this.events = this.Staticevents;

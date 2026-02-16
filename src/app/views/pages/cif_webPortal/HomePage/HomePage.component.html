@@ -76,6 +76,17 @@ old loader
     </div>
 </section>
 <section class="section bg-dark-yellow" #facilitiesSection>
+    <!-- Server Connection Error Card -->
+    <!-- <div *ngIf="serverError" class="container mb-4">
+        <div class="alert alert-danger card" role="alert">
+            <div class="card-body text-center">
+                <h5 class="card-title">Server Connection Error</h5>
+                <p class="card-text">{{ errorMessage }}</p>
+                <button class="btn btn-outline-danger" (click)="serverError = false; getAllInstruments()">Try Again</button>
+            </div>
+        </div>
+    </div> -->
+
     <div class="container">
         <div class="heading-wraper mb-4">
             <div class="main-head">
@@ -92,7 +103,7 @@ old loader
                 measurements, structure determination and chemical analysis. Click on the instrument name in the
                 following table to view their description.</p>
         </div>
-        <div class="row cif-facilties">
+        <div class="row cif-facilties" *ngIf="tmpsInstrumentsDataData.length>1; else ErrorCard " >
             <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index"
                 [attr.data-index]="i">
                 <div class="mb-4">
@@ -120,6 +131,15 @@ old loader
     </div>
 </section>
 
+ <ng-template #ErrorCard>
+            <div class="alert alert-danger card mt-3" role="alert">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Server Connection Error</h5>
+                    <p class="card-text">Data Server Connection error , Try again later</p>
+                    <!-- <span class=" " (click)="serverConnectionError = false; loginError = null">Try  Again</span> -->
+                </div>
+            </div>
+        </ng-template>
 <!-- <section class="section pb-0">
     <div class="container">
         <div class="heading-wraper">

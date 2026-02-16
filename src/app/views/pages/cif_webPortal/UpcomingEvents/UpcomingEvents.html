@@ -17,7 +17,7 @@
                 </div> -->
             </div>
         </div>
-
+        <div *ngIf="allEvents.length>0; else ErrorCard">
         <ngb-carousel #ngbCarousel [interval]="autoSlideInterval" [pauseOnHover]="true" [wrap]="true"
             [showNavigationArrows]="false" [showNavigationIndicators]="false">
             <ng-template ngbSlide *ngFor="let event of allEvents; let i = index" id="{{ 'slide-' + i }}">
@@ -31,9 +31,18 @@
                 </div>
             </ng-template>
         </ngb-carousel>
-
+        </div>
     </div>
 </section> 
+ <ng-template #ErrorCard>
+            <div class="alert alert-danger card mt-3" role="alert">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Server Connection Error</h5>
+                    <p class="card-text">Data Server Connection error , Try again later</p>
+                    <!-- <span class=" " (click)="serverConnectionError = false; loginError = null">Try  Again</span> -->
+                </div>
+            </div>
+        </ng-template>
 
 <!--  
 <section class="section bg-dark-yellow">

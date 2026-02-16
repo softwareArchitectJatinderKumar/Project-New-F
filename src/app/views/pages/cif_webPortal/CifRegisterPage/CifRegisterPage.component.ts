@@ -14,6 +14,7 @@ export class CifRegisterPageComponent implements OnInit {
   isForm1Submitted: boolean = false;
   userRoles: string[] = ['Student', 'Researcher', 'Faculty', 'Industry'];
   loadingIndicator = false;
+  serverConnectionError = false;
   constructor(
     private CIFwebService: LpuCIFWebService,
     private fb: FormBuilder,
@@ -21,15 +22,16 @@ export class CifRegisterPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadingIndicator = true;
+    // Note: loadingIndicator is managed by getAllInstruments() call below
+    // to avoid race conditions between multiple loading timers
     const startTime = new Date().getTime();
     this.LoadForm();
 
     const elapsed = new Date().getTime() - startTime;
-    const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+    const remainingDelay = Math.max(500 - elapsed, 0); // Small delay for form init
 
     setTimeout(() => {
-      this.loadingIndicator = false;
+      // loadingIndicator will be set by getAllInstruments()
     }, remainingDelay);
 
 
@@ -115,6 +117,17 @@ OnReset(): void {
 
       this.CIFwebService.NewUserRecord(formData).subscribe({
         next: (data) => {
+          // Check if response has error flag from service
+          if (data && data.error) {
+            this.serverConnectionError = true;
+            swal.fire({
+              title: 'Server Connection Error',
+              text: 'Data Server Connection error , Try again later',
+              icon: 'error',
+            });
+            return;
+          }
+
           let result = data.item1[0]['msg'];
           let errorCode = data.item1[0]['returnId'];
 
@@ -217,6 +230,13 @@ OnReset(): void {
         const startTime = new Date().getTime();
         this.CIFwebService.GetAllInstrumentsData().subscribe({
           next: response => {
+            // Check if response has error flag from service
+            if (response && response.error) {
+              this.serverConnectionError = true;
+              this.loadingIndicator = false;
+              return;
+            }
+
             if (response.item1 && response.item1.length > 0) {
               this.InstrumentsDataData = response.item1;
               this.tmpsInstrumentsDataData = response.item1.slice(0, 8);
@@ -233,6 +253,7 @@ OnReset(): void {
           },
           error: err => {
             this.loadingIndicator = false;
+            this.serverConnectionError = true;
             console.error(err);
           }
         });

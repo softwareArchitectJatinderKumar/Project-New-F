@@ -19,6 +19,7 @@ export class StaffUserLoginComponent implements OnInit {
   loadingIndicator = false;   storeResult = 0;    CandidateName: any;   UserId: any;    Department: any;    DepartmentName: any;    Designation: any;
   EmailId: any;   MobileNo: any;    UserRole: any;    SupervisorName: any;    SecretKey: any;   EmployeeDetails: any;   EmployeeName: any;    EmployeeCode: any;
   ErrMessage: any='';
+  serverConnectionError = false;
   constructor(
     private fb: FormBuilder,      private authService: AuthService,     private storageService: StorageService,     private CIFwebService: LpuCIFWebService,
     private AuthSession: LoginSessionService,     private router: Router,     private route: ActivatedRoute,      private cookieService: CookieService,     private mouDocumentsService: MouDocumentsService,
@@ -189,6 +190,13 @@ export class StaffUserLoginComponent implements OnInit {
 
     this.CIFwebService.NewUserRecord(formData).subscribe({
       next: (data) => {
+        // Check if response has error flag from service
+        if (data && data.error) {
+          this.serverConnectionError = true;
+          this.storeResult = -1;
+          return;
+        }
+
         const result = data.item1[0]['msg'];
         const errorCode = data.item1[0]['returnId'];
 

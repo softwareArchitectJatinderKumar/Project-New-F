@@ -93,6 +93,15 @@ GetAllEventDetails(): Promise<void> {
   return new Promise((resolve, reject) => {
     this.CIFwebService.GetAllEventDetails().subscribe({
       next: (response) => {
+        // Check if response has error flag from service
+        if (response && response.error) {
+          this.serverError = true;
+          this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+          this.loadingIndicator = false;
+          resolve();
+          return;
+        }
+
         if (response.item1 && response.item1.length > 0) {
           this.events = response.item1;
         } else {
@@ -105,6 +114,8 @@ GetAllEventDetails(): Promise<void> {
       },
       error: (err) => {
         this.loadingIndicator = false;
+        this.serverError = true;
+        this.errorMessage = 'Data Server Connection error , Try again later';
         this.events = [];
         this.chunkedEventsC = [];
         reject(err);
@@ -121,6 +132,9 @@ GetAllEventDetails(): Promise<void> {
     chunkedEvents: any[][] = [];
     allEvents: any = [];
     events: EventDetail[] = []; // full list of events
+    // Error handling properties
+    serverError = false;
+    errorMessage = '';
 
     eventName: string = '';
     eventDate: string = '';

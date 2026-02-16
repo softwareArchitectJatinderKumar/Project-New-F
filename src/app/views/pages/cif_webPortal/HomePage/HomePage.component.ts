@@ -26,6 +26,8 @@ export class HomePageComponent implements OnInit {
   ColumnMode = ColumnMode; columns: any; loadingIndicator = false; headHtmlData: any[] = []; p: any = 1; perPage: any = 5;
   @ViewChild('table') table: ElementRef;
   loadingStates: boolean[] = []; ServerUrl: any; isLoading: boolean = true; loadedCount: number = 0;
+  serverError = false;
+  errorMessage = '';
 
   constructor(
     private CIFwebService: LpuCIFWebService,
@@ -84,6 +86,14 @@ export class HomePageComponent implements OnInit {
     //this.CIFwebService.GetAllInstruments().subscribe({
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
+        // Check if response has error flag from service
+        if (response && response.error) {
+          this.serverError = true;
+          this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+          this.loadingIndicator = false;
+          return;
+        }
+
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
           this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
@@ -100,6 +110,8 @@ export class HomePageComponent implements OnInit {
       },
       error: err => {
         this.loadingIndicator = false;
+        this.serverError = true;
+        this.errorMessage = 'Data Server Connection error , Try again later';
         console.error(err);
       }
     });
