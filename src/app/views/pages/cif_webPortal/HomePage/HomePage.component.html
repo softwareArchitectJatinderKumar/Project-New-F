@@ -10,7 +10,7 @@ old loader
     <div class="custom-spinner-overlay" *ngIf="isLoading">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-           <!-- <p>Loading...</p>-->
+            <!-- <p>Loading...</p>-->
         </div>
     </div>
 </div>
@@ -76,16 +76,6 @@ old loader
     </div>
 </section>
 <section class="section bg-dark-yellow" #facilitiesSection>
-    <!-- Server Connection Error Card -->
-    <!-- <div *ngIf="serverError" class="container mb-4">
-        <div class="alert alert-danger card" role="alert">
-            <div class="card-body text-center">
-                <h5 class="card-title">Server Connection Error</h5>
-                <p class="card-text">{{ errorMessage }}</p>
-                <button class="btn btn-outline-danger" (click)="serverError = false; getAllInstruments()">Try Again</button>
-            </div>
-        </div>
-    </div> -->
 
     <div class="container">
         <div class="heading-wraper mb-4">
@@ -103,7 +93,7 @@ old loader
                 measurements, structure determination and chemical analysis. Click on the instrument name in the
                 following table to view their description.</p>
         </div>
-        <div class="row cif-facilties" *ngIf="tmpsInstrumentsDataData.length>1; else ErrorCard " >
+        <div class="row cif-facilties" *ngIf="tmpsInstrumentsDataData.length>1; else ErrorCard ">
             <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index"
                 [attr.data-index]="i">
                 <div class="mb-4">
@@ -131,92 +121,16 @@ old loader
     </div>
 </section>
 
- <ng-template #ErrorCard>
-            <div class="alert alert-danger card mt-3" role="alert">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Server Connection Error</h5>
-                    <p class="card-text">Data Server Connection error , Try again later</p>
-                    <!-- <span class=" " (click)="serverConnectionError = false; loginError = null">Try  Again</span> -->
-                </div>
-            </div>
-        </ng-template>
-<!-- <section class="section pb-0">
-    <div class="container">
-        <div class="heading-wraper">
-             <div class="main-head">
-                <div class="inner-testi-slider-nav">
-                    <button id="prev_event_slide" class="inner-testi-prev-arrow" (click)="carousel.prev()">
-                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
-                    </button>
-                    <button id="next_event_slide" class="inner-testi-next-arrow" (click)="carousel.next()">
-                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-right.svg" />
-                    </button>
-                </div>
-            </div>
+<ng-template #ErrorCard>
+    <div class="alert alert-danger card mt-3" role="alert">
+        <div class="card-body text-center">
+            <h5 class="card-title">Server Connection Error</h5>
+            <p class="card-text">Data Server Connection error , Try again later</p>
+            <!-- <span class=" " (click)="serverConnectionError = false; loginError = null">Try  Again</span> -->
         </div>
-        <ngb-carousel #carousel [interval]="66000" [pauseOnHover]="true" [showNavigationArrows]="false"
-            [showNavigationIndicators]="false">
-            <ng-template ngbSlide *ngFor="let group of upcomingEventsChunks let i = index" [class.active]="i === 0">
-                <div class="row text-center">
-                    <div class="col-md-4" *ngFor="let event of group">
-                        <img [src]="event.img" [alt]="event.title" class="img-fluid" />
-                        <div class="mt-4 mb-2">
-                            <strong class="d-block">{{ event.title }}</strong>
-                            {{ event.date }}
-                        </div>
-                        <button class="btn btn-primary btn-sm" (click)="goToEvent(event.id)">View Details</button>
-                    </div>
-                </div>
-            </ng-template>
-        </ngb-carousel>
     </div>
-</section> -->
-<!-- <section class="section pb-0">
-   <div class="container my-5">
-  <h3 class="text-center mb-4 text-primary fw-bold">Upcoming Events</h3>
-    <div class="heading-wraper">
-            <div class="main-head">
-                <div class="inner-testi-slider-nav">
-                    <button id="prev_event_slide" class="inner-testi-prev-arrow" data-bs-target="#eventsCarousel" data-bs-slide="prev">
-                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
-                    </button>
-                    <button id="next_event_slide" class="inner-testi-next-arrow" data-bs-target="#eventsCarousel" data-bs-slide="next">
-                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-right.svg" />
-                    </button>
-                </div>
-            </div>
-        </div>
-  <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner bg-dark-yellow">
-        
-
-      
-      <div class="carousel-item" *ngFor="let chunk of upcomingEventsChunks; let i = index" [class.active]="i === 0">
-        <div class="row justify-content-center">
-          <div class="col-md-4" *ngFor="let event of chunk">
-            <div class="card shadow-lg border-0 rounded-4 mb-4 mt-4">
-              <div class="position-relative">
-                <img [src]="event.imageUrl" class="card-img-top" alt="{{ event.title }}" />
-                <div class="position-absolute top-0 start-0 bg-dark text-white px-3 py-1 rounded-end">
-                  {{ event.date | date:'dd MMM yyyy' }}
-                </div>
-              </div>
-              <div class="card-body bg-dark-yellow">
-                <h5 class="card-title">{{ event.title }}</h5>
-                <p class="card-text text-muted">{{ event.shortDescription }}</p>
-                <button class="btn btn-primary btn-sm" (click)="goToEvent(event.id)">View Details</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
+</ng-template>
  
-  </div>
-</div>
-
-</section> -->
 
 <section class="section industry-partners-grid d-none">
     <div class="container">

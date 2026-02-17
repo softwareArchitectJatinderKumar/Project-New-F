@@ -248,7 +248,7 @@
         measurements, structure determination and chemical analysis. Click on the instrument name in the
         following table to view their description.</p>
     </div>
-    <div class="row cif-facilties" *ngIf="serverConnectionError==false; else ErrorCard">
+    <div class="row cif-facilties"  >
       <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index" [attr.data-index]="i">
         <div class="mb-4">
 

@@ -42,6 +42,15 @@ export class UpcomingEventsComponent implements OnInit {
     serverError = false;
     errorMessage = '';
     allEvents: any = [];
+    EventsData = [
+  {
+    eventId: 1011,
+    eventDate: "00:00.0",
+    eventName: "ANRF Sponsored Summer Training Programme",
+    eventDetails: "ANRF Sponsored Summer Training Programme  date: (2 June - 11 July 2025)",
+    imageUrl: "CIF_Events_New_File_352100192_summer-training-programme-2025.webp"
+  }
+];
 
     chunkArray(arr: any[], size: number): any[][] {
         return arr.reduce((acc, _, i) =>
@@ -54,12 +63,12 @@ export class UpcomingEventsComponent implements OnInit {
         this.CIFwebService.GetAllEventDetails().subscribe({
             next: response => {
                 // Check if response has error flag from service
-                if (response && response.error) {
-                    this.serverError = true;
-                    this.errorMessage = response.message || 'Data Server Connection error , Try again later';
-                    this.loadingIndicator = false;
-                    return;
-                }
+                // if (response && response.error) {
+                //     this.serverError = true;
+                //     this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+                //     this.loadingIndicator = false;
+                //     return;
+                // }
 
                 if (response.item1 && response.item1.length > 0) {
                     this.events = response.item1;
@@ -67,7 +76,7 @@ export class UpcomingEventsComponent implements OnInit {
                     this.events = [];
                 }
                 // Update chunkedEvents after events are set
-                this.chunkedEventsC = this.chunkArray(this.events, 3);
+                this.chunkedEventsC = this.chunkArray(this.events.length>0 ? this.events: this.EventsData, 3);
                 this.allEvents = this.chunkedEventsC ? this.chunkedEventsC.flat() : [];
                 const elapsed = new Date().getTime() - startTime;
                 const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 2.5s
