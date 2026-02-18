@@ -60,6 +60,7 @@
                                         <td class="fw-bold ">
 
                                             <!-- <a class="ms-2" [href]="InstrumentDataRow.instrumentExcelUrl" target="_blank"  *ngIf="InstrumentDataRow.instrumentExcelUrl?.length > 0; else noExcel">                                               View  Excel </a> -->
+                                            <!-- <a class="ms-2 btn btn-info m-2"  [href]="InstrumentDataRow.excelSheetUrl"target="_blank"  *ngIf="InstrumentDataRow.excelSheetUrl?.length > 0; else noExcel">                                                -->
                                             <a class="ms-2 btn btn-info m-2"  [href]="serverUrl + InstrumentDataRow.sampleExcelSheetUrl"target="_blank"  *ngIf="InstrumentDataRow.sampleExcelSheetUrl?.length > 0; else noExcel">                                               
                                                 <!-- View  Excel -->
                                                <i class="bi bi-file-earmark-text fs-5"></i>

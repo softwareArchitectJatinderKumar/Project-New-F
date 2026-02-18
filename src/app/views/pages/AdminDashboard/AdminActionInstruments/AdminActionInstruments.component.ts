@@ -127,10 +127,10 @@ export class AdminActionInstrumentsComponent implements OnInit {
     const extIndex = this.fileName.lastIndexOf('.');
     const ext = extIndex >= 0 ? this.fileName.substring(extIndex) : '.xlsx';
     const newFileName = `${InstrumentData.instrumentId}_${Date.now()}${ext}`;
-    alert('old filesss  ' + this.fileName + '  New File  names ' + newFileName)
+    // alert('old filesss  ' + this.fileName + '  New File  names ' + newFileName)
     const formData = new FormData();
     formData.append('InstrumentId', InstrumentData.instrumentId);
-    formData.append('FilePath', this.fileName);   // send unique filename
+    formData.append('FilePath', newFileName);   // send unique filename
     formData.append('File', this.FileData);     // base64 payload expected by API
     this.CIFwebService.ReplaceExcelSheetSample(formData).subscribe({
       next: (data: any) => {
@@ -219,7 +219,8 @@ export class AdminActionInstrumentsComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getSessionDetails();
-    // this.serverUrl = 'http://172.19.2.52/umsweb/CIFDocuments/CIFSampleExcelSheets/';
+    // this.serverUrl = 'http://172.19.2.52/umsweb/CIFDocuments/CIFSampleExcelSheets/'; //172.19.2.52/umsweb/webftp/CIFDocuments/CIFSampleExcelSheets/ 
+
     this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/';
     const GetCookieData = this.cookieService.get('authData');
     const retrievedCookies = JSON.parse(GetCookieData);
@@ -255,14 +256,15 @@ export class AdminActionInstrumentsComponent implements OnInit {
         if (response.item1 && response.item1.length > 0) {
           const mapped = (response.item1 || []).map((it: any) => {
             const row = { ...it };
+            // row.instrumentExcelUrl = row.excelSheetUrl;
             if (!row.instrumentExcelUrl || row.instrumentExcelUrl.length === 0) {
+              // row.instrumentExcelUrl = this.serverUrl + '/' + row.instrumentId + '.xlsx';
               if (row.instrumentExcelName && row.instrumentExcelName.length > 0) {
                 row.instrumentExcelUrl = 'assets/CifDocumentsTemplates/' + row.instrumentExcelName;
               } else if (row.instrumentId) {
-                row.instrumentExcelUrl = this.serverUrl + '/' + row.instrumentId + '.xlsx';
-                // row.instrumentExcelUrl = 'assets/CifDocumentsTemplates/' + row.instrumentId + '.xlsx';
+                row.instrumentExcelUrl = 'assets/CifDocumentsTemplates/' + row.instrumentId + '.xlsx';
               } else {
-                row.instrumentExcelUrl = '';
+               row.instrumentExcelUrl = row.excelSheetUrl;
               }
             }
             return row;
@@ -455,7 +457,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
       const suggestedName = (targetUrl || '').split('/').pop() || 'template.xlsx';
 
       // Assume the source is the file already stored in asset/DocumentTemplate folder
-      const sourceUrl = '/asset/DocumentTemplate/' + suggestedName;
+      const sourceUrl = '/asset/CifDocumentsTemplates/' + suggestedName;
       const response = await fetch(sourceUrl);
       if (!response.ok) {
         throw new Error('Failed to fetch source file from ' + sourceUrl);
