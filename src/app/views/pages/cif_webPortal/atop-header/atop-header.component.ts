@@ -32,10 +32,7 @@ export class ATopHeaderComponent implements OnInit {
            </address>`,
       icon: 'info'
     });
-
-
   }
-
 
   
 

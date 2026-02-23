@@ -82,6 +82,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
 
   OpenReplaceModal(a: any) {
     this.BookingCase = a;
+    // console.log(JSON.stringify(a))
     this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
       (result: string) => {
         console.log("Modal closed" + result);
@@ -154,18 +155,85 @@ export class AdminActionInstrumentsComponent implements OnInit {
     }
     // this.VerifyData();
   }
+UploadNewExcelSampleSheet:any;
+  
+
+  onFileSelected(event: any): void {
+    const reader = new FileReader();
+    const target = event.target as HTMLInputElement;
+    const file: File | null = (target.files as FileList)[0] || null;
+
+    if (!file) {
+      return;
+    }
+
+    if (file && file.size > 1148576) {
+      swal.fire({
+        title: 'File size exceeds 1MB. Please upload a smaller file.',
+        text: 'Invalid File size',
+        icon: 'warning'
+      });
+      target.value = '';
+      return;
+    }
+
+    const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
+    if (file && !fileNameRegex.test(file.name)) {
+      // sanitize filename
+      const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const modifiedFile = new File([file], validFileName, { type: file.type });
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(modifiedFile);
+      target.files = dataTransfer.files;
+      this.fileData = modifiedFile;
+      this.fileStatus = true;
+
+      // read base64 for upload
+      reader.readAsDataURL(modifiedFile);
+      reader.onload = () => {
+        const ssss = reader.result as string;
+        const ssssArray = ssss.split(',');
+        this.FileData =this.UploadNewExcelSampleSheet= ssssArray[1];    // base64 payload
+        this.fileName = validFileName;
+        this.uploadEnabled = true;
+        // parse and preview Excel
+        this.readExcelFile(modifiedFile);
+      };
+      return;
+    }
+
+    // normal case
+    this.fileData = this.UploadNewExcelSampleSheet= file;
+    this.fileStatus = true;
+
+    // read base64 for upload and parse for preview
+    reader.readAsDataURL(file);
+    reader.onload = (ev) => {
+      const ssss = reader.result as string;
+      const ssssArray = ssss.split(',');
+      this.FileData = this.UploadNewExcelSampleSheet= ssssArray[1]; // base64 payload
+      this.fileName = file.name;
+      this.uploadEnabled = true;
+      // parse and preview Excel (pass original File object)
+      this.readExcelFile(file);
+    };
+  }
+
+
 
 
   VerifyData(InstrumentData: any) {
     this.loadingIndicator = true;
-    const startTime = new Date().getTime();
+    const startTime = new Date().getTime();//fileNamesX
 
-    if (!this.FileData || !this.fileName) {
+    if (!this.fileDataX || !this.fileNamesX) {
       swal.fire({ title: 'No file selected', icon: 'warning' });
       this.loadingIndicator = false;
       return;
     }
 
+
+    
     // create a unique filename to avoid overwriting existing file on server
     const extIndex = this.fileName.lastIndexOf('.');
     const ext = extIndex >= 0 ? this.fileName.substring(extIndex) : '.xlsx';
@@ -173,8 +241,11 @@ export class AdminActionInstrumentsComponent implements OnInit {
     // alert('old filesss  ' + this.fileName + '  New File  names ' + newFileName)
     const formData = new FormData();
     formData.append('InstrumentId', InstrumentData.instrumentId);
-    formData.append('FilePath', newFileName);   // send unique filename
-    formData.append('File', this.FileData);     // base64 payload expected by API
+    // formData.append('FilePath', newFileName);   // send unique filename
+    // formData.append('File', this.FileDataX);     // base64 payload expected by API
+
+    formData.append('FilePath', this.fileName);
+    formData.append('File', this.FileDataX);
     this.CIFwebService.ReplaceExcelSheetSample(formData).subscribe({
       next: (data: any) => {
         const result = data.item1 && data.item1.length > 0 ? data.item1[0].msg : null;
@@ -208,7 +279,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
   @ViewChild('ngSelectComponent') ngSelectComponent: NgSelectComponent;
   @ViewChild('ngSelectComponentStream') ngSelectComponentStream: NgSelectComponent;
   @ViewChild('verticalCenteredModal') verticalCenteredModal: TemplateRef<any>;
-  @ViewChild('viewDescModal') viewDescModal: TemplateRef<any>;
+  
   @ViewChild('viewDescModal2') viewDescModal2: TemplateRef<any>;
   dataSource: MatTableDataSource<any>;
 
@@ -432,68 +503,6 @@ export class AdminActionInstrumentsComponent implements OnInit {
     );
   }
 
-
-  onFileSelected(event: any): void {
-    const reader = new FileReader();
-    const target = event.target as HTMLInputElement;
-    const file: File | null = (target.files as FileList)[0] || null;
-
-    if (!file) {
-      return;
-    }
-
-    if (file && file.size > 1148576) {
-      swal.fire({
-        title: 'File size exceeds 1MB. Please upload a smaller file.',
-        text: 'Invalid File size',
-        icon: 'warning'
-      });
-      target.value = '';
-      return;
-    }
-
-    const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
-    if (file && !fileNameRegex.test(file.name)) {
-      // sanitize filename
-      const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-      const modifiedFile = new File([file], validFileName, { type: file.type });
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(modifiedFile);
-      target.files = dataTransfer.files;
-      this.fileData = modifiedFile;
-      this.fileStatus = true;
-
-      // read base64 for upload
-      reader.readAsDataURL(modifiedFile);
-      reader.onload = () => {
-        const ssss = reader.result as string;
-        const ssssArray = ssss.split(',');
-        this.FileData = ssssArray[1];    // base64 payload
-        this.fileName = validFileName;
-        this.uploadEnabled = true;
-        // parse and preview Excel
-        this.readExcelFile(modifiedFile);
-      };
-      return;
-    }
-
-    // normal case
-    this.fileData = file;
-    this.fileStatus = true;
-
-    // read base64 for upload and parse for preview
-    reader.readAsDataURL(file);
-    reader.onload = (ev) => {
-      const ssss = reader.result as string;
-      const ssssArray = ssss.split(',');
-      this.FileData = ssssArray[1]; // base64 payload
-      this.fileName = file.name;
-      this.uploadEnabled = true;
-      // parse and preview Excel (pass original File object)
-      this.readExcelFile(file);
-    };
-  }
-
   async replace(targetUrl: string) {
     try {
       this.replacing = true;
@@ -631,16 +640,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
     link.download = fileName;
     link.click();
   }
-  onSelect(a: any) {
-    let aa = a;
-    this.InstrumentId = aa['id'];
-    this.InstrumentTitles = aa['instrumentName'];
-    this.modalService.open(this.viewDescModal, { size: 'sm' }).result.then((result) => {
-
-      console.log("Modal closed" + result);
-    }).catch((res) => { });
-  }
-
+ 
 
 
 
@@ -653,7 +653,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
 
     if (file && file.size > 10148576) {
       swal.fire({
-        title: 'File size exceeds 10 MB. Please upload a smaller file.',
+        title: 'File size exceeds 1 MB. Please upload a smaller file.',
         text: 'Invalid File size',
         icon: 'warning'
       });
@@ -672,7 +672,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
 
       this.fileDataX = modifiedFile;
       this.fileStatus = true;
-
+this.readExcelFile(this.fileDataX);
       reader.readAsDataURL(modifiedFile);
       reader.onload = () => {
         const ssss = reader.result as string;
@@ -687,6 +687,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
     this.fileStatus = true;
 
     if (file) {
+      
       reader.readAsDataURL(file);
       reader.onload = () => {
         const ssss = reader.result as string;
@@ -694,65 +695,11 @@ export class AdminActionInstrumentsComponent implements OnInit {
         this.FileDataX = ssssArray[1];
         this.fileName = file.name;
       };
+
+      
     }
   }
 
-
-  UpdateFileDocument(Id: any) {
-    this.loadingIndicator = true;
-    const startTime = new Date().getTime();
-    if (this.fileChosen[Id]) {
-      const formData = new FormData();
-      formData.append('InstrumentId', Id);
-      formData.append('IsActive', this.StatusInstrument);
-      formData.append('FilePath', this.fileName);
-      formData.append('File', this.FileDataX);
-
-      this.CIFwebService.UpdateInstrumentImageFile(formData).subscribe({
-        next: (data: any) => {
-          const result = data.item1[0]['msg'];
-          if (result === 'ok') {
-            swal.fire({
-              title: 'Uploaded the Document',
-              text: 'Document uploaded successfully!',
-              icon: 'success',
-              timer: 5000, // Display for 3 seconds
-              showConfirmButton: false,
-            }).then(() => {
-              window.location.reload(); // Reload the page after the success message
-            });
-          } else if (result === 'Failed') {
-            swal.fire({
-              title: 'Failed to Upload',
-              text: result,
-              icon: 'error',
-              timer: 5000, // Display for 3 seconds
-              showConfirmButton: false,
-            });
-          }
-
-          const elapsed = new Date().getTime() - startTime;
-          const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
-
-          setTimeout(() => {
-            this.loadingIndicator = false;
-          }, remainingDelay);
-        },
-        error: (error: any) => {
-          swal.fire({
-            title: 'Error',
-            text: 'Internal Server error',
-            icon: 'error',
-            timer: 10000, // Display for 3 seconds
-            showConfirmButton: false,
-          });
-        },
-        complete: () => {
-
-        },
-      });
-    }
-  }
-
+ 
 
 }

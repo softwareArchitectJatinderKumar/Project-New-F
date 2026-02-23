@@ -43,6 +43,8 @@
                                     <th class="form-label ">Instrument Id</th>
                                     <th class="form-label ">Instrument Name</th>
                                     <th class="form-label ">Instrument Excel Sheet</th>
+                                     
+                                    <th class="form-label ">Status</th>
                                     <th class="form-label ">Action </th>
                                 </tr>
                             </thead>
@@ -61,14 +63,22 @@
                                                 </span>
                                             </ng-template>
                                          </td>
+                                         <td class="fw-bold">
+                                            <ng-container *ngIf="InstrumentDataRow.isActive===true; else unavailable">
+                                                <span class="text-success ">Available</span>
+                                            </ng-container>
+                                            <ng-template #unavailable>
+                                                <span class="text-danger">Unavailable</span>
+                                            </ng-template>
+                                        </td>
                                         <td class="fw-bold ">
                                             <button class="btn btn-danger btn-sm me-2" (click)="OpenModalWindow(InstrumentDataRow)"> 
                                                 <i class="bi bi-arrow-counterclockwise"></i>
                                             </button>
-                                            <button class="btn btn-warning  me-3" (click)="OpenReplaceModal(InstrumentDataRow)">
-                                                <!-- Replace Excel Sheet -->
+                                            <button class="btn btn-warning btn-sm m-3" (click)="OpenReplaceModal(InstrumentDataRow)">
+                                                Replace Excel Sheet
     
-                                                <i class="bi bi-upload "></i>
+                                                <i class="bi bi-upload fs-4 m-2 "></i>
                                             </button>
                                          </td>
 
@@ -205,4 +215,64 @@
 </ng-template>
 
 
- 
+
+<ng-template #viewDescModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Instrument Image Modify</h5>
+        <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <label for="InstrumentId" class="form-label">{{this.InstrumentTitles}}</label>
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <form id="UpdateImage">
+                    <div class="row p-3 m-3">
+
+                        <div class="row mb-4">
+                            <div class="col-3">
+                                <label for="userName" class="col-12 col-form-label">Instrument Id</label>
+                                <label for="InstrumentId" class="form-label">{{this.InstrumentId}}</label>
+
+                            </div>
+                            <div class="col-3">
+                                <div class="col-12">
+                                    <label for="userName" class="col-12 col-form-label">Instrument Status </label>
+                                    <input type="checkbox" id="StatusInstrument" name="StatusInstrument"
+                                        [(ngModel)]="StatusInstrument" (change)="ChangeStatus($event)" />
+                                    <div *ngIf="isForm1Submitted && form1.file.errors?.required"
+                                        class="invalid-feedback">
+                                        Required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <label for="userName" class="col-12 col-form-label">Instrument Image:</label>
+                                <div class="col-12">
+                                    <input class="form-control" [(ngModel)]="fileNamesX" type="file" id="File"
+                                        name="file" (change)="onFileXSelected($event, this.InstrumentId)"
+                                        accept=".png, .jpg, .jpeg" />
+                                    <div *ngIf="isForm1Submitted && form1.file.errors?.required"
+                                        class="invalid-feedback">
+                                        Required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 text-end">
+                                <label class="col-12 col-form-label"> Action Button </label>
+                                <div class="col-12"><button type="submit" [disabled]="!fileChosen[this.InstrumentId]"
+                                        class="btn btn-primary" (click)="UpdateFileDocument(this.InstrumentId);">Upload
+                                        Image </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>

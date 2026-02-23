@@ -72,7 +72,7 @@ export class LpuCIFWebService {
       'Accept': '*/*',
       'Authorization': `Bearer ${this.authToken}`
     });
-    return this.http.post(AUTH_API + 'api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
+    return this.http.post('https://projectsapi.lpu.in/api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
       headers: headers,
       responseType: 'blob'
     });

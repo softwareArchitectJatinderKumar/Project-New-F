@@ -162,7 +162,7 @@ export class NewBookingsComponent implements OnInit {
       }
     });
   }
-  InstrumentName: any;
+  InstrumentName: any; SampleExcelSheet:any;
   getAllAnalysis(event: Event) {
     this.Duration = this.AnalysisId = this.PriceValue = '';
     const selectElement = event.target as HTMLSelectElement;
@@ -173,11 +173,15 @@ export class NewBookingsComponent implements OnInit {
     const selectedInstrumentId = parseInt(selectedInstrumentIdStr, 10);
     const selectedInstrumentName = instrumentNameParts.join(' '); // Join the remaining parts for the name
     this.InstrumentName = selectedInstrumentName;
+
+     this.SampleExcelSheet=this.InstrumentData?.find(instrument => instrument.instrumentId === selectedInstrumentId);
+    //  alert(this.SampleExcelSheet['sampleExcelSheet'])
     if (selectedInstrumentId) {
       // Find the selected instrument using its ID
       const selectedInstrument = this.InstrumentData?.find(instrument => instrument.instrumentId === selectedInstrumentId);
       const inactiveInstrument = this.InstrumentDataInactive?.find(instrument => instrument.instrumentId === selectedInstrumentId);
-
+      // console.log(JSON.stringify(selectedInstrument))
+     
       // Check if the selected instrument is inactive
       if (inactiveInstrument && this.InActiveInstrumentIds?.includes(selectedInstrumentId.toString())) {
         swal.fire({
@@ -192,7 +196,7 @@ export class NewBookingsComponent implements OnInit {
       // Set the selected instrument values and proceed
       this.selectedId = selectedInstrumentId;
       this.InstrumentId = this.selectedId;
-      this.testClick(this.InstrumentId);
+      this.testClick(this.SampleExcelSheet.sampleExcelSheetUrl);
       this.Message = "A Format File is being Downloaded. You need to fill and upload this Excel sheet to send your requirements!";
       swal.fire({
         title: this.Message,
@@ -311,9 +315,7 @@ export class NewBookingsComponent implements OnInit {
   calculateAmount() {
     var CostofTest = this.PriceValue != 'N/A' ? parseInt(this.PriceValue) : 0
     var NoOfSamples = parseInt(this.NumberOfSamples);
-
     this.totalAmount = NoOfSamples * CostofTest;
-
   }
 
 
@@ -367,38 +369,44 @@ export class NewBookingsComponent implements OnInit {
   testClick(a: any) {
     let aa = a;
     const fileName = this.serverUrl+`${a}.xlsx`;
-    
+    this.onDownloadFile(this.serverUrl+a);
     //console.log(fileName+ "  *** **  File Name ")
-    window.open(fileName, '_blank');
+    // window.open(fileName, '_blank');
   }
 
-  // testClick(a: any): void {
-  //   const fileName = `${a}.xlsx`;
-  //   alert(fileName)
-  //   // const fileUrl = `assets/CifDocumentsTemplates/${fileName}`;
-  //   const fileUrl =  this.serverUrl+fileName;
 
-  //   // Check if the file exists
-  //   fetch(fileUrl, { method: 'HEAD' })
-  //     .then(response => {
-  //       if (response.ok) {
-  //         const link = document.createElement('a');
-  //         link.href = fileUrl;
-  //         link.download = fileName;
-  //         document.body.appendChild(link);
-  //         link.click();
-  //         document.body.removeChild(link);
-  //       } else {
-  //         // console.error('File not found:', fileUrl);
-  //         // alert('File not found');
-  //       }
-  //     })
-  //     .catch(() => {
-  //       // console.error('Error fetching the file:', error);
-  //       alert('Error downloading file');
-  //     });
-  // }
-
+  
+   onDownloadFile(remoteUrl: string): void {
+      swal.fire({ title: 'Downloading...', didOpen: () => { swal.showLoading(null); }});
+  
+      this.CIFwebService.downloadFile(remoteUrl).subscribe({
+        next: (blob: Blob) => {
+          const downloadUrl = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+  
+          const fileName = remoteUrl.split('/').pop() || 'Document.pdf';
+          link.download = fileName;
+  
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(downloadUrl);
+  
+          swal.close();
+        },
+        error: async (err) => {
+          swal.close();
+          if (err.error instanceof Blob) {
+            const errorMsg = JSON.parse(await err.error.text());
+            swal.fire('Error', errorMsg.message || 'Download failed', 'error');
+          } else {
+            swal.fire('Error', 'Could not connect to the server', 'error');
+          }
+        }
+      });
+    }
+  
   goToDetails() {
     if (this.Datagrid.length > 0) {
       this.goToNextStep();

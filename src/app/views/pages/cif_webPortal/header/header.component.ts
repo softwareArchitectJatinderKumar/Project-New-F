@@ -1,14 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DOCUMENT } from '@angular/common';
-
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+// Declare jQuery if the header uses it for hover effects
+declare var $: any;
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit {
-   headerHtml: SafeHtml = '';
+export class HeaderComponent implements OnInit, AfterViewInit {
+  headerHtml: SafeHtml = '';
 
   constructor(
     private http: HttpClient,
@@ -16,26 +19,42 @@ export class HeaderComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document
   ) {}
 
-  ngOnInit() {
-    // Load remote header HTML
-    this.http
-      .get('https://includepages.lpu.in/newlpu/header.php', { responseType: 'text' })
-      .subscribe({
-        next: html => {
-          this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-        },
-        error: err => {
-          console.error('Error fetching PHP header:', err);
-        }
-      });
+  ngOnInit(): void {
+    this.http.get('/php-header', { responseType: 'text' }).subscribe({
+      next: (html: string) => {
+        this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+        
+        // Wait a tiny bit for Angular to render the HTML into the view
+        setTimeout(() => {
+          this.reinitializeHeaderScripts();
+        }, 100);
+      },
+      error: (err) => console.error('Error:', err)
+    });
   }
 
-  ngAfterViewInit() {
+  private reinitializeHeaderScripts() {
+    // If the header uses a standard Bootstrap dropdown or custom jQuery hover:
+    if (typeof $ !== 'undefined') {
+      // Example: Force re-binding of hover/dropdowns
+      $('.dropdown').hover(
+        () => { $(this).addClass('show').find('.dropdown-menu').addClass('show'); },
+        () => { $(this).removeClass('show').find('.dropdown-menu').removeClass('show'); }
+      );
+    }
+    
+    // Check if the remote header requires a specific global function to be called
+    // Many LPU headers use a function like initMenu() or layout.init()
+  }
+
+  ngAfterViewInit(): void {
     this.loadGTMScript('GTM-P8ZP9K2');
   }
 
-  loadGTMScript(gtmId: string) {
+  private loadGTMScript(gtmId: string): void {
+    if (this.document.getElementById('gtm-js')) return;
     const script = this.document.createElement('script');
+    script.id = 'gtm-js';
     script.innerHTML = `
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -46,22 +65,39 @@ export class HeaderComponent implements OnInit {
     this.document.head.appendChild(script);
   }
 }
+// import { Component, Inject, OnInit } from '@angular/core';
+// import { HttpClient } from '@angular/common/http';
+// import { DOCUMENT } from '@angular/common';
 
-//   headerHtml: string = '';
+// import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+// @Component({
+//   selector: 'app-header',
+//   templateUrl: './header.component.html'
+// })
+// export class HeaderComponent implements OnInit {
+//    headerHtml: SafeHtml = '';
 
-//   constructor(private http: HttpClient,@Inject(DOCUMENT) private document: Document) {}
+//   constructor(
+//     private http: HttpClient,
+//     private sanitizer: DomSanitizer,
+//     @Inject(DOCUMENT) private document: Document
+//   ) {}
 
-//   ngOnInit(): void {
-//     this.http.get('/php-header', { responseType: 'text' }).subscribe(
-//       response => {
-//         this.headerHtml = response;
-//       },
-//       error => {
-//         console.error('Error loading PHP header:', error);
-//       }
-//     );
+//   ngOnInit() {
+//     // Load remote header HTML
+//     this.http
+//       .get('https://includepages.lpu.in/newlpu/header.php', { responseType: 'text' })
+//       .subscribe({
+//         next: html => {
+//           this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+//         },
+//         error: err => {
+//           console.error('Error fetching PHP header:', err);
+//         }
+//       });
 //   }
-//     ngAfterViewInit() {
+
+//   ngAfterViewInit() {
 //     this.loadGTMScript('GTM-P8ZP9K2');
 //   }
 
@@ -77,3 +113,4 @@ export class HeaderComponent implements OnInit {
 //     this.document.head.appendChild(script);
 //   }
 // }
+

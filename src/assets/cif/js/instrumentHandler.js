@@ -235,7 +235,7 @@ $(document).ready(function() {
     });
 
     function fetchSpecifications(categoryId) {
-        var specificationsApiUrl = 'https://localhost:7125/api/LpuCIF/GetAllSpecifications'; 
+        var specificationsApiUrl = 'https://projectsapi.lpu.in/api/LpuCIF/GetAllSpecifications'; 
         
         $.ajax({
             url: apiUrl + 'GetAllSpecifications',
