@@ -61,6 +61,24 @@ export class LpuCIFWebService {
     return this.folderUrl;
   }
 
+  downloadFile(fileUrl: string): Observable<Blob> {
+    const payload = {
+      fileName: fileUrl,
+      folderPath: ""
+    };
+    const token = this.storageService.getUser();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Authorization': `Bearer ${this.authToken}`
+    });
+    return this.http.post(AUTH_API + 'api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
+      headers: headers,
+      responseType: 'blob'
+    });
+  }
+
+
   getStudentById(regNo: any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()

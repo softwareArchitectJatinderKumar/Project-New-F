@@ -24,6 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { DOCUMENT } from '@angular/common';
 
+import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
 
 @Component({
   selector: 'app-AdminActionInstruments',
@@ -31,6 +32,48 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./AdminActionInstruments.component.scss']
 })
 export class AdminActionInstrumentsComponent implements OnInit {
+
+
+// Download File approach Added on 23-feb-26
+
+
+ onDownloadFile(remoteUrl: string): void {
+    swal.fire({ title: 'Downloading...', didOpen: () => { swal.showLoading(null); }});
+
+    this.CIFwebService.downloadFile(remoteUrl).subscribe({
+      next: (blob: Blob) => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+
+        const fileName = remoteUrl.split('/').pop() || 'Document.pdf';
+        link.download = fileName;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+
+        swal.close();
+      },
+      error: async (err) => {
+        swal.close();
+        if (err.error instanceof Blob) {
+          const errorMsg = JSON.parse(await err.error.text());
+          swal.fire('Error', errorMsg.message || 'Download failed', 'error');
+        } else {
+          swal.fire('Error', 'Could not connect to the server', 'error');
+        }
+      }
+    });
+  }
+
+
+
+  // logic ended 
+
+
+
   file: any; // The actual file object
   uploadedDataRaw: any[] = []; // Raw data from Excel, used for sending to backend
   uploadedDataForDisplay: any[] = []; // Formatted data for UI display
@@ -199,7 +242,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
 
   serverUrl: any; // added on 22-*Nov-25
   constructor(
-    private CIFwebService: LpuCIFWebService,
+    private CIFwebService: LpuCIFWebService, private mouDocumentsService: MouDocumentsService,
     private storageService: StorageService,
     private authService: AuthService,
     private fb: FormBuilder, private cdRef: ChangeDetectorRef,
@@ -219,7 +262,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getSessionDetails();
-    // this.serverUrl = 'http://172.19.2.52/umsweb/CIFDocuments/CIFSampleExcelSheets/'; //172.19.2.52/umsweb/webftp/CIFDocuments/CIFSampleExcelSheets/ 
+    // this.serverUrl = 'http://172.19.2.52/umsweb/CIFDocuments/CIFSampleExcelSheets/'; //172.19.2.52/umsweb/webftp/CIFDocuments/CIFSampleExcelSheets/  ftp://umsftp@172.19.2.52/umsweb/webftp/CIFDocuments/CIFSampleExcelSheets/
 
     this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/';
     const GetCookieData = this.cookieService.get('authData');

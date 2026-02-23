@@ -22,6 +22,25 @@ export class MouDocumentsService {
   constructor(private http: HttpClient, private storageService: StorageService) { }
   // private Localtoken = environment.authToken;
 
+  downloadFile(fileUrl: string): Observable<Blob> {
+    const payload = {
+      fileName: fileUrl,
+      folderPath: ""
+    };
+    const token = this.storageService.getUser(); 
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': '*/*',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(AUTH_API+'api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
+      headers: headers,
+      responseType: 'blob'
+    });
+  }
+
+
+
   GetEmployeeDetails(): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
