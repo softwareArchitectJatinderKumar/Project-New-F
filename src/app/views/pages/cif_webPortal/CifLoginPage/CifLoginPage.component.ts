@@ -497,41 +497,7 @@ export class CifLoginPageComponent implements OnInit {
       }
     });
   }
-  // getAllInstruments(): void {
-  //   this.loadingIndicator = true;
-  //   const startTime = new Date().getTime();
-  //   this.CIFwebService.GetAllInstrumentsData().subscribe({
-  //     next: response => {
-  //       // Check if response has error flag from service
-  //       if (response && response.error) {
-  //         this.serverConnectionError = true;
-  //         this.loginError = response.message || 'Data Server Connection error , Try again later';
-  //         this.loadingIndicator = false;
-  //         return;
-  //       }
-
-  //       if (response.item1 && response.item1.length > 0) {
-  //         this.InstrumentsDataData = response.item1;
-  //         this.tmpsInstrumentsDataData = response.item1.slice(0, 8);
-  //         this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
-  //       } else {
-  //         this.InstrumentsDataData = [];
-  //       }
-  //       const elapsed = new Date().getTime() - startTime;
-  //       const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 5s
-
-  //       setTimeout(() => {
-  //         this.loadingIndicator = false;
-  //       }, remainingDelay);
-  //     },
-  //     error: err => {
-  //       this.loadingIndicator = false;
-  //       this.serverConnectionError = true;
-  //       this.loginError = 'Data Server Connection error , Try again later';
-  //       console.error(err);
-  //     }
-  //   });
-  // }
+ 
   gotoHome(): void {
     this.router.navigateByUrl('Home');
   }

@@ -6,6 +6,7 @@ import { InternalUserLoginComponent } from './internalUser-login.component';
 import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { HomePageTopBarModule } from "../HomePage/HomePageTopBar/HomePageTopBar.module";
 
 const routes: Routes = [
   {
@@ -20,14 +21,15 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),  
+    RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
     NgbNavModule,
     NgbModule,
     PerfectScrollbarModule,
     NgSelectModule,
-  ]
+    HomePageTopBarModule
+]
 })
 export class InternalUserLoginModule {}
 

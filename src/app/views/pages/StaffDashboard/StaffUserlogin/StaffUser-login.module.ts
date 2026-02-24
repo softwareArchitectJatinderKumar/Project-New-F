@@ -6,7 +6,8 @@ import { StaffUserLoginComponent } from './StaffUser-login.component';
 import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { StaffMenuModule } from '../StaffMenu/StaffMenu.module'; 
+import { StaffMenuModule } from '../StaffMenu/StaffMenu.module';
+import { HomePageTopBarModule } from "../../cif_webPortal/HomePage/HomePageTopBar/HomePageTopBar.module"; 
 const routes: Routes = [
   {
     path: '',
@@ -20,14 +21,15 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes),  
+    RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
     NgbNavModule,
     NgbModule,
     PerfectScrollbarModule,
     NgSelectModule,
-    StaffMenuModule
-  ]
+    StaffMenuModule,
+    HomePageTopBarModule
+]
 })
 export class StaffUserLoginModule {}

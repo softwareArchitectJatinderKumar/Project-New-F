@@ -1,3 +1,107 @@
+<!-- <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
+<section class="login-section d-flex align-items-center">
+  <div class="container">
+    <div class="row align-items-center justify-content-between gap-5 py-5">
+      
+      <div class="col-lg-6 d-none d-lg-block text-center mt-5">
+        <img src="https://www.lpu.in/lpu-assets/images/cif/login-left.png" 
+             class="img-fluid floating-img" 
+             alt="Internal Portal" />
+      </div>
+
+      <div class="col-md-8 col-lg-5 ">
+        <div class="shadow-lg p-4 p-md-5 rounded-4" style="background-color: rgba(0, 0, 0, .05); ">
+          <div class="text-center mb-4">
+            <h2 class="fw-bold text-internal">Internal <span class="fw-light">Login</span></h2>
+            <p class="text-dark fs-5 mt-3 mb-3 ">LPU Central Instrumentation Facility</p>
+          </div>
+
+          <form [formGroup]="formdata" (ngSubmit)="OnSubmit()">
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Login ID / Email</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                <input type="text" class="form-control" 
+                       placeholder="User ID or Email" 
+                       formControlName="Email" id="exampleInputEmail1">
+              </div>
+              <div class="text-danger mt-1" *ngIf="formdata.get('Email')?.invalid && formdata.get('Email')?.touched">
+                <small>ID is required</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Password</label>
+              <div class="input-group position-relative">
+                <span class="input-group-text"><i class="bi bi-key"></i></span>
+                <input [type]="showPassword ? 'text' : 'password'" 
+                       class="form-control pe-5" 
+                       placeholder="••••••••" 
+                       formControlName="password">
+                <button type="button" class="btn btn-eye-toggle position-absolute end-0 top-0 h-100" 
+                        (click)="togglePasswordVisibility()">
+                   <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                </button>
+              </div>
+              <div class="text-danger mt-1" *ngIf="formdata.get('password')?.invalid && formdata.get('password')?.touched">
+                <small>Password is required</small>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Choose Role</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person-gear"></i></span>
+                <select class="form-select" formControlName="UserRoleS" (change)="CheckUserType($event)">
+                  <option value="">Select Role</option>
+                  <option value="Student">Student</option>
+                  <option value="Staff">Staff</option>
+                </select>
+              </div>
+              <div class="text-danger mt-1" *ngIf="userRole?.invalid && userRole?.touched">
+                <small>Role selection is required</small>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-internal btn-lg" [disabled]="formdata.invalid">
+                Log In
+              </button>
+            </div>
+
+            <div class="login-footer-links mt-4 pt-3 border-top">
+              <div class="d-flex justify-content-between mb-2">
+                <a routerLink="/Login" class="text-decoration-none small text-secondary">
+                  <i class="bi bi-arrow-left"></i> User Login
+                </a>
+                <a routerLink="/recoverAccount" class="text-decoration-none small text-orange fw-bold">
+                  Forgot Password?
+                </a>
+              </div>
+              <div class="text-center">
+                <p class="mb-2 small">Don't have an account? 
+                  <a routerLink="/Register" class="text-internal fw-bold text-decoration-none">Register Here</a>
+                </p>
+                <a routerLink="/StaffLogins" class="btn btn-sm btn-outline-secondary w-100 mt-2">
+                  Staff Login Portal
+                </a>
+              </div>
+            </div>
+          </form>
+
+          <div class="policy-notice mt-4 text-center">
+            <p class="text-muted" style="font-size: 0.7rem;">
+              By logging in, you agree to our 
+              <a href="/CifTermsConditions" class="text-dark">Terms & Conditions</a> 
+              and <a href="/CifTermsConditions" class="text-dark">Privacy Policy</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+<app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
 <section class="section">
     <div class="container">
         <div class="heading-wraper mb-5">
@@ -19,7 +123,6 @@
                             <label class="form-label" for="loginid">Login ID</label>
                             <input type="text" class="form-control" placeholder="Enter Login ID/ Email" formControlName="Email"
                                 id="exampleInputEmail1"> 
-                                <!-- <i class="input-user"></i> -->
                             <span class="text-danger" *ngIf="formdata.get('Email')?.invalid && formdata.get('Email')?.touched">
                                 Id is required
                             </span>
@@ -27,7 +130,6 @@
                         <div class="mb-4 cif-input-group">
                             <label class="form-label" for="password">Password</label>
                             <input [type]="showPassword ? 'text' : 'password'" class="form-control" placeholder="Enter password" formControlName="password" id="password">
-                            <!-- <i toggle="#password" class="input-eye input-eye-slash toggle-password"></i> -->
                             <i class="input-eye input-eye-slash"  (click)="togglePasswordVisibility()"></i>
                             <span class="text-danger" *ngIf="formdata.get('password')?.invalid && formdata.get('password')?.touched">
                                 Password is required
@@ -61,11 +163,11 @@
                         </div>
                         <div class="d-flex justify-content-center"> <a routerLink="/StaffLogins" class="link-btn justify-content-end"
                                 style="color: #ef7d00 !important;">Staff Login</a>
-                        </div>
+                        </div> 
                         <!-- <a routerLink="/InternalUserLogin" class="btn btn-danger btn-icon-text mb-2 mb-md-0">LPU User Login</a>
                                 <a routerLink="/recoverAccount" class="btn btn-dark btn-icon-text mb-2 ms-5 mb-md-0"> Recover Password</a> -->
 
-                    </form>
+                     </form>
                 </div>
                 <div class="mt-3 mb-4">
                     Don’t have an account? <a class="reg-link" routerLink="/Register"><strong>Register</strong></a>
@@ -145,4 +247,4 @@
 
         </div>
     </div>
-</section>
+</section>  

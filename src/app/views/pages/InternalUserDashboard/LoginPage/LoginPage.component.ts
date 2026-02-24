@@ -1,5 +1,6 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { Router, ActivatedRoute } from '@angular/router';
@@ -18,6 +19,14 @@ import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
   styleUrls: ['./LoginPage.component.scss'],
 })
 export class LoginPageNComponent implements OnInit {
+
+   @ViewChild('table') table: ElementRef;
+      @ViewChild('facilitiesSection') facilitiesSection!: ElementRef;
+      gotoFacilities() {
+        this.facilitiesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+      }
+
+
   registrationNumber: any; regdId: any; DriveDropDown: any; showNoDataFoundMessage: boolean; UserData: any; isLoginFailed: boolean;
   EmployeeDetails: any; EmployeeName: any; EmployeeCode: any; Department: any; DepartmentName: any; loadingIndicator: boolean; CandidateName: any;
   UserId: any; Designation: any; EmailId: any; MobileNo: any; UserRole: any; SupervisorName: any; SecretKey: any; storeResult: number = 0;

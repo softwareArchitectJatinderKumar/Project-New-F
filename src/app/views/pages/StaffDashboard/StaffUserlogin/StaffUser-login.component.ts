@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
@@ -15,6 +15,14 @@ import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
   styleUrls: ['./StaffUser-login.component.scss']
 })
 export class StaffUserLoginComponent implements OnInit {
+
+   @ViewChild('table') table: ElementRef;
+    @ViewChild('facilitiesSection') facilitiesSection!: ElementRef;
+    gotoFacilities() {
+      this.facilitiesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    
   formdata!: FormGroup;     submitted = false;    showPassword = false;   loginError: string | null = null;   isLoginFailed = false;  showNoDataFoundMessage = false;
   loadingIndicator = false;   storeResult = 0;    CandidateName: any;   UserId: any;    Department: any;    DepartmentName: any;    Designation: any;
   EmailId: any;   MobileNo: any;    UserRole: any;    SupervisorName: any;    SecretKey: any;   EmployeeDetails: any;   EmployeeName: any;    EmployeeCode: any;

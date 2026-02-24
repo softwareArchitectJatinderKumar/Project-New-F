@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
@@ -16,6 +16,12 @@ import { MouDocumentsService } from 'src/app/_services/mou-documents.service';
   styleUrls: ['./internalUser-login.component.scss']
 })
 export class InternalUserLoginComponent implements OnInit {
+  @ViewChild('table') table: ElementRef;
+  @ViewChild('facilitiesSection') facilitiesSection!: ElementRef;
+  gotoFacilities() {
+    this.facilitiesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+  }
+
   formdata!: FormGroup;
   submitted = false;
   showPassword = false;
