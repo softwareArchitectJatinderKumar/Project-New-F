@@ -12,6 +12,7 @@ import { ColumnMode } from '@swimlane/ngx-datatable';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { forkJoin } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
   @ViewChild('viewDescModal') viewDescModal: TemplateRef<any>;
   @ViewChild('viewDescModal2') viewDescModal2: TemplateRef<any>;
   @ViewChild('viewDescModal5') viewDescModal5: TemplateRef<any>;
+  @ViewChild('PaymentReceiptUploadModal') PaymentReceiptUploadModal: TemplateRef<any>;
   dataSource: MatTableDataSource<any>;
   TypeId: any = 'CIF';
 
@@ -66,7 +68,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
 
   constructor(
     private CIFwebService: LpuCIFWebService,
-    
+    private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private AuthSession: LoginSessionService,
     private route: ActivatedRoute,
@@ -76,9 +78,172 @@ export class SearchPaymentsPendingComponent implements OnInit {
   getSessionDetails() {
     this.sessionData = this.AuthSession.getSession();
     for (const session of this.sessionData) {
-      this.user_Email = session[0]['userEmail']
+      this.user_Email = session[0]['userEmail'];//'anju19kasp@gmail.com';//session[0]['userEmail']
     }
   }
+
+
+
+// Logic for Payment Upload receipt modal added on 28-Feb-26
+
+
+  openReceiptUploadModal(a: any) {
+    this.BookingCase = a;
+    this.LoadForm();
+    this.modalService.open(this.PaymentReceiptUploadModal, { size: 'lg', centered: true }).result.then(
+      (result: string) => {
+        console.log("Modal closed" + result);
+      }
+    ).catch(() => { });
+
+  }
+
+  validationForm1: FormGroup; isForm1Submitted: boolean = false; ITitle: string = ''; IStatus: string = ''; IDescription: string = '';
+  fileNamesX:any;   ReceiptRemarks : any;
+
+
+  get form1() {
+    return this.validationForm1.controls;
+  }
+  LoadForm(): void {
+    this.validationForm1 = this.formBuilder.group({
+      ReceiptRemarks: ['', Validators.required],
+      file: [null, Validators.required],
+    });
+  }
+
+
+   FileDataX: string; fileDataX: any; fileStatus: any; fileName: any;
+    fileChosen: { [key: number]: boolean } = {};
+    onFileXSelected(event: any, id: number): void {
+      this.fileChosen[id] = event.target.files.length > 0;
+      const reader = new FileReader();
+      const target = event.target as HTMLInputElement;
+      const file: File | null = (target.files as FileList)[0] || null;
+  
+      if (file && file.size > 10148576) {
+        Swal.fire({
+          title: 'File size exceeds 10 MB. Please upload a smaller file.',
+          text: 'Invalid File size',
+          icon: 'warning'
+        });
+        target.value = '';
+        return;
+      }
+  
+      const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
+      if (file && !fileNameRegex.test(file.name)) {
+        const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  
+        const modifiedFile = new File([file], validFileName, { type: file.type });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(modifiedFile);
+        target.files = dataTransfer.files;
+  
+        this.fileDataX = modifiedFile;
+        this.fileStatus = true;
+  
+        reader.readAsDataURL(modifiedFile);
+        reader.onload = () => {
+          const ssss = reader.result as string;
+          const ssssArray = ssss.split(',');
+          this.FileDataX = ssssArray[1];
+          this.fileName = validFileName;
+        };
+        return;
+      }
+  
+      this.fileDataX = file;
+      this.fileStatus = true;
+  
+      if (file) {
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const ssss = reader.result as string;
+          const ssssArray = ssss.split(',');
+          this.FileDataX = ssssArray[1];
+          this.fileName = file.name;
+        };
+      }
+    }
+  
+
+  UpdateFileDocument(Id: any) {
+    this.loadingIndicator=true;
+    const startTime = new Date().getTime();
+
+
+    if (this.fileChosen[Id]) {
+      const formData = new FormData();
+      formData.append('BookingId', Id);
+      formData.append('ReceiptRemarks', this.ReceiptRemarks);
+      formData.append('PaymentReceiptUrl', this.fileName);
+      formData.append('PaymentReceiptData', this.FileDataX);
+      formData.append('UserId', this.UserId);
+
+      console.log("Uploading Payment Receipt with data:");
+      formData.forEach((value, key) => console.log(`${key}: ${value}`));
+      this.CIFwebService.UploadPaymentReceipt(formData).subscribe({
+        next: (data: any) => {
+          const result = data.item1[0]['msg'];
+          if (result === 'success') {
+            Swal.fire({
+              title: 'Upload Receipt',
+              text: 'Receipt Saved successfully!',
+              icon: 'success',
+              showConfirmButton: true,
+            })
+              .then(() => {
+                window.location.reload();
+              });
+          } else if (result === 'Failed') {
+            Swal.fire({
+              title: 'Error to Upload',
+              text: result,
+              icon: 'error',
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          }
+          const elapsed = new Date().getTime() - startTime;
+          const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+  
+          setTimeout(() => {
+            this.loadingIndicator = false;
+          }, remainingDelay);
+        },
+        error: (error: any) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Internal Server error',
+            icon: 'error',
+            showConfirmButton: false,
+          });
+        },
+        complete: () => {
+
+        },
+      });
+
+        // this.loadingIndicator = false;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
       const queryParamLength = params.keys.length;
@@ -89,7 +254,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
     this.ServerUrl ='https://files.lpu.in/umsweb/CIFDocuments/';// 'http://172.19.2.52/umsweb/webftp/MOUDocuments/';
     this.ResponseUrl = window.location.href;// + this.location.path() ;//"https://devums.lpu.in/app/cif/";
     if (this.ResponseUrl.startsWith('https://devums.lpu.in/app/cif/')) {
-      this.ResponseUrl = "https://devums.lpu.in/app/cif/";
+      this.ResponseUrl = "https://www.lpu.in/cif/";
     } 
 
     const baseUrl = `${window.location.origin}${window.location.pathname.split('/').slice(0, -1).join('/')}`;
@@ -109,7 +274,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
 
 
     this.UserRole = retrievedCookies.UserRole;
-    this.user_Email=  this.UserId = retrievedCookies.EmailId;
+    this.user_Email= this.UserId = retrievedCookies.EmailId;// this.UserId = 'anju19kasp@gmail.com';// this.UserId = retrievedCookies.EmailId;
     this.getBookingDetails()
   }
 
@@ -332,7 +497,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
       });
     });
   }
-
+//PaymentReceiptUpload
   openPaymentModal(a: any) {
     this.BookingCase = a;
     this.modalService.open(this.viewDescModal5, { size: 'sm' }).result.then(

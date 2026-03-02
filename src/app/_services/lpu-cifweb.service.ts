@@ -4,9 +4,10 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { StorageService } from './storage.service';
 import { EventModel } from '../_model/Event.model';
- 
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+
 const AUTH_API = 'https://projectsapi.lpu.in/';
-const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/'; 
+const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';
 const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';
 // const AUTH_API = 'https://localhost:7125/';
 // const AUTH_API_LOCAL = 'https://localhost:7125/';
@@ -35,7 +36,7 @@ export class LpuCIFWebService {
       console.error(`${operation} failed:`, error);
       // Return the fallback value with user-friendly error message to prevent UI crashes
       const userFriendlyMessage = 'Data Server Connection error , Try again later';
-      
+
       // For array fallbacks, return the empty array with error flag
       if (Array.isArray(fallbackValue)) {
         return of({ data: fallbackValue, error: true, message: userFriendlyMessage } as unknown as T);
@@ -49,7 +50,7 @@ export class LpuCIFWebService {
     };
   }
 
-    private authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJDSUYiLCJuYmYiOjE3NzA4Njk4NjMsImV4cCI6MTgwMjQwNTg2MywiaWF0IjoxNzcwODY5ODYzLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMjUvIn0.x7GIMap1-qxhY9UDL3HOluXig80_PjVZ5HEcGjZ_Hao';
+  private authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJDSUYiLCJuYmYiOjE3NzA4Njk4NjMsImV4cCI6MTgwMjQwNTg2MywiaWF0IjoxNzcwODY5ODYzLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMjUvIn0.x7GIMap1-qxhY9UDL3HOluXig80_PjVZ5HEcGjZ_Hao';
   // private authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJDSUYiLCJuYmYiOjE3NTM3NzU3ODIsImV4cCI6MTc4NTMxMTc4MiwiaWF0IjoxNzUzNzc1NzgyLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMjUvIn0.9Oc0vzoLFrYmMpzfN5z9cDy-ysE3PgyxY8o4XC8ZRuI';
   // private authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiIyNTg5OSIsIkRlcGFydG1lbnROYW1lIjoiTi9BIiwiUm9sbElkIjoiNTAiLCJlbWFpbElkIjoiamF0aW4uMjU4OTlAbHB1LmNvLmluIiwiTkFNRSI6IkphdGluIFNhcnBhbCIsImlzQWN0aXZlIjoiVHJ1ZSIsIlVuaXF1ZWlkIjoiYmRmYWU4MWQtMDUxNy00M2ZjLWFjMzctZjM0ZDExODRmZjY3IiwiSXNQYXJlbnQiOiJGYWxzZSIsIlVzZXJUeXBlIjoiTi9BIiwiU3BlY2lhbEJsb2NrIjoiTi9BIiwibmJmIjoxNzIxODgxODU1LCJleHAiOjE3NTM0MTc4NTUsImlhdCI6MTcyMTg4MTg1NSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzEyNS8iLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyJ9.K8Pswv0q8MtTJ_QHOyX2TSksR6x888AdYVCqd5f1tTI';
   // private authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJMUFVKb3VybmFsIiwibmJmIjoxNzM5MjU0OTYzLCJleHAiOjE3NzA3OTA5NjMsImlhdCI6MTczOTI1NDk2MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzEyNS8iLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyJ9.Ir-NM1QRF4MMr-hSvbMAhwv6Fzyhc3agCmn0TkqtwrM';
@@ -102,9 +103,9 @@ export class LpuCIFWebService {
   //      'https://localhost:7125/api/LpuCIF/GetUserDataIdWise?Email=' + UserEmail + '&PasswordText=' + secreatKeys + '&UserRole=' + userRole,
   //     { headers }
   //   );
-   
+
   // }
-  
+
 
   GetAllBooksDetails(): Observable<any> {
     const httpOptions = {
@@ -171,10 +172,6 @@ export class LpuCIFWebService {
   // }
 
 
-
-
-
-
   GetAllBookingSlot(UserEmailId: string): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
@@ -204,7 +201,7 @@ export class LpuCIFWebService {
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/CIFGetAllAssignedTesttoStaff',
-    // 'https://localhost:7125/api/LpuCIF/CIFGetAllAssignedTesttoStaff',
+      // 'https://localhost:7125/api/LpuCIF/CIFGetAllAssignedTesttoStaff',
       { headers }
     ).pipe(catchError(this.handleError('GetAllBooking', [])));
   }
@@ -283,7 +280,7 @@ export class LpuCIFWebService {
       { headers }
     ).pipe(catchError(this.handleError('GetAllPaymentDetails', [])));
   }
- 
+
 
 
   CIFResultsUploads(dataSoft: FormData): Observable<any> {
@@ -403,7 +400,7 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       AUTH_API + 'api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
-    //  'https://localhost:7125/api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
+      //  'https://localhost:7125/api/LpuCIF/CIFChangePasswordDetails', UpdateUserData, { headers }
     ).pipe(catchError(this.handleError('CIFUpdateUserDetails', { success: false, message: 'User details update failed' })));
   }
 
@@ -602,7 +599,7 @@ export class LpuCIFWebService {
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetAllSampleStatus', { headers }
-    ).pipe(catchError(this.handleError('GetAllSampleStatus', [])));   
+    ).pipe(catchError(this.handleError('GetAllSampleStatus', [])));
   }
   GetAllFeedbackdetails(): Observable<any> {
     let token = this.storageService.getUser();
@@ -612,7 +609,7 @@ export class LpuCIFWebService {
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetAllUserFeedbacks', { headers }
       // 'https://projectsapi.lpu.in/api/LpuCIF/GetAllUserFeedbacks', { headers }
-    ).pipe(catchError(this.handleError('GetAllFeedbackdetails', [])));   
+    ).pipe(catchError(this.handleError('GetAllFeedbackdetails', [])));
   }
   GetUploadedResultDetails(UserEmailId: any): Observable<any> {
     let token = this.storageService.getUser();
@@ -622,8 +619,8 @@ export class LpuCIFWebService {
     return this.http.get(
       // AUTH_API + 'api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
       //  'https://localhost:7125/api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
-      AUTH_API+'api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
-    ).pipe(catchError(this.handleError('GetUploadedResultDetails', [])));   
+      AUTH_API + 'api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
+    ).pipe(catchError(this.handleError('GetUploadedResultDetails', [])));
   }
   GetAllUserLists(): Observable<any> {
     let token = this.storageService.getUser();
@@ -633,7 +630,7 @@ export class LpuCIFWebService {
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetCIFAssignTestProperties', { headers }
       // 'https://projectsapi.lpu.in/api/LpuCIF/GetCIFAssignTestProperties', { headers }
-    ).pipe(catchError(this.handleError('GetAllUserLists', [])));   
+    ).pipe(catchError(this.handleError('GetAllUserLists', [])));
   }
 
 
@@ -645,7 +642,7 @@ export class LpuCIFWebService {
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetSampleStatusByUserId?UserId=' + UserEmailId,
-        // 'https://localhost:7125/api/LpuCIF/GetSampleStatusByUserId?UserId=' + UserEmailId,
+      // 'https://localhost:7125/api/LpuCIF/GetSampleStatusByUserId?UserId=' + UserEmailId,
       { headers }
     ).pipe(catchError(this.handleError('GetSampleStatus', [])));
   }
@@ -662,7 +659,7 @@ export class LpuCIFWebService {
     ).pipe(catchError(this.handleError('GetAllEventDetails', [])));
   }
 
-  
+
   CIFNewEventsDetails(dataSoft: FormData): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
@@ -670,7 +667,7 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + authToken)
     return this.http.post(
       AUTH_API + 'api/LpuCIF/CIFEventsUploads', dataSoft, { headers });
-      // 'https://localhost:7125/api/LpuCIF/CIFEventsUploads', dataSoft, { headers });
+    // 'https://localhost:7125/api/LpuCIF/CIFEventsUploads', dataSoft, { headers });
   }
   CIFUpdateEventsDetails(dataSoft: FormData): Observable<any> {
     var authToken = this.storageService.getUser();
@@ -679,16 +676,16 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + authToken)
     return this.http.post(
       AUTH_API + 'api/LpuCIF/UpdateCIFEventDetails', dataSoft, { headers });
-      // 'https://localhost:7125/api/LpuCIF/UpdateCIFEventDetails', dataSoft, { headers });
+    // 'https://localhost:7125/api/LpuCIF/UpdateCIFEventDetails', dataSoft, { headers });
   }
 
-  CIFLockUser(dataSoft: FormData): Observable<any>{
+  CIFLockUser(dataSoft: FormData): Observable<any> {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + authToken)
     //.set('Authorization', 'Bearer ' + this.Localtoken)
     return this.http.post(
-         AUTH_API + 'api/LpuCIF/CIFLockUserLogin', dataSoft, { headers }
+      AUTH_API + 'api/LpuCIF/CIFLockUserLogin', dataSoft, { headers }
       //'https://localhost:7125/api/LpuCIF/CIFLockUserLogin', dataSoft, { headers }
     ).pipe(catchError(this.handleError('CIFLockUser', { success: false, message: 'User lock operation failed' })));
   }
@@ -703,8 +700,8 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + authToken)
     return this.http.post(
       //  'https://localhost:7125/api/LpuCIF/CIUpdateUserDetails', UserData, { headers }
-       AUTH_API + 'api/LpuCIF/CIUpdateUserDetails', UserData, { headers }
-    ); 
+      AUTH_API + 'api/LpuCIF/CIUpdateUserDetails', UserData, { headers }
+    );
   }
 
 
@@ -718,7 +715,7 @@ export class LpuCIFWebService {
     return this.http.post(
       //  'https://projectsapi.lpu.in/api/LpuCIF/CIFAssignTest', dataSoft, { headers }
       //  'https://localhost:7125/api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
-        AUTH_API + 'api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
+      AUTH_API + 'api/LpuCIF/ReAssignTesttoCIFStaff', dataSoft, { headers }
     ).pipe(catchError(this.handleError('ReAssignTestToStaff', { success: false, message: 'Test reassignment failed' })));
   }
 
@@ -727,7 +724,7 @@ export class LpuCIFWebService {
     const headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
-      AUTH_API_LOCAL +'api/LpuCIF/GetUserDataIdWise', loginData, { headers }
+      AUTH_API_LOCAL + 'api/LpuCIF/GetUserDataIdWise', loginData, { headers }
     ).pipe(catchError(this.handleError('GetAuthoriseUserData', { success: false, message: 'Data Server Connection error , Try again later' })));
   }
 
@@ -741,38 +738,38 @@ export class LpuCIFWebService {
     ).pipe(catchError(this.handleError('NewUserRecord', { success: false, message: 'Data Server Connection error , Try again later' })));
   }
 
-    NewUserSignUp(newUserData: FormData): Observable<any> {
+  NewUserSignUp(newUserData: FormData): Observable<any> {
     let token = this.storageService.getUser();
     // "Content-Type": "multipart/form-data"
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
     // .set('Content-Type', 'multipart/form-data');
     return this.http.post(
-    //  'https://localhost:7125/api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
-       AUTH_API +  'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
+      //  'https://localhost:7125/api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
+      AUTH_API + 'api/LpuCIF/CIFNewUserSignUpInsert', newUserData, { headers }
     );// for new user account creatinng
   }
 
 
-    ReplaceExcelSheetSample(newUserData: FormData): Observable<any> {
+  ReplaceExcelSheetSample(newUserData: FormData): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
     return this.http.post(
-    //  'https://localhost:7125/api/LpuCIF/ReplaceExcelSheetSample', newUserData, { headers }
-       AUTH_API +  'api/LpuCIF/ReplaceExcelSheetSample', newUserData, { headers }
+      //  'https://localhost:7125/api/LpuCIF/ReplaceExcelSheetSample', newUserData, { headers }
+      AUTH_API + 'api/LpuCIF/ReplaceExcelSheetSample', newUserData, { headers }
     );// for new user account creatinng
   }
 
 
-    CIFUpdateEventsStatus(dataSoft: FormData): Observable<any> {
+  CIFUpdateEventsStatus(dataSoft: FormData): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
       .set('Authorization', 'Bearer ' + authToken)
     return this.http.post(
       AUTH_API + 'api/LpuCIF/UpdateEventsStatus', dataSoft, { headers });
-      // 'https://localhost:7125/api/LpuCIF/UpdateCIFEventDetails', dataSoft, { headers });
+    // 'https://localhost:7125/api/LpuCIF/UpdateCIFEventDetails', dataSoft, { headers });
   }
 
 
@@ -793,20 +790,20 @@ export class LpuCIFWebService {
 
     // EventId is needed for all operations except 'Insert'
     if (event.eventId !== null) {
-        formData.append('EventId', event.eventId.toString());
+      formData.append('EventId', event.eventId.toString());
     }
 
     // Required fields for Insert/Update
     if (action !== 'Delete' && action !== 'View') {
-        formData.append('EventName', event.eventName);
-        formData.append('EventDate', event.eventDate);
-        formData.append('EventCategory',event.eventCategory);
-        formData.append('EventDetails', event.eventDetails);
-        formData.append('ImageUrl', event.imageUrl);
-        // Add placeholders for other fields if required by your API contract
-        formData.append('EventFileData', event.eventFileData || '');
-        formData.append('DisapprovalReason', event.disapprovalReason || '');
-        formData.append('LoginName', event.LoginName || 'DefaultUser');
+      formData.append('EventName', event.eventName);
+      formData.append('EventDate', event.eventDate);
+      formData.append('EventCategory', event.eventCategory);
+      formData.append('EventDetails', event.eventDetails);
+      formData.append('ImageUrl', event.imageUrl);
+      // Add placeholders for other fields if required by your API contract
+      formData.append('EventFileData', event.eventFileData || '');
+      formData.append('DisapprovalReason', event.disapprovalReason || '');
+      formData.append('LoginName', event.LoginName || 'DefaultUser');
     }
 
     return formData;
@@ -821,21 +818,21 @@ export class LpuCIFWebService {
    * @returns An Observable that resolves to the API response (e.g., success message or list of events).
    */
   EventsCrudOperation(data: FormData, action: 'Insert' | 'Update' | 'Delete' | 'View'): Observable<any> {
-      var authToken = this.storageService.getUser();
+    var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
       .set('Authorization', 'Bearer ' + this.authToken)
     // Log the action being performed for debugging
-    console.log(`[Service] Calling EventsCrudOperation with Action: ${action}`);
+    // console.log(`[Service] Calling EventsCrudOperation with Action: ${action}`);
 
     // Since you are passing FormData (which includes the file data for Insert/Update),
     // you MUST use an HTTP POST request, even for 'View' (GET equivalent) and 'Delete', 
     // because your backend controller expects a [FromForm] body.
-    
+
     return this.http.post<any>(
-       AUTH_API + 'api/LpuCIF/EventsCrudOperation',
+      AUTH_API + 'api/LpuCIF/EventsCrudOperation',
       // `${this.baseUrl}${this.eventsEndpoint}`, 
-      data,{ headers }
+      data, { headers }
     ).pipe(catchError(this.handleError('EventsCrudOperation', { success: false, message: 'Events CRUD operation failed' })));
 
     // NOTE on Headers: When posting FormData, Angular's HttpClient automatically sets 
@@ -847,39 +844,39 @@ export class LpuCIFWebService {
   // getEvents(data: FormData): Observable<any> {
   //     return this.EventsCrudOperation(data, 'View');
   // }
-  
+
   // createEvent(data: FormData): Observable<any> {
   //     return this.EventsCrudOperation(data, 'Insert');
   // }
   getEvents(): Observable<any> {
-     var authToken = this.storageService.getUser();
+    var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
       .set('Authorization', 'Bearer ' + this.authToken)
     const viewEventModel: EventModel = {
-        eventId: 0,
-        eventName: '',
-        eventDate: '',
-        eventCategory: 'Upcoming', // Default value
-        eventDetails: '',
-        imageUrl: ''
+      eventId: 0,
+      eventName: '',
+      eventDate: '',
+      eventCategory: 'Upcoming', // Default value
+      eventDetails: '',
+      imageUrl: ''
     };
     // 2. Prepare FormData with Action='View'
     const formData = this.prepareFormData(viewEventModel, 'View');
 
-        return this.http.post(
+    return this.http.post(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers })
       .pipe(catchError(this.handleError('getEvents', [])));
   }
 
 
   createEvent(event: EventModel): Observable<any> {
-     var authToken = this.storageService.getUser();
+    var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
       .set('Authorization', 'Bearer ' + this.authToken)
     const formData = this.prepareFormData(event, 'Insert');
-      return this.http.post(
+    return this.http.post(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers })
       .pipe(catchError(this.handleError('createEvent', { success: false, message: 'Event creation failed' })));
   }
@@ -891,27 +888,52 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
 
     const formData = this.prepareFormData(event, 'Update');
-      return this.http.post(
+    return this.http.post(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers })
       .pipe(catchError(this.handleError('updateEvent', { success: false, message: 'Event update failed' })));
   }
 
-  deleteEvent(eventId: number): Observable<any>{
+  deleteEvent(eventId: number): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
       .set('Authorization', 'Bearer ' + this.authToken)
     const deleteEventModel: EventModel = {
-        eventId: eventId,
-        eventName: '',
-        eventDate: '',
-        eventCategory: 'Upcoming',
-        eventDetails: '',
-        imageUrl: ''
+      eventId: eventId,
+      eventName: '',
+      eventDate: '',
+      eventCategory: 'Upcoming',
+      eventDetails: '',
+      imageUrl: ''
     };
     const formData = this.prepareFormData(deleteEventModel, 'Delete');
-     return this.http.post(
+    return this.http.post(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers })
       .pipe(catchError(this.handleError('deleteEvent', { success: false, message: 'Event deletion failed' })));
   }
+
+
+
+  UploadPaymentReceipt(PaymentReceipt: FormData): Observable<any> {
+    let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + token)
+    return this.http.post(
+      // 'https://localhost:7125/api/LpuCIF/CIFUploadPaymentReceipt', PaymentReceipt, { headers }
+       AUTH_API +  'api/LpuCIF/CIFUploadPaymentReceipt', PaymentReceipt, { headers }
+    );// for new user account creatinng
+  }
+
+  GetBookingPaymentProofDetails(BookingId:any): Observable<any> {
+  let token = this.storageService.getUser();
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Content-Type', 'application/json');
+    return this.http.get(
+      'https://localhost:7125/api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
+      // AUTH_API_LOCAL + 'api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
+      .pipe(catchError(this.handleError('GetBookingPaymentProofDetails', null)));
+  }
+
+   
 }

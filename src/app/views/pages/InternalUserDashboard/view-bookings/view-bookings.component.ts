@@ -170,7 +170,7 @@ export class ViewBookingsComponent implements OnInit {
         if (response.item1 && response.item1.length > 0) {
           this.BookingData = response.item1;
           this.dataSource = response.item1;
-
+          console.log(JSON.stringify(this.BookingData)+ ' Booking data')
           this.tmpsBookingData = response.item1;
 
           this.headHtmlData = this.tmpsBookingData[0];
