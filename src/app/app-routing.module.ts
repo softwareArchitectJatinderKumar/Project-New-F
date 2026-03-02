@@ -106,6 +106,10 @@ const routes: Routes = [
   path: "SampleStatus",//    component:OurTermsConditionsComponent
   loadChildren: () => import('./views/pages/InternalUserDashboard/Sample-Status/SampleStatus.module').then(m => m.SampleStatusModule),
 },
+{
+  path: "UploadProofStatus",//    component:OurTermsConditionsComponent
+  loadChildren: () => import('./views/pages/InternalUserDashboard/Payment-Proof-Upload-Status/UploadProofStatus.module').then(m => m.UploadProofStatusModule),
+},
 // INTERNAL USER DASHBOARD END
 
 
@@ -194,7 +198,7 @@ const routes: Routes = [
   },
   {
     path: "AdminInstrumentPrice", 
-    loadChildren: () => import('./views/pages/AdminDashboard/AdminUpdateInstrumentPrices/AdminUpdateInstrumentPrice.module').then(m => m.AdminActionInstrumentsModule),
+    loadChildren: () => import('./views/pages/AdminDashboard/AdminUpdateInstrumentPrices/AdminUpdateInstrumentPrice.module').then(m => m.AdminUpdateInstrumentPriceModule),
     // component:AdminActionInstrumentsComponent
   },
   {

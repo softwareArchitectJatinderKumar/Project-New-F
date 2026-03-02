@@ -1,0 +1,63 @@
+// Minimal custom styles - leveraging Bootstrap 5
+// Most styling is handled by Bootstrap utility classes in the template
+
+// Card hover effect
+.card {
+  transition: box-shadow 0.15s ease-in-out;
+  
+  &:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+// Table improvements
+.table {
+  th {
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+  
+  // Striped rows
+  &.table-striped tbody tr:nth-of-type(odd) {
+    --bs-table-accent-bg: var(--bs-light);
+  }
+}
+
+// Badge text color fix
+.text-dark {
+  color: #212529 !important;
+}
+
+// Button transition
+.btn {
+  transition: all 0.15s ease-in-out;
+  
+  &:not(:disabled):hover {
+    transform: translateY(-1px);
+  }
+}
+
+// Modal improvements
+.modal {
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+// Print styles
+@media print {
+  .btn,
+  .pagination,
+  .form-control {
+    display: none !important;
+  }
+  
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #dee2e6 !important;
+  }
+}

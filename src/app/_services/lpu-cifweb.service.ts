@@ -6,12 +6,12 @@ import { StorageService } from './storage.service';
 import { EventModel } from '../_model/Event.model';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
-const AUTH_API = 'https://projectsapi.lpu.in/';
-const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';
-const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';
-// const AUTH_API = 'https://localhost:7125/';
-// const AUTH_API_LOCAL = 'https://localhost:7125/';
-// const AUTH_API_LOCALS = 'https://localhost:7125/';
+// const AUTH_API = 'https://projectsapi.lpu.in/';
+// const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';
+// const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';
+const AUTH_API = 'https://localhost:7125/';
+const AUTH_API_LOCAL = 'https://localhost:7125/';
+const AUTH_API_LOCALS = 'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -73,7 +73,8 @@ export class LpuCIFWebService {
       'Accept': '*/*',
       'Authorization': `Bearer ${this.authToken}`
     });
-    return this.http.post('https://projectsapi.lpu.in/api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
+    return this.http.post(AUTH_API +'api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
+    // return this.http.post('https://projectsapi.lpu.in/api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
       headers: headers,
       responseType: 'blob'
     });

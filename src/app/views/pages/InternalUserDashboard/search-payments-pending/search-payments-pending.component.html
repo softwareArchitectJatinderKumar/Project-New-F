@@ -1,252 +1,255 @@
+<!-- Search Payments Pending Component -->
 <app-cif-menu-bar></app-cif-menu-bar>
 
+<!-- Loading Indicator -->
 <div *ngIf="loadingIndicator" class="fullscreen-loader">
-    <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
+    <div class="custom-spinner-overlay">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
         </div>
     </div>
 </div>
-<div class="container-fluid BottomSpace">
-    <div class="row" *ngIf="BookingStatusData.length > 0 ;else NoData">
-        <div class="col-12 stretch-card">
-            <div class="card-body">
-                <hr />
-                <div class="row mt-2 d-flex justify-content-center">
-                    <div class="col-sm-2 text-start">
-                        <div class="mb-3">
-                            <button (click)="exportToExcel()" class="btn btn-dark"
-                                [disabled]="tmpsBookingStatusData.length == 0">Export to Excel</button>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <div class="mb-1 text-start">
-                            <h2>Pending Payment Details </h2>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 text-start">
-                        <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control"
-                            style="width: 14rem;" placeholder="Search" aria-label="Search" />
-                    </div>
-                </div>
 
-                <hr />
-                <ng-container *ngIf="tmpsBookingStatusData.length > 0; else noRecords">
-                    <div class="table-responsive mt-4 mb-4">
-                        <table id="BookinglDataTable" #table>
-                            <thead>
-                                <tr>
-                                    <th class="form-label d-none d-md-table-cell ">Booking Id</th>
-                                    <th class="form-label d-none d-md-table-cell">Instrument Name</th>
-                                    <th class="form-label ">Amount </th>
-                                    <th class="form-label d-none d-lg-table-cell">Request Date</th>
-                                    <th class="form-label">Status</th>
-                                    <th class="form-label">Upload Receipt</th>
-                                    <th class="form-label">Print </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <ng-container *ngFor="let BookingStatusDataRow of getCurrentPageData(); let i = index">
-                                    <tr>
-                                        <td class=" d-none d-md-table-cell "> {{BookingStatusDataRow.bookingId}}</td>
-                                        <td class=" d-none d-md-table-cell"> {{BookingStatusDataRow.instrumentName}}
-                                        </td>
-                                        <td class=" text-danger "> {{ BookingStatusDataRow.amount |
-                                            currency:'INR':'symbol'}} </td>
-                                        <!-- <td class=" d-none d-lg-table-cell"> {{BookingStatusDataRow.noOfSamples}}</td> -->
-                                        <td class=" d-none d-lg-table-cell">{{ BookingStatusDataRow.requestDate }}</td>
-                                        <td class="" [ngSwitch]="BookingStatusDataRow.paymentStatus">
-                                            <div *ngSwitchCase="'success'" class="fw-bold text-success p-2">
-                                                <span class="badge text-bg-success ms-3 fs-5 mb-4">Payment
-                                                    Successful</span>
-                                                <span class="fw-bold text-dark">On</span>
-                                                {{ BookingStatusDataRow.paymentDate }}
-                                            </div>
-                                            <div *ngSwitchCase="'failure'" class="fw-bold text-danger p-2">
-                                                <span class="badge text-bg-info ms-3 fs-5 mb-4">Payment Failed on
-                                                    <!-- <span class="badge text-bg-danger fs-5">{{BookingStatusDataRow.paymentDate }}</span> -->
-                                                </span>
-                                                <button class="btn btn-dark ms-3"
-                                                    (click)="openPaymentModal(BookingStatusDataRow)">Pay Now</button>
-                                            </div>
-                                            <div *ngSwitchCase="null" class="fw-bold text-dark p-3">
-                                                <span class="badge text-bg-warning ms-3 fs-5 mb-4">Payment
-                                                    Pending</span> <br />
-                                                <button class="btn btn-dark ms-3"
-                                                    (click)="openPaymentModal(BookingStatusDataRow)">Pay Now</button>
-                                            </div>
-                                        </td>
-                                        <td class="d-md-table-cell">
-                                            <button class="btn btn-dark ms-3"
-                                                (click)="openReceiptUploadModal(BookingStatusDataRow)">Upload </button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-dark btn-sm"
-                                                (click)="paymentReceiptScreen(BookingStatusDataRow)">Receipt</button>
-                                        </td>
-                                    </tr>
-                                </ng-container>
-                            </tbody>
+<!-- Main Content -->
+<div class="container-fluid">
 
-                        </table>
-                        <div class="pagination">
-                            <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
-                                    class="mdi mdi-chevron-left  fs-2"> </i>
-                            </a>
-                            <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
-                                    class="mdi mdi-chevron-right  fs-2"> </i></a>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-template #noRecords>
-                    <p class="fs-2 text-center " style="color: #ef7d00 !important;">Try Search With Different Text.</p>
-                </ng-template>
-            </div>
-        </div>
-    </div>
-    <ng-template #NoData>
-        <div class="text-center  p-2 mb-4 vh-100">
-            <div class="row mt-4 mb-4 rounded border border-primary">
-                <h3 class="text-center fs-2 pt-5 "> All Pending Payments Records ! </h3>
-                <div class="col-sm-12 text-center">
-                    <div class="mb-3 p-4">
-                        <h3 class="text-center" style="color: #ef7d00 !important;">No Payment Record Found.</h3>
+    <!-- No Data / No Records Found Template -->
+    <ng-template #noDataTemplate>
+        <div class="no-data-wrapper">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="alert alert-info text-center py-5">
+                        <i class="mdi mdi-check-circle-outline fs-1 d-block mb-3"></i>
+                        <h3>All Pending Payments Records!</h3>
+                        <p class="fs-5 text-muted">No payment records found.</p>
                     </div>
                 </div>
             </div>
         </div>
     </ng-template>
-</div>
 
-<ng-template #viewDescModal2 let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Get Result Screen </h5>
-        <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
-    </div>
-    <div class="modal-body" #modalBody>
-        <div class="col-md-12 grid-margin stretch-card" id="ReceiptData">
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <p class="text-center mb-5" style="font-size: 30px; border: 2px solid black;">Payment Receipt</p>
-
-                    <button class="btn btn-primary mb-3" (click)="printReceipt()">Print Receipt</button>
-                    <div class="row">
-                        <hr>
-                        <div class="col-6">
-                            <span class="">Name</span>
-                        </div>
-                        <div class="col-6">
-                            <span class="text-danger">{{PaymentReceipt.candidateName}}</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <hr>
-                        <div class="col-6">
-                            <span class="me-4">Booking Id</span>
-                        </div>
-                        <div class="col-6">
-                            {{PaymentReceipt.bookingId}}
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <span>Request Date</span>
-                        </div>
-                        <div class="col-6">
-                            {{PaymentReceipt.requestDate}}
-                        </div>
-                        <hr />
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <span class="text-black">Instrument Name</span>
-                        </div>
-                        <div class="col-6">
-                            <p>{{PaymentReceipt.instrumentName}}</p>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="row text-black">
-                        <div class="col-6">
-                            <p>Sample Count</p>
-                        </div>
-                        <div class="col-6">
-                            <p class="float-start fw-bold">{{PaymentReceipt.noOfSamples}}</p>
-                        </div>
-                        <hr>
-                    </div>
-                    <div class="row text-black">
-                        <div class="col-6">
-                            <p>Payable Amount</p>
-                        </div>
-                        <div class="col-6">
-                            <p class="float-start fw-bold">Total: {{PaymentReceipt.totalCharges |
-                                currency:'INR':'symbol'}}</p>
-                        </div>
-                        <hr style="border: 2px solid black;">
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <p>Payment Status</p>
-                        </div>
-                        <div class="col-6">
-                            <div class="fw-bold" [ngSwitch]="PaymentReceipt.paymentStatus">
-                                <div *ngSwitchCase="'success'" class="fw-bold text-success ">
-                                    Paid <span class="fw-bold text-dark">Payment Date</span>{{
-                                    PaymentReceipt.paymentDate }}
-                                </div>
-                                <div *ngSwitchCase="'failure'" class="fw-bold text-danger ">
-                                    Failed <span class="fw-bolder text-dark ms-4 me-3">Payment Date </span> {{
-                                    PaymentReceipt.paymentDate }}
-                                </div>
-                                <div *ngSwitchCase="null" class="fw-bold text-dark p-3">
-                                    Pending
-                                </div>
-                            </div>
-
-                        </div>
-                        <hr style="border: 2px solid black;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #viewDescModal5 let-modal>
-    <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabelPayment">Payment Screen </h5>
-        <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-
-        <div class="col-md-12 grid-margin stretch-card">
+    <!-- Data Available -->
+    <div class="row" *ngIf="BookingStatusData.length > 0; else noDataTemplate">
+        <div class="col-12 bottom-space">
             <div class="card">
                 <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-sm">
-                            <table id="dataTableAllClosedRemarks" class="table">
-                                <thead>
+                    <!-- Header Section -->
+                       <hr class="border-1 border-dark opacity-100" />
+                    <div class="row d-flex justify-content-center align-items-center mb-4">
+                        <div class="col-12 mb-2 mb-md-0">
+                            <h4 class="page-title mb-0 text-center">Pending Payment Details</h4>
+                        </div>
+                    </div>
+                      <hr class="border-1 border-dark opacity-100" />
+                    <div class="row d-flex justify-content-center align-items-center mb-4">
+                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                            <button 
+                                (click)="exportToExcel()" 
+                                class="btn btn-dark"
+                                [disabled]="tmpsBookingStatusData.length === 0">
+                                <i class="mdi mdi-file-excel me-1"></i> Export to Excel
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="search-wrapper">
+                                <input 
+                                    [(ngModel)]="searchQuery" 
+                                    (keyup)="search()" 
+                                    type="text" 
+                                    class="form-control search-input"
+                                    placeholder="Search payments..." 
+                                    aria-label="Search" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Data Table -->
+                    <ng-container *ngIf="tmpsBookingStatusData.length > 0; else noDataTemplate">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered" id="bookingDataTable">
+                                <thead class="table-light">
                                     <tr>
-                                        <th class="fw-bold ">Booking Id</th>
-                                        <th class="fw-bold ">Instrument Name </th>
-                                        <th class="fw-bold ">Total Amount </th>
-                                        <th class="fw-bold ">Pay Now </th>
+                                        <th class="d-none d-md-table-cell">Booking ID</th>
+                                        <th class="d-none d-md-table-cell">Instrument Name</th>
+                                        <th>Amount</th>
+                                        <th class="d-none d-lg-table-cell">Request Date</th>
+                                        <th>Status</th>
+                                        <th>Upload Receipt</th>
+                                        <th>Print</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class=" ">{{BookingCase.bookingId}} </td>
-                                        <td class=" " style="width: 20%;">{{BookingCase.instrumentName}}</td>
-                                        <td class=" ">{{BookingCase.amount | currency:'INR':'symbol'}} </td>
-                                        <td><button type="submit" class="btn btn-dark me-2"
-                                                (click)="VerifyData(BookingCase);">Confirm and Pay</button></td>
+                                    <tr *ngFor="let payment of getCurrentPageData(); let i = index">
+                                        <td class="d-none d-md-table-cell">{{ payment.bookingId }}</td>
+                                        <td class="d-none d-md-table-cell">{{ payment.instrumentName }}</td>
+                                        <td class="text-danger fw-bold">{{ payment.amount | currency:'INR':'symbol' }}</td>
+                                        <td class="d-none d-lg-table-cell">{{ payment.requestDate }}</td>
+                                        <td [ngSwitch]="payment.paymentStatus">
+                                            <!-- Success Status -->
+                                            <div *ngSwitchCase="'success'" class="status-badge success">
+                                                <span class="badge bg-success">Payment Successful</span>
+                                                <span class="text-dark ms-1">On</span>
+                                                {{ payment.paymentDate }}
+                                            </div>
+                                            <!-- Failure Status -->
+                                            <div *ngSwitchCase="'failure'" class="status-badge failure">
+                                                <span class="badge bg-info">Payment Failed</span>
+                                                <button 
+                                                    class="btn btn-dark btn-sm ms-2"
+                                                    (click)="openPaymentModal(payment)">
+                                                    Pay Now
+                                                </button>
+                                            </div>
+                                            <!-- Pending Status -->
+                                            <div *ngSwitchCase="null" class="status-badge pending">
+                                                <span class="badge bg-warning text-dark">Payment Pending</span>
+                                                <button 
+                                                    class="btn btn-dark btn-sm ms-2"
+                                                    (click)="openPaymentModal(payment)">
+                                                    Pay Now
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button 
+                                                class="btn btn-dark btn-sm"
+                                                (click)="openReceiptUploadModal(payment)">
+                                                <i class="mdi mdi-upload"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button 
+                                                class="btn btn-outline-dark btn-sm"
+                                                (click)="paymentReceiptScreen(payment)">
+                                                <i class="mdi mdi-printer"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination-wrapper mt-4">
+                            <nav aria-label="Page navigation">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <!-- Items per page selector -->
+                                    <div class="page-size-selector">
+                                        <label for="pageSize" class="form-label mb-0 me-2">Items per Page:</label>
+                                        <select 
+                                            id="pageSize" 
+                                            class="form-select form-select-sm d-inline-block"
+                                            style="width: 7rem;"
+                                            [value]="itemsPerPage"
+                                            (change)="onPageSizeChange($event)">
+                                            <option *ngFor="let size of pageSizeOptions" [value]="size">
+                                                {{ size }}
+                                            </option>
+                                        </select>
+                                        <span class="ms-2 text-muted">entries</span>
+                                        <span class="ms-3 text-muted">
+                                            (Total: {{ tmpsBookingStatusData.length }} records)
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Page navigation -->
+                                    <ul class="pagination mb-0">
+                                        <li class="page-item" [class.disabled]="currentPage === 1">
+                                            <a class="page-link" (click)="prevPage()" href="javascript:void(0)">
+                                                <i class="mdi mdi-chevron-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item disabled">
+                                            <span class="page-link">
+                                                Page <span class="text-danger">{{ currentPage }}</span> of {{ getTotalPages() }}
+                                            </span>
+                                        </li>
+                                        <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                                            <a class="page-link" (click)="nextPage()" href="javascript:void(0)">
+                                                <i class="mdi mdi-chevron-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Receipt Modal -->
+<ng-template #viewDescModal2 let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="paymentReceiptModalLabel">Payment Receipt</h5>
+        <button 
+            type="button" 
+            class="btn-close" 
+            (click)="modal.close('by: close icon')" 
+            aria-label="Close">
+        </button>
+    </div>
+    <div class="modal-body" id="receiptData">
+        <div class="receipt-container">
+            <div class="receipt-header text-center mb-4">
+                <h4 class="receipt-title">Payment Receipt</h4>
+            </div>
+
+            <div class="receipt-actions mb-3">
+                <button class="btn btn-primary" (click)="printReceipt()">
+                    <i class="mdi mdi-printer me-1"></i> Print Receipt
+                </button>
+            </div>
+
+            <div class="receipt-details">
+                <div class="row mb-2">
+                    <div class="col-6 fw-bold">Name:</div>
+                    <div class="col-6 text-danger">{{ PaymentReceipt.candidateName }}</div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-6 fw-bold">Booking ID:</div>
+                    <div class="col-6">{{ PaymentReceipt.bookingId }}</div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-6 fw-bold">Request Date:</div>
+                    <div class="col-6">{{ PaymentReceipt.requestDate }}</div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-6 fw-bold">Instrument Name:</div>
+                    <div class="col-6">{{ PaymentReceipt.instrumentName }}</div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-6 fw-bold">Sample Count:</div>
+                    <div class="col-6 fw-bold">{{ PaymentReceipt.noOfSamples }}</div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-6 fw-bold">Payable Amount:</div>
+                    <div class="col-6 fw-bold">Total: {{ PaymentReceipt.amount | currency:'INR':'symbol' }}</div>
+                </div>
+                <hr style="border: 2px solid black;" />
+                <div class="row mb-2">
+                    <div class="col-6 fw-bold">Payment Status:</div>
+                    <div class="col-6">
+                        <ng-container [ngSwitch]="PaymentReceipt.paymentStatus">
+                            <div *ngSwitchCase="'success'" class="text-success fw-bold">
+                                Paid - {{ PaymentReceipt.paymentDate }}
+                            </div>
+                            <div *ngSwitchCase="'failure'" class="text-danger fw-bold">
+                                Failed - {{ PaymentReceipt.paymentDate }}
+                            </div>
+                            <div *ngSwitchCase="null" class="text-dark fw-bold">
+                                Pending
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
             </div>
@@ -254,78 +257,125 @@
     </div>
 </ng-template>
 
-<!-- Added on 28-Feb-26  -->
-
-<ng-template #PaymentReceiptUploadModal let-modal>
+<!-- Payment Screen Modal -->
+<ng-template #viewDescModal5 let-modal>
     <div class="modal-header">
-        <h5 class="modal-title" id="PaymentReceiptUploadModals">Payment Receipt Upload </h5>
-        <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
+        <h5 class="modal-title" id="paymentScreenModalLabel">Payment Screen</h5>
+        <button 
+            type="button" 
+            class="btn-close" 
+            (click)="modal.close('by: close icon')" 
+            aria-label="Close">
+        </button>
     </div>
     <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Instrument Name</th>
+                                <th>Total Amount</th>
+                                <th>Pay Now</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ BookingCase.bookingId }}</td>
+                                <td>{{ BookingCase.instrumentName }}</td>
+                                <td>{{ BookingCase.amount | currency:'INR':'symbol' }}</td>
+                                <td>
+                                    <button 
+                                        type="button" 
+                                        class="btn btn-dark"
+                                        (click)="VerifyData(BookingCase)">
+                                        <i class="mdi mdi-currency-inr me-1"></i> Confirm and Pay
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
 
-        <div class="col-md-12 grid-margin stretch-card">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-sm">
+<!-- Payment Receipt Upload Modal -->
+<ng-template #PaymentReceiptUploadModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="receiptUploadModalLabel">Payment Receipt Upload</h5>
+        <button 
+            type="button" 
+            class="btn-close" 
+            (click)="modal.close('by: close icon')" 
+            aria-label="Close">
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <form id="paymentReceiptForm">
+                    <div class="row">
+                        <!-- Booking ID -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label fw-bold">Booking ID</label>
+                            <div class="form-control-plaintext">{{ BookingCase.bookingId }}</div>
+                        </div>
 
-                            <form id="UpdatePyamentReceipt">
-                                <div class="row p-3 m-3">
+                        <!-- Payment Amount -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label fw-bold">Payment Amount</label>
+                            <div class="form-control-plaintext">
+                                {{ BookingCase.amount | currency:'INR':'symbol' }}
+                            </div>
+                        </div>
 
-                                    <div class="row mb-4">
-                                        <div class="col-3">
-                                            <label for="userName" class="col-12 col-form-label">Booking Id</label>
-                                            <label for="InstrumentId"
-                                                class="form-label">{{BookingCase.bookingId}}</label>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="col-12">
-                                                <label for="userName" class="col-12 col-form-label">Payment
-                                                    Amount</label>
-                                                <label for="userName" class="col-12 col-form-label">{{BookingCase.amount
-                                                    | currency:'INR':'symbol'}}</label>
+                        <!-- File Upload -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="paymentReceiptFile" class="form-label fw-bold">
+                                Payment Receipt File
+                            </label>
+                            <input 
+                                class="form-control" 
+                                type="file" 
+                                id="paymentReceiptFile" 
+                                name="paymentReceiptFile"
+                                (change)="onFileXSelected($event, BookingCase.bookingId)"
+                                accept=".pdf, .jpg, .jpeg, .png, .zip, .rar, .7z" />
+                            <div class="form-text">Maximum file size: 10MB</div>
+                        </div>
 
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="col-12">
-                                                <label for="userName" class="col-12 col-form-label">Payment Receipt
-                                                    File</label>
-                                                <input class="form-control" [(ngModel)]="fileNamesX" type="file"
-                                                    id="File" name="file"
-                                                    (change)="onFileXSelected($event, BookingCase.bookingId)"
-                                                    accept=".pdf, .jpg, .jpeg, .png, .zip, .rar, .7z" />
-
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <label for="userName" class="col-12 col-form-label">Comments/
-                                                Remarks</label>
-                                            <div class="col-12">
-                                                <input class="form-control" [(ngModel)]="ReceiptRemarks" type="text"
-                                                    id="ReceiptRemarkss" name="ReceiptRemarkss" />
-                                                <div *ngIf="isForm1Submitted && form1.file.errors?.required"
-                                                    class="invalid-feedback">
-                                                    Required
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="row mb-4 d-flex justify-content-center align-items-center ">
-                                        <div class="col-12 text-center">
-                                            <button type="submit" [disabled]="!fileChosen[BookingCase.bookingId]" class="btn btn-primary" (click)="UpdateFileDocument(BookingCase.bookingId);">
-                                                Upload Image 
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </form>
-
+                        <!-- Comments/Remarks -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="receiptRemarks" class="form-label fw-bold">
+                                Comments/Remarks
+                            </label>
+                            <input 
+                                class="form-control" 
+                                type="text" 
+                                id="receiptRemarks" 
+                                name="receiptRemarks"
+                                [(ngModel)]="ReceiptRemarks"
+                                placeholder="Enter remarks..." />
                         </div>
                     </div>
-                </div>
+
+                    <!-- Submit Button -->
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <button 
+                                type="submit" 
+                                class="btn btn-primary"
+                                [disabled]="!fileChosen[BookingCase.bookingId]"
+                                (click)="UpdateFileDocument(BookingCase.bookingId)">
+                                <i class="mdi mdi-upload me-1"></i> Upload Receipt
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -53,5 +53,5 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }
   ]
 })
-export class AdminActionInstrumentsModule { }
+export class AdminUpdateInstrumentPriceModule { }
 // Added by Jatinder Kumar 31309
