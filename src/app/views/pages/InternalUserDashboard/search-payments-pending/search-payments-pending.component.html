@@ -244,11 +244,6 @@
                     <div class="col-6">{{ PaymentReceipt.instrumentName }}</div>
                 </div>
                 <hr />
-                <!-- <div class="row mb-2">
-                    <div class="col-6 fw-bold">Sample Count:</div>
-                    <div class="col-6 fw-bold">{{ PaymentReceipt.noOfSamples }}</div>
-                </div>
-                <hr /> -->
                 <div class="row mb-2">
                     <div class="col-6 fw-bold">Payable Amount:</div>
                     <div class="col-6 fw-bold">Total: {{ PaymentReceipt.amount | currency:'INR':'symbol' }}</div>
@@ -363,7 +358,7 @@
                                 name="paymentReceiptFile"
                                 (change)="onFileXSelected($event, BookingCase.bookingId)"
                                 accept=".pdf, .jpg, .jpeg, .png, .zip, .rar, .7z" />
-                            <div class="form-text">Maximum file size: 10MB</div>
+                            <div class="form-text">Maximum file size: 1MB</div>
                         </div>
 
                         <!-- Comments/Remarks -->

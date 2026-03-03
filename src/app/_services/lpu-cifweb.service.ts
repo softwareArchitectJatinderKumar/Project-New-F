@@ -6,12 +6,12 @@ import { StorageService } from './storage.service';
 import { EventModel } from '../_model/Event.model';
 import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
-// const AUTH_API = 'https://projectsapi.lpu.in/';
-// const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';
-// const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';
-const AUTH_API = 'https://localhost:7125/';
-const AUTH_API_LOCAL = 'https://localhost:7125/';
-const AUTH_API_LOCALS = 'https://localhost:7125/';
+const AUTH_API = 'https://projectsapi.lpu.in/';
+const AUTH_API_LOCAL = 'https://projectsapi.lpu.in/';
+const AUTH_API_LOCALS = 'https://projectsapi.lpu.in/';
+// const AUTH_API = 'https://localhost:7125/';
+// const AUTH_API_LOCAL = 'https://localhost:7125/';
+// const AUTH_API_LOCALS = 'https://localhost:7125/';
 
 @Injectable({
   providedIn: 'root'
@@ -931,8 +931,8 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
-      'https://localhost:7125/api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
-      // AUTH_API_LOCAL + 'api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
+      // 'https://localhost:7125/api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
+      AUTH_API_LOCAL + 'api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
       .pipe(catchError(this.handleError('GetBookingPaymentProofDetails', null)));
   }
 

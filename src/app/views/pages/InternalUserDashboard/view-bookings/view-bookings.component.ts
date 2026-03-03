@@ -34,6 +34,7 @@ export class ViewBookingsComponent implements OnInit {
   @ViewChild('viewDescModal') viewDescModal: TemplateRef<any>;
   @ViewChild('viewDescModal2') viewDescModal2: TemplateRef<any>;
   @ViewChild('ViewUpdateStatusModal') ViewUpdateStatusModal: TemplateRef<any>;
+  @ViewChild('PaymentReceiptUploadModal') PaymentReceiptUploadModal: TemplateRef<any>;
   dataSource: MatTableDataSource<any>;
 
   TypeId: any = 'CIF';
@@ -60,6 +61,27 @@ export class ViewBookingsComponent implements OnInit {
   currentPage = 1; itemsPerPage = 5; tmpsBookingData: any[] = []; paymentresult: PaymentRequest[] = []; paymentData: any;
   InstrumentId: any; UserRole: any; UserId: any; MobileNo: any; departmentName: any; candidateName: any; supervisorName: any; serverUrl: any;
   ResponseUrl: any;
+
+  // ============================================
+  // Properties - Payment Proof Status
+  // ============================================
+  uploadProofStatusData: any[] = [];
+  filteredData: any[] = [];
+
+  // ============================================
+  // Properties - File Upload
+  // ============================================
+  ReceiptRemarks = '';
+  FileDataX: string | null = null;
+  fileDataX: any;
+  fileStatus: any;
+  fileName: any;
+  fileChosen: { [key: number]: boolean } = {};
+
+  // ============================================
+  // Properties - Route Parameters
+  // ============================================
+  id: any; status: any; type: any; transactionNo: any; hashedValue: any; course: any; keyNote: any;
 
   constructor(
     private CIFwebService: LpuCIFWebService, private location: Location,
@@ -108,8 +130,9 @@ export class ViewBookingsComponent implements OnInit {
 
     this.getBookingDetails();
     this.fetchAllSampleStatus();
+    this.fetchPaymentProofDetailsForUser();
   }
-  id: any; status: any; type: any; transactionNo: any; hashedValue: any; course: any; keyNote: any;
+  
   getParams(): void {
     this.route.queryParamMap.subscribe(params => {
       this.id = params.get('id');
@@ -170,7 +193,6 @@ export class ViewBookingsComponent implements OnInit {
         if (response.item1 && response.item1.length > 0) {
           this.BookingData = response.item1;
           this.dataSource = response.item1;
-          console.log(JSON.stringify(this.BookingData)+ ' Booking data')
           this.tmpsBookingData = response.item1;
 
           this.headHtmlData = this.tmpsBookingData[0];
@@ -394,7 +416,6 @@ export class ViewBookingsComponent implements OnInit {
         if (response.item1 && response.item1.length > 0) {
           this.SampleStatusData = response.item1;
           this.dataSourceSamples = response.item1;
-          // console.log(JSON.stringify(this.SampleStatusData))
         } else {
           this.SampleStatusData = [];
         }
@@ -403,6 +424,137 @@ export class ViewBookingsComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+
+  // ============================================
+  // Payment Proof Methods
+  // ============================================
+  private fetchPaymentProofDetailsForUser(): void {
+    this.CIFwebService.GetBookingPaymentProofDetails(this.UserId).subscribe({
+      next: (response: any) => {
+        this.handleApiResponse(response);
+      },
+      error: (error) => {
+        console.error('Error fetching payment proof details:', error);
+      }
+    });
+  }
+
+  private handleApiResponse(response: any): void {
+    if (response.item1 && response.item1.length > 0) {
+      this.uploadProofStatusData = response.item1;
+      this.filteredData = [...this.uploadProofStatusData];
+    } else {
+      this.uploadProofStatusData = [];
+      this.filteredData = [];
+    }
+  }
+
+  hasProofUploaded(bookingId: any): boolean {
+    // Check if bookingId exists in uploadProofStatusData
+    return this.uploadProofStatusData.some(
+      (proof: any) => String(proof.bookingId) === String(bookingId)
+    );
+  }
+
+  // ============================================
+  // File Upload Methods
+  // ============================================
+  openReceiptUploadModal(booking: any): void {
+    this.BookingCase = booking;
+    this.modalService.open(this.PaymentReceiptUploadModal, { size: 'lg', centered: true }).result.then(
+      (result: string) => console.log('Modal closed:', result),
+      () => {}
+    );
+  }
+
+  onFileXSelected(event: any, id: number): void {
+    this.fileChosen[id] = event.target.files.length > 0;
+    const target = event.target as HTMLInputElement;
+    const file: File | null = (target.files as FileList)[0] || null;
+
+    if (!file) return;
+
+    // Check file size (5MB limit)
+    if (file.size > 5148576) {
+      Swal.fire({
+        title: 'File size exceeds 5 MB',
+        text: 'Please upload a smaller file.',
+        icon: 'warning'
+      });
+      target.value = '';
+      return;
+    }
+
+    this.fileDataX = file;
+    this.fileStatus = true;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64Data = result.split(',')[1];
+      this.FileDataX = base64Data;
+      this.fileName = file.name;
+    };
+  }
+
+  UpdateFileDocument(Id: number): void {
+    this.loadingIndicator = true;
+    const startTime = new Date().getTime();
+
+    if (this.fileChosen[Id]) {
+      const formData = new FormData();
+      formData.append('BookingId', Id.toString());
+      formData.append('ReceiptRemarks', this.ReceiptRemarks);
+      formData.append('PaymentReceiptUrl', this.fileName || '');
+      formData.append('PaymentReceiptData', this.FileDataX || '');
+      formData.append('UserId', this.UserId);
+
+      this.CIFwebService.UploadPaymentReceipt(formData).subscribe({
+        next: (data: any) => {
+          const returnId = data.item1[0]?.returnId;
+          const message = data.item1[0]?.msg;
+          
+          if (returnId === 1) {
+            Swal.fire({
+              title: 'Upload Successful',
+              text: 'Receipt saved successfully!',
+              icon: 'success'
+            }).then(() => {
+              window.location.reload();
+            });
+          } else if (returnId === -1) {
+            Swal.fire({
+              title: 'Receipt Already Exists',
+              text: message || 'A receipt has already been uploaded for this booking.',
+              icon: 'warning',
+            }).then(() => {
+              window.location.reload();
+            });
+          } else if (returnId === 0) {
+            Swal.fire({
+              title: 'Upload Failed',
+              text: message || 'Failed to upload receipt. Please try again.',
+              icon: 'error',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          }
+
+          this.loadingIndicator = false;
+        },
+        error: (error: any) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Internal Server error',
+            icon: 'error',
+            showConfirmButton: false
+          });
+          this.loadingIndicator = false;
+        }
+      });
+    }
   }
 
 }

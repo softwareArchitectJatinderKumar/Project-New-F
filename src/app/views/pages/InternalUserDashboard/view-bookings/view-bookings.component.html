@@ -49,6 +49,7 @@
                                     <th class="form-label d-none d-lg-table-cell">Request Sheet</th>
                                     <th class="form-label">Total Charges</th>
                                     <th class="form-label">Payment Status</th>
+                                    <th class="form-label">Upload Receipt</th>
                                     <th class="form-label">Sample Status</th>
                                 </tr>
                             </thead>
@@ -82,6 +83,18 @@
                                             <ng-template #NoPayment>
                                                 <span class="badge text-bg-info mb-3">Payment Pending</span> <br/>
                                                 <button class="btn btn-dark" (click)="openPaymentModal(BookingDataRow)">Pay Now</button>
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="hasProofUploaded(BookingDataRow.id); else uploadBtnTemplate">
+                                                <span class="badge bg-success">
+                                                    <i class="mdi mdi-check-circle me-1"></i> Already Uploaded
+                                                </span>
+                                            </ng-container>
+                                            <ng-template #uploadBtnTemplate>
+                                                <button class="btn btn-dark btn-sm" (click)="openReceiptUploadModal(BookingDataRow)">
+                                                    <i class="mdi mdi-upload"></i>
+                                                </button>
                                             </ng-template>
                                         </td>
                                             <td><button type="submit" class="btn btn-dark me-2"
@@ -222,6 +235,87 @@
     </div>
   </ng-template>
   
+
+
+  
+<!-- Payment Receipt Upload Modal -->
+<ng-template #PaymentReceiptUploadModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="receiptUploadModalLabel">Payment Receipt Upload</h5>
+        <button 
+            type="button" 
+            class="btn-close" 
+            (click)="modal.close('by: close icon')" 
+            aria-label="Close">
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card">
+            <div class="card-body">
+                <form id="paymentReceiptForm">
+                    <div class="row">
+                        <!-- Booking ID -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label fw-bold">Booking ID</label>
+                            <div class="form-control-plaintext">{{ BookingCase.bookingId }}</div>
+                        </div>
+
+                        <!-- Payment Amount -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label class="form-label fw-bold">Payment Amount</label>
+                            <div class="form-control-plaintext">
+                                {{ BookingCase.totalCharges | currency:'INR':'symbol' }}
+                            </div>
+                        </div>
+
+                        <!-- File Upload -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="paymentReceiptFile" class="form-label fw-bold">
+                                Payment Receipt File
+                            </label>
+                            <input 
+                                class="form-control" 
+                                type="file" 
+                                id="paymentReceiptFile" 
+                                name="paymentReceiptFile"
+                                (change)="onFileXSelected($event, BookingCase.bookingId)"
+                                accept=".pdf, .jpg, .jpeg, .png, .zip, .rar, .7z" />
+                            <div class="form-text">Maximum file size: 10MB</div>
+                        </div>
+
+                        <!-- Comments/Remarks -->
+                        <div class="col-12 col-md-6 mb-3">
+                            <label for="receiptRemarks" class="form-label fw-bold">
+                                Comments/Remarks
+                            </label>
+                            <input 
+                                class="form-control" 
+                                type="text" 
+                                id="receiptRemarks" 
+                                name="receiptRemarks"
+                                [(ngModel)]="ReceiptRemarks"
+                                placeholder="Enter remarks..." />
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <button 
+                                type="submit" 
+                                class="btn btn-primary"
+                                [disabled]="!fileChosen[BookingCase.bookingId]"
+                                (click)="UpdateFileDocument(BookingCase.bookingId)">
+                                <i class="mdi mdi-upload me-1"></i> Upload Receipt
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
 <!-- 
 <ng-template #ViewUpdateStatusModal let-modal>
     <div class="modal-header">

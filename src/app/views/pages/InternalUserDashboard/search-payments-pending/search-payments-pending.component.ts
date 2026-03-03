@@ -10,7 +10,7 @@ import { forkJoin } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // Component Constants
-const FILE_SIZE_LIMIT = 5148576; // 5MB in bytes
+const FILE_SIZE_LIMIT = 1048576; // 1MB in bytes
 interface UploadProofRecord {
   bookingId: string;
   instrumentName: string;
@@ -191,7 +191,6 @@ export class SearchPaymentsPendingComponent implements OnInit {
   private handleApiResponse(response: ApiResponse): void {
     if (response.item1 && response.item1.length > 0) {
       this.uploadProofStatusData = response.item1;
-      console.log(this.uploadProofStatusData)
       this.filteredData = [...this.uploadProofStatusData];
     } else {
       this.uploadProofStatusData = [];
