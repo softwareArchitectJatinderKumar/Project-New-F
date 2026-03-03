@@ -199,12 +199,17 @@ const routes: Routes = [
   {
     path: "AdminInstrumentPrice", 
     loadChildren: () => import('./views/pages/AdminDashboard/AdminUpdateInstrumentPrices/AdminUpdateInstrumentPrice.module').then(m => m.AdminUpdateInstrumentPriceModule),
-    // component:AdminActionInstrumentsComponent
+    // component:AdminActionInstrumentsComponent UpdateInstrumentPriceModule
   },
   {
     path: "AdminInstrumentAction", 
     loadChildren: () => import('./views/pages/AdminDashboard/AdminActionInstruments/AdminActionInstruments.mdoule').then(m => m.AdminActionInstrumentsModule),
     // component:AdminActionInstrumentsComponent
+  },
+  {
+    path: "NewInstrumentWizard", 
+    loadChildren: () => import('./views/pages/AdminDashboard/AdminNewInstrumentWizard/AdminNewInstrumentWizard.module').then(m => m.AdminNewInstrumentWizardModule),
+    // component:AdminNewInstrumentWizardComponent
   },
   {
     path: "AssignTestCifA",
@@ -213,7 +218,7 @@ const routes: Routes = [
   },
   {
     path: "AdminUploadImage",
-    loadChildren: () => import('./views/pages/AdminDashboard/AdminNewInstruments/AdminActionInstruments.mdoule').then(m => m.AdminNewInstrumentsModule),
+    loadChildren: () => import('./views/pages/AdminDashboard/AdminNewInstruments/UpdateInstrumentPrice.mdoule').then(m => m.UpdateInstrumentPriceModule),
     // component:AdminNewInstrumentsComponent
   },
   {

@@ -8,8 +8,8 @@ import { NgbDropdownModule, NgbDatepickerModule, NgbTooltipModule, NgbNavModule,
 // Ng-ApexCharts
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ReactiveFormsModule } from '@angular/forms';
-import { AdminNewInstrumentsComponent } from './AdminNewInstruments.component';
-import {} from './AdminNewInstruments.component'
+import { UpdateInstrumentPriceComponent } from './UpdateInstrumentPrice.component';
+import {} from './UpdateInstrumentPrice.component'
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -20,14 +20,14 @@ import { AdminDashboardModule } from "../AdminDashboard/AdminDashboard.module";
 const routes: Routes = [
   {
     path: '',
-    component: AdminNewInstrumentsComponent
+    component: UpdateInstrumentPriceComponent
   }
 ]
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 @NgModule({
-  declarations: [AdminNewInstrumentsComponent],
+  declarations: [UpdateInstrumentPriceComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -53,5 +53,5 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     }
   ]
 })
-export class AdminNewInstrumentsModule { }
+export class UpdateInstrumentPriceModule { }
 // Added by Jatinder Kumar 31309

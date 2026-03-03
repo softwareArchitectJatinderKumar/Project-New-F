@@ -26,11 +26,11 @@ import { DOCUMENT } from '@angular/common';
 
 
 @Component({
-  selector: 'app-AdminNewInstruments',
-  templateUrl: './AdminNewInstruments.component.html',
-  styleUrls: ['./AdminNewInstruments.component.scss']
+  selector: 'app-UpdateInstrumentPrice',
+  templateUrl: './UpdateInstrumentPrice.component.html',
+  styleUrls: ['./UpdateInstrumentPrice.component.scss']
 })
-export class AdminNewInstrumentsComponent implements OnInit {
+export class UpdateInstrumentPriceComponent implements OnInit {
   @ViewChild('ngSelectComponent') ngSelectComponent: NgSelectComponent;
   @ViewChild('ngSelectComponentStream') ngSelectComponentStream: NgSelectComponent;
   @ViewChild('verticalCenteredModal') verticalCenteredModal: TemplateRef<any>;

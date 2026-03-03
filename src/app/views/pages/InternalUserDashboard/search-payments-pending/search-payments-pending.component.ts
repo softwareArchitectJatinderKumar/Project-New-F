@@ -11,6 +11,23 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // Component Constants
 const FILE_SIZE_LIMIT = 5148576; // 5MB in bytes
+interface UploadProofRecord {
+  bookingId: string;
+  instrumentName: string;
+  noOfSamples: number;
+  totalCharges: number;
+  requestDate: string;
+  proofRemarks: string;
+  isProofApproved: string;
+  proofApprovedOn: string | null;
+  receiptProofFile: string | null;
+  [key: string]: unknown;
+}
+
+interface ApiResponse {
+  item1: UploadProofRecord[];
+}
+
 
 @Component({
   selector: 'app-search-payments-pending',
@@ -79,6 +96,13 @@ export class SearchPaymentsPendingComponent implements OnInit {
   TypeId = 'CIF';
 
   // ============================================
+  // Properties - Payment Proof Status
+  // ============================================
+  uploadProofStatusData: any[] = [];
+  filteredData: any[] = [];
+  paymentProofStatus: { [bookingId: string]: { hasProof: boolean; proofFile?: string; isApproved?: string } } = {};
+
+  // ============================================
   // Properties - Route Parameters
   // ============================================
   id: string | null = null;
@@ -137,6 +161,8 @@ export class SearchPaymentsPendingComponent implements OnInit {
     // Set response URL
     const baseUrl = `${window.location.origin}${window.location.pathname.split('/').slice(0, -1).join('/')}`;
     this.responseUrl = `${baseUrl}/SearchPendingPayments`;
+
+    this.fetchPaymentProofDetailsForUser();
   }
 
   private initializeRouteParams(): void {
@@ -146,6 +172,33 @@ export class SearchPaymentsPendingComponent implements OnInit {
       }
     });
   }
+
+
+  private fetchPaymentProofDetailsForUser(): void {
+  
+
+    this.CIFwebService.GetBookingPaymentProofDetails(this.userId).subscribe({
+      next: (response: ApiResponse) => {
+        this.handleApiResponse(response);
+      },
+      error: (error) => {
+        console.error('Error fetching payment proof details:', error);
+        this.loadingIndicator = false;
+      }
+    });
+  }
+
+  private handleApiResponse(response: ApiResponse): void {
+    if (response.item1 && response.item1.length > 0) {
+      this.uploadProofStatusData = response.item1;
+      console.log(this.uploadProofStatusData)
+      this.filteredData = [...this.uploadProofStatusData];
+    } else {
+      this.uploadProofStatusData = [];
+      this.filteredData = [];
+    }
+  }
+
 
   // ============================================
   // Data Loading Methods
@@ -162,6 +215,10 @@ export class SearchPaymentsPendingComponent implements OnInit {
             item.paymentStatus == null ||
             item.paymentStatus?.toLowerCase() === 'failure'
           );
+          
+          if (this.tmpsBookingStatusData.length > 0) {
+            this.fetchPaymentProofDetails(this.tmpsBookingStatusData);
+          }
         } else {
           this.BookingStatusData = [];
           this.tmpsBookingStatusData = [];
@@ -183,6 +240,45 @@ export class SearchPaymentsPendingComponent implements OnInit {
     setTimeout(() => {
       this.loadingIndicator = false;
     }, remainingDelay);
+  }
+
+  // ============================================
+  // Payment Proof Methods
+  // ============================================
+  
+  private fetchPaymentProofDetails(bookingIds: any[]): void {
+    // Fetch proof details for each booking
+    bookingIds.forEach((bookingId: string) => {
+      this.CIFwebService.GetBookingPaymentProofDetails(bookingId).subscribe({
+        next: (response: any) => {
+          if (response && response.item1 && response.item1.length > 0) {
+            const proofData = response.item1[0];
+            this.paymentProofStatus[bookingId] = {
+              hasProof: true,
+              proofFile: proofData.receiptProofFile || proofData.proofFile || null,
+              isApproved: proofData.isProofApproved || proofData.isApproved || null
+            };
+          } else {
+            this.paymentProofStatus[bookingId] = {
+              hasProof: false
+            };
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching payment proof for booking:', bookingId, error);
+          this.paymentProofStatus[bookingId] = {
+            hasProof: false
+          };
+        }
+      });
+    });
+  }
+
+  hasProofUploaded(bookingId: any): boolean {
+    // Check if bookingId exists in uploadProofStatusData (populated by fetchPaymentProofDetailsForUser)
+    return this.uploadProofStatusData.some(
+      (proof: any) => String(proof.bookingId) === String(bookingId)
+    );
   }
 
   // ============================================

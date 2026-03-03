@@ -373,8 +373,34 @@ export class NewBookingsComponent implements OnInit {
     //console.log(fileName+ "  *** **  File Name ")
     // window.open(fileName, '_blank');
   }
+DownloadFormat(a:any){
 
+  
+     this.SampleExcelSheet=this.InstrumentData?.find(instrument => instrument.instrumentId === a);
+    //  alert(this.SampleExcelSheet['sampleExcelSheet'])
+    if (a) {
+      // Find the selected instrument using its ID
+      const selectedInstrument = this.InstrumentData?.find(instrument => instrument.instrumentId === a);
+      const inactiveInstrument = this.InstrumentDataInactive?.find(instrument => instrument.instrumentId === a);
+      // console.log(JSON.stringify(selectedInstrument))
+     
+      // Check if the selected instrument is inactive
+      if (inactiveInstrument && this.InActiveInstrumentIds?.includes(a.toString())) {
+        swal.fire({
+          title: 'This instrument is under Maintenance. You cannot proceed with this selection.',
+          icon: 'error',
+        }).then(() => {
+          window.location.reload();
+        });
+        return; // Exit the function to prevent further action
+      }
 
+      // Set the selected instrument values and proceed
+      this.selectedId = a;
+      this.InstrumentId = this.selectedId;
+      this.testClick(this.SampleExcelSheet.sampleExcelSheetUrl);
+}
+}
   
    onDownloadFile(remoteUrl: string): void {
       swal.fire({ title: 'Downloading...', didOpen: () => { swal.showLoading(null); }});

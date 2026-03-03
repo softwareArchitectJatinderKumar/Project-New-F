@@ -8,7 +8,9 @@ import Swal from 'sweetalert2';
 import { LoginSessionService } from 'src/app/_services/login-session.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { forkJoin } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+const FILE_SIZE_LIMIT = 5148576; // 5MB in bytes
 
 @Component({
   selector: 'app-FailedPayments',
@@ -17,12 +19,220 @@ import { forkJoin } from 'rxjs';
   standalone:false
 })
 export class FailedPaymentsComponent implements OnInit {
+    // ============================================
+    // Properties - Search & Filter
+    // ============================================
+    searchQuery = '';
+  
+    // ============================================
+    // Properties - File Upload
+    // ============================================
+    ReceiptRemarks = '';
+    FileDataX: string | null = null;
+    fileDataX: any;
+    fileStatus: any;
+    fileName: any;
+    fileChosen: { [key: number]: boolean } = {};
+    validationForm1!: FormGroup;
+    isForm1Submitted = false;
+  
+    // ============================================
+    // Properties - User Session
+    // ============================================
+    userId: string = '';
+    userEmail: string = '';
+    mobileNo: string = '';
+    supervisorName: string = '';
+    departmentName: string = '';
+    candidateName: string = '';
+    userRole: string = '';
+  
+    // ============================================
+    // Properties - UI State
+    // ============================================
+    loadingIndicator = false;
+    serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
+    responseUrl = '';
+    TypeId = 'CIF';
+
+    // ============================================
+    // Initialization Methods
+    // ============================================
+    private initializeForm(): void {
+      this.validationForm1 = this.formBuilder.group({
+        ReceiptRemarks: ['', Validators.required],
+        file: [null, Validators.required]
+      });
+    }
+    
+
+    openReceiptUploadModal(booking: any): void {
+    this.BookingCase = booking;
+    this.loadForm();
+    this.modalService.open(this.PaymentReceiptUploadModal, { size: 'lg', centered: true }).result.then(
+      (result: string) => console.log('Modal closed:', result),
+      () => {}
+    );
+  }
+
+
+   // ============================================
+    // Form Methods
+    // ============================================
+    get form1() {
+      return this.validationForm1.controls;
+    }
+  
+    loadForm(): void {
+      this.validationForm1 = this.formBuilder.group({
+        ReceiptRemarks: ['', Validators.required],
+        file: [null, Validators.required]
+      });
+    }
+  
+    // ============================================
+    // File Upload Methods
+    // ============================================
+    onFileXSelected(event: any, id: number): void {
+      this.fileChosen[id] = event.target.files.length > 0;
+      const target = event.target as HTMLInputElement;
+      const file: File | null = (target.files as FileList)[0] || null;
+  
+      if (!file) return;
+  
+      // Check file size
+      if (file.size > FILE_SIZE_LIMIT) {
+        Swal.fire({
+          title: 'File size exceeds 5 MB',
+          text: 'Please upload a smaller file.',
+          icon: 'warning'
+        });
+        target.value = '';
+        return;
+      }
+  
+      // Check file name validity
+      const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
+      if (!fileNameRegex.test(file.name)) {
+        const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const modifiedFile = new File([file], validFileName, { type: file.type });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(modifiedFile);
+        target.files = dataTransfer.files;
+  
+        this.fileDataX = modifiedFile;
+        this.fileStatus = true;
+  
+        const reader = new FileReader();
+        reader.readAsDataURL(modifiedFile);
+        reader.onload = () => {
+          const result = reader.result as string;
+          const base64Data = result.split(',')[1];
+          this.FileDataX = base64Data;
+          this.fileName = validFileName;
+        };
+        return;
+      }
+  
+      this.fileDataX = file;
+      this.fileStatus = true;
+  
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64Data = result.split(',')[1];
+        this.FileDataX = base64Data;
+        this.fileName = file.name;
+      };
+    }
+  
+    UpdateFileDocument(Id: number): void {
+      this.loadingIndicator = true;
+      const startTime = new Date().getTime();
+  
+      if (this.fileChosen[Id]) {
+        const formData = new FormData();
+        formData.append('BookingId', Id.toString());
+        formData.append('ReceiptRemarks', this.ReceiptRemarks);
+        formData.append('PaymentReceiptUrl', this.fileName || '');
+        formData.append('PaymentReceiptData', this.FileDataX || '');
+        formData.append('UserId', this.userId);
+  
+        this.CIFwebService.UploadPaymentReceipt(formData).subscribe({
+          next: (data: any) => {
+            // Check returnId for status: 1 = Success, 0 = Failed, -1 = Already Existed
+            const returnId = data.item1[0]?.returnId;
+            const message = data.item1[0]?.msg;
+            
+            if (returnId === 1) {
+              Swal.fire({
+                title: 'Upload Successful',
+                text: 'Receipt saved successfully!',
+                icon: 'success'
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (returnId === -1) {
+              Swal.fire({
+                title: 'Receipt Already Exists',
+                text: message || 'A receipt has already been uploaded for this booking.',
+                icon: 'warning',
+                // timer: 3000,
+                // showConfirmButton: true
+              }).then(() => {
+                window.location.reload();
+              });
+            } else if (returnId === 0) {
+              Swal.fire({
+                title: 'Upload Failed',
+                text: message || 'Failed to upload receipt. Please try again.',
+                icon: 'error',
+                timer: 2000,
+                showConfirmButton: false
+              });
+            } else {
+              // Fallback for unexpected response format
+              Swal.fire({
+                title: 'Upload Result',
+                text: message || 'Unknown response from server.',
+                icon: 'info',
+                timer: 2000,
+                showConfirmButton: false
+              });
+            }
+  
+            this.delayLoading(startTime);
+          },
+          error: (error: any) => {
+            Swal.fire({
+              title: 'Error',
+              text: 'Internal Server error',
+              icon: 'error',
+              showConfirmButton: false
+            });
+            this.loadingIndicator = false;
+          }
+        });
+      }
+    }
+  
+  private delayLoading(startTime: number): void {
+    const elapsed = new Date().getTime() - startTime;
+    const remainingDelay = Math.max(1500 - elapsed, 0);
+
+    setTimeout(() => {
+      this.loadingIndicator = false;
+    }, remainingDelay);
+  }
+
 
   @ViewChild('viewDescModal2') viewDescModal2: TemplateRef<any>;
+  @ViewChild('PaymentReceiptUploadModal') PaymentReceiptUploadModal: TemplateRef<any>;
   selectedId: number;
   ColumnMode = ColumnMode;
   columns: any;
-  loadingIndicator = false;
+  // loadingIndicator = false;
   headHtmlData: any[] = [];
   p: any = 1;
   perPage: any = 5;
@@ -46,6 +256,9 @@ export class FailedPaymentsComponent implements OnInit {
   Remarks: any;
   dataSource: any;
   ServerUrl: any;
+  
+  // Payment proof status tracking
+  paymentProofStatus: { [bookingId: string]: { hasProof: boolean; proofFile?: string; isApproved?: string } } = {};
 
   constructor(
     private CIFwebService: LpuCIFWebService,
@@ -53,7 +266,8 @@ export class FailedPaymentsComponent implements OnInit {
     private modalService: NgbModal,
     private AuthSession: LoginSessionService,
     private route: ActivatedRoute,
-    private cookieService: CookieService) { }
+    private cookieService: CookieService,
+    private formBuilder: FormBuilder) { }
   user_Email: any;
   sessionData: any[] = [];
   getSessionDetails() {
@@ -63,6 +277,7 @@ export class FailedPaymentsComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    this.initializeForm();
     this.route.queryParamMap.subscribe((params) => {
       const queryParamLength = params.keys.length;
       if (queryParamLength > 0) {
@@ -96,7 +311,7 @@ export class FailedPaymentsComponent implements OnInit {
     this.getBookingDetails()
   }
 
-  searchQuery: string = ''; // Property to store the search query
+  // searchQuery: string = ''; // Property to store the search query
 
   search() {
     const query = this.searchQuery.toLowerCase();
@@ -133,7 +348,10 @@ const startTime = new Date().getTime();
           {this.headHtmlData = this.tmpsBookingStatusData[0];
           this.columns = Object.keys(this.tmpsBookingStatusData[0]);
           this.columns = this.columns.filter((item: any) => item !== 'ResultFile' && item !== 'userId' && item !== 'id' && item !== 'analysisId');
-          this.columns.push()
+          this.columns.push();
+          
+          // Fetch payment proof details for each booking
+          this.fetchPaymentProofDetailsForBookings();
           }
         }
         else {
@@ -151,6 +369,50 @@ setTimeout(() => {
         console.log(err)
       }
     });
+  }
+
+  // Fetch payment proof details for all bookings
+  private fetchPaymentProofDetailsForBookings(): void {
+    // Get unique booking IDs
+    const bookingIds = this.tmpsBookingStatusData.map((item: any) => item.bookingId).filter((id: any) => id);
+    
+    if (bookingIds.length === 0) return;
+    
+    // Fetch proof details for each booking
+    bookingIds.forEach((bookingId: string) => {
+      this.CIFwebService.GetBookingPaymentProofDetails(bookingId).subscribe({
+        next: (response: any) => {
+          if (response && response.item1 && response.item1.length > 0) {
+            const proofData = response.item1[0];
+            this.paymentProofStatus[bookingId] = {
+              hasProof: true,
+              proofFile: proofData.receiptProofFile || proofData.proofFile || null,
+              isApproved: proofData.isProofApproved || proofData.isApproved || null
+            };
+          } else {
+            this.paymentProofStatus[bookingId] = {
+              hasProof: false
+            };
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching payment proof for booking:', bookingId, error);
+          this.paymentProofStatus[bookingId] = {
+            hasProof: false
+          };
+        }
+      });
+    });
+  }
+
+  // Check if proof is already uploaded for a booking
+  hasProofUploaded(bookingId: string): boolean {
+    return this.paymentProofStatus[bookingId]?.hasProof === true;
+  }
+
+  // Get proof status for a booking
+  getProofStatus(bookingId: string): { hasProof: boolean; proofFile?: string; isApproved?: string } | undefined {
+    return this.paymentProofStatus[bookingId];
   }
 
   getTotalPages() {
@@ -273,8 +535,11 @@ setTimeout(() => {
   }
   
   @ViewChild('viewDescModal5') viewDescModal5: TemplateRef<any>;
-  TypeId: any = 'CIF'; id: any; status: any; type: any; transactionNo: any; hashedValue: any; course: any; keyNote: any;
-  MobileNo: any;  supervisorName: any;  departmentName: any;  candidateName: any;  paymentData: any;  ResponseUrl: any;
+  // TypeId: any = 'CIF'; 
+  id: any; status: any; type: any; transactionNo: any; hashedValue: any; course: any; keyNote: any;
+  MobileNo: any; 
+  //  supervisorName: any;    departmentName: any;  candidateName: any;  
+  paymentData: any;  ResponseUrl: any;
 
 
 
@@ -326,12 +591,11 @@ setTimeout(() => {
 
   openPaymentModal(a: any) {
     this.BookingCase = a;
-    this.modalService.open(this.viewDescModal5, { size: 'sm' }).result.then(
+    this.modalService.open(this.viewDescModal5, { size: 'lg', centered: true }).result.then(
       (result: string) => {
-        console.log("Modal closed" + result);
+        console.log('Modal closed: ' + result);
       }
     ).catch(() => { });
-
   }
 
   VerifyData(BookingCase: any) {

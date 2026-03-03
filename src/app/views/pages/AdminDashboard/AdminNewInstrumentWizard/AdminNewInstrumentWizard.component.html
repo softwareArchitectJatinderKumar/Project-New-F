@@ -1,0 +1,468 @@
+<app-AdminDashboard></app-AdminDashboard>
+<div class="wizard-container">
+  <div class="wizard-header">
+    <h2><i class="feather icon-plus-circle"></i> New Instrument Wizard</h2>
+    <p class="text-muted">Create a new instrument with category, analyses, and pricing</p>
+  </div>
+
+  <!-- Wizard Stepper -->
+  <div class="wizard-stepper">
+    <div class="step-item" [ngClass]="getStepClass(1)">
+      <div class="step-circle">
+        <span *ngIf="currentStep <= 1">1</span>
+        <i *ngIf="currentStep > 1" class="feather icon-check"></i>
+      </div>
+      <div class="step-label">Category</div>
+    </div>
+    <div class="step-connector" [class.active]="currentStep > 1"></div>
+    <div class="step-item" [ngClass]="getStepClass(2)">
+      <div class="step-circle">
+        <span *ngIf="currentStep <= 2">2</span>
+        <i *ngIf="currentStep > 2" class="feather icon-check"></i>
+      </div>
+      <div class="step-label">Instrument</div>
+    </div>
+    <div class="step-connector" [class.active]="currentStep > 2"></div>
+    <div class="step-item" [ngClass]="getStepClass(3)">
+      <div class="step-circle">
+        <span *ngIf="currentStep <= 3">3</span>
+        <i *ngIf="currentStep > 3" class="feather icon-check"></i>
+      </div>
+      <div class="step-label">Analysis</div>
+    </div>
+    <div class="step-connector" [class.active]="currentStep > 3"></div>
+    <div class="step-item" [ngClass]="getStepClass(4)">
+      <div class="step-circle">
+        <span *ngIf="currentStep <= 4">4</span>
+        <i *ngIf="currentStep > 4" class="feather icon-check"></i>
+      </div>
+      <div class="step-label">Price</div>
+    </div>
+    <div class="step-connector" [class.active]="currentStep > 4"></div>
+    <div class="step-item" [ngClass]="getStepClass(5)">
+      <div class="step-circle">
+        <span>5</span>
+      </div>
+      <div class="step-label">Review</div>
+    </div>
+  </div>
+
+  <!-- Wizard Content -->
+  <div class="wizard-content">
+    
+    <!-- Step 1: Category -->
+    <div class="step-panel" *ngIf="currentStep === 1">
+      <div class="step-header">
+        <h4><i class="feather icon-folder"></i> Step 1: Create Category</h4>
+        <p>Define the category for your instrument</p>
+      </div>
+      
+      <form [formGroup]="categoryForm" class="wizard-form">
+        <div class="form-group">
+          <label for="categoryName">Category Name <span class="text-danger">*</span></label>
+          <input 
+            type="text" 
+            id="categoryName" 
+            class="form-control" 
+            formControlName="categoryName"
+            [ngClass]="{'is-invalid': categorySubmitted && categoryControls.categoryName.errors}"
+            placeholder="Enter category name"
+            maxlength="1500"
+          >
+          <div *ngIf="categorySubmitted && categoryControls.categoryName.errors" class="invalid-feedback">
+            <div *ngIf="categoryControls.categoryName.errors.required">Category name is required</div>
+            <div *ngIf="categoryControls.categoryName.errors.minlength">Category name must be at least 2 characters</div>
+            <div *ngIf="categoryControls.categoryName.errors.maxlength">Category name cannot exceed 1500 characters</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="categoryDescription">Description</label>
+          <textarea 
+            id="categoryDescription" 
+            class="form-control" 
+            formControlName="categoryDescription"
+            rows="3"
+            placeholder="Enter category description (optional)"
+            maxlength="2000"
+          ></textarea>
+          <small class="text-muted">Optional - Maximum 2000 characters</small>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 2: Instrument with Image and Sample Excel -->
+    <div class="step-panel" *ngIf="currentStep === 2">
+      <div class="step-header">
+        <h4><i class="feather icon-cpu"></i> Step 2: Create Instrument</h4>
+        <p>Add instrument details to the category: <strong>{{ categoryForm.get('categoryName')?.value }}</strong></p>
+      </div>
+      
+      <form [formGroup]="instrumentForm" class="wizard-form">
+        <div class="form-group">
+          <label for="instrumentName">Instrument Name <span class="text-danger">*</span></label>
+          <input 
+            type="text" 
+            id="instrumentName" 
+            class="form-control" 
+            formControlName="instrumentName"
+            [ngClass]="{'is-invalid': instrumentSubmitted && instrumentControls.instrumentName.errors}"
+            placeholder="Enter instrument name"
+            maxlength="1500"
+          >
+          <div *ngIf="instrumentSubmitted && instrumentControls.instrumentName.errors" class="invalid-feedback">
+            <div *ngIf="instrumentControls.instrumentName.errors.required">Instrument name is required</div>
+            <div *ngIf="instrumentControls.instrumentName.errors.minlength">Instrument name must be at least 2 characters</div>
+            <div *ngIf="instrumentControls.instrumentName.errors.maxlength">Instrument name cannot exceed 1500 characters</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="instrumentDescription">Description</label>
+          <textarea 
+            id="instrumentDescription" 
+            class="form-control" 
+            formControlName="instrumentDescription"
+            rows="3"
+            placeholder="Enter instrument description (optional)"
+            maxlength="2000"
+          ></textarea>
+        </div>
+        
+        <!-- Instrument Image Upload (Required) -->
+        <div class="form-group">
+          <label for="instrumentImage">Instrument Image <span class="text-danger">*</span></label>
+          <div class="file-upload-container">
+            <div class="custom-file">
+              <input 
+                type="file" 
+                id="instrumentImage" 
+                class="custom-file-input"
+                accept="image/*"
+                (change)="onInstrumentImageSelected($event)"
+              >
+              <label class="custom-file-label" for="instrumentImage">
+                {{ instrumentImageFileName ? instrumentImageFileName : 'Choose image file' }}
+              </label>
+            </div>
+            <small class="text-muted">Accepted formats: JPEG, PNG, GIF (Max 10MB)</small>
+          </div>
+          <div class="upload-preview" *ngIf="instrumentImageUploaded">
+            <div class="upload-success">
+              <i class="feather icon-check-circle"></i> Image uploaded: {{ instrumentImageFileName }}
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sample Excel Sheet Upload (Required) -->
+        <div class="form-group">
+          <label for="sampleExcel">Sample Excel Sheet <span class="text-danger">*</span></label>
+          <div class="file-upload-container">
+            <div class="custom-file">
+              <input 
+                type="file" 
+                id="sampleExcel" 
+                class="custom-file-input"
+                accept=".xlsx,.xls"
+                (change)="onSampleExcelSelected($event)"
+              >
+              <label class="custom-file-label" for="sampleExcel">
+                {{ sampleExcelFileName ? sampleExcelFileName : 'Choose Excel file' }}
+              </label>
+            </div>
+            <small class="text-muted">Accepted formats: Excel (.xlsx, .xls) - Max 1MB</small>
+          </div>
+          <div class="upload-preview" *ngIf="excelFileUploaded">
+            <div class="upload-success">
+              <i class="feather icon-check-circle"></i> Excel uploaded: {{ sampleExcelFileName }}
+            </div>
+            <div class="excel-data-preview" *ngIf="sampleExcelData.length > 0">
+              <small class="text-muted">{{ sampleExcelData.length - 1 }} row(s) of data detected</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="responsibleUids">Responsible User IDs</label>
+              <input 
+                type="text" 
+                id="responsibleUids" 
+                class="form-control" 
+                formControlName="responsibleUids"
+                placeholder="Enter responsible user IDs"
+                maxlength="50"
+              >
+              <small class="text-muted">Comma-separated if multiple</small>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Step 3: Add Analysis Types -->
+    <div class="step-panel" *ngIf="currentStep === 3">
+      <div class="step-header">
+        <h4><i class="feather icon-activity"></i> Step 3: Add Analysis Types</h4>
+        <p>Add analysis types for: <strong>{{ instrumentForm.get('instrumentName')?.value }}</strong></p>
+      </div>
+      
+      <form [formGroup]="analysisForm" class="wizard-form">
+        <div class="form-group">
+          <label for="analysisType">Analysis Type <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <input 
+              type="text" 
+              id="analysisType" 
+              class="form-control" 
+              formControlName="analysisType"
+              [ngClass]="{'is-invalid': analysisSubmitted && analysisControls.analysisType.errors}"
+              placeholder="Enter analysis type"
+              maxlength="1500"
+              (keyup.enter)="addAnalysis()"
+            >
+            <div class="input-group-append">
+              <button type="button" class="btn btn-primary" (click)="addAnalysis()">
+                <i class="feather icon-plus"></i> Add
+              </button>
+            </div>
+          </div>
+          <div *ngIf="analysisSubmitted && analysisControls.analysisType.errors" class="invalid-feedback d-block">
+            <div *ngIf="analysisControls.analysisType.errors.required">Analysis type is required</div>
+            <div *ngIf="analysisControls.analysisType.errors.minlength">Analysis type must be at least 2 characters</div>
+          </div>
+          <small class="text-muted">Press Enter or click Add to add analysis type</small>
+        </div>
+      </form>
+      
+      <!-- Analysis List -->
+      <div class="analysis-list" *ngIf="analyses.length > 0">
+        <h5>Added Analysis Types ({{ analyses.length }})</h5>
+        <div class="analysis-items">
+          <div class="analysis-item" *ngFor="let analysis of analyses; let i = index">
+            <div class="analysis-info">
+              <span class="analysis-name">
+                <i class="feather icon-activity"></i> {{ analysis.name }}
+              </span>
+            </div>
+            <div class="analysis-actions">
+              <button type="button" class="btn btn-sm btn-danger" (click)="removeAnalysis(i)">
+                <i class="feather icon-trash-2"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="no-analysis" *ngIf="analyses.length === 0">
+        <p class="text-muted">No analysis types added yet. Please add at least one analysis type.</p>
+      </div>
+    </div>
+
+    <!-- Step 4: Price -->
+    <div class="step-panel" *ngIf="currentStep === 4">
+      <div class="step-header">
+        <h4><i class="feather icon-dollar-sign"></i> Step 4: Create Price</h4>
+        <p>Set prices for each analysis and user type combination</p>
+      </div>
+      
+      <div class="price-section">
+        <div class="price-analysis-group" *ngFor="let analysis of analyses">
+          <div class="analysis-price-header">
+            <h5><i class="feather icon-activity"></i> {{ analysis.name }}</h5>
+          </div>
+          <div class="price-combinations">
+            <div class="price-row" *ngFor="let userType of userTypes">
+              <div class="price-label">
+                <strong>{{ getUserTypeName(userType.id) }}</strong>
+              </div>
+              <div class="price-input">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">₹</span>
+                  </div>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    [value]="getPriceValue(analysis.name, userType.id)"
+                    (input)="updatePrice(analysis.name, userType.id, $any($event.target).value)"
+                    placeholder="Enter price"
+                    min="0"
+                    step="0.01"
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="price-summary" *ngIf="analyses.length > 0">
+        <p class="text-muted">
+          Total price combinations: <strong>{{ analyses.length }} analyses × {{ userTypes.length }} user types = {{ analyses.length * userTypes.length }} prices</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- Step 5: Review -->
+    <div class="step-panel" *ngIf="currentStep === 5">
+      <div class="step-header">
+        <h4><i class="feather icon-file-text"></i> Step 5: Review & Create</h4>
+        <p>Review all information before creating the instrument</p>
+      </div>
+      
+      <div class="review-section">
+        <!-- Category Review -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <h5><i class="feather icon-folder"></i> Category</h5>
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="currentStep = 1">
+              <i class="feather icon-edit-2"></i> Edit
+            </button>
+          </div>
+          <div class="review-card-body">
+            <div class="review-item">
+              <strong>Category Name:</strong> {{ categoryForm.get('categoryName')?.value }}
+            </div>
+            <div class="review-item" *ngIf="categoryForm.get('categoryDescription')?.value">
+              <strong>Description:</strong> {{ categoryForm.get('categoryDescription')?.value }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Instrument Review -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <h5><i class="feather icon-cpu"></i> Instrument</h5>
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="currentStep = 2">
+              <i class="feather icon-edit-2"></i> Edit
+            </button>
+          </div>
+          <div class="review-card-body">
+            <div class="review-item">
+              <strong>Instrument Name:</strong> {{ instrumentForm.get('instrumentName')?.value }}
+            </div>
+            <div class="review-item" *ngIf="instrumentForm.get('instrumentDescription')?.value">
+              <strong>Description:</strong> {{ instrumentForm.get('instrumentDescription')?.value }}
+            </div>
+            <div class="review-item">
+              <strong>Instrument Image:</strong> 
+              <span class="text-success"><i class="feather icon-check-circle"></i> {{ instrumentImageFileName }}</span>
+            </div>
+            <div class="review-item">
+              <strong>Sample Excel Sheet:</strong> 
+              <span class="text-success"><i class="feather icon-check-circle"></i> {{ sampleExcelFileName }}</span>
+            </div>
+            <div class="review-item" *ngIf="instrumentForm.get('responsibleUids')?.value">
+              <strong>Responsible UIDs:</strong> {{ instrumentForm.get('responsibleUids')?.value }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Analysis Review -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <h5><i class="feather icon-activity"></i> Analyses ({{ analyses.length }})</h5>
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="currentStep = 3">
+              <i class="feather icon-edit-2"></i> Edit
+            </button>
+          </div>
+          <div class="review-card-body">
+            <div class="review-item" *ngFor="let analysis of analyses">
+              <strong>Analysis:</strong> {{ analysis.name }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Price Review -->
+        <div class="review-card">
+          <div class="review-card-header">
+            <h5><i class="feather icon-dollar-sign"></i> Prices ({{ prices.length }} combinations)</h5>
+            <button type="button" class="btn btn-sm btn-outline-primary" (click)="currentStep = 4">
+              <i class="feather icon-edit-2"></i> Edit
+            </button>
+          </div>
+          <div class="review-card-body">
+            <div class="review-item" *ngFor="let price of prices">
+              <strong>{{ getUserTypeName(price.userTypeId) }} + {{ price.analysisName }}:</strong> ₹{{ price.price }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Wizard Footer -->
+  <div class="wizard-footer">
+    <div class="btn-group">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="cancel()"
+        [disabled]="isSubmitting"
+      >
+        <i class="feather icon-x"></i> Cancel
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn btn-outline-primary" 
+        (click)="previousStep()"
+        [disabled]="currentStep === 1 || isSubmitting"
+        *ngIf="currentStep > 1 && currentStep < 5"
+      >
+        <i class="feather icon-arrow-left"></i> Previous
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn btn-primary" 
+        (click)="nextStep()"
+        [disabled]="isSubmitting"
+        *ngIf="currentStep < 5"
+      >
+        <span *ngIf="isSubmitting">
+          <i class="feather icon-loader icon-spin"></i> Processing...
+        </span>
+        <span *ngIf="!isSubmitting">
+          Next <i class="feather icon-arrow-right"></i>
+        </span>
+      </button>
+      
+      <!-- Create Button for Review Step -->
+      <button 
+        type="button" 
+        class="btn btn-success" 
+        (click)="createAll()"
+        [disabled]="isSubmitting"
+        *ngIf="currentStep === 5"
+      >
+        <span *ngIf="isSubmitting">
+          <i class="feather icon-loader icon-spin"></i> Creating...
+        </span>
+        <span *ngIf="!isSubmitting">
+          <i class="feather icon-check"></i> Create All
+        </span>
+      </button>
+    </div>
+    
+    <button 
+      type="button" 
+      class="btn btn-outline-info" 
+      (click)="resetWizard()"
+      [disabled]="isSubmitting"
+      *ngIf="currentStep > 1"
+    >
+      <i class="feather icon-refresh-cw"></i> Reset
+    </button>
+  </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" *ngIf="isSubmitting">
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

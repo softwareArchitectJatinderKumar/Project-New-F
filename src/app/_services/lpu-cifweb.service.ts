@@ -926,7 +926,7 @@ export class LpuCIFWebService {
   }
 
   GetBookingPaymentProofDetails(BookingId:any): Observable<any> {
-  let token = this.storageService.getUser();
+    let token = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
@@ -936,5 +936,25 @@ export class LpuCIFWebService {
       .pipe(catchError(this.handleError('GetBookingPaymentProofDetails', null)));
   }
 
-   
+  // Method to call the stored procedure for new instrument details with analysis
+  callStoredProcedure(payload: any): Observable<any> {
+    const formData = new FormData();
+    
+    // Append all payload properties to formData
+    Object.keys(payload).forEach(key => {
+      if (payload[key] !== null && payload[key] !== undefined) {
+        formData.append(key, payload[key]);
+      }
+    });
+    
+    let headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + this.authToken);
+      // Don't set Content-Type for FormData - browser will set it with boundary
+    
+    return this.http.post(
+      AUTH_API + 'api/LpuCIF/CIFNewInstrumentDetails', formData, { headers })
+      .pipe(catchError(this.handleError('callStoredProcedure', { NewId: null })));
+  }
+
+
 }

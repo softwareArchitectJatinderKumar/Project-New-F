@@ -72,14 +72,6 @@ export class AdminActionInstrumentsComponent implements OnInit {
 
   // logic ended 
 
-
-
-  file: any; // The actual file object
-  uploadedDataRaw: any[] = []; // Raw data from Excel, used for sending to backend
-  uploadedDataForDisplay: any[] = []; // Formatted data for UI display
-  validationErrors: string[] = [];
-  errorCells: { rowIndex: number, cellIndex: number }[] = [];
-
   OpenReplaceModal(a: any) {
     this.BookingCase = a;
     // console.log(JSON.stringify(a))
@@ -92,6 +84,14 @@ export class AdminActionInstrumentsComponent implements OnInit {
   }
 
 
+  file: any; // The actual file object
+  uploadedDataRaw: any[] = []; // Raw data from Excel, used for sending to backend
+  uploadedDataForDisplay: any[] = []; // Formatted data for UI display
+  validationErrors: string[] = [];
+  errorCells: { rowIndex: number, cellIndex: number }[] = [];
+
+
+
   // Excel Upload Logic
   onFileChange(event: any): void {
     if (event.target.files.length > 0) {
@@ -101,7 +101,13 @@ export class AdminActionInstrumentsComponent implements OnInit {
       }
     }
   }
-
+  confirmUpload() {
+    if (this.hasErrors()) {
+      Swal.fire('Validation Error', 'Please correct the errors in the uploaded data before confirming.', 'error');
+      return;
+    }
+    // this.VerifyData();
+  }
   readExcelFile(file: any) {
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -148,13 +154,7 @@ export class AdminActionInstrumentsComponent implements OnInit {
     return this.errorCells.some(errorCell => errorCell.rowIndex === rowIndex && errorCell.cellIndex === cellIndex);
   }
 
-  confirmUpload() {
-    if (this.hasErrors()) {
-      Swal.fire('Validation Error', 'Please correct the errors in the uploaded data before confirming.', 'error');
-      return;
-    }
-    // this.VerifyData();
-  }
+
 UploadNewExcelSampleSheet:any;
   
 
