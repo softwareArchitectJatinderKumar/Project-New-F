@@ -2,23 +2,24 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SearchPaymentsComponent } from './search-payments.component';
+import { AUploadProofStatusComponent } from './AUploadProofStatus.component';
 import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { CifMenuBarModule } from '../cif-menu-bar/cif-menu-bar.module';
-import { SharedDataTableModule } from '../shared-data-table/shared-data-table.module';
+import { AdminDashboardModule } from '../AdminDashboard/AdminDashboard.module';
+// import { CifMenuBarModule } from '../cif-menu-bar/cif-menu-bar.module'; // Import the menu bar module
+
 
 const routes: Routes = [
   {
     path: '',
-    component: SearchPaymentsComponent  
+    component: AUploadProofStatusComponent // Route to the new bookings component
   }
 ];
 
 @NgModule({
   declarations: [
-    SearchPaymentsComponent  
+    AUploadProofStatusComponent // Declare the new bookings component
   ],
   imports: [
     CommonModule,
@@ -29,8 +30,7 @@ const routes: Routes = [
     NgbModule,
     PerfectScrollbarModule,
     NgSelectModule,
-    CifMenuBarModule, // Include the menu bar module
-    SharedDataTableModule // Include the shared data table module
+    AdminDashboardModule // Include the menu bar module
   ]
 })
-export class SearchPaymentsModule {}
+export class AUploadProofStatusModule {}

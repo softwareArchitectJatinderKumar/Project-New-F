@@ -6,7 +6,8 @@ import { SearchPaymentsPendingComponent } from './search-payments-pending.compon
 import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { CifMenuBarModule } from '../cif-menu-bar/cif-menu-bar.module'; 
+import { CifMenuBarModule } from '../cif-menu-bar/cif-menu-bar.module';
+import { SharedDataTableModule } from '../shared-data-table/shared-data-table.module';
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
     NgbModule,
     PerfectScrollbarModule,
     NgSelectModule,
-    CifMenuBarModule // Include the menu bar module
+    CifMenuBarModule, // Include the menu bar module
+    SharedDataTableModule // Include the shared data table module
   ]
 })
 export class SearchPaymentsPendingModule {}

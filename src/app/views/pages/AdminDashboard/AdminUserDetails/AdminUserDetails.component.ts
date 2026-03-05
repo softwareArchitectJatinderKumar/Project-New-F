@@ -46,17 +46,17 @@ export class AdminUserDetailsComponent implements OnInit {
     'totalCharges', 'remarks', 'bookingRequestDate', //'bookingrequestDate'
   ];
   BookingCase: any;
-  UserDetailsData: any[]=[];
+  UserDetailsData: any[] = [];
   currentPage = 1;
   itemsPerPage = 10; // 
-  tmpsUserDetailsData: any[]=[];
+  tmpsUserDetailsData: any[] = [];
   InstrumentId: any;
   UserRole: any;
   UserId: any;
   uploadEnabled: boolean;
   Remarks: any;
   candidateName: any;
-  
+
   constructor(
     private CIFwebService: LpuCIFWebService,
     private storageService: StorageService,
@@ -104,13 +104,13 @@ export class AdminUserDetailsComponent implements OnInit {
       return Object.values(item).some(val => {
         // Convert val to string and check if it matches the query
         const valString = String(val).toLowerCase();
-  
+
         // Check if the val is a userRole and map it to the corresponding page name
         let mappedRole = '';
         if (item.userRole) {
           // Ensure userRole is an array, if it's not, convert it to an array
           const rolesArray = Array.isArray(item.userRole) ? item.userRole : [item.userRole];
-  
+
           // Map the roles to their corresponding page names
           mappedRole = rolesArray.map((userRole: string) => {
             switch (userRole.trim()) {
@@ -125,26 +125,26 @@ export class AdminUserDetailsComponent implements OnInit {
             }
           }).join(' ').toLowerCase();
         }
-  
+
         // Check if the query matches either the regular field value or the mapped role
         return valString.includes(query) || mappedRole.includes(query);
       });
     });
   }
-  
-  
+
+
 
   get filteredUserDetailsData(): any[] {
     // If search query is empty, return all data
     if (!this.searchQuery.trim()) {
       return this.UserDetailsData;
-    }    
+    }
     const searchTerm = this.searchQuery.toLowerCase();
     return this.UserDetailsData.filter((booking: { instrumentName: string; analysisType: string; }) =>
-      booking.instrumentName.toLowerCase().includes(searchTerm) ||     booking.analysisType.toLowerCase().includes(searchTerm)       
+      booking.instrumentName.toLowerCase().includes(searchTerm) || booking.analysisType.toLowerCase().includes(searchTerm)
     );
   }
- showLoader = true;
+  showLoader = true;
   getBookingDetails() {
     this.showLoader = true;
     const startTime = new Date().getTime();
@@ -159,7 +159,7 @@ export class AdminUserDetailsComponent implements OnInit {
           this.columns = Object.keys(this.tmpsUserDetailsData[0]);
           this.columns = this.columns.filter((item: any) => item !== 'candidateName' && item !== 'userEmail' && item !== 'id' && item !== 'analysisId');
           this.columns.push()
-          this.loadingIndicator = false;          
+          this.loadingIndicator = false;
         }
         else {
           this.UserDetailsData = [];
@@ -176,7 +176,7 @@ export class AdminUserDetailsComponent implements OnInit {
       }
     });
   }
-    getTotalRecords(): number {
+  getTotalRecords(): number {
     return this.tmpsUserDetailsData ? this.tmpsUserDetailsData.length : 0;
   }
   getTotalPages() {
@@ -200,7 +200,7 @@ export class AdminUserDetailsComponent implements OnInit {
       this.currentPage--;
     }
   }
-  
+
   exportToExcel(): void {
     const fileName = 'User_Details_report.xlsx';
     const exportedData = this.UserDetailsData.map(item => ({
@@ -210,15 +210,15 @@ export class AdminUserDetailsComponent implements OnInit {
       Department: item.departmentName,
       SchoolName: item.organisation,
       SupervisorName: item.supervisorName,
-      Designation: item.designation != null? item.designation:'NA',
-      Role: item.userRole != null 
-      ? item.userRole === '400000' 
-        ? 'Internal User' 
-        : item.userRole === '400001' 
-          ? 'External Acadmeia' 
-          : 'Industry User'
-      : 'N-A',
-       
+      Designation: item.designation != null ? item.designation : 'NA',
+      Role: item.userRole != null
+        ? item.userRole === '400000'
+          ? 'Internal User'
+          : item.userRole === '400001'
+            ? 'External Acadmeia'
+            : 'Industry User'
+        : 'N-A',
+
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportedData);
@@ -261,37 +261,37 @@ export class AdminUserDetailsComponent implements OnInit {
     formData.append('FilePath', this.fileName);
     formData.append('File', this.FileData);
     this.CIFwebService.CIFResultsUploads(formData).subscribe({
-        next: (data: any) => {
-            const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
-            const returnId = data.item1[0]['ReturnId'];
+      next: (data: any) => {
+        const result = data.item1[0]['msg']; // Adjusted to match your stored procedure
+        const returnId = data.item1[0]['ReturnId'];
 
-            if (result === 'Success' && returnId !== '0') {
-                Swal.fire({
-                    title: 'Uploaded Successfully!',
-                    icon: 'success'
-                }).then(() => {
-                    window.location.reload();
-                });
-            } else {
-                Swal.fire({
-                    title: 'Already Uploaded Results for this Test',
-                    icon: 'error'
-                }).then(() => {
-                    window.location.reload();
-                });
-            }
-        },
-        error: (error: any) => {
-            Swal.fire({
-                title: 'Error',
-                text: 'Failed to Upload.',
-                icon: 'error'
-            });
+        if (result === 'Success' && returnId !== '0') {
+          Swal.fire({
+            title: 'Uploaded Successfully!',
+            icon: 'success'
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: 'Already Uploaded Results for this Test',
+            icon: 'error'
+          }).then(() => {
+            window.location.reload();
+          });
         }
+      },
+      error: (error: any) => {
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to Upload.',
+          icon: 'error'
+        });
+      }
     });
-}
+  }
 
-  
+
   onFileSelected(event: any): void {
     const reader = new FileReader();
     const target = event.target as HTMLInputElement;
@@ -340,7 +340,7 @@ export class AdminUserDetailsComponent implements OnInit {
         this.FileData = ssssArray[1];
         this.fileName = file.name;
 
-       
+
       };
     }
   }
@@ -348,18 +348,18 @@ export class AdminUserDetailsComponent implements OnInit {
   UploadDocument() {
 
     const formData = new FormData();
-    
+
   }
 
 
 
-  
+
 
   OpenModalWindow(a: any) {
     // this.BookingCase = a;
     let emailId = a['emailId'];
     const formData = new FormData();
-    formData.append('emailId', emailId);    
+    formData.append('emailId', emailId);
     swal.fire({
       title: 'Are you sure you want to Change State of Device ?',
       // text: 'Kindly confirm if the document is valid!',
@@ -409,17 +409,17 @@ export class AdminUserDetailsComponent implements OnInit {
   filterData(): void {
     if (this.selectedStatus === '') {
       this.tmpsUserDetailsData = [...this.UserDetailsData]; // Show all data
-    }    else {
+    } else {
       this.tmpsUserDetailsData = this.UserDetailsData.filter(item => item.userRole === this.selectedStatus);
     }
     this.currentPage = 1; // Reset to first page after filtering
   }
 
   statusOptions = [
-    { label: 'All', value: '' }, 
+    { label: 'All', value: '' },
     { label: 'Internal User', value: '400000' },
     { label: 'External User', value: '400001' },
     { label: 'Industry User', value: '400002' },
-    
+
   ];
 }

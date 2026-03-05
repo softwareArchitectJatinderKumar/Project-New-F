@@ -18,6 +18,12 @@
         <div class="col-12 stretch-card">
             <div class="card-body">
                 <hr />
+                <div class="row d-flex justify-content-center align-items-center mb-4">
+                        <div class="col-12 mb-2 mb-md-0">
+                            <h4 class="fs-3 mb-0 text-start ">Paid Payment Page</h4>
+                        </div>
+                    </div>
+                    <hr/>
                 <div class="row mt-2 d-flex justify-content-center">
                     <div class="col-sm-2 text-start">
                         <div class="mb-3">
@@ -27,7 +33,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                         <div class="mb-1 text-start">
-                            <h3>Paid Payment Screen</h3>
+                            <h3 class="text-primary">Paid Payment Records</h3>
                         </div>
                     </div>
                     <div class="col-sm-3 text-start">
@@ -36,7 +42,7 @@
                     </div>
                 </div>
 
-                <hr />
+                 
                 <ng-container *ngIf="tmpsBookingStatusData.length > 0; else noRecords">
                     <div class="table-responsive mt-4 mb-4">
                         <table id="BookinglDataTable" #table>
@@ -100,7 +106,18 @@
         </div>
     </div>
     <ng-template #NoData>
-        <div class="text-center  p-2 mb-4 vh-100">
+            <div class="card card-warning text-center  p-2 mb-4 ">
+                <hr />
+                <div class="row  mb-4  ">
+                    <h3 class="text-center text-primary fs-2  mb-4 pb-4"> All Paid Payments Page </h3>
+                    <hr />
+                    <div class="  text-center py-5 BottomSpace">
+                        <p class="fs-4 text-danger ">No Details Found.</p>
+                    </div>
+            
+                </div>
+            </div>
+        <!-- <div class="text-center  p-2 mb-4 vh-100">
             <div class="row mt-4 mb-4 rounded border border-primary">
                 <h3 class="text-center fs-2 pt-5 "> All Payments Records   ! </h3>
                 <div class="col-sm-12 text-center">
@@ -109,7 +126,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </ng-template>
 </div>
 

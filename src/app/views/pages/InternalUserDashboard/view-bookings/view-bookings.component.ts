@@ -44,7 +44,7 @@ export class ViewBookingsComponent implements OnInit {
   loadingIndicator = false;
   headHtmlData: any[] = [];
   p: any = 1;
-  perPage: any = 5;
+  perPage: any = 2;
   @ViewChild('table') table: ElementRef;
   displayedColumns: string[] = [
     'instrumentName',
@@ -58,7 +58,10 @@ export class ViewBookingsComponent implements OnInit {
   BookingCase: any;
   BookingData: any[] = [];
 
-  currentPage = 1; itemsPerPage = 5; tmpsBookingData: any[] = []; paymentresult: PaymentRequest[] = []; paymentData: any;
+  // Pagination - Items per page options
+  itemsPerPageOptions: number[] = [ 5, 10, 15, 20, 25];
+  
+  currentPage = 1; itemsPerPage = 2; tmpsBookingData: any[] = []; paymentresult: PaymentRequest[] = []; paymentData: any;
   InstrumentId: any; UserRole: any; UserId: any; MobileNo: any; departmentName: any; candidateName: any; supervisorName: any; serverUrl: any;
   ResponseUrl: any;
 
@@ -243,6 +246,12 @@ export class ViewBookingsComponent implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
+  }
+
+  onItemsPerPageChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.itemsPerPage = Number(select.value);
+    this.currentPage = 1; // Reset to first page when items per page changes
   }
   exportToExcel(): void {
     const fileName = 'Booking_Details_report.xlsx';

@@ -245,7 +245,8 @@ export class FailedPaymentsComponent implements OnInit {
   BookingStatusData: any[] = [];
   ResultData: any[] = [];
   currentPage = 1;
-  itemsPerPage = 5; //
+  itemsPerPage = 5;
+  itemsPerPageOptions: number[] = [5, 10, 15, 20, 25];
   tmpsBookingStatusData: any[] = [];
   tmpsResultData: any[] = [];
   PaymentReceipt: any;
@@ -435,6 +436,10 @@ setTimeout(() => {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
+  }
+
+  onItemsPerPageChange() {
+    this.currentPage = 1;
   }
   exportToExcel(): void {
     const fileName = 'Booking_Details_report.xlsx';

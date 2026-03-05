@@ -8,7 +8,7 @@
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-           <!-- <p>Loading...</p>-->
+            <!-- <p>Loading...</p>-->
         </div>
     </div>
 </div>
@@ -32,8 +32,8 @@
                         </div>
                     </div>
                     <div class="col-sm-3 text-start">
-                        <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control" style="width: 14rem;"
-                            placeholder="Search" aria-label="Search" />
+                        <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control"
+                            style="width: 14rem;" placeholder="Search" aria-label="Search" />
                     </div>
                 </div>
 
@@ -44,7 +44,7 @@
                 <hr />
                 <ng-container *ngIf="tmpsBookingStatusData.length > 0; else noRecords">
                     <div class="table-responsive mt-4 mb-4">
-                        <table id="BookinglDataTable" #table >
+                        <table id="BookinglDataTable" #table>
                             <thead>
                                 <tr>
                                     <th class="form-label d-none d-sm-table-cell">Booking Id</th>
@@ -59,21 +59,25 @@
                             <tbody>
                                 <ng-container *ngFor="let BookingStatusDataRow of getCurrentPageData(); let i = index">
                                     <tr>
-                                        <td class="fw-bold d-none d-sm-table-cell"> {{BookingStatusDataRow.bookingId}}</td>
-                                        <td class="fw-bold d-none d-md-table-cell"> {{BookingStatusDataRow.instrumentName}}</td>
+                                        <td class="fw-bold d-none d-sm-table-cell"> {{BookingStatusDataRow.bookingId}}
+                                        </td>
+                                        <td class="fw-bold d-none d-md-table-cell">
+                                            {{BookingStatusDataRow.instrumentName}}</td>
                                         <!-- <td class="fw-bold text-danger "> {{ BookingStatusDataRow.assignedTo.split('
                                             ').slice(0, -1).join('
                                             ').length >0 ? BookingStatusDataRow.assignedTo.split('
                                             ').slice(0, -1).join('
                                             ') :'N/A' }}</td> -->
                                         <td class="fw-bold text-danger ">{{BookingStatusDataRow.assignedOn }} </td>
-                                        <td class="fw-bold d-none d-md-table-cell"> {{BookingStatusDataRow.noOfSamples}}</td>
-                                        <td class="fw-bold d-none d-md-table-cell">{{ BookingStatusDataRow.bookingRequestDate |
+                                        <td class="fw-bold d-none d-md-table-cell"> {{BookingStatusDataRow.noOfSamples}}
+                                        </td>
+                                        <td class="fw-bold d-none d-md-table-cell">{{
+                                            BookingStatusDataRow.bookingRequestDate |
                                             date:'dd/MM/yyyy' }}</td>
                                         <td class="fw-bold ">
                                             <ng-container
                                                 *ngIf="BookingStatusDataRow.resultFile != null ; else NoResult">
-                                                <span class="text-success "> Test Completed <br/></span>
+                                                <span class="text-success "> Test Completed <br /></span>
                                                 <button class="btn btn-dark btn-sm"
                                                     (click)="openPaymentModal(BookingStatusDataRow)">Get
                                                     Details</button>
@@ -85,7 +89,7 @@
                                     </tr>
                                 </ng-container>
                             </tbody>
-                             
+
                         </table>
                         <div class="pagination">
                             <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
@@ -104,7 +108,19 @@
         </div>
     </div>
     <ng-template #NoData>
-        <div class="text-center  p-2 mb-4 ">
+        <div class="card card-warning text-center  p-2 mb-4 ">
+            <hr />
+            <div class="row  mb-4  ">
+                <h3 class="text-center fs-2 text-primary mb-4 pb-4"> Booking Status Page </h3>
+                <hr />
+                <div class="text-center py-5 BottomSpace">
+                    <!-- <i class="mdi mdi-check-circle-outline fs-1 d-block mb-3"></i> -->
+                    <p class="fs-4 text-danger ">No Booking Found.</p>
+                </div>
+
+            </div>
+        </div>
+        <!-- <div class="text-center  p-2 mb-4 ">
             <div class="row mt-4 mb-4 rounded border border-primary">
                 <h3 class="text-center fs-2 pt-5 "> Booking Status Page </h3>
                 <div class="col-sm-12 text-center">
@@ -113,9 +129,9 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </ng-template>
-     
+
 </div>
 
 
@@ -151,7 +167,7 @@
                                         <td class=" fs-5 ">
                                             <button type="submit" class="btn btn-dark me-2"
                                                 (click)="ExcelSheetDownload(this.ResultData);">Download Sheet</button>
-                                            </td>
+                                        </td>
                                         <td class=" fs-5 p-4 " style="width: 20%;">
                                             {{BookingCase.remarks}}
                                         </td>

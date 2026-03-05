@@ -15,7 +15,18 @@
 
     <!-- No Data / No Records Found Template -->
     <ng-template #noDataTemplate>
-        <div class="no-data-wrapper">
+           <div class="card card-warning text-center  p-2 mb-4 ">
+                <hr />
+                <div class="row  mb-4  ">
+                    <h3 class="text-center text-primary fs-2  mb-4 pb-4"> All Pending Payments Page </h3>
+                    <hr />
+                    <div class="  text-center py-5 BottomSpace">
+                        <p class="fs-4 text-danger ">No Details Found.</p>
+                    </div>
+            
+                </div>
+            </div>
+        <!-- <div class="no-data-wrapper">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-8 col-lg-6">
                     <div class="alert alert-info text-center py-5">
@@ -25,7 +36,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </ng-template>
 
     <!-- Data Available -->
@@ -37,12 +48,13 @@
                        <hr class="border-1 border-dark opacity-100" />
                     <div class="row d-flex justify-content-center align-items-center mb-4">
                         <div class="col-12 mb-2 mb-md-0">
-                            <h4 class="page-title mb-0 text-center">Pending Payment Details</h4>
+                            <h4 class="fs-3 mb-0 text-start ">Pending Payment Page</h4>
                         </div>
                     </div>
                       <hr class="border-1 border-dark opacity-100" />
                     <div class="row d-flex justify-content-center align-items-center mb-4">
-                        <div class="col-12 col-md-4 mb-2 mb-md-0">
+                        
+                        <div class="col-4 mb-2 mb-md-0 text-end ">
                             <button 
                                 (click)="exportToExcel()" 
                                 class="btn btn-dark"
@@ -50,8 +62,11 @@
                                 <i class="mdi mdi-file-excel me-1"></i> Export to Excel
                             </button>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="search-wrapper">
+                         <div class="col-4 mb-md-0">
+                            <h4 class="fs-3 mb-0 text-center text-primary">Pending Payment Details</h4>
+                        </div>
+                        <div class="col-4">
+                            <div class="col-4">
                                 <input 
                                     [(ngModel)]="searchQuery" 
                                     (keyup)="search()" 

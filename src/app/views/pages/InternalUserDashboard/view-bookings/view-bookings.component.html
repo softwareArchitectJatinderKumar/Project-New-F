@@ -1,8 +1,4 @@
 <app-cif-menu-bar></app-cif-menu-bar>
-<!-- <div *ngIf="loadingIndicator" class="fullscreen-loader">
-    <div class="loader-spinner"></div>
-    <div class="loader-text">Loading, please wait...</div>
-</div> -->
 
 <div *ngIf="loadingIndicator" class="fullscreen-loader">
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
@@ -11,164 +7,212 @@
         </div>
     </div>
 </div>
-<div class="container-fluid BottomSpace" >
-    <div class="row " *ngIf="BookingData.length > 0; else NoData">
-       
-        <div class="col-12 stretch-card">
-            <div class="card-body">
-                <div class="row mt-2 d-flex justify-content-center">
-                    <div class="col-sm-2 text-start">
-                        <div class="mb-3">
+
+<div class="container-fluid BottomSpace" *ngIf="BookingData.length > 0; else noDataTemplate">
+    <div class="row mt-5">
+        <div class="col-12 mb-5">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mt-2 mb-3 align-items-center">
+                        <div class="col-12 col-md-4 col-lg-3 text-center text-md-start mb-2 mb-md-0">
                             <button (click)="exportToExcel()" class="btn btn-dark" [disabled]="tmpsBookingData.length == 0">
-                                Export to Excel
+                                <i class="mdi mdi-file-excel"></i> Export to Excel
                             </button>
                         </div>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <div class="mb-1 text-start">
-                            <h3>Payment and Booking Details</h3>
+                        <div class="col-12 col-md-4 col-lg-6 text-center text-md-start mb-2 mb-md-0">
+                            <h3 class="mb-0">Payment and Booking Details</h3>
+                        </div>
+                        <div class="col-12 col-md-4 col-lg-3">
+                            <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" 
+                                class="form-control" placeholder="Search" aria-label="Search" />
                         </div>
                     </div>
-                    <div class="col-sm-3 text-start">
-                        <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control"
-                            style="width: 14rem;" placeholder="Search" aria-label="Search" />
-                    </div>
-                </div>
-        
-                <ng-container *ngIf="tmpsBookingData.length > 0; else noRecords">
-                    <div class="table-responsive mt-4 mb-4 ">
-                        <table id="BookinglDataTable" #table  >
-                            <thead>
-                                <tr>
-                                    <th class="form-label d-none d-md-table-cell">Booking Id</th>
-                                    <th class="form-label d-none d-md-table-cell">Instrument Name</th>
-                                    <th class="form-label d-none d-lg-table-cell">Analysis Type</th>
-                                    <th class="form-label d-none d-lg-table-cell">Analysis Charges</th>
-                                    <th class="form-label d-none d-lg-table-cell">Number of Samples</th>
-                                    <th class="form-label d-none d-lg-table-cell">Request Date</th>
-                                    <th class="form-label d-none d-lg-table-cell">Request Sheet</th>
-                                    <th class="form-label">Total Charges</th>
-                                    <th class="form-label">Payment Status</th>
-                                    <th class="form-label">Upload Receipt</th>
-                                    <th class="form-label">Sample Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <ng-container *ngFor="let BookingDataRow of getCurrentPageData(); let i = index">
+                    
+                    <hr/>
+                    
+                    <ng-container *ngIf="tmpsBookingData.length > 0; else noRecords">
+                        <div class="table-responsive mt-4 mb-4">
+                            <table id="BookinglDataTable" #table class="table table-hover table-striped">
+                                <thead class="table-light">
                                     <tr>
-                                        <td class="fw-bold d-none d-md-table-cell">{{ BookingDataRow.id }}</td>
-                                        <td class="fw-bold d-none d-md-table-cell">{{ BookingDataRow.instrumentName }}</td>
-                                        <td class="fw-bold d-none d-lg-table-cell">{{ BookingDataRow.analysisType }}</td>
-                                        <td class="fw-bold d-none d-lg-table-cell">
-                                            {{ BookingDataRow.analysisCharges | currency:'INR':'symbol' }}
-                                        </td>
-                                        <td class="fw-bold d-none d-lg-table-cell">{{ BookingDataRow.noOfSamples }}</td>
-                                        <td class="fw-bold d-none d-lg-table-cell">
-                                            {{ BookingDataRow.bookingRequestDate | date:'dd/MM/yyyy' }}
-                                        </td>
-                                        <td class="fw-bold d-none d-lg-table-cell">
-                                            <ng-container *ngIf="BookingDataRow.fileName; else NoFile">
-                                                <button class="btn-dark btn ms-3"
-                                                    (click)="downloadFile(BookingDataRow.fileName)">View</button>
-                                            </ng-container>
-                                            <ng-template #NoFile>
-                                                <span>No Sheet Found</span>
-                                            </ng-template>
-                                        </td>
-                                        <td class="fw-bold">{{ BookingDataRow.totalCharges | currency:'INR':'symbol' }}</td>
-                                        <td>
-                                            <ng-container *ngIf="BookingDataRow.paymentDate?.length > 0; else NoPayment">
-                                                <span class="badge text-bg-info">Payment Date {{ BookingDataRow.paymentDate }}</span>
-                                            </ng-container>
-                                            <ng-template #NoPayment>
-                                                <span class="badge text-bg-info mb-3">Payment Pending</span> <br/>
-                                                <button class="btn btn-dark" (click)="openPaymentModal(BookingDataRow)">Pay Now</button>
-                                            </ng-template>
-                                        </td>
-                                        <td>
-                                            <ng-container *ngIf="hasProofUploaded(BookingDataRow.id); else uploadBtnTemplate">
-                                                <span class="badge bg-success">
-                                                    <i class="mdi mdi-check-circle me-1"></i> Already Uploaded
-                                                </span>
-                                            </ng-container>
-                                            <ng-template #uploadBtnTemplate>
-                                                <button class="btn btn-dark btn-sm" (click)="openReceiptUploadModal(BookingDataRow)">
-                                                    <i class="mdi mdi-upload"></i>
-                                                </button>
-                                            </ng-template>
-                                        </td>
-                                            <td><button type="submit" class="btn btn-dark me-2"
-                                                (click)="GetStatus(BookingDataRow);">Check Sample Status</button></td>
+                                        <th class="d-none d-md-table-cell">Booking Id</th>
+                                        <th class="d-none d-md-table-cell">Instrument Name</th>
+                                        <th class="d-none d-lg-table-cell">Analysis Type</th>
+                                        <th class="d-none d-lg-table-cell">Analysis Charges</th>
+                                        <th class="d-none d-lg-table-cell">Number of Samples</th>
+                                        <th class="d-none d-lg-table-cell">Request Date</th>
+                                        <th class="d-none d-lg-table-cell">Request Sheet</th>
+                                        <th>Total charges</th>
+                                        <th>Payment Status</th>
+                                        <th>Upload Receipt</th>
+                                        <th>Sample Status</th>
                                     </tr>
-                                </ng-container>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination">
-                        <a (click)="prevPage()" [class.disabled]="currentPage === 1">
-                            <i class="mdi mdi-chevron-left fs-2"></i>
-                        </a>
-                        <span class="p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                        <a (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()">
-                            <i class="mdi mdi-chevron-right fs-2"></i>
-                        </a>
-                    </div>
-                </ng-container>
-        
-                <ng-template #noRecords>
-                    <p class="fs-2 text-center">No Result Found.</p>
-                </ng-template>
-            </div>
-        </div>
-        
-    </div>
-    <ng-template #NoData>
-        <div class="text-center  p-2 mb-4 vh-100">
-            <div class="row mt-4 mb-4 rounded border border-primary">
-                <h3 class="fs-2 pt-5">No Record!</h3>
-                <div class="col-sm-12 text-center">
-                    <div class="mb-3 p-4 mb-5 mt-5">
-                        <h3 class="fs-3 fw-bolder" style="color: #ef7d00 !important;">No Booking Found.</h3>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let BookingDataRow of getCurrentPageData(); let i = index">
+                                        <tr>
+                                            <td class="fw-bold d-none d-md-table-cell">{{BookingDataRow.id}}</td>
+                                            <td class="fw-bold d-none d-md-table-cell">{{BookingDataRow.instrumentName}}</td>
+                                            <td class="fw-bold d-none d-lg-table-cell">{{BookingDataRow.analysisType}}</td>
+                                            <td class="fw-bold d-none d-lg-table-cell">
+                                                {{BookingDataRow.analysisCharges | currency:'INR':'symbol'}}
+                                            </td>
+                                            <td class="fw-bold d-none d-lg-table-cell">{{BookingDataRow.noOfSamples}}</td>
+                                            <td class="fw-bold d-none d-lg-table-cell">
+                                                {{BookingDataRow.bookingRequestDate | date:'dd/MM/yyyy'}}
+                                            </td>
+                                            <td class="fw-bold d-none d-lg-table-cell">
+                                                <ng-container *ngIf="BookingDataRow.fileName; else NoFile">
+                                                    <button class="btn-dark btn ms-3" (click)="downloadFile(BookingDataRow.fileName)">
+                                                        <i class="mdi mdi-eye-check fs-5"></i>
+                                                    </button>
+                                                </ng-container>
+                                                <ng-template #NoFile>
+                                                    <span>No Sheet Found</span>
+                                                </ng-template>
+                                            </td>
+                                            <td class="fw-bold">{{BookingDataRow.totalCharges | currency:'INR':'symbol'}}</td>
+                                            <td>
+                                                <ng-container *ngIf="BookingDataRow.paymentDate?.length > 0; else NoPayment">
+                                                    <span class="badge bg-dark">Payment Date {{BookingDataRow.paymentDate}}</span>
+                                                </ng-container>
+                                                <ng-template #NoPayment>
+                                                    <span class="badge bg-danger mb-3">Payment Pending</span> <br/>
+                                                    <button class="btn btn-dark" (click)="openPaymentModal(BookingDataRow)">
+                                                        <i class="mdi mdi-cash fs-5"></i>
+                                                    </button>
+                                                </ng-template>
+                                            </td>
+                                            <td>
+                                                <ng-container *ngIf="hasProofUploaded(BookingDataRow.id); else uploadBtnTemplate">
+                                                    <span class="badge bg-success">
+                                                        <i class="mdi mdi-check-circle me-1 fs-5"></i> Already Uploaded
+                                                    </span>
+                                                </ng-container>
+                                                <ng-template #uploadBtnTemplate>
+                                                    <button class="btn btn-dark btn-sm" (click)="openReceiptUploadModal(BookingDataRow)">
+                                                        <i class="mdi mdi-upload fs-5"></i>
+                                                    </button>
+                                                </ng-template>
+                                            </td>
+                                            <td>
+                                                <button type="submit" class="btn btn-dark me-2" (click)="GetStatus(BookingDataRow);">
+                                                    <i class="mdi mdi-check-circle fs-5"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 gap-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="fw-bold me-3">Records per Page:</span>
+                                <select id="itemsPerPage" [value]="itemsPerPage" (change)="onItemsPerPageChange($event)"
+                                    class="form-select form-select-sm" style="width: auto;">
+                                    <option [value]="2">{{'Select'}}</option>
+                                    <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{option}}</option>
+                                </select>
+                            </div>
+                            <nav aria-label="Table pagination">
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item" [class.disabled]="currentPage === 1">
+                                        <a class="page-link" (click)="prevPage()" href="javascript:void(0)">
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item disabled">
+                                        <span class="page-link">
+                                            <span class="text-danger">{{currentPage}}</span> / {{getTotalPages()}}
+                                        </span>
+                                    </li>
+                                    <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                                        <a class="page-link" (click)="nextPage()" href="javascript:void(0)">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </ng-container>
+                    
+                    <ng-template #noRecords>
+                        <div class="text-center py-5">
+                            <p class="fs-2 text-center">No Result Found.</p>
+                        </div>
+                    </ng-template>
                 </div>
             </div>
         </div>
-    </ng-template>
+    </div>
 </div>
 
+<!-- No Data Template -->
+<ng-template #noDataTemplate>
+     <div class="card card-warning text-center  p-2 mb-4 ">
+            <hr />
+            <div class="row  mb-4  ">
+                <h3 class="text-center fs-2 text-primary mb-4 pb-4"> My Bookings Page </h3>
+                <hr />
+                <div class="  text-center py-5 BottomSpace">
+                    <p class="fs-4 text-danger ">No Bookings Found.</p>
+                </div>
+        
+            </div>
+        </div>
+    <!-- <div class="container-fluid BottomSpace">
+        <div class="text-center p-4 min-vh-100">
+            <div class="row justify-content-center mt-4 mb-4">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="card border-primary">
+                        <div class="card-body text-center py-5">
+                            <h3 class="text-primary mb-3">No Record!</h3>
+                            <h4 class="text-danger">No Booking Found.</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</ng-template>
+
+<!-- Payment Screen Modal -->
 <ng-template #viewDescModal2 let-modal>
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Payment Screen </h5>
+        <h5 class="modal-title" id="exampleModalLabel">Payment Screen</h5>
         <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-
-        <div class="col-md-12 grid-margin stretch-card">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="col-sm">
-                            <table id="dataTableAllClosedRemarks" #table>
+                            <table id="dataTableAllClosedRemarks" #table class="table">
                                 <thead>
                                     <tr>
                                         <th class="form-label">Booking Id</th>
-                                        <th class="form-label">Instrument Name </th>
+                                        <th class="form-label">Instrument Name</th>
                                         <th class="form-label">Analysis Name</th>
-                                        <th class="form-label">Samples Requested </th>
-                                        <th class="form-label">Total Amount </th>
-                                        <th class="form-label">Pay Now </th>                                        
+                                        <th class="form-label">Samples Requested</th>
+                                        <th class="form-label">Total Amount</th>
+                                        <th class="form-label">Pay Now</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class=" p-4 " style="width: 20%;">{{BookingCase.id}} </td>
-                                        <td class=" p-4 " style="width: 20%;">{{BookingCase.instrumentName}} </td>
-                                        <td class=" ">{{BookingCase.analysisType}} </td>
-                                        <td class=" ">{{BookingCase.noOfSamples}} </td>
-                                        <td class=" ">{{BookingCase.totalCharges | currency:'INR':'symbol'}} </td>
-                                        <td><button type="submit" class="btn btn-dark me-2"
-                                                (click)="VerifyData(BookingCase);">Confirm and Pay</button></td>
-                                       
+                                        <td class="p-4" style="width: 20%;">{{BookingCase?.id}}</td>
+                                        <td class="p-4" style="width: 20%;">{{BookingCase?.instrumentName}}</td>
+                                        <td>{{BookingCase?.analysisType}}</td>
+                                        <td>{{BookingCase?.noOfSamples}}</td>
+                                        <td>{{BookingCase?.totalCharges | currency:'INR':'symbol'}}</td>
+                                        <td>
+                                            <button type="submit" class="btn btn-warning me-2" (click)="VerifyData(BookingCase);">
+                                                <i class="mdi mdi-credit-card-check fs-3"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -180,73 +224,61 @@
     </div>
 </ng-template>
 
-
-
-
-
-
-
+<!-- Sample Status Modal -->
 <ng-template #ViewUpdateStatusModal let-modal>
     <div class="modal-header">
-      <h2 class="modal-title fs-2" id="exampleModalLabel">Sample Status</h2>
-      <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
+        <h2 class="modal-title fs-2" id="exampleModalLabel">Sample Status</h2>
+        <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
     </div>
     <div class="modal-body">
-      <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="row mb-4" *ngIf="SampleStatusData && SampleStatusData.length > 0; else NoSampleData">
-              <div class="col-sm">
-                <table id="dataTableAllClosedRemarks" class="table">
-                  <thead>
-                    <tr>
-                      <th class="fs-5 text-dark">Booking Id</th>
-                      <th class="fs-5 text-dark">Instrument Id</th>
-                      <th class="fs-5 text-dark">Sample Condition</th>
-                      <th class="fs-5 text-dark">Received on</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].bookingId}}</td>
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].instrumentId}}</td>
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].sampleCondition}}</td>
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].receivedOn}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <ng-template #NoSampleData>
-              <div class="text-center p-2 mb-4 vh-100">
-                <div class="row mt-4 mb-4 rounded border border-primary">
-                  <h3 class="fs-2 pt-5">No Record!</h3>
-                  <div class="col-sm-12 text-center">
-                    <div class="mb-3 p-4 mb-5 mt-5">
-                      <h3 class="fs-3 fw-bolder" style="color: #ef7d00 !important;">No Status Updates Found</h3>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-4" *ngIf="SampleStatusData && SampleStatusData.length > 0; else NoSampleData">
+                        <div class="col-sm">
+                            <table id="dataTableAllClosedRemarks" class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="fs-5 text-dark">Booking Id</th>
+                                        <th class="fs-5 text-dark">Instrument Id</th>
+                                        <th class="fs-5 text-dark">Sample Condition</th>
+                                        <th class="fs-5 text-dark">Received on</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0]?.bookingId}}</td>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0]?.instrumentId}}</td>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0]?.sampleCondition}}</td>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0]?.receivedOn}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                  </div>
+                    <ng-template #NoSampleData>
+                        <div class="text-center p-2 mb-4 vh-100">
+                            <div class="row mt-4 mb-4 rounded border border-primary">
+                                <h3 class="fs-2 pt-5">No Record!</h3>
+                                <div class="col-sm-12 text-center">
+                                    <div class="mb-3 p-4 mb-5 mt-5">
+                                        <h3 class="fs-3 fw-bolder" style="color: #ef7d00 !important;">No Status Updates Found</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
                 </div>
-              </div>
-            </ng-template>
-          </div>
+            </div>
         </div>
-      </div>
     </div>
-  </ng-template>
-  
+</ng-template>
 
-
-  
 <!-- Payment Receipt Upload Modal -->
 <ng-template #PaymentReceiptUploadModal let-modal>
     <div class="modal-header">
         <h5 class="modal-title" id="receiptUploadModalLabel">Payment Receipt Upload</h5>
-        <button 
-            type="button" 
-            class="btn-close" 
-            (click)="modal.close('by: close icon')" 
-            aria-label="Close">
+        <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close">
         </button>
     </div>
     <div class="modal-body">
@@ -257,14 +289,14 @@
                         <!-- Booking ID -->
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label fw-bold">Booking ID</label>
-                            <div class="form-control-plaintext">{{ BookingCase.bookingId }}</div>
+                            <div class="form-control-plaintext">{{BookingCase?.bookingId}}</div>
                         </div>
 
                         <!-- Payment Amount -->
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label fw-bold">Payment Amount</label>
                             <div class="form-control-plaintext">
-                                {{ BookingCase.totalCharges | currency:'INR':'symbol' }}
+                                {{BookingCase?.totalCharges | currency:'INR':'symbol'}}
                             </div>
                         </div>
 
@@ -273,12 +305,8 @@
                             <label for="paymentReceiptFile" class="form-label fw-bold">
                                 Payment Receipt File
                             </label>
-                            <input 
-                                class="form-control" 
-                                type="file" 
-                                id="paymentReceiptFile" 
-                                name="paymentReceiptFile"
-                                (change)="onFileXSelected($event, BookingCase.bookingId)"
+                            <input class="form-control" type="file" id="paymentReceiptFile" name="paymentReceiptFile"
+                                (change)="onFileXSelected($event, BookingCase?.bookingId)"
                                 accept=".pdf, .jpg, .jpeg, .png, .zip, .rar, .7z" />
                             <div class="form-text">Maximum file size: 10MB</div>
                         </div>
@@ -288,24 +316,17 @@
                             <label for="receiptRemarks" class="form-label fw-bold">
                                 Comments/Remarks
                             </label>
-                            <input 
-                                class="form-control" 
-                                type="text" 
-                                id="receiptRemarks" 
-                                name="receiptRemarks"
-                                [(ngModel)]="ReceiptRemarks"
-                                placeholder="Enter remarks..." />
+                            <input class="form-control" type="text" id="receiptRemarks" name="receiptRemarks"
+                                [(ngModel)]="ReceiptRemarks" placeholder="Enter remarks..." />
                         </div>
                     </div>
 
                     <!-- Submit Button -->
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <button 
-                                type="submit" 
-                                class="btn btn-primary"
-                                [disabled]="!fileChosen[BookingCase.bookingId]"
-                                (click)="UpdateFileDocument(BookingCase.bookingId)">
+                            <button type="submit" class="btn btn-primary"
+                                [disabled]="!fileChosen[BookingCase?.bookingId]"
+                                (click)="UpdateFileDocument(BookingCase?.bookingId)">
                                 <i class="mdi mdi-upload me-1"></i> Upload Receipt
                             </button>
                         </div>
@@ -315,54 +336,3 @@
         </div>
     </div>
 </ng-template>
-
-<!-- 
-<ng-template #ViewUpdateStatusModal let-modal>
-    <div class="modal-header">
-      <h2 class="modal-title fs-2" id="exampleModalLabel">Sample Status</h2>
-      <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-      <div class="col-md-12 grid-margin stretch-card">
-        <div class="card">
-          <div class="card-body">
-            <div class="row mb-4" *ngIf="SampleStatusData?.length>0; else NoSampleData">
-              <div class="col-sm">
-                <table id="dataTableAllClosedRemarks" class="table">
-                  <thead>
-                    <tr>
-                      <th class="fs-5 text-dark">Booking Id</th>
-                      <th class="fs-5 text-dark">Instrument Id</th>
-                      <th class="fs-5 text-dark">Sample Condition</th>
-                      <th class="fs-5 text-dark">Received on</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr >
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].bookingId}}</td>
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].instrumentId}}</td>
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].sampleCondition}}</td>
-                      <td class="fs-5 p-4" style="width: 20%;">{{SampleStatusData[0].receivedOn}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <ng-template #NoSampleData>
-                <div class="text-center  p-2 mb-4 vh-100">
-                    <div class="row mt-4 mb-4 rounded border border-primary">
-                        <h3 class="fs-2 pt-5">No Record!</h3>
-                        <div class="col-sm-12 text-center">
-                            <div class="mb-3 p-4 mb-5 mt-5">
-                                <h3 class="fs-3 fw-bolder" style="color: #ef7d00 !important;">No Status Updates Found</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-   -->

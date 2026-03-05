@@ -175,6 +175,10 @@ const routes: Routes = [
 // Admin Dashboard
 
 {
+  path: "AUploadProof",
+  loadChildren: () => import('./views/pages/AdminDashboard/APayment-Proof-Upload-Status/AUploadProofStatus.module').then(m => m.AUploadProofStatusModule),
+},
+{
   path: "EventCrud",
   loadChildren: () => import('./views/pages/AdminDashboard/EventsCrud/event-crud.module').then(m => m.EventsCrudComponentModule),
 },

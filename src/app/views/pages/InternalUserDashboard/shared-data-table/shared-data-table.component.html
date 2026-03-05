@@ -1,0 +1,151 @@
+<!-- Loading Overlay -->
+<div *ngIf="loading" class="fullscreen-loader">
+  <div class="custom-spinner-overlay">
+    <div class="custom-spinner-content text-center">
+      <img src="assets/images/spinner.gif" alt="Loading..." />
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body">
+      <!-- Header Section -->
+      <div class="row align-items-center mb-4">
+        <div class="col-12">
+          <h3 class="mb-3 text-center text-md-start">{{ config.title }}</h3>
+        </div>
+      </div>
+
+      <!-- Search and Export Row -->
+      <div class="row g-3 align-items-center mb-4" *ngIf="config.showSearch || config.showExport">
+        <div class="col-12 col-md-6 col-lg-8 order-2 order-md-1">
+          <div class="d-flex flex-wrap gap-2 align-items-center" *ngIf="config.showSearch">
+            <div class="search-wrapper flex-grow-1" style="max-width: 300px;">
+              <input 
+                [(ngModel)]="searchQuery" 
+                (keyup)="onSearch()" 
+                type="text" 
+                class="form-control" 
+                [placeholder]="'Search ' + config.title + '...'" 
+                aria-label="Search" />
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 order-1 order-md-2 text-md-end mb-2 mb-md-0">
+          <button 
+            *ngIf="config.showExport" 
+            (click)="exportToExcel()" 
+            class="btn btn-dark"
+            [disabled]="data.length === 0">
+            <i class="bi bi-file-earmark-excel me-1"></i>
+            Export to Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- Table Section -->
+      <div class="table-responsive" *ngIf="filteredData.length > 0; else noDataTemplate">
+        <table class="table table-hover table-striped table-bordered mb-0">
+          <thead class="table-light">
+            <tr>
+              <th 
+                *ngFor="let column of config.columns" 
+                [class.d-none]="column.hidden"
+                class="fw-bold">
+                {{ column.label }}
+              </th>
+              <th *ngIf="config.rowAction" class="text-center" style="width: 100px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of paginatedData" (click)="onRowClick(row)" style="cursor: pointer;">
+              <td 
+                *ngFor="let column of config.columns" 
+                [class.d-none]="column.hidden">
+                <ng-container *ngIf="!column.action && !column.badge">
+                  {{ getValue(row, column) }}
+                </ng-container>
+                <ng-container *ngIf="column.badge">
+                  <span 
+                    class="badge" 
+                    [ngClass]="getBadgeClass(row, column)">
+                    {{ getValue(row, column) }}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="column.action">
+                  <button 
+                    *ngIf="!column.condition || column.condition(row)"
+                    class="btn btn-sm"
+                    [ngClass]="column.actionClass || 'btn-dark'"
+                    (click)="onActionClick(row, $event)">
+                    <i *ngIf="column.actionIcon" [class]="column.actionIcon"></i>
+                    {{ column.actionLabel || 'Action' }}
+                  </button>
+                </ng-container>
+              </td>
+              <td *ngIf="config.rowAction" class="text-center">
+                <ng-container *ngIf="template">
+                  <ng-container *ngTemplateOutlet="template; context: { $implicit: row }"></ng-container>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No Data Template -->
+      <ng-template #noDataTemplate>
+        <div class="text-center py-5">
+          <p class="text-muted fs-5 mb-0">{{ config.emptyMessage || 'No records found' }}</p>
+        </div>
+      </ng-template>
+
+      <!-- Pagination -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 gap-3" *ngIf="showPagination">
+        <div class="text-muted small">
+          Showing {{ startRecord }} to {{ endRecord }} of {{ filteredData.length }} entries
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <!-- Items per page -->
+          <div class="d-flex align-items-center gap-2">
+            <label for="itemsPerPage" class="mb-0 text-nowrap">Items per page:</label>
+            <select 
+              id="itemsPerPage" 
+              [value]="itemsPerPage" 
+              (change)="onItemsPerPageChange($event)" 
+              class="form-select form-select-sm"
+              style="width: auto;">
+              <option value="">Select</option>
+              <option *ngFor="let option of itemsPerPageOptions" [value]="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          
+          <!-- Page navigation -->
+          <nav aria-label="Table pagination">
+            <ul class="pagination pagination-sm mb-0">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="prevPage()" href="javascript:void(0)">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+              <li class="page-item disabled">
+                <span class="page-link text-danger">
+                  {{ currentPage }} / {{ totalPages }}
+                </span>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="nextPage()" href="javascript:void(0)">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -41,7 +41,8 @@ export class BookingResultsComponent implements OnInit {
   BookingData: any[] = [];
   ResultData: any[] = [];
   currentPage = 1;
-  itemsPerPage = 10; //
+  itemsPerPage = 10;
+  itemsPerPageOptions: number[] = [5, 10, 15, 20, 25];
   tmpsBookingData: any[] = [];
   tmpsResultData: any[] = [];
   InstrumentId: any;
@@ -163,6 +164,13 @@ export class BookingResultsComponent implements OnInit {
       this.currentPage--;
     }
   }
+
+  onItemsPerPageChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    this.itemsPerPage = Number(select.value);
+    this.currentPage = 1;
+  }
+
   exportToExcel(): void {
     const fileName = 'Booking_Details_report.xlsx';
     const exportedData = this.BookingData.map(item => ({
