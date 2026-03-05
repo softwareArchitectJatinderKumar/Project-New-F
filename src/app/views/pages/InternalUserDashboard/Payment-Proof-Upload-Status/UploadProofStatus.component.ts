@@ -150,14 +150,14 @@ export class UploadProofStatusComponent implements OnInit {
     if (cookieData) {
       const parsedData = JSON.parse(cookieData);
       this.userRole = parsedData.UserRole;
-      this.userId = parsedData.EmailId;
+      this.userId = this.userEmail = parsedData.EmailId;
+    
     }
   }
 
   private fetchPaymentProofDetails(): void {
     this.loadingIndicator = true;
     const startTime = Date.now();
-
     this.cifWebService.GetBookingPaymentProofDetails(this.userId).subscribe({
       next: (response: ApiResponse) => {
         this.handleApiResponse(response);

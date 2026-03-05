@@ -161,7 +161,7 @@ user_Email: any; UserRole:any; candidateName:any;
     this.loadingIndicator = true;
     const startTime = Date.now();
 
-    this.cifWebService.GetBookingPaymentProofDetails(this.userId).subscribe({
+    this.cifWebService.GetBookingPaymentProofDetails('0').subscribe({
       next: (response: ApiResponse) => {
         this.handleApiResponse(response);
         this.ensureMinimumLoadingTime(startTime);
