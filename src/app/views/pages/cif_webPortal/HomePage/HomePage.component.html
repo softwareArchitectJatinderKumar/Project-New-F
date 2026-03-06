@@ -164,7 +164,7 @@ old loader
 
 </section>
 <app-UpcomingEvents></app-UpcomingEvents>
-<section class="section bg-dark-yellow">
+<!-- <section class="section bg-dark-yellow">
     <div class="container">
         <div class="heading-wraper mb-4">
             <div class="main-head d-flex justify-content-between align-items-center">
@@ -183,10 +183,10 @@ old loader
         <ngb-carousel #carousel [interval]="11000" [pauseOnHover]="true" [showNavigationArrows]="false"
             [showNavigationIndicators]="true">
             <ng-template ngbSlide *ngFor="let group of chunkedEvents">
-                <div class="row  g-4 justify-content-center text-center">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2 justify-content-center text-center">
                     <div class="col" *ngFor="let event of group">
                         <div class="card h-100 border-0 shadow-sm bg-white p-2" style="border-radius: 15px;">
-                            <img [src]="serverUrl + event.img" [alt]="event.title" class="card-img-top object-fit-cover" style="height: 16rem; border-radius: 10px;" />
+                            <img [src]="serverUrl + event.img" [alt]="event.title" class="card-img-top object-fit-cover" style="height: 200px; border-radius: 10px;" />
                             <div class="card-body">
                                 <strong class="d-block mb-2">{{ event.title }}</strong>
                                 <span class="text-muted small">{{ event.date }}</span>
@@ -197,8 +197,8 @@ old loader
             </ng-template>
         </ngb-carousel>
     </div>
-</section>
-<!-- <section class="section bg-dark-yellow">
+</section> -->
+<section class="section bg-dark-yellow">
     <div class="container">
         <div class="heading-wraper">
             <div class="main-head">
@@ -216,8 +216,8 @@ old loader
         <ngb-carousel #carousel [interval]="11000" [pauseOnHover]="true" [showNavigationArrows]="false"
             [showNavigationIndicators]="true">
             <ng-template ngbSlide *ngFor="let group of chunkedEvents">
-                <div class="row text-center">
-                    <div class="col-md-4" *ngFor="let event of group">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-center justify-content-center">
+                    <div class="col" *ngFor="let event of group">
                         <img [src]="serverUrl+event.img" [alt]="event.title" class="img-fluid" />
                         <div class="mt-4 mb-2">
                             <strong class="d-block">{{ event.title }}</strong>
@@ -228,7 +228,7 @@ old loader
             </ng-template>
         </ngb-carousel>
     </div>
-</section> -->
+</section>
 
 <section class="section academics-section right-top-circle d-none">
     <div class="container-fluid">

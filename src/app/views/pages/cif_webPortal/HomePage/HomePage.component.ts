@@ -47,23 +47,23 @@ onResize() {
 }
 
   updateChunks() {
-  const width = window.innerWidth;
-  let itemsPerSlide = 3;
+    const width = window.innerWidth;
+    let itemsPerSlide = 3;
 
-  if (width < 768) {
-    itemsPerSlide = 1;
-  } else if (width < 992) {
-    itemsPerSlide = 2;
-  }
-
-  const groups = [];
-  if (this.events) {
-    for (let i = 0; i < this.events.length; i += itemsPerSlide) {
-      groups.push(this.events.slice(i, i + itemsPerSlide));
+    if (width < 768) {
+      itemsPerSlide = 1;
+    } else if (width < 992) {
+      itemsPerSlide = 2;
     }
+
+    const groups = [];
+    if (this.events) {
+      for (let i = 0; i < this.events.length; i += itemsPerSlide) {
+        groups.push(this.events.slice(i, i + itemsPerSlide));
+      }
+    }
+    this.chunkedEvents = groups;
   }
-  this.chunkedEvents = groups;
-}
   openSampleInstructions() {
     swal.fire({
       title: 'Send Samples at Following Address :',
