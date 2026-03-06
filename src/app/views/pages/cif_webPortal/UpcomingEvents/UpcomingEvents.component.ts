@@ -99,7 +99,7 @@ export class UpcomingEventsComponent implements OnInit {
 
 
     goToEventX() {
-        console.log("HELLO")
+        // console.log("HELLO")
         //    this.router.navigateByUrl(eventId);
         this.router.navigateByUrl(`Home`);
     }

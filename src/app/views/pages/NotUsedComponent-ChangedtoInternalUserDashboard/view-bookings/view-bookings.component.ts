@@ -282,7 +282,7 @@ export class ViewBookingsComponent implements OnInit {
     this.modalService
       .open(this.viewDescModal2, { size: 'sm' })
       .result.then((result: string) => {
-        console.log('Modal closed' + result);
+        console.log('Modal closed');
       })
       .catch((res: any) => { });
   }
@@ -394,7 +394,7 @@ export class ViewBookingsComponent implements OnInit {
       this.modalService
         .open(this.ViewUpdateStatusModal, { size: 'sm' })
         .result.then((result: string) => {
-          console.log('Modal closed: ' + result);
+          console.log('Modal closed: ');
         })
         .catch((res: any) => { });
     } else {

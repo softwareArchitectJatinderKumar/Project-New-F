@@ -1,6 +1,6 @@
 
 import { FormBuilder } from '@angular/forms';
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 import { ColumnMode } from '@swimlane/ngx-datatable';
@@ -38,8 +38,32 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.getAllInstruments();
     this.chunkedEvents = this.chunkArray(this.events, 3);
-
+    this.updateChunks();
   }
+
+@HostListener('window:resize') // Removed ['$event']
+onResize() {
+  this.updateChunks();
+}
+
+  updateChunks() {
+  const width = window.innerWidth;
+  let itemsPerSlide = 3;
+
+  if (width < 768) {
+    itemsPerSlide = 1;
+  } else if (width < 992) {
+    itemsPerSlide = 2;
+  }
+
+  const groups = [];
+  if (this.events) {
+    for (let i = 0; i < this.events.length; i += itemsPerSlide) {
+      groups.push(this.events.slice(i, i + itemsPerSlide));
+    }
+  }
+  this.chunkedEvents = groups;
+}
   openSampleInstructions() {
     swal.fire({
       title: 'Send Samples at Following Address :',
@@ -256,48 +280,7 @@ export class HomePageComponent implements OnInit {
     });
   }
 
-  // getAllInstruments(): void {
-  //   this.loadingIndicator = true;
-  //   const startTime = new Date().getTime();
-  //   //this.CIFwebService.GetAllInstruments().subscribe({
-  //   this.CIFwebService.GetAllInstrumentsData().subscribe({
-  //     next: response => {
-  //       // Check if response has error flag from service
-  //       if (response && response.error) {
-  //         // this.serverError = true;
-  //         // this.errorMessage = response.message || 'Data Server Connection error , Try again later';
-  //         this.InstrumentsDataData = this.DataItems; // added on 17-Feb-26 for static Instrument data
-  //         this.loadingIndicator = false;
-  //         return;
-  //       }
-
-  //       if (response.item1 && response.item1.length > 0) {
-  //         this.InstrumentsDataData = response.item1;
-  //         this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
-  //         this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
-  //       } else {
-  //         this.InstrumentsDataData = this.DataItems; // added on 17-Feb-26 for static Instrument data
-  //         this.tmpsInstrumentsDataData = this.InstrumentsDataData.slice(0, this.InstrumentsDataData.length);
-  //         this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
-  //         // this.InstrumentsDataData = [];
-  //       }
-  //       const elapsed = new Date().getTime() - startTime;
-  //       const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 5s
-
-  //       setTimeout(() => {
-  //         this.loadingIndicator = false;
-  //       }, remainingDelay);
-  //     },
-  //     error: err => {
-  //       this.loadingIndicator = false;
-  //       this.serverError = true;
-  //       this.errorMessage = 'Data Server Connection error , Try again later';
-  //       console.error(err);
-  //     }
-  //   });
-
-  // }
-
+   
 
   // added on 21-aug-25
   chunkedEvents: any[][] = [];

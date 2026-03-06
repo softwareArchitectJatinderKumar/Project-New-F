@@ -256,7 +256,7 @@ export class StaffUserDetailsComponent implements OnInit {
     this.BookingCase = a;
     this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
       (result: string) => {
-        console.log("Modal closed" + result);
+        console.log("Modal closed" );
       }
     ).catch((res: any) => { });
 

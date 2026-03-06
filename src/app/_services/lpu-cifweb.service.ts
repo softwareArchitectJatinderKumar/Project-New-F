@@ -932,7 +932,7 @@ export class LpuCIFWebService {
       .set('Content-Type', 'application/json');
     return this.http.get(
       // 'https://localhost:7125/api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
-      AUTH_API_LOCAL + 'api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
+      AUTH_API_LOCAL + 'api/LpuCIF/CIFGetBookingPaymentProofDetails?UserId=' + BookingId, { headers })
       .pipe(catchError(this.handleError('GetBookingPaymentProofDetails', null)));
   }
 

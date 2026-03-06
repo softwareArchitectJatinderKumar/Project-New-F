@@ -164,8 +164,41 @@ old loader
 
 </section>
 <app-UpcomingEvents></app-UpcomingEvents>
-
 <section class="section bg-dark-yellow">
+    <div class="container">
+        <div class="heading-wraper mb-4">
+            <div class="main-head d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">Events & Happenings</h2>
+                <div class="inner-testi-slider-nav">
+                    <button id="prev_event_slide" class="inner-testi-prev-arrow" (click)="carousel.prev()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
+                    </button>
+                    <button id="next_event_slide" class="inner-testi-next-arrow" (click)="carousel.next()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-right.svg" />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <ngb-carousel #carousel [interval]="11000" [pauseOnHover]="true" [showNavigationArrows]="false"
+            [showNavigationIndicators]="true">
+            <ng-template ngbSlide *ngFor="let group of chunkedEvents">
+                <div class="row  g-4 justify-content-center text-center">
+                    <div class="col" *ngFor="let event of group">
+                        <div class="card h-100 border-0 shadow-sm bg-white p-2" style="border-radius: 15px;">
+                            <img [src]="serverUrl + event.img" [alt]="event.title" class="card-img-top object-fit-cover" style="height: 16rem; border-radius: 10px;" />
+                            <div class="card-body">
+                                <strong class="d-block mb-2">{{ event.title }}</strong>
+                                <span class="text-muted small">{{ event.date }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+    </div>
+</section>
+<!-- <section class="section bg-dark-yellow">
     <div class="container">
         <div class="heading-wraper">
             <div class="main-head">
@@ -195,7 +228,7 @@ old loader
             </ng-template>
         </ngb-carousel>
     </div>
-</section>
+</section> -->
 
 <section class="section academics-section right-top-circle d-none">
     <div class="container-fluid">

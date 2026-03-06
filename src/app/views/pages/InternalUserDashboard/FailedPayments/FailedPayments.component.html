@@ -66,19 +66,25 @@
                                                     {{BookingStatusDataRow.paymentDate}}
                                                 </div>
                                                 <div *ngSwitchCase="'failure'" class="fw-bold text-danger p-2">
-                                                    <span class="badge bg-info">Payment Failed</span>
-                                                    <button class="btn btn-dark btn-sm ms-2" (click)="openPaymentModal(BookingStatusDataRow)">Pay Now</button>
+                                                    <span class="badge bg-danger">Payment Failed</span>
+                                                    <button class="btn btn-dark btn-sm ms-2" (click)="openPaymentModal(BookingStatusDataRow)">
+                                                        <i class=" feather icon-dollar-sign ms-1 me-1"></i>
+                                                    </button>
                                                 </div>
                                                 <div *ngSwitchCase="null" class="fw-bold text-dark p-2">
                                                     <span class="badge bg-warning text-dark">Payment Pending</span>
-                                                    <button class="btn btn-dark btn-sm ms-2" (click)="openPaymentModal(BookingStatusDataRow)">Pay Now</button>
+                                                    <button class="btn btn-dark btn-sm ms-2" (click)="openPaymentModal(BookingStatusDataRow)">
+                                                       <i class=" feather icon-send ms-1 me-1"></i></button>
                                                 </div>
                                             </td>
                                             <td>
                                                 <ng-container *ngIf="hasProofUploaded(BookingStatusDataRow.bookingId); else uploadBtn">
-                                                    <span class="badge bg-success">
+                                                    <span class="badge bg-success me-3">
                                                         <i class="feather icon-check-circle me-1"></i> Uploaded
                                                     </span>
+                                                    <button class="btn btn-sm btn-dark" (click)="downloadFile(BookingStatusDataRow.receiptProofFile)">
+                                                         <i class=" feather icon-eye ms-1 me-1"></i>
+                                                    </button>
                                                 </ng-container>
                                                 <ng-template #uploadBtn>
                                                     <button class="btn btn-dark btn-sm" (click)="openReceiptUploadModal(BookingStatusDataRow)">
@@ -320,7 +326,7 @@
                     <div class="row mt-3">
                         <div class="col-12 text-center">
                             <button type="submit" class="btn btn-primary"
-                                [disabled]="!fileChosen[BookingCase?.bookingId]"
+                                [disabled]="!fileChosen[BookingCase?.bookingId] && this.UserId.length<1"
                                 (click)="UpdateFileDocument(BookingCase?.bookingId)">
                                 <i class="mdi mdi-upload me-1"></i> Upload Receipt
                             </button>

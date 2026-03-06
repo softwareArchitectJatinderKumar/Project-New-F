@@ -108,7 +108,25 @@ export class ViewBookingsComponent implements OnInit {
       this.user_Email = session[0]['userEmail'];
     }
   }
+  userId:any;userEmail:any;
   ngOnInit(): void {
+
+    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';// https://files.lpu.in/umsweb/Journal/
+    const GetCookieData = this.cookieService.get('InternalUserAuthData');
+    const retrievedCookies = JSON.parse(GetCookieData);
+    this.UserRole =
+      retrievedCookies.userRole?.length > 0
+        ? retrievedCookies.userRole
+        : 'Internal User';
+    // this.UserId = retrievedCookies.Id;
+    this.user_Email = this.UserId = this.userEmail = this.userId= retrievedCookies.EmailId;
+    this.MobileNo = retrievedCookies.MobileNo;
+    this.supervisorName = retrievedCookies.SupervisorName;
+    this.departmentName = retrievedCookies.DepartmentName;
+    this.candidateName = retrievedCookies.CandidateName;
+
+
+
     this.getParams();
     this.ResponseUrl = window.location.origin + '/ViewBookings';//this.location.path(); 
      
@@ -117,19 +135,10 @@ export class ViewBookingsComponent implements OnInit {
     
      this.ResponseUrl = `${baseUrl}/ViewBookings`;
  
-    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';// https://files.lpu.in/umsweb/Journal/
-    const GetCookieData = this.cookieService.get('InternalUserAuthData');
-    const retrievedCookies = JSON.parse(GetCookieData);
-    this.UserRole =
-      retrievedCookies.userRole?.length > 0
-        ? retrievedCookies.userRole
-        : 'Internal User';
-    this.UserId = retrievedCookies.Id;
-    this.user_Email = retrievedCookies.EmailId;
-    this.MobileNo = retrievedCookies.MobileNo;
-    this.supervisorName = retrievedCookies.SupervisorName;
-    this.departmentName = retrievedCookies.DepartmentName;
-    this.candidateName = retrievedCookies.CandidateName;
+
+
+    
+    
 
     this.getBookingDetails();
     this.fetchAllSampleStatus();
@@ -293,7 +302,7 @@ export class ViewBookingsComponent implements OnInit {
     this.modalService
       .open(this.viewDescModal2, { size: 'sm' })
       .result.then((result: string) => {
-        console.log('Modal closed' + result);
+        console.log('Modal closed' );
       })
       .catch((res: any) => { });
   }
@@ -405,7 +414,7 @@ export class ViewBookingsComponent implements OnInit {
       this.modalService
         .open(this.ViewUpdateStatusModal, { size: 'sm' })
         .result.then((result: string) => {
-          console.log('Modal closed: ' + result);
+          console.log('Modal closed: ' );
         })
         .catch((res: any) => { });
     } else {
@@ -439,7 +448,7 @@ export class ViewBookingsComponent implements OnInit {
   // Payment Proof Methods
   // ============================================
   private fetchPaymentProofDetailsForUser(): void {
-    this.CIFwebService.GetBookingPaymentProofDetails(this.UserId).subscribe({
+    this.CIFwebService.GetBookingPaymentProofDetails(this.userId).subscribe({
       next: (response: any) => {
         this.handleApiResponse(response);
       },

@@ -60,12 +60,29 @@ export class SearchPaymentsComponent implements OnInit {
       this.user_Email = session[0]['userEmail']
     }
   }
+  userEmail:any; userId:any; supervisorName: any; MobileNo: any;departmentName:any; candidateName:any;
   ngOnInit(): void {
-    this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';// 'http://172.19.2.52/umsweb/webftp/MOUDocuments/';
+    // this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';// 'http://172.19.2.52/umsweb/webftp/MOUDocuments/';
+    // const GetCookieData = this.cookieService.get('InternalUserAuthData');
+    // const retrievedCookies = JSON.parse(GetCookieData);
+    // this.UserRole = retrievedCookies.UserRole;
+    // this.UserId = retrievedCookies.EmailId;
+
+
+     this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';// https://files.lpu.in/umsweb/Journal/
     const GetCookieData = this.cookieService.get('InternalUserAuthData');
     const retrievedCookies = JSON.parse(GetCookieData);
-    this.UserRole = retrievedCookies.UserRole;
-    this.UserId = retrievedCookies.EmailId;
+    this.UserRole =
+      retrievedCookies.userRole?.length > 0
+        ? retrievedCookies.userRole
+        : 'Internal User';
+    // this.UserId = retrievedCookies.Id;
+    this.user_Email = this.UserId = this.userEmail = this.userId= retrievedCookies.EmailId;
+    this.MobileNo = retrievedCookies.MobileNo;
+    this.supervisorName = retrievedCookies.SupervisorName;
+    this.departmentName = retrievedCookies.DepartmentName;
+    this.candidateName = retrievedCookies.CandidateName;
+
     this.getBookingDetails()
   }
 

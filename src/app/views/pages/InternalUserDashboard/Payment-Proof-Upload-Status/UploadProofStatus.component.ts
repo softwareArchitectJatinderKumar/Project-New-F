@@ -131,19 +131,26 @@ export class UploadProofStatusComponent implements OnInit {
     private route: ActivatedRoute,
     private cookieService: CookieService
   ) {}
-
+UserRole: any; candidateName:any;MobileNo:any;
   ngOnInit(): void {
-    this.loadUserSession();
-    this.loadUserFromCookie();
+   
+    // this.loadUserFromCookie();
+    
+
+     const GetCookieData = this.cookieService.get('InternalUserAuthData');
+    const retrievedCookies = JSON.parse(GetCookieData);
+    this.UserRole = retrievedCookies.UserRole;
+    this.userId = retrievedCookies.EmailId;
+    this.userEmail = retrievedCookies.EmailId;
+    this.candidateName = retrievedCookies.CandidateName;
+    this.MobileNo = retrievedCookies.MobileNo;
+
+
+
     this.fetchPaymentProofDetails();
   }
 
-  private loadUserSession(): void {
-    const sessionData = this.authSession.getSession();
-    if (sessionData.length > 0) {
-      this.userEmail = sessionData[0][0]?.['userEmail'] || '';
-    }
-  }
+ 
 
   private loadUserFromCookie(): void {
     const cookieData = this.cookieService.get('InternalUserAuthData');

@@ -35,6 +35,44 @@ interface ApiResponse {
   styleUrls: ['./search-payments-pending.component.scss']
 })
 export class SearchPaymentsPendingComponent implements OnInit {
+
+  
+       downloadFile(fileName: string): void {
+      const url = this.serverUrl + fileName;
+      this.onDownloadFile(url);
+      // window.open(url, '_blank');
+    }
+  
+       onDownloadFile(remoteUrl: string): void {
+         Swal.fire({ title: 'Downloading...', didOpen: () => { Swal.showLoading(null); }});
+      
+          this.CIFwebService.downloadFile(remoteUrl).subscribe({
+            next: (blob: Blob) => {
+              const downloadUrl = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = downloadUrl;
+      
+              const fileName = remoteUrl.split('/').pop() || 'Document.pdf';
+              link.download = fileName;
+      
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(downloadUrl);
+      
+              Swal.close();
+            },
+            error: async (err) => {
+              Swal.close();
+              if (err.error instanceof Blob) {
+                const errorMsg = JSON.parse(await err.error.text());
+                Swal.fire('Error', errorMsg.message || 'Download failed', 'error');
+              } else {
+                Swal.fire('Error', 'Could not connect to the server', 'error');
+              }
+            }
+          });
+        }
   // ============================================
   // Template References (matching original template names)
   // ============================================
@@ -151,7 +189,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
 
     // Use proper property names from cookie - match original code's property access
     this.userRole = retrievedCookies.UserRole || 'Internal User';
-    this.userId = retrievedCookies.Id || retrievedCookies.EmailId;
+    this.userId =   retrievedCookies.EmailId;
     this.userEmail = retrievedCookies.EmailId;
     this.mobileNo = retrievedCookies.MobileNo;
     this.supervisorName = retrievedCookies.SupervisorName;
@@ -246,30 +284,49 @@ export class SearchPaymentsPendingComponent implements OnInit {
   // ============================================
   
   private fetchPaymentProofDetails(bookingIds: any[]): void {
-    // Fetch proof details for each booking
-    bookingIds.forEach((bookingId: string) => {
-      this.CIFwebService.GetBookingPaymentProofDetails(bookingId).subscribe({
-        next: (response: any) => {
-          if (response && response.item1 && response.item1.length > 0) {
-            const proofData = response.item1[0];
-            this.paymentProofStatus[bookingId] = {
-              hasProof: true,
-              proofFile: proofData.receiptProofFile || proofData.proofFile || null,
-              isApproved: proofData.isProofApproved || proofData.isApproved || null
-            };
-          } else {
+    // Call API once to get all proof details for the user
+    this.CIFwebService.GetBookingPaymentProofDetails(this.userId).subscribe({
+      next: (response: any) => {
+        if (response && response.item1 && response.item1.length > 0) {
+          const allProofData = response.item1;
+          
+          // Match proof data to each booking
+          bookingIds.forEach((bookingId: string) => {
+            // Find proof data matching the current bookingId
+            const matchingProof = allProofData.find((proof: any) => 
+              proof.bookingId == bookingId
+            );
+            
+            if (matchingProof) {
+              this.paymentProofStatus[bookingId] = {
+                hasProof: true,
+                proofFile: matchingProof.receiptProofFile || matchingProof.proofFile || null,
+                isApproved: matchingProof.isProofApproved || matchingProof.isApproved || null
+              };
+            } else {
+              this.paymentProofStatus[bookingId] = {
+                hasProof: false
+              };
+            }
+          });
+        } else {
+          // No proof data found for any booking
+          bookingIds.forEach((bookingId: string) => {
             this.paymentProofStatus[bookingId] = {
               hasProof: false
             };
-          }
-        },
-        error: (error) => {
-          console.error('Error fetching payment proof for booking:', bookingId, error);
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching payment proof details:', error);
+        // Set all bookings as no proof on error
+        bookingIds.forEach((bookingId: string) => {
           this.paymentProofStatus[bookingId] = {
             hasProof: false
           };
-        }
-      });
+        });
+      }
     });
   }
 
@@ -340,7 +397,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
   paymentReceiptScreen(data: any): void {
     this.PaymentReceipt = data;
     this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
-      (result: string) => console.log('Modal closed:', result),
+      (result: string) => console.log('Modal closed:'),
       () => {}
     );
   }
@@ -358,7 +415,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
     
     this.BookingCase = booking;
     this.modalService.open(this.viewDescModal5, { size: 'sm' }).result.then(
-      (result: string) => console.log('Modal closed:', result),
+      (result: string) => console.log('Modal closed:'),
       () => {}
     );
   }

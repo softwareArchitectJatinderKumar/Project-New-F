@@ -79,7 +79,7 @@ export class NewBookingsComponent implements OnInit {
   ) { }
   loadingIndicator: any;
   ngOnInit(): void {
-   this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/';
+    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFSampleExcelSheets/';
     const GetCookieData = this.cookieService.get('InternalUserAuthData');
     const retrievedCookies = JSON.parse(GetCookieData);
     this.UserRole = retrievedCookies.UserRole;
@@ -106,7 +106,7 @@ export class NewBookingsComponent implements OnInit {
     }
   }
   getDurationData(AnalysisId: any) {
-    this.loadingIndicator=true;
+    this.loadingIndicator = true;
     const startTime = new Date().getTime();
     this.CIFwebService.GetAnalysisData(AnalysisId, this.UserId).subscribe({
       next: response => {
@@ -162,7 +162,7 @@ export class NewBookingsComponent implements OnInit {
       }
     });
   }
-  InstrumentName: any; SampleExcelSheet:any;
+  InstrumentName: any; SampleExcelSheet: any;
   getAllAnalysis(event: Event) {
     this.Duration = this.AnalysisId = this.PriceValue = '';
     const selectElement = event.target as HTMLSelectElement;
@@ -174,14 +174,14 @@ export class NewBookingsComponent implements OnInit {
     const selectedInstrumentName = instrumentNameParts.join(' '); // Join the remaining parts for the name
     this.InstrumentName = selectedInstrumentName;
 
-     this.SampleExcelSheet=this.InstrumentData?.find(instrument => instrument.instrumentId === selectedInstrumentId);
+    this.SampleExcelSheet = this.InstrumentData?.find(instrument => instrument.instrumentId === selectedInstrumentId);
     //  alert(this.SampleExcelSheet['sampleExcelSheet'])
     if (selectedInstrumentId) {
       // Find the selected instrument using its ID
       const selectedInstrument = this.InstrumentData?.find(instrument => instrument.instrumentId === selectedInstrumentId);
       const inactiveInstrument = this.InstrumentDataInactive?.find(instrument => instrument.instrumentId === selectedInstrumentId);
       // console.log(JSON.stringify(selectedInstrument))
-     
+
       // Check if the selected instrument is inactive
       if (inactiveInstrument && this.InActiveInstrumentIds?.includes(selectedInstrumentId.toString())) {
         swal.fire({
@@ -297,7 +297,7 @@ export class NewBookingsComponent implements OnInit {
           }
           const elapsed = new Date().getTime() - startTime;
           const remainingDelay = Math.max(1000 - elapsed, 0); // wait at least 5s
-  
+
           setTimeout(() => {
             this.loadingIndicator = false;
           }, remainingDelay);
@@ -368,22 +368,20 @@ export class NewBookingsComponent implements OnInit {
 
   testClick(a: any) {
     let aa = a;
-    const fileName = this.serverUrl+`${a}.xlsx`;
-    this.onDownloadFile(this.serverUrl+a);
+    const fileName = this.serverUrl + `${a}.xlsx`;
+    this.onDownloadFile(this.serverUrl + a);
     //console.log(fileName+ "  *** **  File Name ")
     // window.open(fileName, '_blank');
   }
-DownloadFormat(a:any){
-
-  
-     this.SampleExcelSheet=this.InstrumentData?.find(instrument => instrument.instrumentId === a);
+  DownloadFormat(a: any) {
+    this.SampleExcelSheet = this.InstrumentData?.find(instrument => instrument.instrumentId === a);
     //  alert(this.SampleExcelSheet['sampleExcelSheet'])
     if (a) {
       // Find the selected instrument using its ID
       const selectedInstrument = this.InstrumentData?.find(instrument => instrument.instrumentId === a);
       const inactiveInstrument = this.InstrumentDataInactive?.find(instrument => instrument.instrumentId === a);
       // console.log(JSON.stringify(selectedInstrument))
-     
+
       // Check if the selected instrument is inactive
       if (inactiveInstrument && this.InActiveInstrumentIds?.includes(a.toString())) {
         swal.fire({
@@ -399,40 +397,40 @@ DownloadFormat(a:any){
       this.selectedId = a;
       this.InstrumentId = this.selectedId;
       this.testClick(this.SampleExcelSheet.sampleExcelSheetUrl);
-}
-}
-  
-   onDownloadFile(remoteUrl: string): void {
-      swal.fire({ title: 'Downloading...', didOpen: () => { swal.showLoading(null); }});
-  
-      this.CIFwebService.downloadFile(remoteUrl).subscribe({
-        next: (blob: Blob) => {
-          const downloadUrl = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = downloadUrl;
-  
-          const fileName = remoteUrl.split('/').pop() || 'Document.pdf';
-          link.download = fileName;
-  
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(downloadUrl);
-  
-          swal.close();
-        },
-        error: async (err) => {
-          swal.close();
-          if (err.error instanceof Blob) {
-            const errorMsg = JSON.parse(await err.error.text());
-            swal.fire('Error', errorMsg.message || 'Download failed', 'error');
-          } else {
-            swal.fire('Error', 'Could not connect to the server', 'error');
-          }
-        }
-      });
     }
-  
+  }
+
+  onDownloadFile(remoteUrl: string): void {
+    swal.fire({ title: 'Downloading...', didOpen: () => { swal.showLoading(null); } });
+
+    this.CIFwebService.downloadFile(remoteUrl).subscribe({
+      next: (blob: Blob) => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+
+        const fileName = remoteUrl.split('/').pop() || 'Document.pdf';
+        link.download = fileName;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+
+        swal.close();
+      },
+      error: async (err) => {
+        swal.close();
+        if (err.error instanceof Blob) {
+          const errorMsg = JSON.parse(await err.error.text());
+          swal.fire('Error', errorMsg.message || 'Download failed', 'error');
+        } else {
+          swal.fire('Error', 'Could not connect to the server', 'error');
+        }
+      }
+    });
+  }
+
   goToDetails() {
     if (this.Datagrid.length > 0) {
       this.goToNextStep();
@@ -481,7 +479,7 @@ DownloadFormat(a:any){
     this.Datagrid.splice(index, 1);
   }
   saveAllRecords() {
-    this.loadingIndicator=true;
+    this.loadingIndicator = true;
     const startTime = new Date().getTime();
 
     const apiCalls = this.Datagrid.map(item => {

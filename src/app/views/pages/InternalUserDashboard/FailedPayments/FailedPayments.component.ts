@@ -16,207 +16,244 @@ const FILE_SIZE_LIMIT = 5148576; // 5MB in bytes
   selector: 'app-FailedPayments',
   templateUrl: './FailedPayments.component.html',
   styleUrls: ['./FailedPayments.component.scss'],
-  standalone:false
+  standalone: false
 })
 export class FailedPaymentsComponent implements OnInit {
-    // ============================================
-    // Properties - Search & Filter
-    // ============================================
-    searchQuery = '';
-  
-    // ============================================
-    // Properties - File Upload
-    // ============================================
-    ReceiptRemarks = '';
-    FileDataX: string | null = null;
-    fileDataX: any;
-    fileStatus: any;
-    fileName: any;
-    fileChosen: { [key: number]: boolean } = {};
-    validationForm1!: FormGroup;
-    isForm1Submitted = false;
-  
-    // ============================================
-    // Properties - User Session
-    // ============================================
-    userId: string = '';
-    userEmail: string = '';
-    mobileNo: string = '';
-    supervisorName: string = '';
-    departmentName: string = '';
-    candidateName: string = '';
-    userRole: string = '';
-  
-    // ============================================
-    // Properties - UI State
-    // ============================================
-    loadingIndicator = false;
-    serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
-    responseUrl = '';
-    TypeId = 'CIF';
 
-    // ============================================
-    // Initialization Methods
-    // ============================================
-    private initializeForm(): void {
-      this.validationForm1 = this.formBuilder.group({
-        ReceiptRemarks: ['', Validators.required],
-        file: [null, Validators.required]
-      });
-    }
+     downloadFile(fileName: string): void {
+    const url = this.serverUrl + fileName;
+    this.onDownloadFile(url);
+    // window.open(url, '_blank');
+  }
+
+     onDownloadFile(remoteUrl: string): void {
+       Swal.fire({ title: 'Downloading...', didOpen: () => { Swal.showLoading(null); }});
     
+        this.CIFwebService.downloadFile(remoteUrl).subscribe({
+          next: (blob: Blob) => {
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+    
+            const fileName = remoteUrl.split('/').pop() || 'Document.pdf';
+            link.download = fileName;
+    
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(downloadUrl);
+    
+            Swal.close();
+          },
+          error: async (err) => {
+            Swal.close();
+            if (err.error instanceof Blob) {
+              const errorMsg = JSON.parse(await err.error.text());
+              Swal.fire('Error', errorMsg.message || 'Download failed', 'error');
+            } else {
+              Swal.fire('Error', 'Could not connect to the server', 'error');
+            }
+          }
+        });
+      }
+  // ============================================
+  // Properties - Search & Filter
+  // ============================================
+  searchQuery = '';
 
-    openReceiptUploadModal(booking: any): void {
+  // ============================================
+  // Properties - File Upload
+  // ============================================
+  ReceiptRemarks = '';
+  FileDataX: string | null = null;
+  fileDataX: any;
+  fileStatus: any;
+  fileName: any;
+  fileChosen: { [key: number]: boolean } = {};
+  validationForm1!: FormGroup;
+  isForm1Submitted = false;
+
+  // ============================================
+  // Properties - User Session
+  // ============================================
+  userId: string = '';
+  userEmail: string = '';
+  mobileNo: string = '';
+  supervisorName: string = '';
+  departmentName: string = '';
+  candidateName: string = '';
+  userRole: string = '';
+
+  // ============================================
+  // Properties - UI State
+  // ============================================
+  loadingIndicator = false;
+  serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
+  responseUrl = '';
+  TypeId = 'CIF';
+
+  // ============================================
+  // Initialization Methods
+  // ============================================
+  private initializeForm(): void {
+    this.validationForm1 = this.formBuilder.group({
+      ReceiptRemarks: ['', Validators.required],
+      file: [null, Validators.required]
+    });
+  }
+
+
+  openReceiptUploadModal(booking: any): void {
     this.BookingCase = booking;
     this.loadForm();
     this.modalService.open(this.PaymentReceiptUploadModal, { size: 'lg', centered: true }).result.then(
       (result: string) => console.log('Modal closed:', result),
-      () => {}
+      () => { }
     );
   }
 
 
-   // ============================================
-    // Form Methods
-    // ============================================
-    get form1() {
-      return this.validationForm1.controls;
-    }
-  
-    loadForm(): void {
-      this.validationForm1 = this.formBuilder.group({
-        ReceiptRemarks: ['', Validators.required],
-        file: [null, Validators.required]
+  // ============================================
+  // Form Methods
+  // ============================================
+  get form1() {
+    return this.validationForm1.controls;
+  }
+
+  loadForm(): void {
+    this.validationForm1 = this.formBuilder.group({
+      ReceiptRemarks: ['', Validators.required],
+      file: [null, Validators.required]
+    });
+  }
+
+  // ============================================
+  // File Upload Methods
+  // ============================================
+  onFileXSelected(event: any, id: number): void {
+    this.fileChosen[id] = event.target.files.length > 0;
+    const target = event.target as HTMLInputElement;
+    const file: File | null = (target.files as FileList)[0] || null;
+
+    if (!file) return;
+
+    // Check file size
+    if (file.size > FILE_SIZE_LIMIT) {
+      Swal.fire({
+        title: 'File size exceeds 5 MB',
+        text: 'Please upload a smaller file.',
+        icon: 'warning'
       });
+      target.value = '';
+      return;
     }
-  
-    // ============================================
-    // File Upload Methods
-    // ============================================
-    onFileXSelected(event: any, id: number): void {
-      this.fileChosen[id] = event.target.files.length > 0;
-      const target = event.target as HTMLInputElement;
-      const file: File | null = (target.files as FileList)[0] || null;
-  
-      if (!file) return;
-  
-      // Check file size
-      if (file.size > FILE_SIZE_LIMIT) {
-        Swal.fire({
-          title: 'File size exceeds 5 MB',
-          text: 'Please upload a smaller file.',
-          icon: 'warning'
-        });
-        target.value = '';
-        return;
-      }
-  
-      // Check file name validity
-      const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
-      if (!fileNameRegex.test(file.name)) {
-        const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-        const modifiedFile = new File([file], validFileName, { type: file.type });
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(modifiedFile);
-        target.files = dataTransfer.files;
-  
-        this.fileDataX = modifiedFile;
-        this.fileStatus = true;
-  
-        const reader = new FileReader();
-        reader.readAsDataURL(modifiedFile);
-        reader.onload = () => {
-          const result = reader.result as string;
-          const base64Data = result.split(',')[1];
-          this.FileDataX = base64Data;
-          this.fileName = validFileName;
-        };
-        return;
-      }
-  
-      this.fileDataX = file;
+
+    // Check file name validity
+    const fileNameRegex = /^[a-zA-Z0-9._-]+$/;
+    if (!fileNameRegex.test(file.name)) {
+      const validFileName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const modifiedFile = new File([file], validFileName, { type: file.type });
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(modifiedFile);
+      target.files = dataTransfer.files;
+
+      this.fileDataX = modifiedFile;
       this.fileStatus = true;
-  
+
       const reader = new FileReader();
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(modifiedFile);
       reader.onload = () => {
         const result = reader.result as string;
         const base64Data = result.split(',')[1];
         this.FileDataX = base64Data;
-        this.fileName = file.name;
+        this.fileName = validFileName;
       };
+      return;
     }
-  
-    UpdateFileDocument(Id: number): void {
-      this.loadingIndicator = true;
-      const startTime = new Date().getTime();
-  
-      if (this.fileChosen[Id]) {
-        const formData = new FormData();
-        formData.append('BookingId', Id.toString());
-        formData.append('ReceiptRemarks', this.ReceiptRemarks);
-        formData.append('PaymentReceiptUrl', this.fileName || '');
-        formData.append('PaymentReceiptData', this.FileDataX || '');
-        formData.append('UserId', this.userId);
-  
-        this.CIFwebService.UploadPaymentReceipt(formData).subscribe({
-          next: (data: any) => {
-            // Check returnId for status: 1 = Success, 0 = Failed, -1 = Already Existed
-            const returnId = data.item1[0]?.returnId;
-            const message = data.item1[0]?.msg;
-            
-            if (returnId === 1) {
-              Swal.fire({
-                title: 'Upload Successful',
-                text: 'Receipt saved successfully!',
-                icon: 'success'
-              }).then(() => {
-                window.location.reload();
-              });
-            } else if (returnId === -1) {
-              Swal.fire({
-                title: 'Receipt Already Exists',
-                text: message || 'A receipt has already been uploaded for this booking.',
-                icon: 'warning',
-                // timer: 3000,
-                // showConfirmButton: true
-              }).then(() => {
-                window.location.reload();
-              });
-            } else if (returnId === 0) {
-              Swal.fire({
-                title: 'Upload Failed',
-                text: message || 'Failed to upload receipt. Please try again.',
-                icon: 'error',
-                timer: 2000,
-                showConfirmButton: false
-              });
-            } else {
-              // Fallback for unexpected response format
-              Swal.fire({
-                title: 'Upload Result',
-                text: message || 'Unknown response from server.',
-                icon: 'info',
-                timer: 2000,
-                showConfirmButton: false
-              });
-            }
-  
-            this.delayLoading(startTime);
-          },
-          error: (error: any) => {
+
+    this.fileDataX = file;
+    this.fileStatus = true;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64Data = result.split(',')[1];
+      this.FileDataX = base64Data;
+      this.fileName = file.name;
+    };
+  }
+
+  UpdateFileDocument(Id: number): void {
+    this.loadingIndicator = true;
+    const startTime = new Date().getTime();
+
+    if (this.fileChosen[Id]) {
+      const formData = new FormData();
+      formData.append('BookingId', Id.toString());
+      formData.append('ReceiptRemarks', this.ReceiptRemarks);
+      formData.append('PaymentReceiptUrl', this.fileName || '');
+      formData.append('PaymentReceiptData', this.FileDataX || '');
+      formData.append('UserId', this.userId);
+
+      this.CIFwebService.UploadPaymentReceipt(formData).subscribe({
+        next: (data: any) => {
+          // Check returnId for status: 1 = Success, 0 = Failed, -1 = Already Existed
+          const returnId = data.item1[0]?.returnId;
+          const message = data.item1[0]?.msg;
+
+          if (returnId === 1) {
             Swal.fire({
-              title: 'Error',
-              text: 'Internal Server error',
+              title: 'Upload Successful',
+              text: 'Receipt saved successfully!',
+              icon: 'success'
+            }).then(() => {
+              window.location.reload();
+            });
+          } else if (returnId === -1) {
+            Swal.fire({
+              title: 'Receipt Already Exists',
+              text: message || 'A receipt has already been uploaded for this booking.',
+              icon: 'warning',
+              // timer: 3000,
+              // showConfirmButton: true
+            }).then(() => {
+              window.location.reload();
+            });
+          } else if (returnId === 0) {
+            Swal.fire({
+              title: 'Upload Failed',
+              text: message || 'Failed to upload receipt. Please try again.',
               icon: 'error',
+              timer: 2000,
               showConfirmButton: false
             });
-            this.loadingIndicator = false;
+          } else {
+            // Fallback for unexpected response format
+            Swal.fire({
+              title: 'Upload Result',
+              text: message || 'Unknown response from server.',
+              icon: 'info',
+              timer: 2000,
+              showConfirmButton: false
+            });
           }
-        });
-      }
+
+          this.delayLoading(startTime);
+        },
+        error: (error: any) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Internal Server error',
+            icon: 'error',
+            showConfirmButton: false
+          });
+          this.loadingIndicator = false;
+        }
+      });
     }
-  
+  }
+
   private delayLoading(startTime: number): void {
     const elapsed = new Date().getTime() - startTime;
     const remainingDelay = Math.max(1500 - elapsed, 0);
@@ -257,13 +294,13 @@ export class FailedPaymentsComponent implements OnInit {
   Remarks: any;
   dataSource: any;
   ServerUrl: any;
-  
+
   // Payment proof status tracking
   paymentProofStatus: { [bookingId: string]: { hasProof: boolean; proofFile?: string; isApproved?: string } } = {};
 
   constructor(
     private CIFwebService: LpuCIFWebService,
-    
+
     private modalService: NgbModal,
     private AuthSession: LoginSessionService,
     private route: ActivatedRoute,
@@ -271,13 +308,25 @@ export class FailedPaymentsComponent implements OnInit {
     private formBuilder: FormBuilder) { }
   user_Email: any;
   sessionData: any[] = [];
-  getSessionDetails() {
-    this.sessionData = this.AuthSession.getSession();
-    for (const session of this.sessionData) {
-      this.user_Email = session[0]['userEmail']
-    }
-  }
+ 
   ngOnInit(): void {
+
+    
+    const GetCookieData = this.cookieService.get('InternalUserAuthData');
+    const retrievedCookies = JSON.parse(GetCookieData);
+    this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
+    this.UserId = this.userId= this.user_Email = retrievedCookies.EmailId;
+    this.MobileNo = retrievedCookies.MobileNo;
+    this.supervisorName = retrievedCookies.SupervisorName;
+    this.departmentName = retrievedCookies.DepartmentName;
+    this.candidateName = retrievedCookies.CandidateName;
+    this.UserRole = retrievedCookies.UserRole;
+     
+
+
+
+
+
     this.initializeForm();
     this.route.queryParamMap.subscribe((params) => {
       const queryParamLength = params.keys.length;
@@ -286,28 +335,16 @@ export class FailedPaymentsComponent implements OnInit {
       }
     });
 
-    this.ServerUrl ='https://files.lpu.in/umsweb/CIFDocuments/';// 'http://172.19.2.52/umsweb/webftp/MOUDocuments/';
+    this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';// 'http://172.19.2.52/umsweb/webftp/MOUDocuments/';
     this.ResponseUrl = window.location.href;// + '/FailedPayments'; 
     if (this.ResponseUrl.startsWith('https://devums.lpu.in/app/cif/')) {
       this.ResponseUrl = "https://devums.lpu.in/app/cif/FailedPayments";
-    }  
+    }
 
     const baseUrl = `${window.location.origin}${window.location.pathname.split('/').slice(0, -1).join('/')}`;
-    
+
     this.ResponseUrl = `${baseUrl}/FailedPayments`;
 
-
-    const GetCookieData = this.cookieService.get('InternalUserAuthData');
-    const retrievedCookies = JSON.parse(GetCookieData);
-    this.UserRole = retrievedCookies.userRole?.length > 0 ? retrievedCookies.userRole : 'Internal User';
-    this.UserId = retrievedCookies.Id;
-    this.user_Email = retrievedCookies.EmailId;
-    this.MobileNo = retrievedCookies.MobileNo;
-    this.supervisorName = retrievedCookies.SupervisorName;
-    this.departmentName = retrievedCookies.DepartmentName;
-    this.candidateName = retrievedCookies.CandidateName;
-    this.UserRole = retrievedCookies.UserRole;
-    this.user_Email=  this.UserId = retrievedCookies.EmailId;
 
     this.getBookingDetails()
   }
@@ -335,9 +372,9 @@ export class FailedPaymentsComponent implements OnInit {
     );
   }
   getBookingDetails() {
-    
-this.loadingIndicator=true;
-const startTime = new Date().getTime();
+
+    this.loadingIndicator = true;
+    const startTime = new Date().getTime();
 
     this.CIFwebService.GetUserPaymentStatusDetails(this.UserId).subscribe({
       next: response => {
@@ -345,26 +382,26 @@ const startTime = new Date().getTime();
           this.BookingStatusData = response.item1;
           this.dataSource = response.item1;
           this.tmpsBookingStatusData = response.item1.filter((item: { paymentStatus: any }) => item.paymentStatus === 'failure');
-          if(this.tmpsBookingStatusData.length>0)
-          {this.headHtmlData = this.tmpsBookingStatusData[0];
-          this.columns = Object.keys(this.tmpsBookingStatusData[0]);
-          this.columns = this.columns.filter((item: any) => item !== 'ResultFile' && item !== 'userId' && item !== 'id' && item !== 'analysisId');
-          this.columns.push();
-          
-          // Fetch payment proof details for each booking
-          this.fetchPaymentProofDetailsForBookings();
+          if (this.tmpsBookingStatusData.length > 0) {
+            this.headHtmlData = this.tmpsBookingStatusData[0];
+            this.columns = Object.keys(this.tmpsBookingStatusData[0]);
+            this.columns = this.columns.filter((item: any) => item !== 'ResultFile' && item !== 'userId' && item !== 'id' && item !== 'analysisId');
+            this.columns.push();
+
+            // Fetch payment proof details for each booking
+            this.fetchPaymentProofDetailsForBookings();
           }
         }
         else {
           this.BookingStatusData = [];
         }
-        
-const elapsed = new Date().getTime() - startTime;
-const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
 
-setTimeout(() => {
-  this.loadingIndicator = false;
-}, remainingDelay);
+        const elapsed = new Date().getTime() - startTime;
+        const remainingDelay = Math.max(1500 - elapsed, 0); // wait at least 5s
+
+        setTimeout(() => {
+          this.loadingIndicator = false;
+        }, remainingDelay);
       },
       error: err => {
         console.log(err)
@@ -374,35 +411,54 @@ setTimeout(() => {
 
   // Fetch payment proof details for all bookings
   private fetchPaymentProofDetailsForBookings(): void {
-    // Get unique booking IDs
     const bookingIds = this.tmpsBookingStatusData.map((item: any) => item.bookingId).filter((id: any) => id);
-    
+
     if (bookingIds.length === 0) return;
-    
-    // Fetch proof details for each booking
-    bookingIds.forEach((bookingId: string) => {
-      this.CIFwebService.GetBookingPaymentProofDetails(bookingId).subscribe({
-        next: (response: any) => {
-          if (response && response.item1 && response.item1.length > 0) {
-            const proofData = response.item1[0];
-            this.paymentProofStatus[bookingId] = {
-              hasProof: true,
-              proofFile: proofData.receiptProofFile || proofData.proofFile || null,
-              isApproved: proofData.isProofApproved || proofData.isApproved || null
-            };
-          } else {
+
+    // Call API once to get all proof details for the user
+    this.CIFwebService.GetBookingPaymentProofDetails(this.userId).subscribe({
+      next: (response: any) => {
+        if (response && response.item1 && response.item1.length > 0) {
+          const allProofData = response.item1;
+          console.log('All Proof Data:', JSON.stringify(allProofData));
+          
+          // Match proof data to each booking
+          bookingIds.forEach((bookingId: string) => {
+            // Find proof data matching the current bookingId
+            const matchingProof = allProofData.find((proof: any) => 
+              proof.bookingId == bookingId
+            );
+            
+            if (matchingProof) {
+              this.paymentProofStatus[bookingId] = {
+                hasProof: true,
+                proofFile: matchingProof.receiptProofFile || matchingProof.proofFile || null,
+                isApproved: matchingProof.isProofApproved || matchingProof.isApproved || null
+              };
+            } else {
+              this.paymentProofStatus[bookingId] = {
+                hasProof: false
+              };
+            }
+          });
+        } else {
+          // No proof data found for any booking
+          bookingIds.forEach((bookingId: string) => {
             this.paymentProofStatus[bookingId] = {
               hasProof: false
             };
-          }
-        },
-        error: (error) => {
-          console.error('Error fetching payment proof for booking:', bookingId, error);
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching payment proof details:', error);
+        // Set all bookings as no proof on error
+        bookingIds.forEach((bookingId: string) => {
           this.paymentProofStatus[bookingId] = {
             hasProof: false
           };
-        }
-      });
+        });
+      }
     });
   }
 
@@ -446,9 +502,9 @@ setTimeout(() => {
     const exportedData = this.BookingStatusData.map(item => ({
       BookingId: item.bookingId,
       InstrumentName: item.instrumentName,
-     
+
       Samples: item.noOfSamples,
-      RequestDate: item.bookingRequestDate ,
+      RequestDate: item.bookingRequestDate,
 
     }));
 
@@ -473,18 +529,17 @@ setTimeout(() => {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  paymentReceiptScreen(data:any)
-  {
-    this.PaymentReceipt=data;
+  paymentReceiptScreen(data: any) {
+    this.PaymentReceipt = data;
     this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
       (result: string) => {
         console.log("Modal closed" + result);
       }
     ).catch(() => { });
   }
-   printReceipt(): void {
+  printReceipt(): void {
     const modalContent = document.getElementById("ReceiptData");  // Get the modal content by its ID
-  
+
     if (modalContent) {
       const iframe = document.createElement('iframe');
       iframe.style.position = 'absolute';
@@ -492,13 +547,13 @@ setTimeout(() => {
       iframe.style.height = '0px';
       iframe.style.border = 'none';
       document.body.appendChild(iframe);
-  
+
       const iframeDoc = iframe.contentWindow?.document;
-  
+
       if (iframeDoc) {
         iframeDoc.open();
         iframeDoc.write('<html><head><title>Payment Receipt</title>');
-        
+
         const styles = Array.from(document.styleSheets)
           .map(styleSheet => {
             try {
@@ -508,25 +563,25 @@ setTimeout(() => {
             }
           })
           .join(' ');
-  
-        iframeDoc.write(`<style>${styles}</style>`);  
+
+        iframeDoc.write(`<style>${styles}</style>`);
         iframeDoc.write('</head><body >');
-        
+
         const clonedContent = modalContent.cloneNode(true) as HTMLElement;
-        const printButton = clonedContent.querySelector("button"); 
+        const printButton = clonedContent.querySelector("button");
         if (printButton) {
-          printButton.style.display = "none"; 
+          printButton.style.display = "none";
         }
-  
-        iframeDoc.write(clonedContent.innerHTML); 
+
+        iframeDoc.write(clonedContent.innerHTML);
         iframeDoc.write('</body></html>');
         iframeDoc.close();
-  
-        
+
+
         iframe.onload = () => {
           iframe.contentWindow?.focus();
           iframe.contentWindow?.print();
-  
+
           iframe.onload = () => {
             document.body.removeChild(iframe);
           };
@@ -538,17 +593,17 @@ setTimeout(() => {
       console.error('Modal content not found');
     }
   }
-  
+
   @ViewChild('viewDescModal5') viewDescModal5: TemplateRef<any>;
   // TypeId: any = 'CIF'; 
   id: any; status: any; type: any; transactionNo: any; hashedValue: any; course: any; keyNote: any;
-  MobileNo: any; 
+  MobileNo: any;
   //  supervisorName: any;    departmentName: any;  candidateName: any;  
-  paymentData: any;  ResponseUrl: any;
+  paymentData: any; ResponseUrl: any;
 
 
 
-  
+
   getParams(): void {
     // const params = this.route.snapshot.params;
     this.ResponseUrl = window.location.href;// + '/FailedPayments'; 
@@ -668,6 +723,7 @@ setTimeout(() => {
         // Open the URL in a new tab
         window.open(url);
       }
-    });}
+    });
+  }
 
 }
