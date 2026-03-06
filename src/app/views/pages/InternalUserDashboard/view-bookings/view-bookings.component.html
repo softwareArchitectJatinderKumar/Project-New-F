@@ -78,8 +78,9 @@
                                                 </ng-container>
                                                 <ng-template #NoPayment>
                                                     <span class="badge bg-danger mb-3">Payment Pending</span> <br/>
-                                                    <button class="btn btn-dark" (click)="openPaymentModal(BookingDataRow)">
-                                                        <i class="mdi mdi-cash fs-5"></i>
+                                                    <button class="btn btn-warning" (click)="openPaymentModal(BookingDataRow)">
+                                                        <!-- <i class="mdi mdi-cash fs-5"></i> -->
+                                                         <i class=" feather icon-dollar-sign ms-1 me-1"></i>
                                                     </button>
                                                 </ng-template>
                                             </td>

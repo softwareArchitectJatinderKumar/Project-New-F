@@ -74,7 +74,7 @@
                                                 <div *ngSwitchCase="null" class="fw-bold text-dark p-2">
                                                     <span class="badge bg-warning text-dark">Payment Pending</span>
                                                     <button class="btn btn-dark btn-sm ms-2" (click)="openPaymentModal(BookingStatusDataRow)">
-                                                       <i class=" feather icon-send ms-1 me-1"></i></button>
+                                                       <i class=" feather icon-dollar ms-1 me-1"></i></button>
                                                 </div>
                                             </td>
                                             <td>
@@ -263,7 +263,9 @@
                                         <td>{{BookingCase?.id}}</td>
                                         <td style="width: 20%;">{{BookingCase?.instrumentName}}</td>
                                         <td>{{BookingCase?.amount | currency:'INR':'symbol'}}</td>
-                                        <td><button type="submit" class="btn btn-dark me-2" (click)="VerifyData(BookingCase);">Confirm & Pay</button></td>
+                                        <td><button type="submit" class="btn btn-warning me-2" (click)="VerifyData(BookingCase);">
+                                             <i class="mdi mdi-credit-card-check fs-3"></i>
+                                            </button></td>
                                     </tr>
                                 </tbody>
                             </table>
