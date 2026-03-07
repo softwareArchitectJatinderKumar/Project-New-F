@@ -72,7 +72,7 @@ export class CifInstrumentsComponent implements OnInit {
   selectedInstrument: any = null;
   cifInstrumentsCharges: any;
   tmpscifInstrumentsCharges: any;
-
+  Name:any;
   constructor(
     private CIFwebService: LpuCIFWebService,
     private storageService: StorageService,
@@ -89,9 +89,9 @@ export class CifInstrumentsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllInstrumentss();
-    this.getAllInstruments();
+    
     this.route.paramMap.subscribe((params) => {
+      this.Name = Number(params.get('Name'));
       this.InstrumentId = Number(params.get('id'));
       this.categoryId = Number(params.get('categoryId'));
 
@@ -100,6 +100,9 @@ export class CifInstrumentsComponent implements OnInit {
         this.fetchSpecifications(this.categoryId, this.InstrumentId);
       }
     });
+
+    this.getAllInstrumentss();
+    this.getAllInstruments();
   }
 
       DataItems = [
@@ -256,7 +259,7 @@ export class CifInstrumentsComponent implements OnInit {
       next: response => {
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
-          this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
+          this.tmpscifInstrumentsDataData = this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
           this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
         } else {
           this.InstrumentsDataData = this.DataItems; // added on 17-Feb-26 for static Instrument data
@@ -286,15 +289,21 @@ export class CifInstrumentsComponent implements OnInit {
 
   fetchSpecifications(categoryId: any, id: any): void {
     this.InstrumentId = id;
+    
+    // Use tmpscifInstrumentsDataData if available, otherwise fall back to DataItems
+    const instrumentData = (this.tmpscifInstrumentsDataData && this.tmpscifInstrumentsDataData.length > 0) 
+      ? this.tmpscifInstrumentsDataData 
+      : this.DataItems;
+    
     this.CIFwebService.fetchSpecifications().subscribe({
       next: (response: any) => {
         if (response.item1 && Array.isArray(response.item1) && response.item1.length > 0) {
           const allSpecifications: Specification[] = response.item1;
-          const activeInstrument = this.cifInstrumentsDataData.some(
+          const activeInstrument = instrumentData.some(
             (x: { isActive: boolean, id: any }) => x.isActive === true && x.id === this.InstrumentId
           );
 
-          const instrument = this.cifInstrumentsDataData.find(
+          const instrument = instrumentData.find(
             (x: { id: any, instrumentName: string }) => x.id == this.InstrumentId
           );
 
@@ -307,8 +316,11 @@ export class CifInstrumentsComponent implements OnInit {
               (spec: Specification) => spec.categoryId === categoryId
             );
           } else {
-            this.isInstrumentActive = false;
-            this.specifications = [];
+            // Show section even if instrument not found in data array
+            this.isInstrumentActive = true;
+            this.specifications = allSpecifications.filter(
+              (spec: Specification) => spec.categoryId === categoryId
+            );
           }
 
           this.cdr.detectChanges();
@@ -327,7 +339,12 @@ export class CifInstrumentsComponent implements OnInit {
 
   // Helper method to set static specifications based on categoryId
   private setStaticSpecifications(categoryId: number): void {
-    const instrument = this.DataItems.find(
+    // Use tmpscifInstrumentsDataData or DataItems for instrument lookup
+    const instrumentData = this.tmpscifInstrumentsDataData?.length > 0 
+      ? this.tmpscifInstrumentsDataData 
+      : this.DataItems;
+      
+    const instrument = instrumentData.find(
       (x: { id: any, instrumentName: string, categoryId: number }) => x.categoryId === categoryId
     );
 
@@ -340,8 +357,20 @@ export class CifInstrumentsComponent implements OnInit {
         (spec: Specification) => spec.categoryId === categoryId
       );
     } else {
+      // Show section with specs even if instrument details not found
       this.isInstrumentActive = true;
-      this.specifications = [];
+      // Try to get instrument name from DataItems
+      const staticInstrument = this.DataItems.find(
+        (item: { categoryId: number }) => item.categoryId === categoryId
+      );
+      if (staticInstrument) {
+        this.instrumentName = staticInstrument.instrumentName;
+        this.Description = staticInstrument.description;
+        this.ImageUrl = staticInstrument.imageUrl;
+      }
+      this.specifications = this.staticSpecifications.filter(
+        (spec: Specification) => spec.categoryId === categoryId
+      );
     }
 
     this.cdr.detectChanges();

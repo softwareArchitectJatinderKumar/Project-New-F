@@ -114,6 +114,47 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
       });
+
+      // Search icon click handler
+      const searchButton = document.querySelector('#remote-header-wrapper #openSearch');
+      if (searchButton && !(searchButton as any)._searchInitialized) {
+        (searchButton as any)._searchInitialized = true;
+        searchButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          const topsearch = document.querySelector('#remote-header-wrapper .topsearch');
+          if (topsearch) {
+            topsearch.classList.add('open');
+            const input = topsearch.querySelector('input[type="text"]') as HTMLInputElement;
+            if (input) {
+              input.focus();
+            }
+          }
+        });
+      }
+
+      // Close search button handler
+      const closeSearch = document.querySelector('#remote-header-wrapper .close-search');
+      if (closeSearch && !(closeSearch as any)._closeSearchInitialized) {
+        (closeSearch as any)._closeSearchInitialized = true;
+        closeSearch.addEventListener('click', (e) => {
+          e.preventDefault();
+          const topsearch = document.querySelector('#remote-header-wrapper .topsearch');
+          if (topsearch) {
+            topsearch.classList.remove('open');
+          }
+        });
+      }
+
+      // ESC key to close search
+      document.addEventListener('keyup', (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          const topsearch = document.querySelector('#remote-header-wrapper .topsearch');
+          if (topsearch && topsearch.classList.contains('open')) {
+            topsearch.classList.remove('open');
+          }
+        }
+      });
     }
   }
 }
+
