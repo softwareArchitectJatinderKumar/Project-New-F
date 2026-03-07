@@ -1,22 +1,19 @@
-<!-- <div id="fixed-header" [innerHTML]="headerHtml">test case *********</div>
+<!-- Loading state - show placeholder while checking mount status -->
+<div *ngIf="!isMounted" style="min-height: 80px;"></div>
 
+<!-- Loading indicator while fetching header -->
+<div *ngIf="isMounted && loading" class="loading-container">
+  <div class="loading-spinner"></div>
+</div>
 
-<div [innerHTML]="headerHtml"></div> -->
-
-
-<!-- <div [innerHTML]="headerHtml"></div> -->
-
-
-<!-- <div *ngIf="loading" class="loader-container">
-  <mat-spinner [diameter]="20"></mat-spinner>
-</div> -->
-
-<div *ngIf="error && !loading" class="error-alert">
+<!-- Error state - show alert when header is unavailable -->
+<div *ngIf="isMounted && error && !loading" class="error-alert">
   <p>External Header Unavailable</p>
 </div>
 
+<!-- Remote header content -->
 <div 
-  *ngIf="headerHtml && !loading" 
+  *ngIf="isMounted && headerHtml && !loading" 
   id="remote-header-wrapper" 
   [innerHTML]="headerHtml">
 </div>

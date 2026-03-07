@@ -1,160 +1,119 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
-   selector: 'app-header',
+  selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-
-  encapsulation: ViewEncapsulation.None 
+  encapsulation: ViewEncapsulation.None
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   headerHtml: SafeHtml | null = null;
   loading: boolean = true;
   error: boolean = false;
+  isMounted: boolean = false;
+  private observer: MutationObserver | null = null;
 
   constructor(
     private http: HttpClient, 
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
+    this.isMounted = true;
     this.fetchHeader();
   }
 
+  ngOnDestroy(): void {
+    this.isMounted = false;
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    // Reinitialize dropdowns after view is rendered
+  }
+
   fetchHeader(): void {
-   // Ensure this matches the key in proxy.conf.json EXACTLY
-  this.http.get('/php-header', { responseType: 'text' })
-    .pipe(
-      catchError((err) => {
-        console.error('Proxy Error Details:', err); // Log the actual error to the console
-        this.error = true;
-        return of('');
-      }),
-      finalize(() => this.loading = false)
-    )
-    .subscribe(html => {
-      if (html) this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-    });
+    // Using /api/remote-header which proxies to https://includepages.lpu.in/newlpu/header.php
+    // This matches the React RemoteHeader component's endpoint
+    this.http.get('/api/remote-header', { responseType: 'text' })
+      .pipe(
+        catchError((err) => {
+          console.error('Proxy Error Details:', err);
+          this.error = true;
+          return of('');
+        }),
+        finalize(() => this.loading = false)
+      )
+      .subscribe(html => {
+        if (html) {
+          this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+          // Reinitialize dropdowns after HTML is rendered
+          setTimeout(() => this.reinitializeDropdowns(), 100);
+          // Also set up a MutationObserver to handle any dynamically added dropdowns
+          this.setupMutationObserver();
+        }
+      });
+  }
+
+  private setupMutationObserver(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const targetNode = document.getElementById('remote-header-wrapper');
+      if (targetNode) {
+        this.observer = new MutationObserver((mutations) => {
+          this.reinitializeDropdowns();
+        });
+        this.observer.observe(targetNode, { childList: true, subtree: true });
+      }
+    }
+  }
+
+  private reinitializeDropdowns(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Add hover handlers for nav-items (LPU uses .nav-item, not .dropdown)
+      const navItems = document.querySelectorAll('#remote-header-wrapper .nav-item');
+      navItems.forEach((navItem: Element) => {
+        // Check if event listeners are already added to avoid duplicates
+        if ((navItem as any)._hoverInitialized) {
+          return;
+        }
+        (navItem as any)._hoverInitialized = true;
+        
+        // Mouse enter - show dropdown
+        navItem.addEventListener('mouseenter', () => {
+          navItem.classList.add('show');
+        });
+        
+        // Mouse leave - hide dropdown
+        navItem.addEventListener('mouseleave', () => {
+          navItem.classList.remove('show');
+        });
+      });
+
+      // Also handle click events for dropdown toggle icons
+      const toggleIcons = document.querySelectorAll('#remote-header-wrapper .dropdown-toggle-icon');
+      toggleIcons.forEach((toggle: Element) => {
+        if ((toggle as any)._clickInitialized) {
+          return;
+        }
+        (toggle as any)._clickInitialized = true;
+        
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const parent = toggle.parentElement;
+          if (parent && parent.classList.contains('nav-item')) {
+            parent.classList.toggle('show');
+          }
+        });
+      });
+    }
   }
 }
-
-// import { Component, Inject, OnInit, AfterViewInit } from '@angular/core';
-// import { HttpClient } from '@angular/common/http';
-// import { DOCUMENT } from '@angular/common';
-// import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-
-// // Declare jQuery if the header uses it for hover effects
-// declare var $: any;
-
-// @Component({
-//   selector: 'app-header',
-//   templateUrl: './header.component.html'
-// })
-// export class HeaderComponent implements OnInit, AfterViewInit {
-//   headerHtml: SafeHtml = '';
-
-//   constructor(
-//     private http: HttpClient,
-//     private sanitizer: DomSanitizer,
-//     @Inject(DOCUMENT) private document: Document
-//   ) {}
-
-//   ngOnInit(): void {
-//     this.http.get('/php-header', { responseType: 'text' }).subscribe({
-//       next: (html: string) => {
-//         this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-        
-//         // Wait a tiny bit for Angular to render the HTML into the view
-//         setTimeout(() => {
-//           this.reinitializeHeaderScripts();
-//         }, 100);
-//       },
-//       error: (err) => console.error('Error:', err)
-//     });
-//   }
-
-//   private reinitializeHeaderScripts() {
-//     // If the header uses a standard Bootstrap dropdown or custom jQuery hover:
-//     if (typeof $ !== 'undefined') {
-//       // Example: Force re-binding of hover/dropdowns
-//       $('.dropdown').hover(
-//         () => { $(this).addClass('show').find('.dropdown-menu').addClass('show'); },
-//         () => { $(this).removeClass('show').find('.dropdown-menu').removeClass('show'); }
-//       );
-//     }
-    
-//     // Check if the remote header requires a specific global function to be called
-//     // Many LPU headers use a function like initMenu() or layout.init()
-//   }
-
-//   ngAfterViewInit(): void {
-//     this.loadGTMScript('GTM-P8ZP9K2');
-//   }
-
-//   private loadGTMScript(gtmId: string): void {
-//     if (this.document.getElementById('gtm-js')) return;
-//     const script = this.document.createElement('script');
-//     script.id = 'gtm-js';
-//     script.innerHTML = `
-//       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-//       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-//       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-//       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-//       })(window,document,'script','dataLayer','${gtmId}');
-//     `;
-//     this.document.head.appendChild(script);
-//   }
-// }
-// // import { Component, Inject, OnInit } from '@angular/core';
-// // import { HttpClient } from '@angular/common/http';
-// // import { DOCUMENT } from '@angular/common';
-
-// // import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-// // @Component({
-// //   selector: 'app-header',
-// //   templateUrl: './header.component.html'
-// // })
-// // export class HeaderComponent implements OnInit {
-// //    headerHtml: SafeHtml = '';
-
-// //   constructor(
-// //     private http: HttpClient,
-// //     private sanitizer: DomSanitizer,
-// //     @Inject(DOCUMENT) private document: Document
-// //   ) {}
-
-// //   ngOnInit() {
-// //     // Load remote header HTML
-// //     this.http
-// //       .get('https://includepages.lpu.in/newlpu/header.php', { responseType: 'text' })
-// //       .subscribe({
-// //         next: html => {
-// //           this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-// //         },
-// //         error: err => {
-// //           console.error('Error fetching PHP header:', err);
-// //         }
-// //       });
-// //   }
-
-// //   ngAfterViewInit() {
-// //     this.loadGTMScript('GTM-P8ZP9K2');
-// //   }
-
-// //   loadGTMScript(gtmId: string) {
-// //     const script = this.document.createElement('script');
-// //     script.innerHTML = `
-// //       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-// //       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-// //       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-// //       'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-// //       })(window,document,'script','dataLayer','${gtmId}');
-// //     `;
-// //     this.document.head.appendChild(script);
-// //   }
-// // }
-

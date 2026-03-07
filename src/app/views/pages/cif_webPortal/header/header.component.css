@@ -1,6 +1,0 @@
-/* Force show dropdown on hover via CSS */
-::ng-deep .dropdown:hover > .dropdown-menu {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
