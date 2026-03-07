@@ -4,4 +4,19 @@
 <div [innerHTML]="headerHtml"></div> -->
 
 
-<div [innerHTML]="headerHtml"></div>
+<!-- <div [innerHTML]="headerHtml"></div> -->
+
+
+<!-- <div *ngIf="loading" class="loader-container">
+  <mat-spinner [diameter]="20"></mat-spinner>
+</div> -->
+
+<div *ngIf="error && !loading" class="error-alert">
+  <p>External Header Unavailable</p>
+</div>
+
+<div 
+  *ngIf="headerHtml && !loading" 
+  id="remote-header-wrapper" 
+  [innerHTML]="headerHtml">
+</div>

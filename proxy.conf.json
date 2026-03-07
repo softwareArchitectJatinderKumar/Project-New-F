@@ -1,15 +1,11 @@
 {
-        "/php-header": {
-          "target": " https://includepages.lpu.in",
-          "secure": true,
-          "changeOrigin": true,
-          "logLevel": "debug",
-          "pathRewrite": {
-            "^/php-header": "/newlpu/header.php"
-          }
-        }
-   
+  "/php-header": {
+    "target": "https://includepages.lpu.in",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/php-header": "/newlpu/header.php"
+    }
   }
-  
-
- 
+}
