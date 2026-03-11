@@ -3,17 +3,19 @@
 
     -->
 
-    <!-- Loading state - show placeholder while checking mount status -->
+   <!-- Loading state - show placeholder while checking mount status -->
 <div *ngIf="!isMounted" style="min-height: 80px;"></div>
 
 <!-- Loading indicator while fetching footer -->
 <div *ngIf="isMounted && loading" class="loading-container">
   <div class="loading-spinner"></div>
+  <p>Loading footer...</p>
 </div>
 
 <!-- Error state - show alert when footer is unavailable -->
 <div *ngIf="isMounted && error && !loading" class="error-alert">
   <p>External footer Unavailable</p>
+  <small>Check console for details. Make sure to run with proxy: npm run start-proxy</small>
 </div>
 
 <!-- Remote footer content -->

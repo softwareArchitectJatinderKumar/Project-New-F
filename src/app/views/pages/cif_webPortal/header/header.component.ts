@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.isMounted = true;
+    this.loading = true;
     this.fetchHeader();
   }
 
@@ -41,24 +42,25 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   fetchHeader(): void {
-    // Using /api/remote-header which proxies to https://includepages.lpu.in/newlpu/header.php
-    // This matches the React RemoteHeader component's endpoint
-    this.http.get('/api/remote-header', { responseType: 'text' })
-      .pipe(
-        catchError((err) => {
-          console.error('Proxy Error Details:', err);
+    console.log('Fetching header from /api/header...');
+    this.http.get('/api/header', { responseType: 'text' })
+      .subscribe({
+        next: (html) => {
+          console.log('Header response received, length:', html ? html.length : 0);
+          if (html && html.trim()) {
+            this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+            setTimeout(() => this.reinitializeDropdowns(), 100);
+            this.setupMutationObserver();
+          } else {
+            console.warn('Header response is empty');
+            this.error = true;
+          }
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error fetching header:', err);
           this.error = true;
-          return of('');
-        }),
-        finalize(() => this.loading = false)
-      )
-      .subscribe(html => {
-        if (html) {
-          this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-          // Reinitialize dropdowns after HTML is rendered
-          setTimeout(() => this.reinitializeDropdowns(), 100);
-          // Also set up a MutationObserver to handle any dynamically added dropdowns
-          this.setupMutationObserver();
+          this.loading = false;
         }
       });
   }

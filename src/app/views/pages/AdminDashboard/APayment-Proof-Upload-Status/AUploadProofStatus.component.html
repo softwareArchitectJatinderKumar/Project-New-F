@@ -55,6 +55,7 @@
                 <thead class="table-light">
                   <tr>
                     <th class="fw-bolder ">Booking Id</th>
+                    <th class="fw-bolder ">User Id</th>
                     <th class="fw-bolder ">Number of Samples</th>
                     <th class="fw-bolder ">Total Charges</th>
                     <th class="fw-bolder ">Uploaded Proof</th>
@@ -66,6 +67,7 @@
                 <tbody>
                   <tr *ngFor="let row of getCurrentPageData(); let i = index">
                     <td class="fw-bold">{{ row.bookingId }}</td>
+                    <td class="fw-bold">{{ row.userId }}</td>
                     <td class="fw-bold">{{ row.noOfSamples }}</td>
                     <td class="fw-bold">{{ row.totalCharges }}</td>
                     <td>

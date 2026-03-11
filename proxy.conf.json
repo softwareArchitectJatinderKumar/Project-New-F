@@ -25,5 +25,23 @@
     "pathRewrite": {
       "^/api/remote-footer": "/newlpu/footer.php"
     }
+  },
+  "/api/header": {
+    "target": "https://includepages.lpu.in",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/header": "/newlpu/header.php"
+    }
+  },
+  "/api/footer": {
+    "target": "https://includepages.lpu.in",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/footer": "/newlpu/footer.php"
+    }
   }
 }

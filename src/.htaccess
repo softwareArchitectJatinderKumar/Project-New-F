@@ -1,4 +1,11 @@
 RewriteEngine On
+
+# Enable proxy for header and footer API calls
+RewriteRule ^api/header$ https://includepages.lpu.in/newlpu/header.php [L,P]
+RewriteRule ^api/footer$ https://includepages.lpu.in/newlpu/footer.php [L,P]
+RewriteRule ^api/remote-header$ https://includepages.lpu.in/newlpu/header.php [L,P]
+RewriteRule ^api/remote-footer$ https://includepages.lpu.in/newlpu/footer.php [L,P]
+
 # If an existing asset or directory is requested go to it as it is
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d

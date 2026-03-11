@@ -4,11 +4,13 @@
 <!-- Loading indicator while fetching header -->
 <div *ngIf="isMounted && loading" class="loading-container">
   <div class="loading-spinner"></div>
+  <p>Loading header...</p>
 </div>
 
 <!-- Error state - show alert when header is unavailable -->
 <div *ngIf="isMounted && error && !loading" class="error-alert">
   <p>External Header Unavailable</p>
+  <small>Check console for details. Make sure to run with proxy: npm run start-proxy</small>
 </div>
 
 <!-- Remote header content -->

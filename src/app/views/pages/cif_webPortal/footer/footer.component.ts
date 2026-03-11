@@ -25,6 +25,7 @@ export class FooterComponent implements OnInit, AfterViewInit {
   
     ngOnInit(): void {
       this.isMounted = true;
+      this.loading = true;
       this.fetchfooter();
     }
   
@@ -33,20 +34,29 @@ export class FooterComponent implements OnInit, AfterViewInit {
     }
   
     fetchfooter(): void {
-      // Using /api/remote-footer which proxies to https://includepages.lpu.in/newlpu/footer.php
-      // This matches the React Remotefooter component's endpoint
-      this.http.get('/api/remote-footer', { responseType: 'text' })
-        .pipe(
-          catchError((err) => {
-            console.error('Proxy Error Details:', err);
+      console.log('Fetching footer from /api/footer...');
+      this.http.get('/api/footer', { responseType: 'text' })
+        .subscribe({
+          next: (html) => {
+            console.log('Footer response received, length:', html ? html.length : 0);
+            if (html && html.trim()) {
+              this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+            } else {
+              console.warn('Footer response is empty');
+              this.error = true;
+            }
+            this.loading = false;
+          },
+          error: (err) => {
+            console.error('Error fetching footer:', err);
             this.error = true;
-            return of('');
-          }),
-          finalize(() => this.loading = false)
-        )
-        .subscribe(html => {
-          if (html) this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+            this.loading = false;
+          }
         });
+    }
+
+    private loadFooterFromEndpoint(endpoint: string) {
+      return this.http.get(endpoint, { responseType: 'text' });
     }
 
     
