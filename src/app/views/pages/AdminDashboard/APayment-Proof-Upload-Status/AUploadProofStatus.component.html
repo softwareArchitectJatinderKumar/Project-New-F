@@ -97,8 +97,7 @@
                 </tbody>
               </table>
             </div>
-            
-            <!-- Pagination -->
+ 
             <div class="d-flex justify-content-between align-items-center mt-4">
               <div class="text-muted small">
                 Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to {{ Math.min(currentPage * itemsPerPage, filteredData.length) }} of {{ filteredData.length }} entries
@@ -133,8 +132,7 @@
         </div>
       </div>
   </div>
-  
-  <!-- No Data Template -->
+ 
   <ng-template #noDataTemplate>
         <div class="card card-warning text-center  p-2 mb-4 ">
                 <hr />
@@ -147,13 +145,6 @@
             
                 </div>
             </div>
-    <!-- <div class="row">
-      <div class="col-12">
-        <div class="text-center py-5">
-          <h3 class="text-danger">No Record!</h3>
-          <p class="text-muted">No Samples Found.</p>
-        </div>
-      </div>
-    </div> -->
+ 
   </ng-template>
 </div>

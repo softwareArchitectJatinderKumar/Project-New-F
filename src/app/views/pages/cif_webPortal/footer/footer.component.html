@@ -1,26 +1,39 @@
- <!-- <footer class="footer bg-[#4c4f57] text-white mt-8 relative">
-      <div id="footer-container" class="mt-32" [innerHTML]="footerHtml"></div>
+<div class="mt-auto">
+  <div *ngIf="loading" class="text-center py-3 bg-light border-top">
+    <div class="spinner-grow spinner-grow-sm text-secondary"></div>
+  </div>
 
-    -->
+  <div *ngIf="error && !loading" class="text-center py-2 border-top small text-muted">
+    Footer data paused. <a href="javascript:void(0)" (click)="fetchFooter()">Reload</a>
+  </div>
 
-   <!-- Loading state - show placeholder while checking mount status -->
-<div *ngIf="!isMounted" style="min-height: 80px;"></div>
+  <div *ngIf="footerHtml && !loading" [innerHTML]="footerHtml"></div>
 
-<!-- Loading indicator while fetching footer -->
-<div *ngIf="isMounted && loading" class="loading-container">
-  <div class="loading-spinner"></div>
-  <p>Loading footer...</p>
+  <button *ngIf="showGotoTop" (click)="scrollToTop()" 
+          class="btn btn-danger position-fixed bottom-0 end-0 m-4 rounded-circle shadow"
+          style="width: 40px; height: 40px; z-index: 999;">
+    ↑
+  </button>
 </div>
+<!-- <div class="footer-wrapper" *ngIf="isMounted">
 
-<!-- Error state - show alert when footer is unavailable -->
-<div *ngIf="isMounted && error && !loading" class="error-alert">
-  <p>External footer Unavailable</p>
-  <small>Check console for details. Make sure to run with proxy: npm run start-proxy</small>
-</div>
+  <div *ngIf="loading" class="text-center py-4 bg-light">
+    <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+    <span class="ms-2 small text-muted">Loading footer...</span>
+  </div>
 
-<!-- Remote footer content -->
-<div 
-  *ngIf="isMounted && footerHtml && !loading" 
-  id="remote-footer-wrapper" 
-  [innerHTML]="footerHtml">
-</div>
+  <div *ngIf="error && !loading" class="alert alert-light border-top rounded-0 m-0 text-center">
+    <small class="text-muted">External Footer Unavailable</small>
+    <button class="btn btn-link btn-sm text-danger p-0 ms-2" (click)="fetchFooter()">Retry</button>
+  </div>
+
+  <div *ngIf="footerHtml && !loading" id="remote-footer-wrapper" [innerHTML]="footerHtml">
+  </div>
+
+  <button *ngIf="showGotoTop" (click)="scrollToTop()"
+    class="btn btn-danger position-fixed bottom-0 end-0 m-4 shadow-lg rounded-circle"
+    style="width: 45px; height: 45px; z-index: 1050;" title="Go to Top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+</div>  -->
