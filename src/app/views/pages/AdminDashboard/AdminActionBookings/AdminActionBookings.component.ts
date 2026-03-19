@@ -149,10 +149,29 @@ export class AdminActionBookingsComponent implements OnInit {
     return this.tmpsBookingData ? this.tmpsBookingData.length : 0;
   }
 
+  // Items per page dropdown options
+  itemsPerPageOptions = [
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '15', value: 15 },
+    { label: '20', value: 20 },
+    { label: 'All', value: 'all' }
+  ];
+
+  // Track if 'all' is selected
+  isAllSelected = false;
+
   // Handle record size dropdown change
-  onRecordSizeChange(event: any): void {
-    this.itemsPerPage = +event.target.value;
-    this.currentPage = 1; // Reset to first page
+  onItemsPerPageChange(event: any): void {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.isAllSelected = true;
+      this.itemsPerPage = this.tmpsBookingData.length; // Show all records
+    } else {
+      this.isAllSelected = false;
+      this.itemsPerPage = parseInt(value, 10);
+    }
+    this.currentPage = 1; // Reset to first page when items per page changes
   }
 
 

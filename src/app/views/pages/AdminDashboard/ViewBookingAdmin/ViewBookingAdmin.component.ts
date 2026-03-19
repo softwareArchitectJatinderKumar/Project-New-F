@@ -36,6 +36,19 @@ export class ViewBookingAdminComponent implements OnInit {
   loadingIndicator = false;   headHtmlData: any[] = [];
   p: any = 1;   perPage: any = 5;   perPages: any = 5;  currentPages: any=1; itemsPerPages = 10;
   BookingCase: any;   BookingData: any[]=[];      currentPage = 1;    itemsPerPage = 10; //
+  
+  // Items per page dropdown options
+  itemsPerPageOptions = [
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '15', value: 15 },
+    { label: '20', value: 20 },
+    { label: 'All', value: 'all' }
+  ];
+  
+  // Track if 'all' is selected
+  isAllSelected = false;
+  
   UplaodedResultsData: any[]=[]; tmpUplaodedResultsData: any[]=[];
   tmpsBookingData: any[]=[];    InstrumentId: any;    UserRole: any;  UserId: any;
   uploadEnabled: boolean; Remarks: any;   serverUrl: string;
@@ -192,6 +205,9 @@ export class ViewBookingAdminComponent implements OnInit {
   }
 
   getTotalPagess() {
+    if (this.isAllSelected) {
+      return 1;
+    }
     return Math.ceil(this.tmpUplaodedResultsData.length / this.itemsPerPages);
   }
 
@@ -269,6 +285,9 @@ export class ViewBookingAdminComponent implements OnInit {
   }
 
   getTotalPages() {
+    if (this.isAllSelected) {
+      return 1;
+    }
     return Math.ceil(this.tmpsBookingData.length / this.itemsPerPage);
   }
 
@@ -288,6 +307,32 @@ export class ViewBookingAdminComponent implements OnInit {
     if (this.currentPage > 1) {
       this.currentPage--;
     }
+  }
+
+  // Handle items per page change
+  onItemsPerPageChange(event: any): void {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.isAllSelected = true;
+      this.itemsPerPage = this.tmpsBookingData.length;
+    } else {
+      this.isAllSelected = false;
+      this.itemsPerPage = parseInt(value, 10);
+    }
+    this.currentPage = 1;
+  }
+
+  // Handle items per page change for second tab
+  onItemsPerPagesChange(event: any): void {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.isAllSelected = true;
+      this.itemsPerPages = this.tmpUplaodedResultsData.length;
+    } else {
+      this.isAllSelected = false;
+      this.itemsPerPages = parseInt(value, 10);
+    }
+    this.currentPages = 1;
   }
 
   exportToExcel(): void {

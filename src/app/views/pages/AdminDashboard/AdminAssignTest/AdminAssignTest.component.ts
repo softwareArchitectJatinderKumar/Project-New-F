@@ -34,6 +34,18 @@ export class AdminAssignTestComponent implements OnInit {
   itemsPerPage = 5;
   searchQuery: string = '';
 
+  // Items per page dropdown options
+  itemsPerPageOptions = [
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '15', value: 15 },
+    { label: '20', value: 20 },
+    { label: 'All', value: 'all' }
+  ];
+
+  // Track if 'all' is selected
+  isAllSelected = false;
+
   BookingCase: any;
   AssignedTo: any = '';
   InstrumentId: any;
@@ -176,6 +188,9 @@ export class AdminAssignTestComponent implements OnInit {
   }
 
   getTotalPages(): number {
+    if (this.isAllSelected) {
+      return 1; // When 'all' is selected, there's only 1 page showing all data
+    }
     return Math.ceil(this.tmpsAllBookingTestsData.length / this.itemsPerPage);
   }
 
@@ -366,9 +381,21 @@ export class AdminAssignTestComponent implements OnInit {
   }
 
   // Handle record size dropdown change
+  onItemsPerPageChange(event: any): void {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.isAllSelected = true;
+      this.itemsPerPage = this.tmpsAllBookingTestsData.length; // Show all records
+    } else {
+      this.isAllSelected = false;
+      this.itemsPerPage = parseInt(value, 10);
+    }
+    this.currentPage = 1; // Reset to first page when items per page changes
+  }
+
+  // Legacy method for backward compatibility
   onRecordSizeChange(event: any): void {
-    this.itemsPerPage = +event.target.value;
-    this.currentPage = 1; // Reset to first page
+    this.onItemsPerPageChange(event);
   }
 
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as XLSX from 'xlsx';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { DOCUMENT } from '@angular/common';
@@ -28,6 +29,21 @@ export class AdminUpdateInstrumentPrice implements OnInit {
     selectedInstrumentName: string = '';
     selectedUserRole: string = '';
     user_Email: string = '';
+
+    // Pagination properties
+    currentPage = 1;
+    itemsPerPage = 5;
+    searchQuery: string = '';
+    isAllSelected = false;
+
+    // Items per page dropdown options
+    itemsPerPageOptions = [
+      { label: '5', value: 5 },
+      { label: '10', value: 10 },
+      { label: '15', value: 15 },
+      { label: '20', value: 20 },
+      { label: 'All', value: 'all' }
+    ];
 
     constructor(
         private fb: FormBuilder,

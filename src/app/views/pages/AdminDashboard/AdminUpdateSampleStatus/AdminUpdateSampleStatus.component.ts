@@ -22,7 +22,19 @@ export class AdminUpdateSampleStatusComponent implements OnInit {
 
   currentPage = 1;
   itemsPerPage = 10;
-
+  
+  // Items per page dropdown options
+  itemsPerPageOptions = [
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '15', value: 15 },
+    { label: '20', value: 20 },
+    { label: 'All', value: 'all' }
+  ];
+  
+  // Track if 'all' is selected
+  isAllSelected = false;
+  
   searchQuery = '';
   BookingCase: any;
   AssignedTo = '';
@@ -141,7 +153,23 @@ export class AdminUpdateSampleStatusComponent implements OnInit {
   }
 
   getTotalPages(): number {
+    if (this.isAllSelected) {
+      return 1;
+    }
     return Math.ceil(this.filteredBookingTestsData.length / this.itemsPerPage) || 1;
+  }
+
+  // Handle items per page change
+  onItemsPerPageChange(event: any): void {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.isAllSelected = true;
+      this.itemsPerPage = this.filteredBookingTestsData.length;
+    } else {
+      this.isAllSelected = false;
+      this.itemsPerPage = parseInt(value, 10);
+    }
+    this.currentPage = 1;
   }
 
   getCurrentPageData(): any[] {

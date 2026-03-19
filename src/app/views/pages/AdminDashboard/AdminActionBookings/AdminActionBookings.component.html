@@ -16,7 +16,7 @@
             </div>
             <hr />
              <div class="card-body">
-                <div class="row d-flex justify-content-center align-items-center mt-4 mb-4">
+                <div class="row d-flex justify-content-center align-items-center mt-4 mb-2">
                     <div class="col-sm-4 col-3 text-end">
 
                         <button (click)="exportToExcel()" class="btn btn-dark"
@@ -26,11 +26,11 @@
 
                     </div>
 
-                    
+                     
                     <div class="col-sm-4 col-3  mb-4 mt-3 text-center">
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
                             class="form-control w-50 " placeholder="Search Your Text Here" aria-label="Search"
-                            aria-describedby="basic-addon1" />
+                            aria-describedby="basic-addon1" [disabled]="tmpsBookingData.length == 0" />
                     </div>
                     <div class="col-md-4 col-3 mb-4 mt-3">
                         <button (click)="toggleAdvancedSearch()" class="btn btn-dark w-50">
@@ -42,13 +42,15 @@
 
 
                 </div>
+                <hr/>
                 <div *ngIf="showAdvancedSearch"
-                    class="row mb-3 p-3 d-flex justify-content-center align-items-center bg-light rounded">
+                    class="row mb-3 p-2 d-flex justify-content-center align-items-center bg-light rounded">
 
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <ng-select [(ngModel)]="selectedStatus" [items]="statusOptions"
                             (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
-                            placeholder="-- Select Status --" class="w-100">
+                            placeholder="-- Select Status --" class="w-100"
+                            [disabled]="tmpsBookingData.length == 0">
                             <ng-template ng-option-tmp let-item="item">
                                 <span *ngIf="item.value === ''">-- All Payments--</span>
                                 <span *ngIf="item.value === 'success'">Paid</span>
@@ -68,7 +70,8 @@
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <ng-select [(ngModel)]="IsAssigned" [items]="assignedOptions"
                             (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
-                            placeholder="-- Select --" class="w-100">
+                            placeholder="-- Select --" class="w-100"
+                            [disabled]="tmpsBookingData.length == 0">
                             <ng-template ng-option-tmp let-item="item">
                                 <span *ngIf="item.value === ''">-- All Tests--</span>
                                 <span *ngIf="item.value === 'Assigned'">All Assigned</span>
@@ -106,17 +109,42 @@
                             Records</span>
                     </span>
                 </div>
-                <div class="row">
-                    <div class="m-1">
-                        <span class="text-dark m-3 fs-5 p-2 fw-bolder" style="border:1px solid #ef7d00;">
-                            Record Count: {{ getTotalRecords() }} | Total Pages: {{ getTotalPages() }}
+                <!-- Top Pagination and Controls -->
+                <div class="row d-flex justify-content-center align-items-center mb-3" *ngIf="tmpsBookingData.length > 0">
+                    <div class="col-md-4 text-end">
+                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                            Records: {{ getTotalRecords() }}
                         </span>
                     </div>
+                    <div class="col-md-4 text-start">
+                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
+                        <select class="form-select d-inline-block ms-2" style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;" 
+                            [value]="isAllSelected ? 'all' : itemsPerPage"
+                            (change)="onItemsPerPageChange($event)">
+                            <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
+                                {{ option.label }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="pagination">
+                            <a class="btn btn-outline-primary m-3" (click)="prevPage()"
+                                [class.disabled]="currentPage === 1">
+                                <i class="mdi mdi-chevron-left fs-4"></i>
+                            </a>
+                            <span class="fs-5 mt-4">{{ currentPage }} / {{ getTotalPages() }}</span>
+                            <a class="btn btn-outline-primary m-3" (click)="nextPage()"
+                                [class.disabled]="currentPage === getTotalPages()">
+                                <i class="mdi mdi-chevron-right fs-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <ng-container *ngIf="tmpsBookingData.length > 0; else noRecords">
-                    <div class="table-responsive mt-4 mb-4">
-                        <table id="BookingDetailsDataTable" #table>
+                    <div class="table-responsive bg-dark-yellow mt-4 mb-4">
+                        <table id="BookingDetailsDataTable" #table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th class="form-label fw-bolder">Booking Id</th>
@@ -189,12 +217,18 @@
                                 </ng-container>
                             </tbody>
                         </table>
-                        <div class="pagination">
-                            <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
-                                    class="mdi mdi-chevron-left  fs-2"> </i> </a>
-                            <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
-                                    class="mdi mdi-chevron-right  fs-2"> </i></a>
+                        <div class="row" *ngIf="tmpsBookingData.length > 0">
+                            <div class="col-sm-3 pagination d-flex justify-content-center align-items-center mt-3">
+                                <a class="btn btn-outline-primary me-3" (click)="prevPage()"
+                                    [class.disabled]="currentPage === 1">
+                                    <i class="mdi mdi-chevron-left fs-4"></i>
+                                </a>
+                                <span class="fs-5">{{ currentPage }} / {{ getTotalPages() }}</span>
+                                <a class="btn btn-outline-primary ms-3" (click)="nextPage()"
+                                    [class.disabled]="currentPage === getTotalPages()">
+                                    <i class="mdi mdi-chevron-right fs-4"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </ng-container>

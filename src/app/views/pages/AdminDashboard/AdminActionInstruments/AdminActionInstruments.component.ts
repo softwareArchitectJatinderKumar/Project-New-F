@@ -302,6 +302,19 @@ UploadNewExcelSampleSheet:any;
   InstrumentData: any[] = [];
   currentPage = 1;
   itemsPerPage = 10; // 
+  
+  // Items per page dropdown options
+  itemsPerPageOptions = [
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '15', value: 15 },
+    { label: '20', value: 20 },
+    { label: 'All', value: 'all' }
+  ];
+  
+  // Track if 'all' is selected
+  isAllSelected = false;
+  
   tmpsInstrumentData: any[] = [];
   InstrumentId: any;
   UserRole: any;
@@ -418,6 +431,9 @@ UploadNewExcelSampleSheet:any;
   }
 
   getTotalPages() {
+    if (this.isAllSelected) {
+      return 1;
+    }
     return Math.ceil(this.tmpsInstrumentData.length / this.itemsPerPage);
   }
 
@@ -440,6 +456,24 @@ UploadNewExcelSampleSheet:any;
       this.currentPage--;
     }
   }
+
+  // Handle items per page change
+  onItemsPerPageChange(event: any): void {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.isAllSelected = true;
+      this.itemsPerPage = this.tmpsInstrumentData.length;
+    } else {
+      this.isAllSelected = false;
+      this.itemsPerPage = parseInt(value, 10);
+    }
+    this.currentPage = 1;
+  }
+
+  getTotalRecords(): number {
+    return this.tmpsInstrumentData ? this.tmpsInstrumentData.length : 0;
+  }
+
   exportToExcel(): void {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();

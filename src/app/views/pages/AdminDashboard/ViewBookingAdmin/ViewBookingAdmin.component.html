@@ -1,3 +1,4 @@
+
 <app-FacultyDashboard></app-FacultyDashboard>
 <div class="container-fluid " style=" height: 2.5rem; ">
   <div class="container-fluid d-flex justify-content-center align-items-center">
@@ -60,7 +61,7 @@
               <div class="col-sm-2">
                 <div class="mb-3">
                   <button (click)="exportToExcel()" class="btn btn-dark "
-                    [disabled]="tmpsBookingData.length ===0">Export to
+                    [disabled]="tmpsBookingData.length === 0">Export to
                     Excel</button>
                 </div>
               </div>
@@ -71,9 +72,37 @@
               </div>
               <div class="col-sm-5 mb-4 ">
                 <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" style=" width: 21rem; "
-                  class="form-control " placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" />
+                  class="form-control " placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" 
+                  [disabled]="tmpsBookingData.length === 0" />
               </div>
               <hr />
+            </div>
+            <!-- Top Pagination and Controls -->
+            <div class="row d-flex justify-content-between align-items-center mb-3" *ngIf="tmpsBookingData.length > 0">
+              <div class="col-md-4">
+                <span class="text-dark fs-5 fw-bolder" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                  Records: {{ tmpsBookingData.length }}
+                </span>
+              </div>
+              <div class="col-md-4 text-center">
+                <div class="pagination">
+                  <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
+                      class="mdi mdi-chevron-left  fs-2"> </i> </a>
+                  <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
+                  <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
+                      class="mdi mdi-chevron-right  fs-2"> </i></a>
+                </div>
+              </div>
+              <div class="col-md-4 text-end">
+                <label class="me-2 fw-bold">Items per page:</label>
+                <select class="form-select d-inline-block" style="width: auto;" 
+                  [value]="isAllSelected ? 'all' : itemsPerPage"
+                  (change)="onItemsPerPageChange($event)">
+                  <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
             </div>
             <ng-container *ngIf="tmpsBookingData.length > 0; else noRecords">
 
@@ -131,12 +160,31 @@
                   </tr>
                 </tfoot> -->
               </table>
-              <div class="pagination">
-                <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
-                    class="mdi mdi-chevron-left  fs-2"> </i> </a>
-                <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
-                    class="mdi mdi-chevron-right  fs-2"> </i></a>
+              <div class="row d-flex justify-content-between align-items-center mt-3" *ngIf="tmpsBookingData.length > 0">
+                <div class="col-md-4">
+                  <span class="text-dark fs-5 fw-bolder" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                    Records: {{ tmpsBookingData.length }}
+                  </span>
+                </div>
+                <div class="col-md-4 text-center">
+                  <div class="pagination">
+                    <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
+                        class="mdi mdi-chevron-left  fs-2"> </i> </a>
+                    <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
+                    <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
+                        class="mdi mdi-chevron-right  fs-2"> </i></a>
+                  </div>
+                </div>
+                <div class="col-md-4 text-end">
+                  <label class="me-2 fw-bold">Items per page:</label>
+                  <select class="form-select d-inline-block" style="width: auto;" 
+                    [value]="isAllSelected ? 'all' : itemsPerPage"
+                    (change)="onItemsPerPageChange($event)">
+                    <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </ng-container>
             <ng-template #noRecords>
@@ -236,9 +284,37 @@
               </div>
               <div class="col-sm-5 mb-4 ">
                 <input [(ngModel)]="searchQueryx" (keyup)="searchx()" id="search" type="text" style=" width: 21rem; "
-                  class="form-control " placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" />
+                  class="form-control " placeholder="Search" aria-label="Search" aria-describedby="basic-addon1" 
+                  [disabled]="tmpUplaodedResultsData.length === 0" />
               </div>
               <hr />
+            </div>
+            <!-- Top Pagination and Controls for Second Tab -->
+            <div class="row d-flex justify-content-between align-items-center mb-3" *ngIf="tmpUplaodedResultsData.length > 0">
+              <div class="col-md-4">
+                <span class="text-dark fs-5 fw-bolder" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                  Records: {{ tmpUplaodedResultsData.length }}
+                </span>
+              </div>
+              <div class="col-md-4 text-center">
+                <div class="pagination">
+                  <a class="" (click)="prevPages()" [class.disabled]="currentPages === 1"> <i
+                      class="mdi mdi-chevron-left  fs-2"> </i> </a>
+                  <span class="text-danger p-2">{{ currentPages }} / {{ getTotalPagess() }}</span>
+                  <a class="" (click)="nextPages()" [class.disabled]="currentPages === getTotalPagess()"><i
+                      class="mdi mdi-chevron-right  fs-2"> </i></a>
+                </div>
+              </div>
+              <div class="col-md-4 text-end">
+                <label class="me-2 fw-bold">Items per page:</label>
+                <select class="form-select d-inline-block" style="width: auto;" 
+                  [value]="isAllSelected ? 'all' : itemsPerPages"
+                  (change)="onItemsPerPagesChange($event)">
+                  <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
             </div>
             <ng-container *ngIf="tmpUplaodedResultsData.length > 0; else noRecords">
 
@@ -305,12 +381,31 @@
                   </tr>
                 </tfoot> -->
               </table>
-              <div class="pagination">
-                <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
-                    class="mdi mdi-chevron-left  fs-2"> </i> </a>
-                <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
-                    class="mdi mdi-chevron-right  fs-2"> </i></a>
+              <div class="row d-flex justify-content-between align-items-center mt-3" *ngIf="tmpUplaodedResultsData.length > 0">
+                <div class="col-md-4">
+                  <span class="text-dark fs-5 fw-bolder" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                    Records: {{ tmpUplaodedResultsData.length }}
+                  </span>
+                </div>
+                <div class="col-md-4 text-center">
+                  <div class="pagination">
+                    <a class="" (click)="prevPages()" [class.disabled]="currentPages === 1"> <i
+                        class="mdi mdi-chevron-left  fs-2"> </i> </a>
+                    <span class="text-danger p-2">{{ currentPages }} / {{ getTotalPagess() }}</span>
+                    <a class="" (click)="nextPages()" [class.disabled]="currentPages === getTotalPagess()"><i
+                        class="mdi mdi-chevron-right  fs-2"> </i></a>
+                  </div>
+                </div>
+                <div class="col-md-4 text-end">
+                  <label class="me-2 fw-bold">Items per page:</label>
+                  <select class="form-select d-inline-block" style="width: auto;" 
+                    [value]="isAllSelected ? 'all' : itemsPerPages"
+                    (change)="onItemsPerPagesChange($event)">
+                    <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </ng-container>
             <ng-template #noRecords>

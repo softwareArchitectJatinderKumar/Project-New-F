@@ -42,8 +42,20 @@ export class AUploadProofStatusComponent implements OnInit {
 
   // Pagination
   currentPage = 1;
-  itemsPerPage = 10;
-
+  itemsPerPage = 5;
+  
+  // Items per page dropdown options
+  itemsPerPageOptions = [
+    { label: '5', value: 5 },
+    { label: '10', value: 10 },
+    { label: '15', value: 15 },
+    { label: '20', value: 20 },
+    { label: 'All', value: 'all' }
+  ];
+  
+  // Track if 'all' is selected
+  isAllSelected = false;
+  
   // Search
   searchQuery = '';
 
@@ -222,7 +234,23 @@ user_Email: any; UserRole:any; candidateName:any;
 
   // Pagination methods
   get totalPages(): number {
+    if (this.isAllSelected) {
+      return 1;
+    }
     return Math.ceil(this.filteredData.length / this.itemsPerPage);
+  }
+
+  // Handle items per page change
+  onItemsPerPageChange(event: any): void {
+    const value = event.target.value;
+    if (value === 'all') {
+      this.isAllSelected = true;
+      this.itemsPerPage = this.filteredData.length;
+    } else {
+      this.isAllSelected = false;
+      this.itemsPerPage = parseInt(value, 10);
+    }
+    this.currentPage = 1;
   }
 
   getCurrentPageData(): UploadProofRecord[] {
@@ -232,6 +260,10 @@ user_Email: any; UserRole:any; candidateName:any;
 
   get hasNextPage(): boolean {
     return this.currentPage < this.totalPages;
+  }
+
+  getTotalRecords(): number {
+    return this.filteredData.length;
   }
 
   get hasPrevPage(): boolean {

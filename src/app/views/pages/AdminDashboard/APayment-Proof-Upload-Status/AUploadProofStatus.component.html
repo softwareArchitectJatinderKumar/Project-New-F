@@ -40,7 +40,8 @@
                     type="text" 
                     class="form-control" 
                     placeholder="Search records..." 
-                    aria-label="Search" />
+                    aria-label="Search"
+                    [disabled]="!hasFilteredData" />
                 </div>
               </div>
             </div>
@@ -48,6 +49,39 @@
           
           
           
+          <!-- Top Pagination and Controls -->
+          <div class="row d-flex justify-content-center align-items-center mb-3" *ngIf="hasFilteredData">
+              <div class="col-md-4 text-end">
+                  <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                      Records: {{ getTotalRecords() }}
+                  </span>
+              </div>
+              <div class="col-md-4 text-start">
+                  <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
+                  <select class="form-select d-inline-block ms-2" style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;" 
+                      [value]="isAllSelected ? 'all' : itemsPerPage"
+                      (change)="onItemsPerPageChange($event)"
+                      [disabled]="!hasFilteredData">
+                      <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
+                          {{ option.label }}
+                      </option>
+                  </select>
+              </div>
+              <div class="col-md-4 text-center">
+                  <div class="pagination">
+                      <a class="btn btn-outline-primary m-3" (click)="prevPage()"
+                          [class.disabled]="currentPage === 1">
+                          <i class="mdi mdi-chevron-left fs-4"></i>
+                      </a>
+                      <span class="fs-5 mt-4">{{ currentPage }} / {{ totalPages }}</span>
+                      <a class="btn btn-outline-primary m-3" (click)="nextPage()"
+                          [class.disabled]="currentPage === totalPages">
+                          <i class="mdi mdi-chevron-right fs-4"></i>
+                      </a>
+                  </div>
+              </div>
+          </div>
+
           <!-- Table Section -->
           <ng-container *ngIf="hasFilteredData; else noRecordsTemplate">
             <div class="table-responsive">
@@ -98,30 +132,19 @@
               </table>
             </div>
             
-            <!-- Pagination -->
-            <div class="d-flex justify-content-between align-items-center mt-4">
-              <div class="text-muted small">
-                Showing {{ (currentPage - 1) * itemsPerPage + 1 }} to {{ Math.min(currentPage * itemsPerPage, filteredData.length) }} of {{ filteredData.length }} entries
-              </div>
-              <nav aria-label="Table pagination">
-                <ul class="pagination pagination-sm mb-0">
-                  <li class="page-item" [class.disabled]="!hasPrevPage">
-                    <a class="page-link" (click)="prevPage()">
-                      <i class="bi bi-chevron-left"></i>
+            <!-- Bottom Pagination -->
+            <div class="row" *ngIf="hasFilteredData">
+                <div class="col-sm-3 pagination d-flex justify-content-center align-items-center mt-3">
+                    <a class="btn btn-outline-primary me-3" (click)="prevPage()"
+                        [class.disabled]="currentPage === 1">
+                        <i class="mdi mdi-chevron-left fs-4"></i>
                     </a>
-                  </li>
-                  <li class="page-item disabled">
-                    <span class="page-link text-danger">
-                      {{ currentPage }} / {{ totalPages }}
-                    </span>
-                  </li>
-                  <li class="page-item" [class.disabled]="!hasNextPage">
-                    <a class="page-link" (click)="nextPage()">
-                      <i class="bi bi-chevron-right"></i>
+                    <span class="fs-5">{{ currentPage }} / {{ totalPages }}</span>
+                    <a class="btn btn-outline-primary ms-3" (click)="nextPage()"
+                        [class.disabled]="currentPage === totalPages">
+                        <i class="mdi mdi-chevron-right fs-4"></i>
                     </a>
-                  </li>
-                </ul>
-              </nav>
+                </div>
             </div>
           </ng-container>
           
