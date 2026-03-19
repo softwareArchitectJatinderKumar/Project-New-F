@@ -38,31 +38,46 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Reinitialize dropdowns after view is rendered
   }
 
   fetchHeader(): void {
-    console.log('Fetching header from /api/header...');
-    this.http.get('/api/header', { responseType: 'text' })
-      .subscribe({
-        next: (html) => {
-          console.log('Header response received, length:', html ? html.length : 0);
-          if (html && html.trim()) {
-            this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-            setTimeout(() => this.reinitializeDropdowns(), 100);
-            this.setupMutationObserver();
-          } else {
-            console.warn('Header response is empty');
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      this.http.get('/api/header', { responseType: 'text' })
+        .subscribe({
+          next: (html) => {
+            if (html && html.trim()) {
+              this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+              setTimeout(() => this.reinitializeDropdowns(), 100);
+              this.setupMutationObserver();
+            } else {
+              this.error = true;
+            }
+            this.loading = false;
+          },
+          error: (err) => {
             this.error = true;
+            this.loading = false;
           }
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error fetching header:', err);
-          this.error = true;
-          this.loading = false;
-        }
-      });
+        });
+    } else {
+      this.http.get('https://includepages.lpu.in/newlpu/header.php', { responseType: 'text' })
+        .subscribe({
+          next: (html) => {
+            if (html && html.trim()) {
+              this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+              setTimeout(() => this.reinitializeDropdowns(), 100);
+              this.setupMutationObserver();
+            } else {
+              this.error = true;
+            }
+            this.loading = false;
+          },
+          error: (err) => {
+            this.error = true;
+            this.loading = false;
+          }
+        });
+    }
   }
 
   private setupMutationObserver(): void {
@@ -79,27 +94,22 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private reinitializeDropdowns(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Add hover handlers for nav-items (LPU uses .nav-item, not .dropdown)
       const navItems = document.querySelectorAll('#remote-header-wrapper .nav-item');
       navItems.forEach((navItem: Element) => {
-        // Check if event listeners are already added to avoid duplicates
         if ((navItem as any)._hoverInitialized) {
           return;
         }
         (navItem as any)._hoverInitialized = true;
         
-        // Mouse enter - show dropdown
         navItem.addEventListener('mouseenter', () => {
           navItem.classList.add('show');
         });
         
-        // Mouse leave - hide dropdown
         navItem.addEventListener('mouseleave', () => {
           navItem.classList.remove('show');
         });
       });
 
-      // Also handle click events for dropdown toggle icons
       const toggleIcons = document.querySelectorAll('#remote-header-wrapper .dropdown-toggle-icon');
       toggleIcons.forEach((toggle: Element) => {
         if ((toggle as any)._clickInitialized) {
@@ -117,7 +127,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       });
 
-      // Search icon click handler
       const searchButton = document.querySelector('#remote-header-wrapper #openSearch');
       if (searchButton && !(searchButton as any)._searchInitialized) {
         (searchButton as any)._searchInitialized = true;
@@ -134,7 +143,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
 
-      // Close search button handler
       const closeSearch = document.querySelector('#remote-header-wrapper .close-search');
       if (closeSearch && !(closeSearch as any)._closeSearchInitialized) {
         (closeSearch as any)._closeSearchInitialized = true;
@@ -147,7 +155,6 @@ export class HeaderComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
 
-      // ESC key to close search
       document.addEventListener('keyup', (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           const topsearch = document.querySelector('#remote-header-wrapper .topsearch');
