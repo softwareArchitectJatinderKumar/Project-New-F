@@ -25,7 +25,7 @@
             <div class="col-md-6 d-none d-lg-block mt-5 ">
                 <img src="https://www.lpu.in/lpu-assets/images/cif/login-left.png" />
             </div>
-            <div class="col-md-6 login-div" *ngIf="serverConnectionError==false; else ErrorCard">
+            <div class="col-md-6 login-div" >
 
 
 
@@ -178,13 +178,23 @@
 </section>
 
 <ng-template #ErrorCard>
-    <div class="col-md-6 login-div alert alert-danger card mt-3" role="alert">
+     <div class="text-center" >
+        <h3 class="text-center fs-2 m-5 text-danger pt-5 "> No Record ! </h3>
+        <div class="row mt-4 mb-4">
+            <div class="col-sm-12 text-center">
+                <div class="mb-3 p-4">
+                    <Label class="form-label fs-4 text-danger ">No Data Found.</Label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="col-md-6 login-div alert alert-danger card mt-3" role="alert">
         <div class="card-body text-center">
             <h5 class="card-title">Server Connection Error</h5>
             <p class="card-text">Data Server Connection error , Try again later</p>
-            <!-- <span class=" " (click)="serverConnectionError = false; loginError = null">Try  Again</span> -->
+             
         </div>
-    </div>
+    </div> -->
 </ng-template>
 <ng-template #ViewTermsModal let-modal>
     <div class="modal-header">
