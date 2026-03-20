@@ -43,5 +43,41 @@
     "pathRewrite": {
       "^/api/footer": "/newlpu/footer.php"
     }
+  },
+  "/api/header-static": {
+    "target": "https://includepages.lpu.in",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/header-static": "/newlpu/header.php"
+    }
+  },
+  "/api/footer-static": {
+    "target": "https://includepages.lpu.in",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/footer-static": "/newlpu/footer.php"
+    }
+  },
+  "/api/header-alt": {
+    "target": "https://includepages.lpu.in",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/header-alt": "/newlpu/header.php"
+    }
+  },
+  "/api/footer-alt": {
+    "target": "https://includepages.lpu.in",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/footer-alt": "/newlpu/footer.php"
+    }
   }
 }

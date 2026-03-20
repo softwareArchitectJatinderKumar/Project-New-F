@@ -1,10 +1,16 @@
-<div class="footer-container">
-  <iframe 
-    src="https://includepages.lpu.in/newlpu/footer.php" 
-    width="100%" 
-    frameborder="0" 
-    scrolling="no" 
-    onload="this.style.height=this.contentWindow.document.body.scrollHeight+'px';"
-    style="min-height: 300px; border: none;">
-  </iframe>
+ 
+<div *ngIf="!isMounted" style="min-height: 80px;"></div>
+
+ 
+<div *ngIf="isMounted && loading" class="loading-container">
+  <div class="loading-spinner"></div>
+  <p>Loading footer...</p>
+</div>
+
+ 
+ 
+<div 
+  *ngIf="isMounted && footerHtml && !loading" 
+  id="remote-footer-wrapper" 
+  [innerHTML]="footerHtml">
 </div>

@@ -1,5 +1,7 @@
 export const environment = {
   production: false,
+  headerUrl: '/api/header',   // proxy handles this locally
+  footerUrl: '/api/footer',
   firebaseConfig: {
     apiKey: "AIzaSyBazhtVRY3KesQdRHiaIWAVfckvMUb-bz8",
     authDomain: "lpuchat-d0b7c.firebaseapp.com",

@@ -1,5 +1,7 @@
 export const environment = {
   production: true,
+  headerUrl: 'https://includepages.lpu.in/newlpu/header.php',  // direct URL
+  footerUrl: 'https://includepages.lpu.in/newlpu/footer.php',
   firebaseConfig : {
     apiKey: "AIzaSyBazhtVRY3KesQdRHiaIWAVfckvMUb-bz8",
     authDomain: "lpuchat-d0b7c.firebaseapp.com",
