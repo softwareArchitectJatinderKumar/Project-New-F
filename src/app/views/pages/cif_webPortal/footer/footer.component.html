@@ -1,26 +1,10 @@
- <!-- <footer class="footer bg-[#4c4f57] text-white mt-8 relative">
-      <div id="footer-container" class="mt-32" [innerHTML]="footerHtml"></div>
-
-    -->
-
-   <!-- Loading state - show placeholder while checking mount status -->
-<div *ngIf="!isMounted" style="min-height: 80px;"></div>
-
-<!-- Loading indicator while fetching footer -->
-<div *ngIf="isMounted && loading" class="loading-container">
-  <div class="loading-spinner"></div>
-  <p>Loading footer...</p>
-</div>
-
-<!-- Error state - show alert when footer is unavailable -->
-<div *ngIf="isMounted && error && !loading" class="error-alert">
-  <p>External footer Unavailable</p>
-  <small>Check console for details. Make sure to run with proxy: npm run start-proxy</small>
-</div>
-
-<!-- Remote footer content -->
-<div 
-  *ngIf="isMounted && footerHtml && !loading" 
-  id="remote-footer-wrapper" 
-  [innerHTML]="footerHtml">
+<div class="footer-container">
+  <iframe 
+    src="https://includepages.lpu.in/newlpu/footer.php" 
+    width="100%" 
+    frameborder="0" 
+    scrolling="no" 
+    onload="this.style.height=this.contentWindow.document.body.scrollHeight+'px';"
+    style="min-height: 300px; border: none;">
+  </iframe>
 </div>
