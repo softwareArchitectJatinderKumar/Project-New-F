@@ -531,6 +531,7 @@ export class FailedPaymentsComponent implements OnInit {
   }
   paymentReceiptScreen(data: any) {
     this.PaymentReceipt = data;
+    // console.log(JSON.stringify(data)+' dartarasads')
     this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
       (result: string) => {
         console.log("Modal closed" + result);

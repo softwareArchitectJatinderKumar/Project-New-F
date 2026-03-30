@@ -11,17 +11,17 @@ import { AdminDashboardModule } from '../AdminDashboard/AdminDashboard.module'; 
 const routes: Routes = [
   {
     path: '',
-    component: AdminActionBookingsComponent // Route to the new bookings component
+    component: AdminActionBookingsComponent 
   }
 ];
 
 @NgModule({
   declarations: [
-    AdminActionBookingsComponent // Declare the new bookings component
+    AdminActionBookingsComponent  
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes), // Set up child routes
+    RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
     NgbNavModule,

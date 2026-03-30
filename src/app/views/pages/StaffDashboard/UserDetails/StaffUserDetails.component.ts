@@ -91,22 +91,18 @@ export class StaffUserDetailsComponent implements OnInit {
     this.getBookingDetails()
   }
 
-  searchQuery: string = ''; // Property to store the search query
+  searchQuery: string = '';
 
   search() {
     const query = this.searchQuery.toLowerCase();
     this.tmpsUserDetailsData = this.UserDetailsData.filter(item => {
       return Object.values(item).some(val => {
-        // Convert val to string and check if it matches the query
         const valString = String(val).toLowerCase();
 
-        // Check if the val is a userRole and map it to the corresponding page name
         let mappedRole = '';
         if (item.userRole) {
-          // Ensure userRole is an array, if it's not, convert it to an array
           const rolesArray = Array.isArray(item.userRole) ? item.userRole : [item.userRole];
 
-          // Map the roles to their corresponding page names
           mappedRole = rolesArray.map((userRole: string) => {
             switch (userRole.trim()) {
               case '400':
@@ -121,7 +117,6 @@ export class StaffUserDetailsComponent implements OnInit {
           }).join(' ').toLowerCase();
         }
 
-        // Check if the query matches either the regular field value or the mapped role
         return valString.includes(query) || mappedRole.includes(query);
       });
     });
@@ -141,48 +136,47 @@ export class StaffUserDetailsComponent implements OnInit {
   }
   showLoader = true;
   getBookingDetails() {
-  this.showLoader = true;
-  const startTime = new Date().getTime();
+    this.showLoader = true;
+    const startTime = new Date().getTime();
 
-  this.CIFwebService.GetAllUserData().subscribe({
-    next: response => {
-      if (response.item1 && response.item1.length > 0) {
-        // this.UserDetailsData = response.item1;
-        this.originalData =  this.tmpsUserDetailsData =this.UserDetailsData = response.item1.sort((a: any, b: any) => b.idProofNumber - a.idProofNumber);
-        // this.originalData = [...response.item1];    
-        // this.tmpsUserDetailsData = [...response.item1];
+    this.CIFwebService.GetAllUserData().subscribe({
+      next: response => {
+        if (response.item1 && response.item1.length > 0) {
+          this.originalData = this.tmpsUserDetailsData = this.UserDetailsData = response.item1.sort((a: any, b: any) => b.idProofNumber - a.idProofNumber);
+          // this.originalData = [...response.item1];    
+          // this.tmpsUserDetailsData = [...response.item1];
 
-        // this.dataSource = response.item1;
-        // console.log(" USER DATA", this.UserDetailsData);
+          // this.dataSource = response.item1;
+          // console.log(" USER DATA", this.UserDetailsData);
 
-        this.headHtmlData = this.tmpsUserDetailsData[0];
-        this.columns = Object.keys(this.tmpsUserDetailsData[0]);
-        this.columns = this.columns.filter((item: any) =>
-          item !== 'candidateName' &&
-          item !== 'userEmail' &&
-          item !== 'id' &&
-          item !== 'analysisId'
-        );
-        this.loadingIndicator = false;
-      } else {
-        this.UserDetailsData = [];
-        this.originalData = [];
-        this.tmpsUserDetailsData = [];
-      }
+          this.headHtmlData = this.tmpsUserDetailsData[0];
+          this.columns = Object.keys(this.tmpsUserDetailsData[0]);
+          this.columns = this.columns.filter((item: any) =>
+            item !== 'candidateName' &&
+            item !== 'userEmail' &&
+            item !== 'id' &&
+            item !== 'analysisId'
+          );
+          this.loadingIndicator = false;
+        } else {
+          this.UserDetailsData = [];
+          this.originalData = [];
+          this.tmpsUserDetailsData = [];
+        }
 
-      const elapsed = new Date().getTime() - startTime;
-      const remainingDelay = Math.max(1500 - elapsed, 0);
+        const elapsed = new Date().getTime() - startTime;
+        const remainingDelay = Math.max(1500 - elapsed, 0);
 
-      setTimeout(() => {
+        setTimeout(() => {
+          this.showLoader = false;
+        }, remainingDelay);
+      },
+      error: err => {
+        console.error(err);
         this.showLoader = false;
-      }, remainingDelay);
-    },
-    error: err => {
-      console.error(err);
-      this.showLoader = false;
-    }
-  });
-}
+      }
+    });
+  }
 
   getTotalRecords(): number {
     return this.tmpsUserDetailsData.length > 0 ? this.tmpsUserDetailsData.length : 0;

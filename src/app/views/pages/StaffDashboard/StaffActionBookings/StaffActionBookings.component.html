@@ -21,7 +21,7 @@
                     <div class="col-sm-3 mb-4">
                         <button (click)="exportToExcel()" class="btn btn-info "
                             [disabled]="NoResults=='No Details'">Export to
-                            Excel  <i class="bi bi-download ms-3"></i></button>
+                            Excel <i class="bi bi-download ms-3"></i></button>
                     </div>
 
                     <div class="col-sm-3 mb-4">
@@ -89,7 +89,7 @@
                                     <th class="form-label fw-bolder">Result Status</th> <th class="form-label fw-bolder">Action </th>
                                 </tr>
                             </thead>
-                            <tbody>                             
+                            <tbody> 
                                 <ng-container *ngFor="let AllBookingTestsDataRow of getCurrentPageData(); let i = index">
                                     <tr>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.bookingId}}</td>

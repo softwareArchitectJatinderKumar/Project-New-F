@@ -2,15 +2,13 @@ import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
-import { catchError, finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
-
+import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
 })
 export class FooterComponent implements OnInit, AfterViewInit {
-    footerHtml: SafeHtml = '';
+  footerHtml: SafeHtml = '';
   showGotoTop = false;
 
   constructor(
@@ -21,7 +19,8 @@ export class FooterComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.http
-      .get('https://includepages.lpu.in/newlpu/footer.php', { responseType: 'text' })
+    .get(environment.footerUrl, { responseType: 'text' })
+      // .get('/api/footer', { responseType: 'text' })   // ← changed
       .subscribe({
         next: html => {
           this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
@@ -44,3 +43,49 @@ export class FooterComponent implements OnInit, AfterViewInit {
     }
   }
 }
+// import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+// import { HttpClient } from '@angular/common/http';
+// import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+// import { isPlatformBrowser } from '@angular/common';
+// import { catchError, finalize } from 'rxjs/operators';
+// import { of } from 'rxjs';
+
+// @Component({
+//   selector: 'app-footer',
+//   templateUrl: './footer.component.html',
+// })
+// export class FooterComponent implements OnInit, AfterViewInit {
+//     footerHtml: SafeHtml = '';
+//   showGotoTop = false;
+
+//   constructor(
+//     private http: HttpClient,
+//     private sanitizer: DomSanitizer,
+//     @Inject(PLATFORM_ID) private platformId: Object
+//   ) {}
+
+//   ngOnInit(): void {
+//     this.http
+//       .get('https://includepages.lpu.in/newlpu/footer.php', { responseType: 'text' })
+//       .subscribe({
+//         next: html => {
+//           this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+//         },
+//         error: err => console.error('Error fetching footer:', err),
+//       });
+//   }
+
+//   ngAfterViewInit(): void {
+//     if (isPlatformBrowser(this.platformId)) {
+//       window.addEventListener('scroll', () => {
+//         this.showGotoTop = window.scrollY > 300;
+//       });
+//     }
+//   }
+
+//   scrollToTop(): void {
+//     if (isPlatformBrowser(this.platformId)) {
+//       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+//     }
+//   }
+// }

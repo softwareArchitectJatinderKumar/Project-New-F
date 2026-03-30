@@ -4,17 +4,13 @@
 </div>
 <nav class="navbar navbar-light navbar-expand-lg mb-4">
   <div class="container-fluid">
-    <button
-      class="navbar-toggler bg-light"
-      type="button"
-      (click)="toggleNavbar()"
-      aria-controls="navbarNav"
-      [attr.aria-expanded]="isNavbarCollapsed ? 'false' : 'true'"
-      aria-label="Toggle navigation">
+    <button class="navbar-toggler bg-light" type="button" (click)="toggleNavbar()" aria-controls="navbarNav"
+      [attr.aria-expanded]="isNavbarCollapsed ? 'false' : 'true'" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div [ngClass]="{'collapse': isNavbarCollapsed, 'navbar-collapse': true, 'justify-content-center': true}" id="navbarNav">
+    <div [ngClass]="{'collapse': isNavbarCollapsed, 'navbar-collapse': true, 'justify-content-center': true}"
+      id="navbarNav">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 bg-transparent">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="manageTestsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -22,7 +18,7 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="manageTestsDropdown">
             <li><a class="dropdown-item" (click)="goto('StaffActionBookings')">Upload Results</a></li>
-             <li><a class="dropdown-item" (click)="goto('MyUploads')"> Results Uploaded </a></li>
+            <li><a class="dropdown-item" (click)="goto('MyUploads')"> Results Uploaded </a></li>
           </ul>
         </li>
         <li class="nav-item dropdown ">
@@ -34,7 +30,7 @@
             <li><a class="dropdown-item" (click)="goto('UserDetailSS')">All User</a></li>
           </ul>
         </li>
-         
+
         <!-- <li class="nav-item    d-flex align-items-center">
           
         </li> -->
@@ -50,7 +46,7 @@
     </div>
   </div>
 </nav>
- 
+
 <div class="container-fluid d-flex justify-content-center align-items-center">
   <div class="mx-auto mt-4 mb-4 text-start">
     <h1 class="mb-0">Central Instrumentation Facility Staff Dashboard </h1>
@@ -94,12 +90,7 @@
               {{this.departmentName}}
             </label>
           </div>
-          <!-- <div class="row d-flex justify-content-around">
-            <label class="col-md-5 form-label  " style="font-weight: 700;">Email Id</label>
-            <label class="col-md-7 form-label text-dark " style="text-align: right;font-weight: 700;">
-              {{this.user_Email.length>0 ? this.user_Email: 'NA' }}
-            </label>
-          </div> -->
+
         </div>
       </div>
     </div>

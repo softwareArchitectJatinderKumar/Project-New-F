@@ -72,8 +72,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1116mb",
-                  "maximumError": "1128mb"
+                  "maximumWarning": "116mb",
+                  "maximumError": "128mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -100,7 +100,7 @@
           },
           "defaultConfiguration": "production"
         },
-        "serve": {
+        "serve": { 
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "proxyConfig": "proxy.conf.json"

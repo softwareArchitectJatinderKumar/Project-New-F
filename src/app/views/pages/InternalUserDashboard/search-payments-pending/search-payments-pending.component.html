@@ -10,10 +10,9 @@
     </div>
 </div>
 
-<!-- Main Content -->
+
 <div class="container-fluid">
 
-    <!-- No Data / No Records Found Template -->
     <ng-template #noDataTemplate>
            <div class="card card-warning text-center  p-2 mb-4 ">
                 <hr />
@@ -25,21 +24,9 @@
                     </div>
             
                 </div>
-            </div>
-        <!-- <div class="no-data-wrapper">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-8 col-lg-6">
-                    <div class="alert alert-info text-center py-5">
-                        <i class="mdi mdi-check-circle-outline fs-1 d-block mb-3"></i>
-                        <h3>All Pending Payments Records!</h3>
-                        <p class="fs-5 text-muted">No payment records found.</p>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+            </div> 
     </ng-template>
-
-    <!-- Data Available -->
+    
     <div class="row" *ngIf="BookingStatusData.length > 0; else noDataTemplate">
         <div class="col-12 bottom-space">
             <div class="card">
