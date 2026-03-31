@@ -175,7 +175,7 @@ user_Email: any; UserRole:any; candidateName:any;
 
     this.cifWebService.GetBookingPaymentProofDetails('0').subscribe({
       next: (response: ApiResponse) => {
-        console.log(JSON.stringify(response))
+        // console.log(JSON.stringify(response))
         this.handleApiResponse(response);
         this.ensureMinimumLoadingTime(startTime);
       },

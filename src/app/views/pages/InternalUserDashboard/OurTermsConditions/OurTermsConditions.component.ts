@@ -1,5 +1,5 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,6 +36,18 @@ export class OurTermsConditionsComponent implements OnInit {
   MobileN: any;
   SupervisorName: any;
 
+    @Output() facilitiesClicked = new EventEmitter<void>();
+    serverUrl: any;
+    onFacilitiesClick() {
+      this.facilitiesClicked.emit();
+    }
+
+       @ViewChild('table') table: ElementRef;
+      @ViewChild('facilitiesSection') facilitiesSection!: ElementRef;
+      gotoFacilities() {
+        this.facilitiesSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    
   constructor(
     private CIFwebService: LpuCIFWebService,
     private storageService: StorageService,

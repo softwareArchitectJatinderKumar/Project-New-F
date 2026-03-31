@@ -1,0 +1,539 @@
+/* ============================================================
+   LPU Footer Component Styles — Fixed to match live site
+   ============================================================ */
+
+$primary:          #f68220;
+$footer-bg:        #1e1e1e;
+$address-card-bg:  #272727;
+$footer-bottom-bg: #111111;
+$footer-text:      #b0b0b0;
+$footer-link:      #b0b0b0;
+$footer-link-hover:#f68220;
+$heading-color:    #ffffff;
+$border-color:     #3a3a3a;
+$font-base:        'Segoe UI', Arial, sans-serif;
+
+/* ============================================================
+   BASE
+   ============================================================ */
+footer {
+  background-color: $footer-bg;
+  color: $footer-text;
+  font-family: $font-base;
+  font-size: 13px;
+  line-height: 1.6;
+
+  * { box-sizing: border-box; }
+
+  a {
+    color: $footer-link;
+    text-decoration: none;
+    transition: color 0.18s ease;
+    &:hover { color: $footer-link-hover; }
+  }
+
+  ul { list-style: none; padding: 0; margin: 0; }
+}
+
+/* ============================================================
+   TWO-COLUMN WRAPPER
+   ============================================================ */
+.footer-inner {
+  display: flex;
+  align-items: stretch;
+  min-height: 340px;
+}
+
+/* ============================================================
+   LEFT — Address Card (darker background)
+   ============================================================ */
+.footer-address {
+  flex: 0 0 280px;
+  background: $address-card-bg;
+  padding: 32px 26px 28px;
+  display: flex;
+  flex-direction: column;
+
+  .logo {
+    margin-bottom: 20px;
+    img {
+      max-width: 175px;
+      height: auto;
+    }
+  }
+
+  .locate {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: $footer-text;
+    margin-bottom: 10px;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 1px;
+      background: $footer-text;
+      flex-shrink: 0;
+    }
+  }
+
+  .uni-name {
+    font-weight: 700;
+    color: $heading-color;
+    font-size: 15px;
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+
+  .uni-address {
+    font-size: 13px;
+    color: $footer-text;
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  .uni-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 20px;
+
+    a {
+      font-size: 13px;
+      color: $footer-link;
+      &:hover { color: $footer-link-hover; }
+    }
+  }
+
+  .get-directions {
+    margin-top: auto;
+
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: $heading-color;
+      cursor: pointer;
+
+      // Orange circle bullet — live site style
+      .dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: $primary;
+        flex-shrink: 0;
+
+        svg {
+          fill: #fff;
+          width: 12px;
+          height: 12px;
+        }
+      }
+
+      img { display: none; }
+
+      &:hover { color: $primary; }
+    }
+  }
+}
+
+/* ============================================================
+   RIGHT PANEL
+   ============================================================ */
+.footer-right {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 28px 0 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- TOP ICON ROW ---- */
+.footer-icon-links {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px 0;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid $border-color;
+}
+
+/* Shared heading style for the icon row sections */
+.follow-us,
+.lpu-touch,
+.footer-academics,
+.footer-others {
+  padding-right: 36px;
+
+  .heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: $heading-color;
+    // Live site: normal case, no underline, no orange decoration
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 12px;
+  }
+}
+
+/* Social icons — no circle background */
+.follow-us ul,
+.lpu-touch ul {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+
+  li a {
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border-radius: 0;
+
+    svg {
+      fill: $footer-text;
+      width: 17px;
+      height: 17px;
+      transition: fill 0.18s;
+    }
+
+    &:hover svg { fill: $primary; }
+  }
+}
+
+/* 360 + DigiLocker images */
+.footer-academics {
+  .view360 {
+    max-width: 72px;
+    height: auto;
+    display: block;
+    margin-bottom: 8px;
+    filter: brightness(0) invert(1);
+    opacity: 0.88;
+    &:hover { opacity: 1; }
+  }
+
+  .digi-locker {
+    max-width: 88px;
+    height: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+    opacity: 0.85;
+    &:hover { opacity: 1; }
+  }
+}
+
+/* LPU in Media */
+.footer-others {
+  padding-right: 0;
+
+  a {
+    font-size: 13px;
+    color: $footer-link;
+    display: block;
+    &:hover { color: $footer-link-hover; }
+  }
+}
+
+/* ---- LINK COLUMNS ---- */
+.footer-links {
+  display: flex;
+  flex: 1;
+  padding-bottom: 28px;
+  gap: 0;
+}
+
+.footer-other-links {
+  flex: 1;
+  padding-right: 16px;
+
+  .heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: $heading-color;
+    // Live site: bold, normal case, NO orange border-bottom
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 14px;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  ul li {
+    margin-bottom: 9px;
+
+    a {
+      font-size: 13px;
+      color: $footer-link;
+      display: block;
+      line-height: 1.4;
+
+      small, span {
+        font-size: 10px;
+        display: block;
+        line-height: 1.2;
+        color: #777;
+        font-weight: 400;
+      }
+
+      &:hover { color: $footer-link-hover; }
+    }
+  }
+}
+
+/* ============================================================
+   FOOTER BOTTOM BAR
+   ============================================================ */
+.footer-bottom {
+  background: $footer-bottom-bg !important;
+  padding: 14px 24px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+  // Override the gap/flex from .footer-wrap
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+.footer-bottom-link {
+  width: 100%;
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+
+    li {
+      position: relative;
+      padding: 0 12px;
+
+      &:not(:last-child)::after {
+        content: '|';
+        position: absolute;
+        right: -1px;
+        top: 0;
+        color: #444;
+        pointer-events: none;
+      }
+
+      a, span {
+        font-size: 12px;
+        color: #888;
+        cursor: pointer;
+        &:hover { color: $footer-link-hover; }
+      }
+    }
+  }
+}
+
+.contact-webmaster {
+  font-size: 12px;
+  color: #555;
+
+  a {
+    color: #777;
+    font-size: 12px;
+    font-weight: 600;
+    &:hover { color: $footer-link-hover; }
+  }
+}
+
+/* ============================================================
+   MODAL STYLES
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-dialog {
+  background: #fff;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 760px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  &.modal-lg { max-width: 860px; }
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+
+  .modal-title-custom {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+  }
+
+  .btn-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    line-height: 1;
+    &:hover { color: #333; }
+  }
+}
+
+.modal-body {
+  overflow-y: auto;
+  padding: 20px;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #ddd;
+  background: #f5f5f5;
+
+  .btn-default {
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 6px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    &:hover { background: #5a6268; }
+  }
+}
+
+.tabs-bb .tab-nav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #ddd;
+
+  li a {
+    display: block;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    text-decoration: none;
+    &.active, &:hover { background: $primary; color: #fff; }
+  }
+}
+
+.iconlist.nirf {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 10px;
+
+    .nirf-hd {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: #333;
+      text-decoration: none;
+
+      .icon-ok {
+        color: $primary;
+        font-style: normal;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      &:hover { color: $primary; }
+    }
+  }
+}
+
+.nirf-footer-note {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  a { color: $primary; &:hover { text-decoration: underline; } }
+}
+
+.icc-list {
+  padding: 0 0 0 20px;
+  margin: 0;
+  li {
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #444;
+    line-height: 1.6;
+    a { color: #1a73e8; &:hover { text-decoration: underline; } }
+  }
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .footer-address { flex: 0 0 240px; padding: 28px 20px; }
+  .footer-right { padding: 24px 20px 0; }
+  .follow-us, .lpu-touch, .footer-academics, .footer-others { padding-right: 24px; }
+}
+
+@media (max-width: 900px) {
+  .footer-inner { flex-direction: column; }
+
+  .footer-address {
+    flex: 0 0 auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 24px;
+    row-gap: 0;
+    padding: 24px 20px;
+
+    .logo       { flex: 0 0 100%; margin-bottom: 10px; }
+    .locate     { flex: 0 0 100%; }
+    .uni-name   { flex: 0 0 100%; }
+    .uni-address{ flex: 1 1 200px; }
+    .uni-contact{ flex: 1 1 180px; }
+    .get-directions { flex: 0 0 100%; margin-top: 12px; }
+  }
+
+  .footer-right { padding: 24px 20px 0; }
+  .footer-links { flex-wrap: wrap; }
+  .footer-other-links { flex: 1 1 45%; }
+}
+
+@media (max-width: 600px) {
+  .footer-other-links { flex: 0 0 100%; padding-right: 0; margin-bottom: 16px; }
+  .footer-icon-links  { gap: 14px 20px; }
+  .footer-bottom-link ul { justify-content: flex-start; }
+  .footer-address { padding: 20px 16px; }
+  .footer-right   { padding: 20px 16px 0; }
+}

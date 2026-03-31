@@ -1,0 +1,1233 @@
+
+
+<link rel="stylesheet" href="https://www.lpu.in/css/radio-checkbox.css" type="text/css" />
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@7.28.11/dist/sweetalert2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://www.lpu.in/lpu-assets/css/footer.css" type="text/css" />
+<script src="https://www.lpu.in/js/jquery.popupwindow.js" defer></script>
+<style>
+    #feedback-modal .custom-popup {
+        background: #FFF;
+        width: 100%;
+        height: 500px;
+        position: relative;
+    }
+
+    #feedback-modal .custom-popup .close {
+        font-size: 36px;
+        color: #FFF !important;
+        text-shadow: none !important;
+        opacity: 1;
+        position: absolute;
+        right: -23px;
+        top: -40px;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+
+    #feedback-modal .custom-popup h4 {
+        font-family: inherit;
+    }
+
+    #feedback-modal .custom-popup .left {
+        background: url('https://www.lpu.in/images/feedback-bg.png') #f1f1f1;
+        background-size: contain;
+        background-repeat: no-repeat;
+        height: 500px;
+    }
+
+    #feedback-modal .custom-popup .right h3 {
+        background: #f68220;
+        width: fit-content;
+        margin: 0 auto;
+        padding: 5px 10px;
+        color: #FFF;
+        text-transform: uppercase;
+        font-family: inherit;
+    }
+
+    #feedback-modal .custom-popup .radio-style-2-label {
+        color: #333 !important;
+        font-weight: 500;
+        margin: 5px 15px !important;
+        line-height: 35px;
+    }
+
+    .error-text {
+        color: red;
+        font-size: 12px;
+        display: none;
+    }
+
+    .error-input {
+        border: 1px solid red !important;
+    }
+
+    .call-us-later-grid {
+        max-width: 600px;
+        margin: 40px auto;
+    }
+
+    @media(max-width:1030px) {
+        #feedback-modal .custom-popup .right h3 {
+            font-size: 20px;
+        }
+
+        #feedback-modal .modal-dialog {
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+
+    @media(max-width:770px) {
+        #feedback-modal .custom-popup .left {
+            display: none;
+        }
+
+        #feedback-modal .custom-popup {
+            width: 85%;
+            height: auto;
+            padding: 0 25px;
+            margin: 0 auto;
+        }
+
+    }
+</style>
+
+
+<div class="modal" id="nirf" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-custom" id="exampleModalLabel">NIRF</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs tabs-bb clearfix" id="tab-9">
+                    <ul class="tab-nav clearfix">
+                        <li><a href="#tabs-24">2025</a></li>
+                        <li><a href="#tabs-38">2024</a></li>
+                        <li><a href="#tabs-23">2023</a></li>
+
+                    </ul>
+                    <div class="tab-container">
+
+
+                        <div class="tab-content clearfix" id="tabs-24">
+                            <ul class="iconlist nirf" style="margin:0 0 0 10px">
+
+
+
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Management.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Management</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Pharmacy.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Pharmacy</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Engineering.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Engineering</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Overall.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Overall</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Law.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Law</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Architecture.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Architecture</a></li>
+
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Innovation.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Innovation</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/Agriculture.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Agriculture</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2025/SDG-institution.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of SDG Institution</a></li>
+
+
+                            </ul>
+                        </div>
+
+                        <div class="tab-content clearfix" id="tabs-38">
+
+                            <ul class="iconlist nirf" style="margin:0 0 0 10px">
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Management.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Management</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Pharmacy.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Pharmacy</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Engineering.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Engineering</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Overall.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Overall</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Law.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Law</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Architecture.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Architecture</a></li>
+
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Innovation.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Innovation</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2024/Agriculture.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Agriculture</a></li>
+
+
+                            </ul>
+                        </div>
+
+                        <div class="tab-content clearfix" id="tabs-23">
+
+                            <ul class="iconlist nirf" style="margin:0 0 0 10px">
+                                <li><a href="https://www.lpu.in/downloads/nirf/2023/Management.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Management</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2023/Pharmacy.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Pharmacy</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2023/Engineering.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Engineering</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2023/Overall.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Overall</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2023/Law.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data Capturing System:
+                                        Law</a></li>
+                                <li><a href="https://www.lpu.in/downloads/nirf/2023/Architecture.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Architecture</a></li>
+
+                                <li><a href="https://www.lpu.in/downloads/nirf/2023/Agriculture.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Report of NIRF Data
+                                        Capturing System: Agriculture</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <ul class="iconlist text-center nirf" style="margin:0 !important;">
+                    <li class="nirf-hd">Email ID for Comments & Feedback : <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="790b1c1e100a0d0b180b3915090c571a16571017">[email&#160;protected]</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="sexual-harrassment-footer" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-custom" id="exampleModalLabel">ICC (Internal Complaints Committee)</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <ol class="p-5">
+                    <li> <a href="https://www.lpu.in/downloads/sexual-harrassment-of-women-act-and-rules-2013.pdf"
+                            target="_blank"> The Sexual Harassment of Women at Workplace (Prevention, Prohibition and
+                            Redressal) Act, 2013</a></li>
+                    <li> <a href="https://www.lpu.in/downloads/ugc-regulations-harassment.pdf" target="_blank">UGC (
+                            Prevention, Prohibition and Redressal of sexual harassment of Women employees and students
+                            in Higher Educational Institutions ) Regulations, 2015</a></li>
+                    <li> <a href="https://www.lpu.in/downloads/handbook-for-prevention-of-sexual-harassment-at-workplace.pdf"
+                            target="_blank">Handbook on Sexual Harassment of Women at Workplace issued by the Ministry
+                            of Women and Child Development, Government of India</a></li>
+                    <!--<li><a href="https://www.lpu.in/downloads/composition-of-ICCASH.pdf" target="_blank">  Internal Complaints Committee against Sexual harassment</a></li>-->
+                    <li><a href="https://www.lpu.in/downloads/composition-of-ICC.pdf" target="_blank"> Internal
+                            Complaints Committee </a></li>
+                    <li>Email id of Presiding officer- <a href="/cdn-cgi/l/email-protection#9ef0fbfbeaffb0ecfff4def2eeebb0fdf1b0f7f0" target="_top"><span class="__cf_email__" data-cfemail="c4aaa1a1b0a5eab6a5ae84a8b4b1eaa7abeaadaa">[email&#160;protected]</span></a></li>
+                    <li>Phone number of Presiding Officer- <a href="tel:+918283921144">+91-8283921144</a></li>
+                    <li> Sexual Harassment Complaint Registration: - <a href="/cdn-cgi/l/email-protection#9cf5ffffdcf0ece9b2fff3b2f5f2" target="_top"><span class="__cf_email__" data-cfemail="a5ccc6c6e5c9d5d08bc6ca8bcccb">[email&#160;protected]</span></a> </li>
+                    <li>Email id of HEI- <a href="/cdn-cgi/l/email-protection#285a4d4f415b5c5a495a6844585d064b47064146" target="_top"><span class="__cf_email__" data-cfemail="80f2e5e7e9f3f4f2e1f2c0ecf0f5aee3efaee9ee">[email&#160;protected]</span></a></li>
+                    <li>Contact details (Landline)- <a href="tel:+911824510274">+91-1824-510274</a></li>
+                    <li>Contact details (Registrar)- <a href="tel:+919915020408">+91-9915020408</a></li>
+                    <li><a href="//www.lpu.in/downloads/anti-sexual-harrasment-policy.pdf" target="_blank">Anti Sexual
+                            Harrasment Policy</a> </li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="live-video-counselling" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-custom" id="exampleModalLabel">Admission - 2026 Live Video Counselling</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="vid-scheduleform">
+                    <div class="call-us-later-grid">
+                        <h2>Register for Video Counselling</h2>
+
+                        <!-- NAME -->
+                        <div class="row g-3 align-items-center mt-2">
+                            <div class="col-md-4 d-none d-md-block">
+                                <label for="sch_name">Name</label>
+                            </div>
+                            <div class="col-md-8 col-12">
+                                <input type="text" id="sch_name" class="form-control" placeholder="Enter your name" />
+                            </div>
+                        </div>
+
+                        <!-- MOBILE -->
+                        <div class="row g-3 align-items-center mt-2">
+                            <div class="col-md-4 d-none d-md-block">
+                                <label for="sch_mobile">Mobile Number</label>
+                            </div>
+                            <div class="col-md-8 col-12 position-relative">
+                                <input type="tel" id="sch_mobile" class="form-control" placeholder="Enter phone number"
+                                    maxlength="10" />
+                                <span id="vid-send-otp-btn" style="position:absolute; right:0px; top:0px;"></span>
+                            </div>
+                        </div>
+
+                        <!-- OTP Placeholder -->
+                        <div class="row g-3 align-items-center mt-2" id="vid-sch-otp-div"></div>
+
+                        <!-- EMAIL -->
+                        <div class="row g-3 align-items-center mt-2">
+                            <div class="col-md-4 d-none d-md-block">
+                                <label for="sch_email">Email</label>
+                            </div>
+                            <div class="col-md-8 col-12">
+                                <input type="text" id="sch_email" class="form-control" placeholder="Enter email" />
+                            </div>
+                        </div>
+
+                        <!-- SUBMIT -->
+                        <div class="mt-4 text-center" id="vid-sch-call-btn">
+
+                        </div>
+                    </div>
+                </form>
+
+                <div id="vidcountext" class="d-none">
+
+                    <p>To continue interaction with our expert admission counsellors enter
+                        the <strong>
+                            passcode
+                            <span id="vidcounpasscode"></span></strong> for career guidance to discover the best
+                        suited programmes for you.
+                        <strong>Available from 10 am to 5 pm on all working days.</strong>
+                    </p>
+                    <div class="text-center">
+                        <a href="https://us06web.zoom.us/j/84898289868?pwd=QnB0YllDUmVLRVBoOEwxWnMyUVZOQT09"
+                            target="_blank" class="button button-small button-border button-rounded"><strong>Join
+                                Now</strong></a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    $(document).ready(function () {
+
+        // Regex
+        const nameRegex = /^[A-Za-z ]{2,50}$/;
+        const mobileRegex = /^[6-9][0-9]{9}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        let name = "";
+        let email = "";
+        let phoneNo = "";
+        let verificataiontoken = null;
+        let countdown = 10;
+        let isOTPSent = false;
+        let isResendOTP = 0;
+        const apiUrl = "https://webapi.lpu.in/VideoCounsellingRegistration/api/VideoConferenceRegistration/"
+
+        // Show Error
+        function showError(input, message) {
+            let errorSpan = $(input).siblings(".error-text");
+
+            if (errorSpan.length === 0) {
+                $(input).after('<span class="error-text"></span>');
+                errorSpan = $(input).siblings(".error-text");
+            }
+
+            $(input).addClass("error-input");
+            errorSpan.text(message).show();
+        }
+
+        // Clear Error
+        function clearError(input) {
+            $(input).removeClass("error-input");
+            $(input).siblings(".error-text").hide();
+        }
+
+        // =========================
+        // NAME VALIDATION
+        // =========================
+        $(document).on("input", "#sch_name", function () {
+            const value = $(this).val().trim();
+
+            if (value === "") {
+                showError(this, "Name is required");
+            } else if (!nameRegex.test(value)) {
+                showError(this, "Only letters allowed (min 2 characters)");
+            } else {
+                name = value;
+                clearError(this);
+            }
+        });
+
+        // =========================
+        // MOBILE VALIDATION
+        // =========================
+        $(document).on("input", "#sch_mobile", function () {
+            let value = $(this).val().replace(/\D/g, '');
+            $(this).val(value);
+
+            if (value === "") {
+                showError(this, "Mobile number is required");
+                $("#vid-send-otp-btn").html("")
+            } else if (!mobileRegex.test(value)) {
+                showError(this, "Enter valid 10-digit number starting with 6-9");
+                $("#vid-send-otp-btn").html("")
+            } else {
+                clearError(this);
+                phoneNo = value;
+                $("#vid-send-otp-btn").html(
+                    `<input type="button" id="vid-coun-call-otp" style="background: none;border: 0;font-size: 12px;color: green;font-weight: normal;" class="office-details-btn-reverse" value="Send OTP" />`
+                )
+
+                $("#vid-coun-call-otp").on("click", function () {
+                    SendOTPToUser(phoneNo, false);
+                })
+            }
+        });
+
+        // =========================
+        // EMAIL VALIDATION
+        // =========================
+        $(document).on("input", "#sch_email", function () {
+            const value = $(this).val().trim();
+
+            if (value === "") {
+                showError(this, "Email is required");
+            } else if (!emailRegex.test(value)) {
+                showError(this, "Enter a valid email");
+            } else {
+                email = value;
+                clearError(this);
+            }
+        });
+
+        async function SendOTPToUser(phoneNumber, isResendOTP) {
+            try {
+                await fetch(`${apiUrl}SendOTP`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        "phoneNumber": phoneNumber,
+                        "isResend": isResendOTP
+                    }) // formType -> 1 for makeCall
+                }).then(async (response) => {
+                    if (response.status == 200) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'OTP sent!',
+                            // text: "OTP sent to your phone number. working on it, don't deploy it.",
+                            text: "OTP is sent to your filled Phone number.",
+                        });
+                        isOTPSent = true;
+                        $("#sch_mobile").prop("disabled", true);
+                        $("#vid-sch-otp-div").html(
+                            `
+                                <div class="col-md-4 d-none d-md-block d-lg-block">
+                                    <label for="vid-sche-otp-label">OTP</label>
+                                </div>
+                                <div class="col-md-8 col-12 position-relative">
+                                    <input type="tel" id="vid-sche-otp" class="form-control"
+                                        placeholder="Enter OTP here" maxlength="6" />
+                                    <span id="vid-send-otp-btn" style="position: absolute;right: 0px;top: 0px; display: flex; align-items: center;">
+                                        <input type="button" id="vid-resend-sch-otp-btn" style="background: none;border: 0;font-size: 12px;color: #849c79;font-weight: normal; padding-right:4px" 
+                                            class="office-details-btn-reverse" value="Resend">
+                                        <span id="vid-resend-timer" style="color: #849c79; padding-right:20px; font-size: 10px;"></span>
+                                    </span>
+                                </div>
+                            `
+                        )
+
+                        $("#vid-resend-sch-otp-btn").on("click", function () {
+
+                            console.log(phoneNumber);
+                            SendOTPToUser(phoneNumber, true);
+                        })
+
+                        $("#vid-sche-otp").on("input", function () {
+                            var otp = $("#vid-sche-otp").val()
+                            if (otp.length == 6) {
+                                VerifyUserOTP(phoneNo, otp, true);
+                            }
+                        })
+
+                        $("#vid-resend-sch-otp-btn").prop("disabled", true);
+                        isResendOTP = 1
+                        const interval = setInterval(() => {
+                            countdown--;
+                            $("#vid-resend-timer").text(countdown);
+                            if (countdown == 0) {
+                                clearInterval(interval);
+                                $('#vid-resend-sch-otp-btn').css('color', '#60c932');
+                                $("#vid-resend-timer").html("");
+                                $("#vid-resend-sch-otp-btn").prop("disabled", false);
+                                countdown = 60; // reset countdown
+                            }
+                        }, 1000);
+                        // $("#makecallbtn").html('<input type="submit" id="sbmt-otp" class="office-details-btn-reverse" value="Submit OTP" />');
+                        $("#vid-send-otp-btn").html("");
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed to send OTP.',
+                            text: "Something Went wrong.",
+                        });
+                    }
+                })
+            } catch (err) {
+                // console.log(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed to send OTP',
+                    text: 'There was an error sending OTP. Please try again later.',
+                });
+            }
+        }
+
+        async function VerifyUserOTP(phoneNo, otp, isResend) {
+            try {
+                await fetch(`${apiUrl}VerifyOTP`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        "phoneNumber": phoneNo,
+                        "otp": otp,
+                        "isResend": isResend
+                    })
+                }).then(async (response) => await response.json()).then((data) => {
+                    console.log(data);
+                    if (data.taskStatus) {
+                        isNumConfirmed = true;
+                        $("#vid-sch-otp-div").html("");
+                        $("#sch_mobile").prop("disable", true);
+                        $("#vid-sch-call-btn").html(`
+                            <input type="submit" id="vid-sechedule-call" class="office-details-btn-reverse" value="Submit" />
+                        `);
+                        // $("#make-call").click();
+                        verificataiontoken = data.data.statusToken;
+                        return;
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'OTP Mismatch!',
+                            text: "OTP is not Matched.",
+                        });
+                        return;
+                    }
+                })
+
+            } catch (error) {
+                // console.error("Error during OTP verification:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'OTP Verification Failed',
+                    text: 'There was an error verifying the OTP. Please try again later.',
+                });
+                return;
+            }
+        }
+
+        async function RegistrationVideoConf(studentphone, studentname, studentemail, token) {
+            try {
+                const response = await fetch(`${apiUrl}Register`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: studentname,
+                        email: studentemail,
+                        phoneNo: studentphone,
+                        token: token
+                    })
+                });
+
+                // ✅ Check HTTP status
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.taskStatus) {
+                    $("#vidcounpasscode").text(data.data.PassCode);
+                    $("#vid-scheduleform").trigger("reset");
+                    $("#vid-scheduleform").hide();
+                    $("#vidcountext").removeClass("d-none");
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Registration Failed",
+                        text: data.taskMessage ?? "Failed to register, try again later."
+                    });
+                }
+
+            } catch (err) {
+                console.error(err);
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Something went wrong",
+                    text: "Unable to process request. Please try again."
+                });
+            }
+        }
+
+
+        const videocounsellingModal = document.getElementById("live-video-counselling");
+
+        videocounsellingModal.addEventListener("hidden.bs.modal", function () {
+            resetStates();
+        });
+
+        const resetStates = () => {
+            isOTPSent = false;
+            isResendOTP = 0;
+            countdown = 60; // Reset countdown
+
+            $("#vidcountext").addClass("d-none");
+            $("#vid-scheduleform").show();
+            $("#sch_mobile").prop("disabled", false);
+            $("#vid-send-otp-btn").html("");
+            $("#vidcounpasscode").text("");
+            $("#vid-sch-call-btn").html("");
+            return;
+        }
+
+        // =========================
+        // FORM SUBMIT
+        // =========================
+        $(document).on("submit", "#vid-scheduleform", function (e) {
+            e.preventDefault();
+            let isValid = true;
+
+            $("#sch_name, #sch_mobile, #sch_email").each(function () {
+                $(this).trigger("blur");
+
+                if ($(this).hasClass("error-input") || $(this).val().trim() === "") {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid",
+                    text: "Enter Valid data"
+                });
+            } else {
+                RegistrationVideoConf(phoneNo, name, email, verificataiontoken);
+            }
+        });
+    });
+</script>
+
+
+<!-- <div id="feedback-modal" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-body p-0">
+                <div class="custom-popup">
+                    <div class="row">
+                        <div class="col-md-4 left"></div>
+                        <div class="col-md-8 pt30 pb30 right">
+                            <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                            <h3 class="text-center">Share your Feedback</h3>
+                            <div id="dvfeedback" class="p-4"></div>
+                            <div class="text-center p-4" id="dvWaitFeeback"><img
+                                    src="https://www.lpu.in/images/feedback-loading.gif" alt="LPU"/></div>
+                            <div class="text-center pa20" id="feebackSubmitbtn"><a href="#"
+                                    class="button button-small button-dark button-rounded"
+                                    onclick="submitFeeback();">Submit</a></div>
+                            <div class="text-center pa20" id="feebackSubmitbtn1" style="display:none;"><a href="#"
+                                    class="button button-small button-dark button-rounded"
+                                    onclick="gotoNextNew();">Next</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+<!-- Not on all pages -->
+
+<!-- Student Grievance Redressal start-->
+<!-- <div id="StudentGrievance" class="modal" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-custom" id="exampleModalLabel">Grievance Details</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="custom-form grid gap-2">
+                    <div class="g-col-md-6 g-col-12">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="txtSGName" placeholder="Enter name" />
+                    </div>
+                    <div class="g-col-md-6 g-col-12">
+                        <label>Email</label>
+                        <input type="text" class="form-control" id="txtSGEmail" placeholder="Enter Email" />
+                    </div>
+                </div>
+
+                <div id="dvOtpSend" class="custom-form grid gap-2" style="display: none;">
+                    <div class="g-col-md-6 g-col-12">
+                        <label>OTP</label>
+                        <input type="text" id="txtOtp" class="form-control" placeholder="Entr OTP">
+                    </div>
+
+                    <div class="g-col-md-6 g-col-12">
+                        <label>Phone Number</label>
+                        <input type="text" class="form-control" id="txtSGPhone" placeholder="Enter Phone Number" />
+                    </div>
+                    <div class="g-col-md-6 g-col-12 natureofgrievance">
+                        <label>Nature Of Grievance</label>
+                        <select id="ddlNG" class="form-control">
+                            <option value="">Select Nature of Grievance</option>
+                            <option value="Examination">Examination</option>
+                            <option value="Academic">Academic</option>
+                            <option value="Fees">Fees</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="g-col-md-6 g-col-12 Subject">
+                        <label>Subject</label>
+                        <input type="text" class="form-control" id="txtSGSubject" placeholder="Enter Subject" />
+                    </div>
+
+                    <div class="g-col-12">
+                        <label>Description</label>
+                        <textarea name="txtSGDesc" class="form-control" id="txtSGDesc" autocomplete="off"
+                            placeholder="Type Your Grievance Here" rows="3"></textarea>
+                    </div>
+                    <div class="g-col-12 attachment">
+                        <label>Attachment</label>
+                        <input type="file" id="txtFile" />
+                    </div>
+                    <div class="g-col-12 text-center mt15 mb15">
+                        <a type="button" class="lpu-btn" id="btnSG">Submit</a>
+                        <a class="lpu-btn" id="btnSGLoader" disabled>
+                            <span class="spinner-border spinner-border-sm"></span>
+                            Loading..
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <a type="button" class="lpu-btn" id="btnSGOTP">Send OTP</a>
+                    <a class="lpu-btn" id="btnSGOtpLoader" disabled>
+                        <span class="spinner-border spinner-border-sm"></span>
+                        Loading..
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!-- Modal -->
+<div class="modal fade" id="studentGrievanceModal" tabindex="-1" aria-labelledby="studentGrievanceModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="studentGrievanceModalLabel">Grievance Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Step 1: Basic Info -->
+                <div id="step1">
+                    <form id="basicInfoForm">
+                        <div class="row">
+                            <!-- Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="sgname" required>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="sgemail" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 2: OTP -->
+                <div id="step2" style="display: none;">
+                    <div class="alert alert-info">OTP has been sent to your email</div>
+                    <form id="otpForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="otp" class="form-label">Enter OTP</label>
+                                <input type="text" class="form-control" id="otp" placeholder="Enter 6-digit OTP"
+                                    required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Step 3: Grievance -->
+                <div id="step3" style="display: none;">
+                    <form id="grievanceForm">
+                        <div class="row">
+                            <!-- Hidden autofill -->
+                            <div class="col-md-6 mb-3">
+                                <input type="text" id="gName" name="Name" class="form-control" disabled>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="text" id="gEmail" name="Email" class="form-control" disabled>
+                            </div>
+                            <!-- Phone -->
+                            <div class="col-md-6 mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+
+                            <!-- Nature -->
+                            <div class="col-md-6 mb-3" id="sgnature" style="display: none;">
+                                <label for="nature" class="form-label">Nature Of Grievance</label>
+                                <select class="form-select" id="nature" required>
+                                    <option value="" selected disabled>Select Nature of Grievance</option>
+                                    <option value="Examination">Examination</option>
+                                    <option value="Academic">Academic</option>
+                                    <option value="Fees">Fees</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </div>
+
+                            <!-- Subject -->
+                            <div class="col-md-6 mb-3" id="sgsubject" style="display: none;">
+                                <label for="subject" class="form-label">Subject</label>
+                                <input type="text" class="form-control" id="subject" required>
+                            </div>
+
+                            <!-- Attachment -->
+                            <div class="col-md-6 mb-3" id="gsattachment" style="display: none;">
+                                <label for="attachment" class="form-label">Attachment</label>
+                                <input type="file" class="form-control" id="attachment">
+                            </div>
+
+                            <!-- Description -->
+                            <div class="col-md-12 mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" rows="5" required></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="lpu-btn" id="sendOtpBtn">Send OTP
+                    <span id="sendotpSpinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+
+                </button>
+                <button type="button" class="lpu-btn" id="verifyOtpBtn" style="display:none;">Verify OTP
+                    <span id="sendotpSpinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+                </button>
+                <button type="button" class="lpu-btn" id="submitGrievanceBtn" style="display:none;">Submit
+                    <span id="sendotpSpinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Student Grievance Redressal end-->
+<div class="modal" id="ariia" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-custom" id="exampleModalLabel">ARIIA</div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs tabs-bb clearfix" id="tab-9">
+                    <ul class="tab-nav clearfix">
+                        <li><a href="#tabs-33">2020</a></li>
+                    </ul>
+                    <div class="tab-container">
+                        <div class="tab-content clearfix" id="tabs-33">
+                            <ul class="iconlist nirf" style="margin:0 0 0 30px;">
+                                <li><a href="https://www.lpu.in/downloads/ariia-2020.pdf" target="_blank"
+                                        class="nirf-hd"><i class="icon-ok"></i>Atal Ranking of Institutions on
+                                        Innovation Achievements (ARIIA) - 2020<br></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <ul class="iconlist text-center nirf" style="margin:0 !important;">
+                    <li class="nirf-hd">Email ID for Comments & Feedback : <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f0829597998384829182b09c8085de939fde999e">[email&#160;protected]</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Not on all pages --><style>
+	#cross-asset-syncing {
+		display: none;
+	}
+
+</style>
+<!-- <section class="section section-bg-gray subscribe-section">
+	<div class="container">
+		<div class="subscribe-form">
+			<h3>subscribe to newsletter</h3>
+			<div class="subscribe-imput"> <input type="text" id="subscribe" name="subscribe"></div>
+			<div> <a href="" class="link-btn"><img src="https://www.lpu.in/lpu-assets/images/icons/chevron-right.svg" alt="LPU">
+					Submit</a></div>
+		</div>
+	</div>
+</section> -->
+
+<!-- <div class="last-date-bar"><a href="#">Hurry! Admission Closing on <strong>31<sup>st</sup> July 2025</strong>. <br>Grab Your Scholarship Now!</a></div>
+<script>
+if ($(window).width() > 992) {
+  $(document).ready(function () {
+    const $bar = $('.last-date-bar');
+    let timeout;
+    let lastScrollY = $(window).scrollTop();
+
+    function showBar() {
+      clearTimeout(timeout);
+      $bar.stop(true).animate({ right: '1%' }, 600, 'swing'); // Slide in
+      timeout = setTimeout(() => {
+        hideBar();
+      }, 2000);
+    }
+
+    function hideBar() {
+      $bar.stop(true).animate({ right: '-400px' }, 600, 'swing'); // Slide out
+    }
+
+    // Pause on hover
+    $bar.on('mouseenter', () => {
+      clearTimeout(timeout);
+      $bar.stop(true); // Stop any hide animation
+    });
+
+    $bar.on('mouseleave', () => {
+      timeout = setTimeout(() => {
+        hideBar();
+      }, 2000);
+    });
+
+    // Show once on page load
+    showBar();
+
+    // Show on scroll (up or down)
+    $(window).on('scroll', () => {
+      const currentScrollY = $(window).scrollTop();
+      if (currentScrollY !== lastScrollY) {
+        showBar();
+        lastScrollY = currentScrollY;
+      }
+    });
+  });
+}
+</script>
+<style>
+.last-date-bar {
+  position: fixed;
+  bottom: 40%;
+  right: -400px; /* Hidden off-screen */
+  background: #f00;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  z-index: 1040;
+  white-space: nowrap;
+
+}
+.last-date-bar a {
+  color: #fff;
+  text-decoration: none;
+}
+.last-date-bar a strong{
+font-size:16px;
+text-transform: uppercase;
+}
+</style>  -->
+<footer>
+	<div class="container-fuild">
+		<div class="footer-wrap">
+			<div class="footer-address">
+				<div class="logo"><img src="https://www.lpu.in/lpu-assets/images/logo/logo-dark.svg" width="240" height="150" alt="LPU Logo"/></div>
+				<div class="address">
+					<div class="locate">Locate Us</div>
+					<div class="uni-name">Lovely Professional University</div>
+					<div class="uni-address">Jalandhar-Delhi, G.T. Road,<br>Phagwara, Punjab<br>(INDIA) -144411.
+					</div>
+				</div>
+				<div class="uni-contact">
+					<a href="tel:+911824517000">Tel: +91-1824-517000</a>
+					<a href="tel:+911824404404">Tel: +91-1824-404404</a>
+				</div>
+				<div class="get-directions">
+					<a href="https://www.lpu.in/admission/lpu-in-your-town.php#lpu-town" class="link-btn"><img src="https://www.lpu.in/lpu-assets/images/icons/chevron-right.svg" width="24" height="24" alt="LPU in your town"> Get Directions</a>
+				</div>
+
+			</div>
+			<div class="footer-right">
+				<div class="footer-links">
+					<div class="footer-other-links">
+						<div class="heading">Admissions</div>
+						<ul>
+							<li><a href="https://www.lpu.in/admission/admissions.php">Admissions 2026-27</a></li>
+							<li><a target="_blank" href="https://www.lpu.in/international/">International Admission 2026-27</a></li>
+							<li><a target="_blank" href="https://www.lpude.in/admissions/overview.php" rel="nofollow">Distance Education Admissions</a></li>
+							<li><a target="_blank" href="https://www.lpuonline.com/" rel="nofollow">Online Education Admissions</a></li>
+							<li><a href="https://www.lpu.in/scholarship/scholarship.php">Scholarship & Financial Aid</a></li>
+							<li><a href="https://www.lpu.in/frmloginaccounts.aspx">Fee Deposits</a></li>
+							<li><a href="https://www.lpu.in/faq.php">FAQs</a></li>
+							<li><a href="https://www.lpu.in/blog">LPU Blog</a></li>
+							 <li><a href="https://www.lpu.in/admission/prospectus-and-forms.php">Download Prospectus</a></li>
+						</ul>
+					</div>
+					<div class="footer-other-links">
+						<div class="heading">Academics</div>
+						<ul>
+							<li><a href="https://www.lpu.in/jpd">Joint Placement Drive</a></li>
+							<!-- <li><a href="https://www.lpu.in/lpusummerschool">LPU Summer School</a></li> -->
+							<li><a href="https://alumni.lpu.in/" rel="nofollow">Alumni</a></li>
+							<li><a href="https://www.lpu.in/campus-life/entrepreneurship.php">Entrepreneurship</a></li>
+
+
+
+
+
+							<!--<li><a target="_blank" href="https://lpu.in/downloads/application.pdf">Recognition Application (ODL)</a></li>
+							<li><a target="_blank" href="https://lpu.in/downloads/application-2.pdf">Recognition Application (Online)</a></li>-->
+							<li><a title="Top Engineering Colleges (B.Tech - M.Tech)" href="https://www.lpu.in/engineering/" target="_blank">
+									Top Engineering College in India</a>
+							</li>
+							<li><a title="Top MBA Colleges" href="https://www.lpu.in/mba/" target="_blank">
+									Top MBA Colleges</a>
+							</li>
+							<li><a target="_blank" href="https://lpu.in/downloads/UGC-Application-OL-2025-26.pdf">Entitlement Application (OL)</a></li>
+
+										<li><a target="_blank" href="https://lpu.in/downloads/UGC-Application-ODL-2025-26.pdf">Entitlement Application (ODL)  <span style="font-size:11px; line-height:10px; display:block;">(Under Category-1 HEI)</span></a></li>
+						</ul>
+					</div>
+					<div class="footer-other-links">
+						<div class="heading">Resources</div>
+						<ul>
+							<!-- <li><a href="https://www.lpu.in/explorica/index.php">Explorica</a></li>
+							<li><a href="https://www.lpu.in/knowledge-brain-storm/index.php">Knowledge Brainstrom</a></li> -->
+							<li><a href="https://www.lpu.in/convocation/convocation-pictures.php" target="_blank">Convocations@LPU</a></li>
+							<li><a href="http://www.lpude.in/" rel="nofollow">Distance Education</a></li>
+							<li><a href="https://www.lpuonline.com/" rel="nofollow">Online Education</a></li>
+							<li><a href="https://www.lpu.in/frmLoginAccounts.aspx">Online Fee Payment</a></li>
+							<li><a href="https://ums.lpu.in/lpuums/" target="_blank" rel="nofollow">UMS Login</a></li>
+							<li><a href="https://ums.lpu.in/lpuums/LoginNew.aspx?loginPage=ExtCert" rel="nofollow">Apply Certificate</a></li>
+							<li><a href="https://www.lpu.in/esanad/" target="_blank" rel="nofollow">eSanad</a></li>
+							<li><a href="https://www.lpu.in/downloads/a_handbook_on_basics_of_cyber_hygiene.pdf" target="_blank" rel="nofollow">UGC Cyber Hygiene Handbook</a></li>
+						</ul>
+					</div>
+					<div class="footer-other-links">
+						<div class="heading">Others</div>
+						<ul>
+							<li><a href="https://www.lpu.in/downloads/nisp.pdf">NISP</a></li>
+							<li><a href="" class="" data-bs-toggle="modal" data-bs-target="#nirf">NIRF</a></li>
+							<li><a href="https://www.lpu.in/downloads/ugc-public-self-disclosure.pdf" target="_blank">UGC Public Self Disclosure</a></li>
+							<li><a href="https://www.lpu.in/lpu-assets/download/act/act.pdf" target="_blank">Act</a></li>
+							<li><a href="https://samadhaan.ugc.ac.in" target="_blank" rel="nofollow noopener noreferrer">UGC e-Samadhan Portal</a></li>
+
+							<li><a href="https://docs.google.com/forms/d/e/1FAIpQLScHTG-vQoSOKIRPGnuNZ2bc66M6BOpJXOxBUxOFAUdfz35UkA/viewform" target="_blank">Supplier Registration</a></li>
+							<li><a href="https://www.lpu.in/jobs">Careers @ LPU</a></li>
+							<li><a href="https://ums.lpu.in/lpuums" target="_blank">Parent's Login</a></li>
+							<!-- <li><a target="_blank" href="https://www.lpu.in/downloads/service-rules.pdf" target="_blank">Service Rules </a></li>
+							<li><a href="">Service Rules </a></li> -->
+							<li><a href="https://lpu.in/tenders/" target="_blank">Tenders </a></li>
+							 <!-- <li><a href="https://www.lpu.in/downloads/corigendum-26-06-2025.html" target="_blank">Corrigendum</a></li> -->
+						</ul>
+					</div>
+
+				</div>
+
+
+
+				<div class="footer-icon-links">
+
+
+					<div class="follow-us">
+						<div class="heading">Follow us</div>
+						<div>
+							<ul>
+								<li><a href="https://www.facebook.com/LPUUniversity" rel="nofollow" target="_blank" aria-label="Facebook - LPU"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512">
+											<path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
+										</svg></a></li>
+
+								<li><a href="https://twitter.com/lpuuniversity" rel="nofollow" target="_blank" aria-label="Twitter - LPU"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+											<path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z" />
+										</svg></a></li>
+
+								<li><a href="https://www.instagram.com/lpuuniversity/?hl=en" rel="nofollow" target="_blank" aria-label="Instagram - LPU"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+											<path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+										</svg></a></li>
+
+								<li><a href="https://www.linkedin.com/company/lovely-professional-university" rel="nofollow" target="_blank" aria-label="Linkedin - LPU"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+											<path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z" />
+										</svg></a></li>
+
+								<li><a href="https://www.youtube.com/user/LPUuniversity" rel="nofollow" target="_blank" aria-label="Youtube - LPU"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
+											<path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z" />
+										</svg></a></li>
+							</ul>
+						</div>
+					</div>
+
+
+					<div class="follow-us">
+						<div class="heading">LPU Touch</div>
+						<div>
+							<ul>
+								<li><a href="https://play.google.com/store/apps/details?id=ums.lovely.university&hl=en" target="_blank"  aria-label="Google Play Store - LPU"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
+											<path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" />
+										</svg></a></li>
+
+								<li><a href="https://itunes.apple.com/in/app/lputouch/id509819753?mt=8" target="_blank" aria-label="Apple Store - LPU">
+										<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
+											<path d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zM127 384.5c-5.5 9.6-17.8 12.8-27.3 7.3-9.6-5.5-12.8-17.8-7.3-27.3l14.3-24.7c16.1-4.9 29.3-1.1 39.6 11.4L127 384.5zm138.9-53.9H84c-11 0-20-9-20-20s9-20 20-20h51l65.4-113.2-20.5-35.4c-5.5-9.6-2.2-21.8 7.3-27.3 9.6-5.5 21.8-2.2 27.3 7.3l8.9 15.4 8.9-15.4c5.5-9.6 17.8-12.8 27.3-7.3 9.6 5.5 12.8 17.8 7.3 27.3l-85.8 148.6h62.1c20.2 0 31.5 23.7 22.7 40zm98.1 0h-29l19.6 33.9c5.5 9.6 2.2 21.8-7.3 27.3-9.6 5.5-21.8 2.2-27.3-7.3-32.9-56.9-57.5-99.7-74-128.1-16.7-29-4.8-58 7.1-67.8 13.1 22.7 32.7 56.7 58.9 102h52c11 0 20 9 20 20 0 11.1-9 20-20 20z" />
+										</svg>
+									</a></li>
+
+
+							</ul>
+						</div>
+					</div>
+
+
+					<div class="footer-academics">
+						<div class="heading"><a href="http://iviewd.com/lpu2/" target="_blank"><img src="https://www.lpu.in/lpu-assets/images/icons/360-view.svg" class="view360" width="300" height="106" alt="PM Modi at LPU" /></a></div>
+						<div><a href="https://nad.digilocker.gov.in/" target="_blank"><img src="https://www.lpu.in/lpu-assets/images/icons/digi-locker.svg" class="digi-locaker" width="300" height="73" alt="PM Modi at LPU" /></a></div>
+					</div>
+					<div class="footer-others">
+						<div class="heading">LPU in Media</div>
+						<div><a href="https://www.lpu.in/LPUMedia/newshome.php">Press Coverage</a></div>
+					</div>
+
+
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+
+	<div class="footer-wrap footer-bottom">
+		<div class="footer-bottom-link">
+			<ul>
+				<li><a href="https://www.lpu.in/anti-ragging.php">Anti Ragging</a></li>
+				<li><span style="cursor:pointer" target="_blank" data-bs-toggle="modal" data-bs-target="#sexual-harrassment-footer">ICC</span></li>
+				<li><a href="https://www.lpu.in/privacy.php">Privacy Policy</a></li>
+				<li><a href="https://www.lpu.in/disclaimer.php">Disclaimer</a></li>
+				<li><a href="https://www.lpu.in/terms-conditions.php">Terms and Conditions</a></li>
+				<li><a href="https://www.lpu.in/student-grievance-redressal.php">Student Grievance Redressal</a></li>
+				<li><a href="https://www.lpu.in/caste-based-discrimination.php">Caste Based Discrimination</a></li>
+				<li><a href="https://www.lpu.in/rti">RTI</a></li>
+				<li><a href="https://lovelyprofessionaluniversity.outgrow.us/LPU-Website-Survey">Feedback</a></li>
+
+			</ul>
+		</div>
+		<div class="contact-webmaster webmaster">
+			Problem with this page? <a style="font-size:12px;" href="/cdn-cgi/l/email-protection#b2c5d7d0dfd3c1c6d7c0f2dec2c79cd1dd9cdbdc8dc1c7d0d8d7d1c68fffd3dbde92d4c0dddf92dec2c79cdbdc92e5d7d0c1dbc6d7">Contact
+				Webmaster</a>
+		</div>
+		<div class="contact-webmaster webmaster">
+			Copyrights © 2026 All Rights Reserved by Lovely Professional University</div>
+	</div>
+</footer>
+
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://www.lpu.in/js/jquery.lettering.js" defer></script>
+<script type="text/javascript">
+	var dataInt = window.location.href;
+	var arrInt = dataInt.split('/');
+	if (arrInt[3].toLowerCase() == "international") {
+		var s = document.createElement("script");
+		s.type = "text/javascript";
+		s.async = true;
+		s.src = "https://widgets.in8.nopaperforms.com/emwgts.js";
+		document.body.appendChild(s);
+
+	} else {
+		var s = document.createElement("script");
+		s.type = "text/javascript";
+		s.async = true;
+		s.src = "https://lpuwidgets.nopaperforms.com/emwgts.js";
+		document.body.appendChild(s);
+	}
+
+
+
+
+
+</script>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"c5db119ec2de4adc8b8b1d95388884a3","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e4d3062fd4659f0',t:'MTc3NDkzNzQwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>

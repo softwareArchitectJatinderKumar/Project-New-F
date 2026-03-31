@@ -189,7 +189,7 @@
                                             <td>
                                                 <button class="btn-dark btn ms-3"
                                                     (click)="downloadFile(AllBookingTestsDataRow.fileName)">
-                                                    View
+                                                    <i class="bi bi-download"></i>
                                                 </button>
                                             </td>
                                         </ng-container>
@@ -239,7 +239,8 @@
                                         <ng-container *ngIf="AllBookingTestsDataRow.assignedUserId?.length<=0; else Assigned">
                                             <td class="fw-bold" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
                                                 <button class="btn btn-dark" (click)="openPaymentModal(AllBookingTestsDataRow)">
-                                                    Assign Staff
+                                                    <!-- Assign Staff -->
+                                                    <i class="bi bi-tools"></i>
                                                 </button>
                                             </td>
                                             <ng-template #NA>

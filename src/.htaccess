@@ -1,3 +1,4 @@
+Options -MultiViews
 RewriteEngine On
 
 # Enable proxy for header and footer API calls

@@ -1,0 +1,1026 @@
+/* ═══════════════════════════════════════════════════════════════
+   LPU HEADER — ANGULAR COMPONENT SCSS  (v2 — layout & hover fix)
+════════════════════════════════════════════════════════════════ */
+
+/* ─── 0. CSS CUSTOM PROPERTIES ─────────────────────────────── */
+:host {
+  --yellow:   #fecd46;
+  --black:    #030303;
+  --dark:     #080708;
+  --gray:     #171717;
+  --white:    #ffffff;
+  --s1: cubic-bezier(0.4, 0, 0.2, 1);
+  --s2: cubic-bezier(0.22, 1, 0.36, 1);
+  --s3: cubic-bezier(0.19, 1, 0.22, 1);
+  display: block;
+}
+
+/* ─── 1. ANNOUNCEMENT BAR ──────────────────────────────────── */
+.announcement-bar {
+  background: linear-gradient(125deg, #39b6d8 -20%, #f7d344 50%, #e38330 100%);
+  padding: 10px 0;
+  color: #000;
+  width: 100%;
+  position: relative;
+  z-index: 1001;
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .topbar-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .topbar-arrow {
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    font-weight: 900;
+    cursor: pointer;
+    color: #000;
+    padding: 0 6px;
+    flex-shrink: 0;
+    line-height: 1;
+    transition: transform .2s ease;
+    &:hover { transform: scale(1.2); }
+  }
+
+  .topbar-track-wrapper { flex: 1; overflow: hidden; }
+
+  .topbar-track {
+    display: flex;
+    transition: transform .5s var(--s1);
+  }
+
+  .topbar-slide {
+    min-width: 100%;
+    text-align: center;
+    a {
+      color: #000;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+/* ─── 2. MAIN HEADER ────────────────────────────────────────── */
+#header {
+  position: relative;          /* ← positioning context for mega-menu */
+  background: var(--white);
+  z-index: 999;
+  width: 100%;
+  transition: box-shadow .4s var(--s1), background .4s var(--s1);
+
+  &.sticky-header {
+    position: fixed;
+    top: 0;
+    background: var(--white);
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+
+    .nav-bar-top-links   { opacity: 0 !important; pointer-events: none; }
+    .lpu-logo            { padding: 0; }
+    .navbar-expand-lg    { padding-top: 0; margin-top: -21px; }
+    .naac-logo-image     { filter: brightness(0); width: 70px; height: auto; }
+    .search-icon         { border-color: var(--black) !important; }
+    .dropdown-toggle-icon::after { filter: invert(1) !important; }
+  }
+}
+
+.container-fluid {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ── 2a. Two-column grid: logo | right-nav ── */
+.header-row {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  align-items: center;
+}
+
+/* ── 2b. Logo ── */
+.lpu-logo {
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
+  padding: 10px 0;
+  flex-shrink: 0;
+  transition: padding .6s var(--s1);
+  img { display: block; transition: width .6s var(--s1), height .6s var(--s1); }
+}
+
+/* ── 2c. Right nav column: top-links stacked above navbar ── */
+.navbar-right {
+  display: flex;
+  flex-direction: column;   /* ← stacks top-links ABOVE main nav */
+  align-items: flex-end;
+  min-width: 0;
+  overflow: visible;
+}
+
+/* ─── 3. TOP LINKS ROW ─────────────────────────────────────── */
+.nav-bar-top-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  opacity: 1;
+  transition: opacity .6s var(--s1);
+  pointer-events: auto;
+
+  .nav-bar-top-links-container {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: nowrap;
+    gap: 0;
+
+    li { display: flex; }
+
+    li a {
+      display: block;
+      padding: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #000;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .3s ease, color .3s ease;
+      &:hover                    { background: var(--yellow); color: #000; }
+      &.nav-bar-top-links-active { background: var(--yellow); color: #000; }
+    }
+  }
+
+  .social-media-logo { margin-left: 20px; flex-shrink: 0; }
+}
+
+/* ─── 4. MAIN NAVBAR ────────────────────────────────────────── */
+
+/*
+ * CRITICAL: .navbar must NOT have position:relative
+ * Mega menus use `position:absolute` relative to #header (position:relative)
+ * so they span the full header width.
+ */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 0;                    /* override any UA default */
+
+  &.navbar-expand-lg {
+    justify-content: flex-end;
+    padding-top: 12px;
+    margin-top: 0;
+    transition: padding-top .6s var(--s1), margin-top .6s var(--s1);
+  }
+}
+
+/* Collapse div: always visible as flex on desktop */
+.navbar-collapse.offcanvas-collapse {
+  display: flex;                 /* ← desktop: inline flex */
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  overflow: visible;
+}
+
+/* Nav list: horizontal row, no wrap */
+.navbar-nav {
+  display: flex;
+  flex-direction: row;           /* ← always row on desktop */
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-wrap: nowrap;
+  overflow: visible;
+}
+
+/* ─── 5. NAV ITEMS & LINKS ─────────────────────────────────── */
+
+/* Every nav item: flex + overflow visible for dropdowns */
+.nav-item {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  position: relative;            /* fallback for simple dropdown */
+  overflow: visible;
+}
+
+.nav-link {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black);
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
+  transition: color .3s ease;
+  &:hover { color: #444; }
+}
+
+/* Dropdown arrow via ::after */
+.dropdown-toggle-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+
+  &::after {
+    content: url('https://www.lpu.in/images/icons/dropdown-arrow-white.svg');
+    margin-left: 4px;
+    display: inline-block;
+    line-height: 0;
+    vertical-align: middle;
+    filter: invert(1);
+    transition: transform .3s ease;
+  }
+}
+
+.nav-item.show .dropdown-toggle-icon::after { transform: rotate(180deg); }
+
+/* ─── 6. SIMPLE DROPDOWN (not-mega-menu) ────────────────────── */
+
+/*
+ * .not-mega-menu already has position:relative (from .nav-item above)
+ * The sub-menu is absolute relative to the nav-item itself.
+ */
+.sub-menu-container {
+  /* Hidden state */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .25s ease, transform .25s var(--s2), visibility 0s linear .25s;
+  pointer-events: none;
+
+  /* Positioning */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1020;
+
+  /* Visual */
+  list-style: none;
+  margin: 0;
+  padding: 10px 0 !important;
+  min-width: 230px;
+  background: var(--gray);
+  border-bottom: 2px solid var(--yellow);
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+
+  li {
+    display: block;
+    a {
+      display: block;
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 7px 14px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      transition: background .2s ease, color .2s ease;
+      &:hover { background: var(--yellow); color: #000 !important; }
+    }
+  }
+}
+
+/* Shown state */
+.not-mega-menu.show > .sub-menu-container {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity .25s ease, transform .25s var(--s2);
+}
+
+/* ─── 7. MEGA MENU ──────────────────────────────────────────── */
+
+/*
+ * CRITICAL: .mega-dropdown must NOT be a positioning context.
+ * sub-mega-menu's position:absolute is relative to #header (position:relative).
+ * This lets it span 100% of the header width.
+ */
+.mega-dropdown {
+  position: static !important;   /* override .nav-item's position:relative */
+}
+
+.sub-mega-menu {
+  /* Hidden state */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .28s ease, transform .28s var(--s2), visibility 0s linear .28s;
+  pointer-events: none;
+
+  /* Positioned relative to #header → spans full header width */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 1020;
+  box-sizing: border-box;
+
+  /* Visual */
+  background: var(--gray);
+  border-bottom: 2px solid var(--yellow);
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  padding: 20px 32px;
+
+  /* Inner layout */
+  .mega-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .col-mega {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 16px;
+    &:not(:last-child) {
+      border-right: 1px solid rgba(255,255,255,.09);
+    }
+  }
+
+  h6.sub-mega-menu-heading {
+    color: var(--white);
+    background: rgba(255,255,255,.1);
+    padding: 8px 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: .5px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+    a { color: inherit; text-decoration: none; }
+    &:hover { background: var(--yellow); color: #000; a { color: #000; } }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px;
+    li a {
+      display: block;
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 5px 10px;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      transition: background .2s ease, color .2s ease;
+      &:hover { background: var(--yellow); color: #000 !important; }
+    }
+  }
+}
+
+/* Shown state */
+.mega-dropdown.show > .sub-mega-menu {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity .28s ease, transform .28s var(--s2);
+}
+
+/* ─── 8. SEARCH ICON ────────────────────────────────────────── */
+.search-grid {
+  margin-left: auto !important;
+  margin-right: 1rem !important;
+}
+
+.search-icon {
+  border: 1px solid var(--black);
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color .3s ease;
+
+  .icon-hover  { display: none; }
+  .icon-default { display: inline; }
+
+  &:hover {
+    border-color: var(--yellow) !important;
+    .icon-default { display: none; }
+    .icon-hover   { display: inline; }
+  }
+}
+
+/* ─── 9. APPLY NOW BUTTON ───────────────────────────────────── */
+.apply-now-btn-grid { flex-shrink: 0; }
+
+.lpu-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 10px 10px 20px;
+  color: var(--black);
+  background: var(--yellow);
+  border: 1px solid var(--yellow);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: background .4s ease, color .4s ease, border-color .4s ease;
+
+  span {
+    margin-left: -1em;
+    font-size: 14px;
+    font-weight: 600;
+    transition: transform .6s var(--s3);
+  }
+
+  img {
+    margin-left: .7em;
+    transition: opacity .6s var(--s3), transform .6s var(--s3);
+    transition-delay: .25s;
+  }
+
+  img + img {
+    order: -1;
+    transform: translateX(-1em);
+    opacity: 0;
+    margin: 0;
+    transition-delay: 0s;
+  }
+
+  &:hover {
+    background: #231f20 !important;
+    color: var(--white) !important;
+    border-color: #231f20 !important;
+    span { transform: translateX(1.3em); }
+    img  { transform: translateX(1em); opacity: 0; transition-delay: 0s; }
+    img + img { opacity: 1; transform: translateX(-5px); transition-delay: .25s; }
+  }
+}
+
+/* ─── 10. SEARCH OVERLAY ────────────────────────────────────── */
+.topsearch {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.95);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform .4s var(--s1), opacity .3s ease, visibility 0s linear .4s;
+
+  &.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition: transform .4s var(--s1), opacity .3s ease;
+  }
+
+  form { width: 90%; max-width: 800px; }
+
+  input[type="text"] {
+    width: 100%;
+    height: 60px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--yellow);
+    color: var(--white);
+    font-size: 22px;
+    outline: none;
+    &::placeholder { color: rgba(255,255,255,.35); }
+  }
+
+  .close-search {
+    position: fixed;
+    right: 40px;
+    top: 40px;
+    color: var(--white);
+    font-size: 32px;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1;
+    transition: color .2s ease, transform .2s ease;
+    &:hover { color: var(--yellow); transform: scale(1.1); }
+  }
+}
+
+/* ─── 11. HAMBURGER TOGGLER ─────────────────────────────────── */
+.custom-toggler {
+  display: none;                 /* hidden on desktop */
+  width: 34px;
+  height: 26px;
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--black);
+    border-radius: 2px;
+    transition: all .35s var(--s1);
+    &:nth-child(1) { top: 0; }
+    &:nth-child(2) { top: 11px; }
+    &:nth-child(3) { bottom: 0; }
+  }
+
+  &.open span {
+    &:nth-child(1) { transform: rotate(45deg);  top: 11px; }
+    &:nth-child(2) { opacity: 0; }
+    &:nth-child(3) { transform: rotate(-45deg); bottom: 12px; }
+  }
+}
+
+/* Mobile-only sections hidden on desktop */
+.mobile-logo-container { display: none; }
+.innr-top-links        { display: none; }
+
+/* ─── 12. STICKY SIDEBAR BAR ────────────────────────────────── */
+.sticky-bar-grid {
+  position: fixed;
+  bottom: 20%;
+  right: 1%;
+  z-index: 1040;
+}
+
+.sticky-bar {
+  position: relative;
+  display: inline-block;
+
+  &.open .sticky-items,
+  &:hover .sticky-items {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.sticky-bar-innr {
+  background: var(--dark);
+  padding: 15px;
+  cursor: pointer;
+  display: inline-flex;
+}
+
+.sticky-items {
+  position: absolute;
+  right: 52px;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all .4s ease-in-out;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 8px;
+    margin: 0 2px;
+    background: #d9d9d9;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .25s ease;
+
+    a { display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    img { filter: invert(1); width: 28px; height: 28px; }
+    .st-label { display: none; }
+
+    &:hover {
+      background: linear-gradient(180deg, #ed7d01 0%, #bb5b04 100%);
+      img { filter: invert(0); }
+    }
+  }
+
+  li.apply-now-outer { display: none; }
+  li.sticky-items-none { display: none; }
+}
+
+/* ─── 13. CLICK-TO-CALL MODAL ───────────────────────────────── */
+.modal-backdrop-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 1049;
+  &.show { display: block; }
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  overflow-y: auto;
+  &.open { display: flex; align-items: center; justify-content: center; }
+}
+
+.modal-dialog {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  margin: 24px auto;
+}
+
+.modal-content {
+  background: var(--white);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,.35);
+}
+
+.modal-header {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.click-call-tab {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  align-items: center;
+
+  li:first-child { border-right: 1px solid #e9eaeb; padding-right: 25px; margin-right: 15px; }
+
+  li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #b8b8b8;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color .3s ease;
+
+    span {
+      border: 1px solid #b8b8b8;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .3s ease;
+      img { transition: filter .3s ease; }
+    }
+
+    &.active, &:hover {
+      color: #414651;
+      span { border-color: #414651; img { filter: brightness(0); } }
+    }
+  }
+}
+
+.btn-close {
+  appearance: none;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: .6;
+  padding: 4px 8px;
+  line-height: 1;
+  &:hover { opacity: 1; }
+  &::before { content: '✕'; }
+}
+
+.tab-pane { display: none; &.active { display: block; } }
+
+.call-now-grid {
+  margin: 0 auto;
+  max-width: 70%;
+  text-align: center;
+  padding: 32px 0;
+  h2 { font-weight: 600; font-size: 28px; color: #181d27; margin-bottom: 12px; }
+}
+
+.call-us-later-grid {
+  margin: 0 auto;
+  max-width: 70%;
+  padding: 32px 0;
+  h2 { font-weight: 600; font-size: 28px; color: #181d27; margin-bottom: 4px; }
+}
+
+.content-normal  { font-size: 16px; line-height: 24px; color: #717680; margin: 16px 0 10px !important; }
+.content-highlight { font-weight: 600; font-size: 16px; color: #231f20; }
+
+/* Minimal grid helpers for the schedule form */
+.form-row { display: flex; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+.form-label-col { width: 33.33%; padding-right: 12px; box-sizing: border-box; }
+.form-input-col { flex: 1; min-width: 0; }
+.form-label {
+  font-weight: 500; font-size: 14px; color: #414651;
+  white-space: nowrap; display: block;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.input-group-text {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  padding: 0 8px;
+  color: #444;
+  white-space: nowrap;
+}
+
+.form-control {
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  outline: none;
+  font-size: 14px;
+  padding: 9px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  color: #222;
+  background: var(--white);
+  transition: border-color .2s ease;
+  &:focus { border-color: var(--yellow); outline: none; }
+  &::placeholder { color: #6c757d; }
+}
+
+/* Input inside input-group overrides */
+.input-group .form-control {
+  border: none;
+  border-radius: 0;
+  padding: 6px 8px;
+}
+
+.modal-innr-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  border-top: 1px solid #dee2e6;
+}
+
+.office-details-btn-reverse {
+  padding: 13px 40px;
+  min-width: 200px;
+  background: var(--yellow);
+  color: #000;
+  border: 1px solid var(--yellow);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .3s ease, color .3s ease, border-color .3s ease;
+  &:hover { background: #231f20; color: var(--white); border-color: #231f20; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+  .nav-bar-top-links .nav-bar-top-links-container li a { font-size: 9px; }
+}
+
+@media (max-width: 1025px) {
+  .social-media-logo { display: none; }
+}
+
+/* ── MOBILE ≤ 995px ── */
+@media (max-width: 995px) {
+
+  #header {
+    background: var(--dark);
+    padding: 0 10px;
+    position: fixed;
+    top: 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,.4);
+  }
+
+  .header-row { grid-template-columns: 85% 15%; }
+
+  .nav-bar-top-links  { display: none !important; }
+  .apply-now-btn-grid { display: none; }
+
+  .custom-toggler {
+    display: block;
+    span { background: var(--white); }
+  }
+
+  .search-icon { border-color: var(--white); img { filter: invert(1); } }
+  .search-grid { margin: 12px 0 !important; margin-left: unset !important; }
+
+  /* Nav reverts to block */
+  .navbar { padding: 0; }
+
+  .navbar-collapse.offcanvas-collapse {
+    display: block;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--dark);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform .4s ease-in-out, opacity .4s ease-in-out;
+    z-index: 9999;
+    pointer-events: none;
+    overflow-y: auto;
+    justify-content: unset;
+
+    &.open {
+      transform: translateX(0);
+      opacity: 1;
+      padding: 36px;
+      pointer-events: auto;
+    }
+  }
+
+  .mobile-logo-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .innr-top-links {
+    display: block;
+    ul {
+      display: flex;
+      justify-content: space-evenly;
+      border-top: 1px solid var(--yellow);
+      border-bottom: 1px solid var(--yellow);
+      margin: 20px 0;
+      padding: 0;
+      list-style: none;
+      li {
+        display: flex;
+        padding: 10px 4px;
+        font-weight: 600;
+        a { color: var(--yellow); text-decoration: none; font-size: 12px; }
+      }
+    }
+  }
+
+  .navbar-nav {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100%;
+  }
+
+  .nav-item { display: block; position: relative; overflow: visible; }
+
+  .nav-link {
+    font-size: 18px !important;
+    border-bottom: 1px solid rgba(255,255,255,.15) !important;
+    padding: 15px 10px !important;
+    color: var(--white) !important;
+  }
+
+  .dropdown-toggle-icon::after {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    filter: invert(0);
+  }
+
+  .nav-item.show .dropdown-toggle-icon::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  /* Mega dropdown: restore relative on mobile */
+  .mega-dropdown { position: relative !important; }
+
+  /* Sub menus: full width, in-flow */
+  .sub-menu-container,
+  .sub-mega-menu {
+    position: relative !important;
+    width: 100% !important;
+    min-width: unset !important;
+    top: 0 !important; left: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+
+    .mega-row { flex-direction: column !important; }
+    .col-mega  { width: 100% !important; border-right: none !important; padding: 0 !important; }
+  }
+
+  .not-mega-menu.show > .sub-menu-container,
+  .mega-dropdown.show  > .sub-mega-menu {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Sticky bar → mobile bottom strip */
+  .sticky-bar-grid {
+    bottom: 0; right: 0; left: 0;
+    max-width: 97%;
+    margin: 0 auto;
+    display: block;
+    position: fixed;
+    z-index: 999;
+  }
+
+  .sticky-bar {
+    background: var(--yellow);
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 0 10px;
+    display: block !important;
+  }
+
+  .sticky-bar-innr { display: none; }
+
+  .sticky-items {
+    position: relative;
+    right: 0; top: 0;
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    padding: 4px 0;
+
+    li {
+      width: auto; height: auto;
+      padding: 8px 4px;
+      background: transparent;
+      &:hover { background: transparent; }
+      img { width: 28px; height: 28px; filter: invert(0); }
+    }
+
+    li.apply-now-outer {
+      display: block;
+      .apply-now {
+        display: block;
+        font-size: 11px;
+        background: var(--white);
+        color: var(--dark);
+        padding: 8px 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-radius: 14px;
+        border: 1px solid var(--dark);
+        text-decoration: none;
+      }
+    }
+    li.sticky-items-none { display: block; }
+  }
+
+  /* Modal adjustments */
+  .call-now-grid, .call-us-later-grid { max-width: 90%; padding: 20px 0; }
+  .call-now-grid h2, .call-us-later-grid h2 { font-size: 20px; }
+  .office-details-btn-reverse { padding: 10px 24px; min-width: unset; }
+  .form-label-col { display: none; }
+  .form-input-col { width: 100%; }
+}
+
+@media (max-width: 600px) {
+  #header.sticky-header {
+    background: var(--dark);
+    padding: 0 15px;
+    .lpu-logo { padding: 10px 0; }
+    .navbar-expand-lg { margin-top: 7px; padding-top: 0; }
+  }
+  .innr-top-links ul li { padding: 10px 3px; font-size: 11px; }
+
+  .navbar-collapse.offcanvas-collapse.open { padding: 36px 24px; }
+}

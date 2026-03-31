@@ -1,3 +1,6 @@
+.BottomSpace{
+  margin-bottom:20rem !important;
+}
 /* --- Global & Layout --- */
 .login-section {
   // min-height: 100vh;
@@ -14,7 +17,7 @@
 .login-card {
   border: none;
   border-top: 5px solid #b1040e; /* LPU Maroon */
-  background-color: rgba(0, 0, 0, .05);
+  // background-color: rgba(0, 0, 0, .05);
    
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);

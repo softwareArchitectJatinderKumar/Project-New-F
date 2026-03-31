@@ -91,7 +91,7 @@
                   <td>
                     <ng-container *ngIf="row.receiptProofFile; else NoFile">
                       <button class="btn btn-sm btn-dark" (click)="downloadFile(row.receiptProofFile)">
-                        View
+                         <i class="bi bi-download"></i>
                       </button>
                     </ng-container>
                     <ng-template #NoFile>
@@ -99,7 +99,7 @@
                     </ng-template>
                   </td>
                   <td class="text-danger">{{ row.requestDate }}</td>
-                  <td class="text-danger">{{ row.proofRemarks }}</td>
+                  <td class="text-dark">{{ row.proofRemarks  ? row.proofRemarks:'N-A'  }}</td>
                   <td>
                     <span class="badge" [ngClass]="{
                           'bg-success': row.isProofApproved === '1',

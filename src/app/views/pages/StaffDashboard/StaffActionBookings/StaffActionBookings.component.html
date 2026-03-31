@@ -29,7 +29,7 @@
                         <ng-select [(ngModel)]="selectedStatus" (change)="applyFilters()" [items]="statusOptions"
                             bindLabel="label" bindValue="value" placeholder="-- All Payments --" class="w-100">
                             <ng-template ng-option-tmp let-item="item">
-                                <span *ngIf="item.value === ''"  >-- All Payments --</span>
+                                <span *ngIf="item.value === ''" >-- All Payments --</span>
                                 <span *ngIf="item.value === 'success'" >Paid Payments</span>
                                 <span *ngIf="item.value === 'failure'" >Failed Payments</span>
                                 <span *ngIf="item.value === 'null'" >Pending Payments</span>
