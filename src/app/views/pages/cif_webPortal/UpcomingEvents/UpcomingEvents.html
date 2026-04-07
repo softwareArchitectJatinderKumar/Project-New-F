@@ -17,25 +17,28 @@
                 </div> -->
             </div>
         </div>
-        <div *ngIf="allEvents.length>0; else ErrorCard">
-        <ngb-carousel #ngbCarousel [interval]="autoSlideInterval" [pauseOnHover]="true" [wrap]="true"
-            [showNavigationArrows]="false" [showNavigationIndicators]="false">
-            <ng-template ngbSlide *ngFor="let event of allEvents; let i = index" id="{{ 'slide-' + i }}">
-                <div class="slider-item event-card mb-4 bg-dark-yellow">
-                    <div class="row">
-                        <div class="col-md-12 text-start">
-                            <h4 class="font-primary">{{ event.eventName }}</h4>
-                            <div class="misc-smfont mt-3"><b>Date:</b> {{ event.eventDate }}</div>
+        <div *ngIf="UpcomingchunkedEvents.length>0; else ErrorCard">
+            <ngb-carousel #ngbCarousel [interval]="autoSlideInterval" [pauseOnHover]="true" [wrap]="true"
+                [showNavigationArrows]="false" [showNavigationIndicators]="false">
+                <ng-template ngbSlide *ngFor="let event of UpcomingchunkedEvents; let i = index"
+                    id="{{ 'slide-' + i }}">
+                    <div class="slider-item event-card mb-4 bg-dark-yellow">
+                        <div class="col" *ngFor="let event of event">
+                            <div class="row">
+                                <div class="col-md-12 text-start">
+                                    <h4 class="font-primary">{{ event.eventName }}</h4>
+                                    <div class="misc-smfont mt-3"><b>Date:</b> {{ event.eventDate }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </ng-template>
-        </ngb-carousel>
+                </ng-template>
+            </ngb-carousel>
         </div>
     </div>
-</section> 
- <ng-template #ErrorCard>
-     <div class="text-center" >
+</section>
+<ng-template #ErrorCard>
+    <div class="text-center">
         <h3 class="text-center fs-2 m-5 text-danger pt-5 "> No Record ! </h3>
         <div class="row mt-4 mb-4">
             <div class="col-sm-12 text-center">
@@ -45,14 +48,14 @@
             </div>
         </div>
     </div>
-            <!-- <div class="alert alert-danger card mt-3" role="alert">
+    <!-- <div class="alert alert-danger card mt-3" role="alert">
                 <div class="card-body text-center">
                     <h5 class="card-title">Server Connection Error</h5>
                     <p class="card-text">Data Server Connection error , Try again later</p>
                   
                 </div>
             </div> -->
-        </ng-template>
+</ng-template>
 
 <!--  
 <section class="section bg-dark-yellow">
@@ -79,3 +82,43 @@
         </div>
     </div>
 </section>  -->
+
+
+
+<section class="section bg-dark-yellow">
+    <div class="container">
+        <div class="heading-wraper">
+            <div class="main-head">
+                <h2> Events & Happenings </h2>
+
+                <div class="inner-testi-slider-nav">
+                    <button id="prev_event_slide" class="inner-testi-prev-arrow" (click)="carousel.prev()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
+                    </button>
+                    <button id="next_event_slide" class="inner-testi-next-arrow" (click)="carousel.next()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-right.svg" />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <ngb-carousel #carousel [interval]="15000" [pauseOnHover]="true" [showNavigationArrows]="false"
+            [showNavigationIndicators]="true">
+            <ng-template ngbSlide *ngFor="let group of chunkedEvents">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-center justify-content-center">
+                    <div class="col" *ngFor="let event of group">
+                        <img [src]="ServerUrl + event.imageUrl" [alt]="event.eventName" class="img-fluid" />
+                        <div class="mt-4 mb-2">
+                            <strong class="d-block">{{ event.eventName }}</strong>
+                            {{ event.eventDetails }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+
+        <p *ngIf="chunkedEvents.length === 0" class="text-center mt-4 text-muted">
+            No Happenings events available at the moment.
+        </p>
+    </div>
+</section>

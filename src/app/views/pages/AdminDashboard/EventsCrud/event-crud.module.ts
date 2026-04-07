@@ -17,18 +17,20 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 // Ng-select
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AdminDashboardModule } from "../AdminDashboard/AdminDashboard.module";
-import { EventsCrudComponent } from './events-crud.component';
+// import { EventsCrudComponent } from './events-crud.component';
+import { newEventsCrudComponent } from './new-events-crud.component';
 const routes: Routes = [
   {
     path: '',
-    component: EventsCrudComponent
+    component: newEventsCrudComponent
+    // component: EventsCrudComponent
   }
 ]
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 @NgModule({
-  declarations: [EventsCrudComponent],
+  declarations: [newEventsCrudComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

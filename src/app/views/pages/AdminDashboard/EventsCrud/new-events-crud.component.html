@@ -1,4 +1,4 @@
-<!-- <app-AdminDashboard></app-AdminDashboard>
+<app-AdminDashboard></app-AdminDashboard>
 
 <div *ngIf="isLoading" class="fullscreen-loader">
     <div class="custom-spinner-overlay" *ngIf="isLoading">
@@ -9,11 +9,12 @@
 </div>
 
 
+ 
 <section class="section bg-dark-yellow">
     <div class="container">
         <div class="heading-wraper">
             <div class="main-head">
-                <h2>Events & Happenings</h2>
+                <h2> Events & Happenings </h2>
                 <div class="inner-testi-slider-nav">
                     <button id="prev_event_slide" class="inner-testi-prev-arrow" (click)="carousel.prev()">
                         <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
@@ -30,7 +31,7 @@
             <ng-template ngbSlide *ngFor="let group of chunkedEvents">
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-center justify-content-center">
                     <div class="col" *ngFor="let event of group">
-                        <img [src]="ServerUrl+event.imageUrl" [alt]="event.eventName" class="img-fluid" />
+                        <img [src]="ServerUrl + event.imageUrl" [alt]="event.eventName" class="img-fluid" />
                         <div class="mt-4 mb-2">
                             <strong class="d-block">{{ event.eventName }}</strong>
                             {{ event.eventDetails }}
@@ -39,6 +40,50 @@
                 </div>
             </ng-template>
         </ngb-carousel>
+
+        <p *ngIf="chunkedEvents.length === 0" class="text-center mt-4 text-muted">
+            No Happenings events available at the moment.
+        </p>
+    </div>
+</section>
+
+
+
+<section class="section bg-dark-yellow">
+    <div class="container">
+        <div class="heading-wraper">
+            <div class="main-head">
+                <h2>Upcoming Events </h2>
+                
+                <div class="inner-testi-slider-nav">
+                    <button id="prev_event_slide" class="inner-testi-prev-arrow" (click)="carousel.prev()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
+                    </button>
+                    <button id="next_event_slide" class="inner-testi-next-arrow" (click)="carousel.next()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-right.svg" />
+                    </button>
+                </div>
+            </div>
+        </div>
+ 
+        <ngb-carousel #carousel [interval]="15000" [pauseOnHover]="true" [showNavigationArrows]="false"
+            [showNavigationIndicators]="true">
+            <ng-template ngbSlide *ngFor="let group of UpcomingchunkedEvents">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-center justify-content-center">
+                    <div class="col" *ngFor="let event of group">
+                        <!-- <img [src]="ServerUrl + event.imageUrl" [alt]="event.eventName" class="img-fluid" /> -->
+                        <div class="mt-4 mb-2">
+                            <strong class="d-block">{{ event.eventName }}</strong>
+                            {{ event.eventDetails }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+
+        <p *ngIf="chunkedEvents.length === 0" class="text-center mt-4 text-muted">
+            No Happenings events available at the moment.
+        </p>
     </div>
 </section>
 
@@ -99,29 +144,49 @@
                             </div>
                         </div>
 
+                        
                         <div class="form-group row">
-                            <label for="imageFile" class="col-sm-3 col-form-label required">Image File</label>
+
+                            <!-- REQ #1: required asterisk CSS class applied conditionally -->
+                            <label for="imageFile"
+                                [ngClass]="isImageRequired ? 'col-sm-3 col-form-label required' : 'col-sm-3 col-form-label'">
+                                Image File
+                                <!-- REQ #1: optional badge shown when Happenings is selected -->
+                                <span *ngIf="!isImageRequired"
+                                    class="badge bg-secondary ms-1"
+                                    style="font-size: 0.7rem; font-weight: normal; vertical-align: middle;">
+                                    Optional
+                                </span>
+                            </label>
+
                             <div class="col-sm-9">
                                 <input type="file" (change)="onFileSelectedEventFile($event)" accept="image/*"
                                     class="form-control-file">
 
-                                <small class="form-text text-muted">Max file size: {{ MAX_FILE_SIZE_BYTES_MB
-                                    }}MB.</small>
+                                <small class="form-text text-muted">
+                                    Max file size: {{ MAX_FILE_SIZE_BYTES_MB }}MB.
+                                    <!-- REQ #1: hint text changes based on category -->
+                                    <span *ngIf="isImageRequired"> Required for Upcoming events.</span>
+                                    <span *ngIf="!isImageRequired"> Image is optional for Happenings events.</span>
+                                </small>
 
-                                <div *ngIf="isFormSubmitted && !EventFileData && !isEditMode" class="text-danger">
-                                    Image file is required for a new event.
+                                <!-- REQ #1: validation error only shown when image IS required -->
+                                <div *ngIf="isFormSubmitted && !EventFileData && !isEditMode && isImageRequired"
+                                    class="text-danger mt-1">
+                                    Image file is required for Upcoming events.
                                 </div>
 
+                                <!-- Existing image preview in edit mode (unchanged) -->
                                 <div *ngIf="isEditMode && currentImageUrl" class="mt-2">
                                     <p class="mb-1">Current Image:</p>
                                     <img [src]="ServerUrl + currentImageUrl"
                                         style="max-height: 80px; max-width: 150px; border: 1px solid #ccc;">
-                                    <small class="d-block">Image will be replaced only if a new file is
-                                        uploaded.</small>
+                                    <small class="d-block">Image will be replaced only if a new file is uploaded.</small>
                                 </div>
                             </div>
                         </div>
 
+                        <!-- Form Actions (REQ #2: button and submit flow unchanged) -->
                         <div class="form-group row">
                             <div class="col-sm-12 text-center">
                                 <button type="submit" class="btn btn-primary m-2" [disabled]="isLoading">
@@ -143,11 +208,12 @@
 
     <hr>
 
+    <!-- All Events Table (unchanged) -->
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow mb-4">
-                <div class="row  mb-5 mt-4 ">
-                    <h2 class="text-center ">All Events</h2>
+                <div class="row mb-5 mt-4">
+                    <h2 class="text-center">All Events</h2>
                 </div>
                 <div class="card-header py-3 d-flex justify-content-center align-items-center">
                     <div class="col-2">
@@ -159,10 +225,10 @@
                     </div>
                     <span class="ms-4 col-2 text-end"> Select Items per page </span>
                     <div class="ms-1 col-2">
-                        <select class="form-control form-control-sm "
+                        <select class="form-control form-control-sm"
                             style="width: auto; background-color: bisque !important; color: black !important;"
                             [(ngModel)]="pageSize" (ngModelChange)="onSearchChange()">
-                            <option [ngValue]="5" selected>Select </option>
+                            <option [ngValue]="5" selected>Select</option>
                             <option [ngValue]="10">10 / page</option>
                             <option [ngValue]="25">25 / page</option>
                             <option [ngValue]="50">50 / page</option>
@@ -188,8 +254,9 @@
 
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <p *ngIf="paginatedEventsData.length === 0" class="p-4 text-center text-muted">No events found
-                            matching your criteria.</p>
+                        <p *ngIf="paginatedEventsData.length === 0" class="p-4 text-center text-muted">
+                            No events found matching your criteria.
+                        </p>
 
                         <table class="table table-striped table-hover mb-0" *ngIf="paginatedEventsData.length > 0">
                             <thead>
@@ -212,15 +279,18 @@
                                     <td>{{ event.eventDetails | slice:0:70 }}...</td>
                                     <td>
                                         <button *ngIf="event.imageUrl" class="btn btn-sm btn-info"
-                                            (click)="onViewFile(event.imageUrl)"><span
-                                                class="bi bi-eye"></span></button>
+                                            (click)="onViewFile(event.imageUrl)">
+                                            <span class="bi bi-eye"></span>
+                                        </button>
                                         <span *ngIf="!event.imageUrl" class="text-muted">N/A</span>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-warning mr-2" (click)="onEdit(event)"><span
-                                                class="bi bi-pencil"></span></button>
-                                        <button class="btn btn-sm btn-danger" (click)="onDelete(event)"><span
-                                                class="bi bi-trash"></span></button>
+                                        <button class="btn btn-sm btn-warning mr-2" (click)="onEdit(event)">
+                                            <span class="bi bi-pencil"></span>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" (click)="onDelete(event)">
+                                            <span class="bi bi-trash"></span>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -248,15 +318,16 @@
         </div>
     </div>
 </div>
+
 <ng-template #loginFailed>
     <div class="text-center bg-danger" *ngIf="isLoginFailed">
-        <h3 class="text-center fs-2 m-5 text-warn pt-5 "> Error in User Login . </h3>
+        <h3 class="text-center fs-2 m-5 text-warn pt-5">Error in User Login.</h3>
         <div class="row mt-4 mb-4">
             <div class="col-sm-12 text-center">
                 <div class="mb-3 p-4">
-                    <Label class="form-label fs-4 text-warn ">Something Went Wrong. Please Try login again!.</Label>
+                    <label class="form-label fs-4 text-warn">Something Went Wrong. Please Try login again!</label>
                 </div>
             </div>
         </div>
     </div>
-</ng-template> -->
+</ng-template>

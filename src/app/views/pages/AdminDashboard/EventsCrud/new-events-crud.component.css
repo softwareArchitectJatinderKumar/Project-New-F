@@ -1,4 +1,4 @@
-src/app/events-crud/events-crud.component.css
+/* src/app/events-crud/events-crud.component.css */
 /* 
 .container {
     max-width: 1000px;
@@ -106,7 +106,7 @@ h3 {
   }
   
   .bg-dark-yellow {
-    background-color: #f8c51c; /* Replace with your desired dark-yellow color */
+    background-color: #f8c51c; 
   }
   
   .heading-wraper .main-head h2 {
