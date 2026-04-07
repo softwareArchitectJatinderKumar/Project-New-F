@@ -41,10 +41,10 @@ export class HomePageComponent implements OnInit {
     this.updateChunks();
   }
 
-@HostListener('window:resize') // Removed ['$event']
-onResize() {
-  this.updateChunks();
-}
+  @HostListener('window:resize') // Removed ['$event']
+  onResize() {
+    this.updateChunks();
+  }
 
   updateChunks() {
     const width = window.innerWidth;
@@ -280,7 +280,7 @@ onResize() {
     });
   }
 
-   
+
 
   // added on 21-aug-25
   chunkedEvents: any[][] = [];
@@ -323,7 +323,7 @@ onResize() {
       date: '(09 - 13 December, 2024)'
     },
     {
-      img: 'event-1.jpg',
+      img: 'event-1.jpg',  //
       title: 'National workshop on X-Ray Diffraction and Particle Size Analyzer',
       date: '(26 - 27 April 2024)'
     },
@@ -338,7 +338,7 @@ onResize() {
       date: '(29 - 30 March 2024)'
     },
     {
-      img: 'summer-training-programme-2025.webp',
+      img: 'summer-training-programme-2025.webp', //
       title: 'ANRF Sponsored Summer Training Programme',
       date: '(2 June - 11 July 2025)'
     },

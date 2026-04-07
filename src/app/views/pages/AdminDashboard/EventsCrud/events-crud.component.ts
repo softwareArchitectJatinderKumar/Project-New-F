@@ -47,7 +47,7 @@ export class EventsCrudComponent implements OnInit {
 
     // --- Search & Pagination ---
     searchTerm: string = '';
-    pageSize: number = 10;
+    pageSize: number = 5;
     currentPage: number = 1;
     totalItems: number = 0;
     totalPages: number = 0;
@@ -98,14 +98,31 @@ export class EventsCrudComponent implements OnInit {
         }
         this.initForm();
         this.loadEvents();
+       
+    }
+  chunkedEvents: any[][] = [];
+    chunkArray(arr: any[], size: number): any[][] {
+    return arr.reduce((acc, _, i) =>
+      (i % size ? acc : [...acc, arr.slice(i, i + size)]), []);
+  }
+ updateChunks() {
+    const width = window.innerWidth;
+    let itemsPerSlide = 3;
+
+    if (width < 768) {
+      itemsPerSlide = 1;
+    } else if (width < 992) {
+      itemsPerSlide = 2;
     }
 
-
-    // ngOnInit(): void {
-    //     this.initForm();
-    //     this.loadEvents();
-    // }
-
+    const groups = [];
+    if (this.events) {
+      for (let i = 0; i < this.events.length; i += itemsPerSlide) {
+        groups.push(this.events.slice(i, i + itemsPerSlide));
+      }
+    }
+    this.chunkedEvents = groups;
+  }
     // --- Form Initialization and Getters ---
     private initForm(): void {
         this.eventForm = this.fb.group({
@@ -156,8 +173,12 @@ export class EventsCrudComponent implements OnInit {
                 const elapsed = Date.now() - startTime;
                 const remaining = Math.max(MIN_LOADING_TIME - elapsed, 0);
                 setTimeout(() => this.isLoading = false, remaining);
+
+                 this.chunkedEvents = this.chunkArray(this.events, 3);
+    this.updateChunks();
             })
         ).subscribe();
+
     }
 
     // --- CRUD Operations - Edit & Delete ---
@@ -172,6 +193,7 @@ export class EventsCrudComponent implements OnInit {
         this.EventFileData = null; // Clear file data
         this.EventFileName = null; // Clear file name
         this.isFormSubmitted = false;
+        this.isLoading=false;
     }
 
     /**
@@ -275,17 +297,13 @@ export class EventsCrudComponent implements OnInit {
         const formData = this.prepareFormData('Update');
 
         this.eventsService.EventsCrudOperation(formData, "Update").pipe(
-            // 💡 FIX: Check the API return code for success or show a generic message
             tap((data: any) => {
                 const errorCode = data?.item1?.[0]?.['returnData'];
 
                 if (errorCode > 0) {
                     Swal.fire({ title: 'Success', text: `Event ID ${this.currentEventId} updated successfully.`, icon: 'success' });
                 } else {
-                    // Show a generic success message if the request was handled, 
-                    // assuming a successful HTTP status implies a successful transaction, 
-                    // or show the technical issue if the code is 0 or less.
-                    Swal.fire({ title: 'Error', text: 'Update failed or returned an unexpected failure code.', icon: 'error' });
+                    // Swal.fire({ title: 'Error', text: 'Update failed or returned an unexpected failure code.', icon: 'error' });
                 }
             }),
             catchError(error => {
@@ -294,7 +312,7 @@ export class EventsCrudComponent implements OnInit {
                 return of(null);
             }),
             finalize(() => {
-                this.loadEvents();
+                // this.loadEvents();
                 this.resetForm();
             })
         ).subscribe();
@@ -307,7 +325,6 @@ export class EventsCrudComponent implements OnInit {
         const formData = this.prepareFormData('Insert');
 
         this.eventsService.EventsCrudOperation(formData, 'Insert').pipe(
-            // 💡 FIX: Check the API return code for success or fall back to the generic error
             tap((data: any) => {
                 const errorCode = data?.item1?.[0]?.['returnData'];
 
@@ -316,8 +333,7 @@ export class EventsCrudComponent implements OnInit {
                 }
                
                 else {
-                    // If the API call succeeded (no HTTP error), but the return code is 0 or negative (unknown failure)
-                    Swal.fire({ title: 'Technical Issue', text: 'The server processed the request but returned an unexpected failure code.', icon: 'error' });
+                    // Swal.fire({ title: 'Technical Issue', text: 'The server processed the request but returned an unexpected failure code.', icon: 'error' });
                 }
             }),
             catchError(error => {
@@ -326,7 +342,7 @@ export class EventsCrudComponent implements OnInit {
                 return of(null);
             }),
             finalize(() => {
-                this.loadEvents();
+                // this.loadEvents();
                 this.resetForm();
             })
         ).subscribe();
@@ -358,19 +374,16 @@ export class EventsCrudComponent implements OnInit {
             // New file selected (Base64 approach)
             formData.append('ImageUrl', this.EventFileName);
             formData.append('EventFileData', this.EventFileData);
-        } else if (action === 'Update' && this.currentImageUrl) {
-            // Update without new file: reuse existing URL
-            formData.append('ImageUrl', this.currentImageUrl);
-            formData.append('EventFileData', ''); // No file data sent
+        } else if (action === 'Update' && this.EventFileName && this.EventFileData ) {
+            formData.append('ImageUrl',  this.EventFileName );
+            formData.append('EventFileData', this.EventFileData);  
         } else {
             // Insert/Update with no file or existing file
             formData.append('ImageUrl', '');
             formData.append('EventFileData', '');
         }
-        // --- END FIXED Image Handling Logic ---
-
-        // Add other API required fields (LoginName, DisapprovalReason, etc.)
-        formData.append('LoginName', 'AngularUser');
+       
+        formData.append('LoginName', this.user_Email);
         formData.append('DisapprovalReason', '');
 
         return formData;

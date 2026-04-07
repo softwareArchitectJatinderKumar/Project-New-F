@@ -823,12 +823,7 @@ export class LpuCIFWebService {
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
       .set('Authorization', 'Bearer ' + this.authToken)
-    // Log the action being performed for debugging
-    // console.log(`[Service] Calling EventsCrudOperation with Action: ${action}`);
-
-    // Since you are passing FormData (which includes the file data for Insert/Update),
-    // you MUST use an HTTP POST request, even for 'View' (GET equivalent) and 'Delete', 
-    // because your backend controller expects a [FromForm] body.
+   
 
     return this.http.post<any>(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation',
@@ -836,9 +831,7 @@ export class LpuCIFWebService {
       data, { headers }
     ).pipe(catchError(this.handleError('EventsCrudOperation', { success: false, message: 'Events CRUD operation failed' })));
 
-    // NOTE on Headers: When posting FormData, Angular's HttpClient automatically sets 
-    // the Content-Type to 'multipart/form-data' with the correct boundary, which is 
-    // essential for file uploads. You should NOT set the Content-Type manually.
+  
   }
 
   // You can optionally create wrappers for clarity:

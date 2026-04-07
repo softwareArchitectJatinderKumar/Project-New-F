@@ -1,5 +1,5 @@
 /* src/app/events-crud/events-crud.component.css */
-
+/* 
 .container {
     max-width: 1000px;
     margin: 40px auto;
@@ -7,7 +7,7 @@
     background: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+} */
 
 h3 {
     border-bottom: 2px solid #ccc;
@@ -97,4 +97,31 @@ h3 {
     background-color: #dc3545;
     color: white;
     border: none;
+}
+
+
+
+.section {
+    padding: 60px 0 !important;
+  }
+  
+  .bg-dark-yellow {
+    background-color: #f8c51c; /* Replace with your desired dark-yellow color */
+  }
+  
+  .heading-wraper .main-head h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  
+.img-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+.spinner-border {
+  z-index: 10;
 }

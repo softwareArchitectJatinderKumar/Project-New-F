@@ -62,16 +62,10 @@ export class UpcomingEventsComponent implements OnInit {
         const startTime = new Date().getTime();
         this.CIFwebService.GetAllEventDetails().subscribe({
             next: response => {
-                // Check if response has error flag from service
-                // if (response && response.error) {
-                //     this.serverError = true;
-                //     this.errorMessage = response.message || 'Data Server Connection error , Try again later';
-                //     this.loadingIndicator = false;
-                //     return;
-                // }
 
                 if (response.item1 && response.item1.length > 0) {
                     this.events = response.item1;
+                    console.log(JSON.stringify(this.events))
                 } else {
                     this.events = [];
                 }

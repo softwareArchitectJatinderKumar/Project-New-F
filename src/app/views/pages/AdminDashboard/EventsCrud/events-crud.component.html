@@ -8,6 +8,40 @@
     </div>
 </div>
 
+
+<section class="section bg-dark-yellow">
+    <div class="container">
+        <div class="heading-wraper">
+            <div class="main-head">
+                <h2>Events & Happenings</h2>
+                <div class="inner-testi-slider-nav">
+                    <button id="prev_event_slide" class="inner-testi-prev-arrow" (click)="carousel.prev()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-left.svg" />
+                    </button>
+                    <button id="next_event_slide" class="inner-testi-next-arrow" (click)="carousel.next()">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/vector-right.svg" />
+                    </button>
+                </div>
+            </div>
+        </div>
+ 
+        <ngb-carousel #carousel [interval]="15000" [pauseOnHover]="true" [showNavigationArrows]="false"
+            [showNavigationIndicators]="true">
+            <ng-template ngbSlide *ngFor="let group of chunkedEvents">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-center justify-content-center">
+                    <div class="col" *ngFor="let event of group">
+                        <img [src]="ServerUrl+event.imageUrl" [alt]="event.eventName" class="img-fluid" />
+                        <div class="mt-4 mb-2">
+                            <strong class="d-block">{{ event.eventName }}</strong>
+                            {{ event.eventDetails }}
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-carousel>
+    </div>
+</section>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
@@ -115,17 +149,40 @@
                 <div class="row  mb-5 mt-4 ">
                     <h2 class="text-center ">All Events</h2>
                 </div>
-                <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                    <h2 class="m-0 font-weight-bold text-center text-primary">All Event List</h2>
-                    <div class="d-flex align-items-center">
+                <div class="card-header py-3 d-flex justify-content-center align-items-center">
+                    <div class="col-2">
+                        <h2 class="m-0 font-weight-bold text-start text-primary">All Event List</h2>
+                    </div>
+                    <div class="col-3">
                         <input type="text" placeholder="Search..." class="form-control form-control-sm mr-2"
-                            [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()">
-                        <select class="form-control form-control-sm" style="width: auto;" [(ngModel)]="pageSize"
-                            (ngModelChange)="onSearchChange()">
+                            [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" />
+                    </div>
+                    <span class="ms-4 col-2 text-end"> Select Items per page </span>
+                    <div class="ms-1 col-2">
+                        <select class="form-control form-control-sm "
+                            style="width: auto; background-color: bisque !important; color: black !important;"
+                            [(ngModel)]="pageSize" (ngModelChange)="onSearchChange()">
+                            <option [ngValue]="5" selected>Select </option>
                             <option [ngValue]="10">10 / page</option>
                             <option [ngValue]="25">25 / page</option>
                             <option [ngValue]="50">50 / page</option>
                         </select>
+                    </div>
+                    <div class="col-3" *ngIf="totalPages > 1">
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item" [class.disabled]="currentPage === 1">
+                                    <a class="page-link" (click)="goToPage(currentPage - 1)">Previous</a>
+                                </li>
+                                <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+                                    [class.active]="currentPage === i + 1">
+                                    <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
+                                </li>
+                                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                    <a class="page-link" (click)="goToPage(currentPage + 1)">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
 
