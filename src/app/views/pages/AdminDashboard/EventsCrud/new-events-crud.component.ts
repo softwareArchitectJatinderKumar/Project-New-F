@@ -183,13 +183,11 @@ export class newEventsCrudComponent implements OnInit {
                 const remaining = Math.max(MIN_LOADING_TIME - elapsed, 0);
                 setTimeout(() => this.isLoading = false, remaining);
 
-                // REQ #3: rebuild carousel chunks (Happenings-only) after data loads
                 this.updateChunks();
             })
         ).subscribe();
     }
 
-    // --- CRUD Operations ---
 
     resetForm(): void {
         this.eventForm.reset();

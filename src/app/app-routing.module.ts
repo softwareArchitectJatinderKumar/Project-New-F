@@ -107,9 +107,18 @@ const routes: Routes = [
   loadChildren: () => import('./views/pages/InternalUserDashboard/Sample-Status/SampleStatus.module').then(m => m.SampleStatusModule),
 },
 {
-  path: "UploadProofStatus",//    component:OurTermsConditionsComponent
+  path: "UploadProofStatus",
   loadChildren: () => import('./views/pages/InternalUserDashboard/Payment-Proof-Upload-Status/UploadProofStatus.module').then(m => m.UploadProofStatusModule),
 },
+
+
+{
+  path: "UserCIFMou",
+  loadChildren: () => import('./views/pages/InternalUserDashboard/CIF-Mou-Page/new-Mou.module').then(m => m.NewMouModule),
+},
+
+
+
 // INTERNAL USER DASHBOARD END
 
 
@@ -174,6 +183,10 @@ const routes: Routes = [
 
 // Admin Dashboard
 
+{
+  path: "CifMouCrud",
+  loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Mou/adminMou.module').then(m => m.AdminMouModule),
+},
 {
   path: "AUploadProof",
   loadChildren: () => import('./views/pages/AdminDashboard/APayment-Proof-Upload-Status/AUploadProofStatus.module').then(m => m.AUploadProofStatusModule),
@@ -245,6 +258,7 @@ const routes: Routes = [
     loadChildren: () => import('./views/pages/AdminDashboard/AdminUserFeedbackDetails/AdminUserFeedbackDetails.module').then(m => m.AdminUserFeedbackDetailsModule),
     // component:AdminNewInstrumentsComponent
   },
+  
   {
     path: "cifUserProfile",
     loadChildren: () => import('./views/pages/InternalUserDashboard/Cifprofile/Cifprofile.module').then(m => m.CifprofileModule),

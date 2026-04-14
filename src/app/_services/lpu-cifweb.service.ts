@@ -801,7 +801,6 @@ export class LpuCIFWebService {
       formData.append('EventCategory', event.eventCategory);
       formData.append('EventDetails', event.eventDetails);
       formData.append('ImageUrl', event.imageUrl);
-      // Add placeholders for other fields if required by your API contract
       formData.append('EventFileData', event.eventFileData || '');
       formData.append('DisapprovalReason', event.disapprovalReason || '');
       formData.append('LoginName', event.LoginName || 'DefaultUser');
@@ -834,14 +833,7 @@ export class LpuCIFWebService {
   
   }
 
-  // You can optionally create wrappers for clarity:
-  // getEvents(data: FormData): Observable<any> {
-  //     return this.EventsCrudOperation(data, 'View');
-  // }
 
-  // createEvent(data: FormData): Observable<any> {
-  //     return this.EventsCrudOperation(data, 'Insert');
-  // }
   getEvents(): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
@@ -950,4 +942,8 @@ export class LpuCIFWebService {
   }
 
 
+
+
+
+  
 }

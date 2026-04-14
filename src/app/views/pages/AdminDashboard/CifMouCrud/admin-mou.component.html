@@ -1,0 +1,176 @@
+<!-- <app-AdminDashboard></app-AdminDashboard>
+
+<div class="mou-admin-page">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value">{{ statTotal }}</div>
+      <div class="stat-label">Total MOUs</div>
+      <div class="stat-bar total"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value approved">{{ statApproved }}</div>
+      <div class="stat-label">Approved</div>
+      <div class="stat-bar approved"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value pending">{{ statPending }}</div>
+      <div class="stat-label">Pending Review</div>
+      <div class="stat-bar pending"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value expired">{{ statExpired }}</div>
+      <div class="stat-label">Expired</div>
+      <div class="stat-bar expired"></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value Rejected">{{ statRejected }}</div>
+      <div class="stat-label">Rejected</div>
+      <div class="stat-bar expired"></div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <span>🔍</span>
+      <input type="text" class="filter-input search-input" placeholder="Search by title, user, org…"
+        [(ngModel)]="searchQuery" (ngModelChange)="currentPage = 1" />
+    </div>
+
+    <select class="filter-select" [(ngModel)]="filterApproved" (change)="currentPage = 1">
+      <option value="">All Approval States</option>
+      <option value="True">Approved</option>
+      <option value="False">Rejected</option>
+      <option value="NA">Pending / Not Approved</option>
+    </select>
+
+    <select class="filter-select" [(ngModel)]="filterStatus" (change)="currentPage = 1">
+      <option value="">All MOU Status</option>
+      <option value="1">Active</option>
+      <option value="0">Expired</option>
+    </select>
+
+    <select class="filter-select" [(ngModel)]="filterUserType" (change)="currentPage = 1">
+      <option value="">All User Types</option>
+      <option value="Internal User">Internal</option>
+      <option value="External User">External</option>
+      <option value="Industrial">Industrial</option>
+    </select>
+
+    <button class="btn-clear-filters" (click)="clearFilters()">✕ Clear</button>
+    <span class="results-badge">{{ filteredList.length }} results</span>
+  </div>
+
+  <div class="grid-section">
+    <div *ngIf="isLoading" class="state-center">
+      <div class="admin-spinner"></div>
+      <p>Loading MOU records…</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredList.length === 0" class="state-center">
+      <div class="empty-icon">📋</div>
+      <p class="empty-title">No MOUs match the current filters.</p>
+      <button class="btn-clear-filters" (click)="clearFilters()">Clear Filters</button>
+    </div>
+
+    <div class="table-responsive" *ngIf="!isLoading && filteredList.length > 0">
+      <table class="table table-striped table-hover mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th class="th-num">#</th>
+            <th>MOU Title</th>
+            <th>Submitted By</th>
+            <th>User Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Submitted On</th>
+            <th>MOU Status</th>
+            <th>Approval</th>
+            <th>Document</th>
+            <th class="th-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of pagedList; let i = index" class="admin-row"
+            [class.row-expired]="row.mouStatus === '0'">
+            <td class="td-num">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td class="td-title">
+              <span class="row-title">{{ row.mouTitle }}</span>
+              <small *ngIf="row.mouRemarks" class="row-remark">{{ row.mouRemarks }}</small>
+            </td>
+            <td>
+              <div class="user-cell">
+                <span class="user-name">{{ row.userName }}</span>
+                <small class="user-email">{{ row.userEmailId }}</small>
+              </div>
+            </td>
+            <td><span class="type-chip">{{ row.userType }}</span></td>
+            <td class="td-date">{{ row.mouStartDate }}</td>
+            <td class="td-date">{{ row.mouEndDate }}</td>
+            <td class="td-date">{{ row.createdOn }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="statusClass(row)">
+                {{ statusLabel(row) }}
+              </span>
+            </td>
+            <td>
+              <span *ngIf="row.isApproved === 'True'" class="status-badge badge-approved">Approved</span>
+              <span *ngIf="row.isApproved === 'False'" class="status-badge badge-disapproved">Disapproved</span>
+              <span *ngIf="row.isApproved !== 'True' && row.isApproved !== 'False'"
+                class="status-badge badge-pending">Pending</span>
+            </td>
+            <td>
+              <button *ngIf="row.mouDocumentUrl" class="btn-doc" (click)="viewDocument(row.mouDocumentUrl)">📄</button>
+              <span *ngIf="!row.mouDocumentUrl" class="no-doc">—</span>
+            </td>
+            <td class="td-actions">
+              <div class="action-group">
+                <button *ngIf="row.isApproved === 'NA'" class="action-btn approve"
+                  (click)="openAction('Approve', row)">✔</button>
+                <button *ngIf="row.isApproved === 'NA' || row.isApproved === 'null'" class="action-btn disapprove"
+                  (click)="openAction('DisApprove', row)">✘</button>
+                <button class="action-btn delete" (click)="openAction('Delete', row)">🗑</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="admin-pagination" *ngIf="totalPages > 1">
+      <button class="pg-btn" (click)="prevPage()" [disabled]="currentPage === 1">‹ Prev</button>
+      <button *ngFor="let n of pageNumbers" class="pg-btn" [class.active]="currentPage === n" (click)="currentPage = n">
+        {{ n }}
+      </button>
+      <button class="pg-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">Next ›</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #remarksModal let-modal>
+  <div class="confirm-modal">
+    <div class="confirm-header" [ngClass]="actionColor()">
+      <h3 class="confirm-title">Confirm: {{ actionLabel() }}</h3>
+      <button class="modal-close" (click)="modal.dismiss()">✕</button>
+    </div>
+    <div class="confirm-body">
+      <div class="mou-summary" *ngIf="pendingRow">
+        <p class="summary-label">MOU Title</p>
+        <p class="summary-value">{{ pendingRow.mouTitle }}</p>
+      </div>
+      <div class="remark-field" *ngIf="pendingAction === 'Approve' || pendingAction === 'DisApprove'">
+        <label class="remark-label">Remarks <span *ngIf="pendingAction === 'DisApprove'"
+            class="required">*</span></label>
+        <textarea class="remark-input" rows="4" [(ngModel)]="approvalRemark"></textarea>
+      </div>
+      <div class="delete-warning" *ngIf="pendingAction === 'Delete'">
+        ⚠️ This action cannot be reversed.
+      </div>
+    </div>
+    <div class="confirm-footer">
+      <button class="btn-secondary" (click)="modal.dismiss()">Cancel</button>
+      <button class="btn-confirm" [ngClass]="actionColor()" [disabled]="processing" (click)="confirmAction(modal)">
+        <span *ngIf="processing" class="spinner"></span> Confirm
+      </button>
+    </div>
+  </div>
+</ng-template> -->
