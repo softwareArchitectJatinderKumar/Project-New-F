@@ -20,8 +20,8 @@ export interface MouUpdatePayload {
   action: 'Update';
   mouId: string;
   mouTitle?: string;
-  mouDocumentData: string;   // required on update — user must re-upload document
-  mouDocumentUrl: string;    // required on update — filename of the new document
+  mouDocumentData: string;  
+  mouDocumentUrl: string;   
   mouStartDate?: string;
   mouEndDate: string;
   mouRemarks?: string;
@@ -77,10 +77,9 @@ export class MOUCrudOperation {
   private readonly http           = inject(HttpClient);
   private readonly storageService = inject(StorageService);
 
-  // ✅ Update to your actual API base URL
-  private readonly baseUrl = 'https://localhost:7125/api/LpuCIF';
+  private readonly baseUrl = 'https://projectsapi.lpu.in/api/LpuCIF';//'https://localhost:7125/api/LpuCIF';
 
-  private readonly authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJDSUYiLCJuYmYiOjE3NTM3NzU3ODIsImV4cCI6MTc4NTMxMTc4MiwiaWF0IjoxNzUzNzc1NzgyLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMjUvIn0.9Oc0vzoLFrYmMpzfN5z9cDy-ysE3PgyxY8o4XC8ZRuI';
+  private readonly authToken = '33245klsdakjsdfkdfs';;
   private get authHeadersFormData(): HttpHeaders {
     const token = this.storageService.getUser();
     return new HttpHeaders()

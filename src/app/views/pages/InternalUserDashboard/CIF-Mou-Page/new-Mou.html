@@ -12,8 +12,9 @@
         <h4 class="page-subtitles">Memorandum of Undertakings </h4>
       </div>
       <div class="col-md-3 m-2 p-2">
+          <!-- [disabled]="filteredList.length > 0" -->
         <button *ngIf="formMode === null" class="btn-create" (click)="openCreateForm()"
-          [disabled]="filteredList.length > 0">
+        >
           <span class="btn-icon">＋</span> New MOU
         </button>
       </div>

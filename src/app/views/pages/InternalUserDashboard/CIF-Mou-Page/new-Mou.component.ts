@@ -149,14 +149,14 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
 
   // ── Load ──────────────────────────────────────────────────────────────────
   loadMyMous(): void {
-    this.isLoading = true;                        // was: this.isLoading.set(true)
-    this.mouService.viewMyMous(this.userEmail)    // was: this.userEmail()
+    this.isLoading = true;                       
+    this.mouService.viewMyMous(this.userEmail)   
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: res => {
-          this.mouList    = res.item1 ?? [];       // was: this.mouList.set(...)
-          this.currentPage = 1;                    // was: this.currentPage.set(1)
-          this.isLoading  = false;                 // was: this.isLoading.set(false)
+          this.mouList    = res.item1 ?? [];     
+          this.currentPage = 1;                  
+          this.isLoading  = false;               
         },
         error: () => {
           this.isLoading = false;
@@ -167,17 +167,17 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
   // ── Create form ───────────────────────────────────────────────────────────
   openCreateForm(): void {
     this.resetForm();
-    this.formMode = 'create';                     // was: this.formMode.set('create')
-  }
-
-  closeForm(): void {
-    this.formMode = null;                          // was: this.formMode.set(null)
+    this.formMode = 'create';                      
+  } 
+ 
+  closeForm(): void { 
+    this.formMode = null;                          
     this.resetForm();
   }
 
   // ── Edit modal ────────────────────────────────────────────────────────────
   openEditModal(row: MouRecord): void {
-    this.editingRow = row;                         // was: this.editingRow.set(row)
+    this.editingRow = row;                        
 
     this.form = {
       mouId:        row.mouId        ?? '',
@@ -189,9 +189,9 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
 
     this.fileData64 = '';
     this.fileName   = '';
-    this.fileStatus  = false;                      // was: this.fileStatus.set(false)
-
-    this.editExistingFileName =                    // was: this.editExistingFileName.set(...)
+    this.fileStatus  = false;                       
+ 
+    this.editExistingFileName =                     
       row.mouDocumentUrl
         ? row.mouDocumentUrl.split('/').pop() ?? row.mouDocumentUrl
         : '';
@@ -201,7 +201,7 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
 
   // ── File handling ─────────────────────────────────────────────────────────
   onFileSelected(event: Event): void {
-    this.fileStatus = false;                       // was: this.fileStatus.set(false)
+    this.fileStatus = false;                       
     const target = event.target as HTMLInputElement;
     const file   = target.files?.[0];
     if (!file) return;
@@ -227,7 +227,7 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
     reader.onload = () => {
       this.fileData64 = (reader.result as string).split(',')[1];
       this.fileName   = file.name;
-      this.fileStatus  = true;                     // was: this.fileStatus.set(true)
+      this.fileStatus  = true;                     
     };
     reader.readAsDataURL(file);
   }
@@ -353,9 +353,9 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
   }
 
   viewDocument(url: string | undefined): void {
-    // window.open(this.serverUrl + url, '_blank');
-     const urls = this.serverUrl + url;
-    this.onDownloadFile(urls);
+    window.open(this.serverUrl + 'CIF_Mou_Document_703472083_.pdf', '_blank');
+    //  const urls = this.serverUrl + url;
+    // this.onDownloadFile(urls);
   }
 
 
