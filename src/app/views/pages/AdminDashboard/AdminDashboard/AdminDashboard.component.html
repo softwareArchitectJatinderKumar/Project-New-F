@@ -35,7 +35,7 @@
             <a class="dropdown-item" (click)="goto('AdminInstrumentAction')">Change State</a>
             <a class="dropdown-item" (click)="goto('AdminUploadImage')">Upload Image</a>
 
-            <!-- <a class="dropdown-item" (click)="goto('NewInstrumentWizard')">Create New Instrument</a> -->
+            <a class="dropdown-item" (click)="goto('NewInstrumentWizard')">Create New Instrument</a>
             <!-- <a class="dropdown-item" (click)="goto('AdminInstrumentPrice')">Update Price(s)</a> -->
             <!-- <li><a class="nav-link" >Edit Details</a></li>  -->
             <!-- (click)="goto('#')" -->
@@ -58,8 +58,10 @@
             <a class="dropdown-item" (click)="goto('AllCIFEvents')">All Events</a>
             <!-- <a class="dropdown-item" (click)="goto('EventUploads')">Add New</a> -->
             <a class="dropdown-item" (click)="goto('EventCrud')">Manage Events</a>
-            <a class="dropdown-item" (click)="goto('CifMouCrud')">Manage Cif Mous</a>
           </ul>
+        </li>
+        <li class="nav-item  ">
+          <a class="nav-link" (click)="goto('CifMouCrud')">Manage Cif Mous</a>
         </li>
         <li class="nav-item  ">
           <a class="nav-link" (click)="LogoutUser()">Logout</a>

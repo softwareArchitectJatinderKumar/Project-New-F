@@ -1,4 +1,4 @@
-<section class="section ">
+<section class="section "  >
     <div class="container mb-4">
         <div class="heading-wraper">
             <div class="main-head d-flex align-items-center justify-content-between">
@@ -17,7 +17,7 @@
                 </div> -->
             </div>
         </div>
-        <div *ngIf="UpcomingchunkedEvents.length>0; else ErrorCard">
+        <div  *ngIf="UpcomingchunkedEvents.length>0; else ErrorCard">
             <ngb-carousel #ngbCarousel [interval]="autoSlideInterval" [pauseOnHover]="true" [wrap]="true"
                 [showNavigationArrows]="false" [showNavigationIndicators]="false">
                 <ng-template ngbSlide *ngFor="let event of UpcomingchunkedEvents; let i = index"
@@ -39,22 +39,16 @@
 </section>
 <ng-template #ErrorCard>
     <div class="text-center">
-        <h3 class="text-center fs-2 m-5 text-danger pt-5 "> No Record ! </h3>
-        <div class="row mt-4 mb-4">
+        
+        <div class="slider-item event-card mb-4 bg-dark-yellow">
             <div class="col-sm-12 text-center">
                 <div class="mb-3 p-4">
-                    <Label class="form-label fs-4 text-danger ">No Data Found.</Label>
+                    <Label class="text-center mt-4 font-primary">No event is scheduled yet.</Label>
                 </div>
             </div>
         </div>
     </div>
-    <!-- <div class="alert alert-danger card mt-3" role="alert">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Server Connection Error</h5>
-                    <p class="card-text">Data Server Connection error , Try again later</p>
-                  
-                </div>
-            </div> -->
+ 
 </ng-template>
 
 <!--  

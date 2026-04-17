@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
 
 import { StorageService } from './storage.service';
+import { environment } from 'src/environments/environment';
 
 // ─── Interfaces matching the stored procedure columns ────────────────────────
 
@@ -60,6 +61,7 @@ export interface MouRecord {
   userType: string;
   mouDocumentUrl?: string;
   mouId?: string;
+  approvalRemarks?: string;
 }
 
 export interface MouApiResponse {
@@ -77,9 +79,9 @@ export class MOUCrudOperation {
   private readonly http           = inject(HttpClient);
   private readonly storageService = inject(StorageService);
 
-  private readonly baseUrl = 'https://projectsapi.lpu.in/api/LpuCIF';//'https://localhost:7125/api/LpuCIF';
+  private readonly baseUrl = 'https://projectsapi.lpu.in/api/LpuCIF';//'https://localhost:7125/api/LpuCIF'; 'https://localhost:7125/api/LpuCIF';//
 
-  private readonly authToken = '33245klsdakjsdfkdfs';;
+  private readonly authToken = environment.authToken;
   private get authHeadersFormData(): HttpHeaders {
     const token = this.storageService.getUser();
     return new HttpHeaders()

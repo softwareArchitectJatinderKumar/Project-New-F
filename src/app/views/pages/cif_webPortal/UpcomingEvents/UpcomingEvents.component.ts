@@ -135,31 +135,64 @@ export class UpcomingEventsComponent implements OnInit {
     //     });
     // }
 
-    updateChunks(): void {
-        const width = window.innerWidth;
-        let itemsPerSlide = 3;
-        if (width < 768) { itemsPerSlide = 1; }
-        else if (width < 992) { itemsPerSlide = 2; }
+updateChunks(): void {
+    const width = window.innerWidth;
+    let itemsPerSlide = 3;
+    
+    // 1. Determine items per slide based on screen width
+    if (width < 768) { itemsPerSlide = 1; }
+    else if (width < 992) { itemsPerSlide = 2; }
 
-        // ── CHANGED: filter to Happenings only before chunking ────────────────
-        const happeningEvents = this.events.filter(e => e.eventCategory === 'Happenings');
-
+    /**
+     * Helper to process, sort, and chunk events by category
+     */
+    const getSortedChunks = (category: string) => {
+        const filteredAndSorted = this.events
+            .filter(e => e.eventCategory === category)
+            .sort((a, b) => {
+                // Convert to Date objects for comparison
+                const dateA = new Date(a.eventDate).getTime();
+                const dateB = new Date(b.eventDate).getTime();
+                
+                // Descending order: newest/future dates first
+                return dateB - dateA;
+            });
 
         const groups: any[][] = [];
-        for (let i = 0; i < happeningEvents.length; i += itemsPerSlide) {
-            groups.push(happeningEvents.slice(i, i + itemsPerSlide));
+        for (let i = 0; i < filteredAndSorted.length; i += itemsPerSlide) {
+            groups.push(filteredAndSorted.slice(i, i + itemsPerSlide));
         }
-        this.chunkedEvents = groups;
+        return groups;
+    };
+
+    // 2. Assign the chunked data to your class properties
+    this.chunkedEvents = getSortedChunks('Happenings');
+    this.UpcomingchunkedEvents = getSortedChunks('Upcoming');
+}
+    // updateChunks(): void {
+    //     const width = window.innerWidth;
+    //     let itemsPerSlide = 3;
+    //     if (width < 768) { itemsPerSlide = 1; }
+    //     else if (width < 992) { itemsPerSlide = 2; }
+
+    //     const happeningEvents = this.events.filter(e => e.eventCategory === 'Happenings');
+
+
+    //     const groups: any[][] = [];
+    //     for (let i = 0; i < happeningEvents.length; i += itemsPerSlide) {
+    //         groups.push(happeningEvents.slice(i, i + itemsPerSlide));
+    //     }
+    //     this.chunkedEvents = groups;
 
 
 
-        const upcomingEvents = this.events.filter(e => e.eventCategory === 'Upcoming');
-        const upcominggroups: any[][] = [];
-        for (let i = 0; i < upcomingEvents.length; i += itemsPerSlide) {
-            upcominggroups.push(upcomingEvents.slice(i, i + itemsPerSlide));
-        }
-        this.UpcomingchunkedEvents = upcominggroups;
-    }
+    //     const upcomingEvents = this.events.filter(e => e.eventCategory === 'Upcoming');
+    //     const upcominggroups: any[][] = [];
+    //     for (let i = 0; i < upcomingEvents.length; i += itemsPerSlide) {
+    //         upcominggroups.push(upcomingEvents.slice(i, i + itemsPerSlide));
+    //     }
+    //     this.UpcomingchunkedEvents = upcominggroups;
+    // }
 
 
     goToEventX() {

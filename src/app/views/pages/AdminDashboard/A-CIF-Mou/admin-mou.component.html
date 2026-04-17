@@ -135,9 +135,10 @@
 
             <!-- Approval column: admin decision — three states -->
             <td>
-              <!-- FIX: API sends 'True'/'False'/'NA' — corrected from '1'/'0' -->
               <span *ngIf="row.isApproved === 'True'"  class="status-badge badge-approved">Approved</span>
+              <span *ngIf="row.isApproved === 'True'" >   {{row.approvalRemarks}} </span>
               <span *ngIf="row.isApproved === 'False'" class="status-badge badge-disapproved">Rejected</span>
+              <span *ngIf="row.isApproved === 'False'" >   {{row.approvalRemarks}} </span>
               <span *ngIf="row.isApproved !== 'True' && row.isApproved !== 'False'"
                     class="status-badge badge-pending">Pending</span>
             </td>
@@ -160,7 +161,7 @@
                   (click)="openAction('Approve', row)">✔</button>
 
                 <!-- Reject / Disapprove: only when Pending or already Approved (allow revoke) -->
-                <button *ngIf="row.isApproved !== 'False'"
+                <button  *ngIf="row.isApproved !== 'True' && row.isApproved !== 'False'"
                   class="action-btn disapprove"
                   title="Reject"
                   (click)="openAction('DisApprove', row)">✘</button>

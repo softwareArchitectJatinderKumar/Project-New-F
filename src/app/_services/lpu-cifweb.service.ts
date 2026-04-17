@@ -932,12 +932,17 @@ export class LpuCIFWebService {
       }
     });
     
+     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken);
+      .set('Authorization', 'Bearer ' + token)
+
+    // let headers = new HttpHeaders()
+    //   .set('Authorization', 'Bearer ' + this.authToken);
       // Don't set Content-Type for FormData - browser will set it with boundary
     
     return this.http.post(
-      AUTH_API + 'api/LpuCIF/CIFNewInstrumentDetails', formData, { headers })
+       'https://localhost:7125/api/LpuCIF/CIFNewInstrumentDetails', formData, { headers })
+      // AUTH_API + 'api/LpuCIF/CIFNewInstrumentDetails', formData, { headers })
       .pipe(catchError(this.handleError('callStoredProcedure', { NewId: null })));
   }
 

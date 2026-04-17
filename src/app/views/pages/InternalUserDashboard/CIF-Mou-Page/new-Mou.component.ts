@@ -125,8 +125,8 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
   private loadSession(): void {
     if (!isPlatformBrowser(this.platformId)) { return; }
 
-    this.serverUrl = 'http://172.19.2.52/umsweb/webftp/CIFDocuments/CIFMouDocuments/';
-    this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFMouDocuments/';
+    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';//'http://172.19.2.52/umsweb/webftp/CIFDocuments/CIFMouDocuments/';
+    this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
 
     const rawData = this.cookieService.get('InternalUserAuthData');
     if (!rawData || rawData.trim().length === 0) {
@@ -353,7 +353,7 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
   }
 
   viewDocument(url: string | undefined): void {
-    window.open(this.serverUrl + 'CIF_Mou_Document_703472083_.pdf', '_blank');
+    window.open(this.serverUrl + url, '_blank');
     //  const urls = this.serverUrl + url;
     // this.onDownloadFile(urls);
   }

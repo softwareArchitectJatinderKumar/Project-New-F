@@ -163,8 +163,13 @@
             <td>{{ row.mouEndDate }}</td>
 
             <td>
-              <span *ngIf="row.isApproved === 'True'" class="status-badge badge-approved">Approved</span>
-              <span *ngIf="row.isApproved === 'False'" class="status-badge badge-disapproved">Disapproved</span>
+              <span *ngIf="row.isApproved === 'True'" class="status-badge badge-approved">Approved 
+                
+              </span>
+              <span *ngIf="row.isApproved === 'True'" >   {{row.approvalRemarks}} </span>
+              <span *ngIf="row.isApproved === 'False'" class="status-badge badge-disapproved">Disapproved
+              </span>  
+              <span *ngIf="row.isApproved === 'False'" >   {{row.approvalRemarks}} </span>
               <span *ngIf="row.isApproved !== 'True' && row.isApproved !== 'False'"
                 class="status-badge badge-pending">Pending</span>
             </td>
