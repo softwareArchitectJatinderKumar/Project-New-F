@@ -40,7 +40,8 @@ export class AdminMouComponent implements OnInit, OnDestroy {
   userRole      = '';
   userEmail     = '';
   candidateName = '';
-
+  serverUrl = '';
+  ServerUrl ='';
   // ── Data ──────────────────────────────────────────────────────────────────
   mouList:   MouRecord[] = [];
   isLoading  = false;
@@ -77,6 +78,9 @@ export class AdminMouComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadSession();    
     this.loadAllMous();
+    
+    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFMouDocuments/';//'http://172.19.2.52/umsweb/webftp/CIFDocuments/CIFMouDocuments/';
+    this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFMouDocuments/';
   }
 
   ngOnDestroy(): void {    
@@ -243,8 +247,55 @@ export class AdminMouComponent implements OnInit, OnDestroy {
     return 'confirm-orange';
   }
 
-  viewDocument(url: string | undefined): void { if (url) window.open(url, '_blank'); }
 
   nextPage(): void { if (this.currentPage < this.totalPages) this.currentPage++; }
   prevPage(): void { if (this.currentPage > 1) this.currentPage--; }
+
+
+
+
+   viewDocument(url: string ): void {
+       const urls = this.serverUrl + url;
+      this.onDownloadFile(urls);
+    }
+  
+  
+    
+     downloadFile(fileName: any): void {
+      const url = this.serverUrl + fileName;
+      this.onDownloadFile(url);
+    }
+  
+  
+    
+       onDownloadFile(remoteUrl: string): void {
+         Swal.fire({ title: 'Downloading...', didOpen: () => { Swal.showLoading(null); }});
+      
+          this.cifWebService.downloadFile(remoteUrl).subscribe({
+            next: (blob: Blob) => {
+              const downloadUrl = window.URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = downloadUrl;
+      
+              const fileName = remoteUrl.split('/').pop() || 'Document.pdf';
+              link.download = fileName;
+      
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(downloadUrl);
+      
+              Swal.close();
+            },
+            error: async (err) => {
+              Swal.close();
+              if (err.error instanceof Blob) {
+                const errorMsg = JSON.parse(await err.error.text());
+                Swal.fire('Error', errorMsg.message || 'Download failed', 'error');
+              } else {
+                Swal.fire('Error', 'Could not connect to the server', 'error');
+              }
+            }
+          });
+        }
 }

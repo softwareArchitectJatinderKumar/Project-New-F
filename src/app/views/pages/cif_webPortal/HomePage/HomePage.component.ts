@@ -55,7 +55,6 @@ export class HomePageComponent implements OnInit {
     } else if (width < 992) {
       itemsPerSlide = 2;
     }
-    console.log(JSON.stringify(this.events) + ' events ')
     const groups = [];
     if (this.events) {
       for (let i = 0; i < this.events.length; i += itemsPerSlide) {

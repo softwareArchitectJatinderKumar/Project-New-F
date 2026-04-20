@@ -1,6 +1,6 @@
 <app-cif-menu-bar></app-cif-menu-bar>
 
-<div class="mou-user-page">
+<div class="mou-user-page" *ngIf="this.UserRole=='400001' || this.UserRole==='400002'; else NotAllowed">
 
   <!-- ── Page Header ──────────────────────────────────────────────────────── -->
   <div class=" container-fluid">
@@ -13,7 +13,7 @@
       </div>
       <div class="col-md-3 m-2 p-2">
           <!-- [disabled]="filteredList.length > 0" -->
-        <button *ngIf="formMode === null" class="btn-create" (click)="openCreateForm()"
+        <button *ngIf="formMode === null" class="btn-create" (click)="openCreateForm()" [disabled]="filteredList.length > 0"
         >
           <span class="btn-icon">＋</span> New MOU
         </button>
@@ -206,6 +206,14 @@
   </div>
 
 </div>
+<ng-template #NotAllowed>
+   <div class="card shadow-sm BottomSpace">
+    <div class="card-body text-center py-5">
+      <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+      <h4 class="text-danger">Access Denied</h4>
+    </div>
+  </div>
+</ng-template>
 
 <!-- ══════════════════════════════════════════════════════════════════════
      EDIT MODAL

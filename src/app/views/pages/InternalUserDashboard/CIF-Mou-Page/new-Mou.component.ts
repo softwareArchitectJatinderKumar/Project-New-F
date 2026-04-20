@@ -125,8 +125,8 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
   private loadSession(): void {
     if (!isPlatformBrowser(this.platformId)) { return; }
 
-    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';//'http://172.19.2.52/umsweb/webftp/CIFDocuments/CIFMouDocuments/';
-    this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/';
+    this.serverUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFMouDocuments/';//'http://172.19.2.52/umsweb/webftp/CIFDocuments/CIFMouDocuments/';
+    this.ServerUrl = 'https://files.lpu.in/umsweb/CIFDocuments/CIFMouDocuments/';
 
     const rawData = this.cookieService.get('InternalUserAuthData');
     if (!rawData || rawData.trim().length === 0) {
@@ -137,7 +137,7 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
 
     try {
       const c         = JSON.parse(rawData);
-      this.UserRole   = c.userRole?.length > 0 ? c.userRole : 'Internal User';
+      this.UserRole   = c.UserRole ;//?.length > 0 ? c.userRole : 'Internal User';
       this.user_Email = c.EmailId;
       this.userEmail  = c.EmailId        ?? '';   
       this.userName   = c.CandidateName  ?? '';   
@@ -352,10 +352,10 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
     return 'badge-pending';
   }
 
-  viewDocument(url: string | undefined): void {
-    window.open(this.serverUrl + url, '_blank');
-    //  const urls = this.serverUrl + url;
-    // this.onDownloadFile(urls);
+  viewDocument(url: string ): void {
+    // window.open(this.serverUrl + url, '_blank');
+    const urls = this.serverUrl + url;
+    this.onDownloadFile(urls);
   }
 
 

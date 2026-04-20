@@ -6,6 +6,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { NewUserMouComponent } from './new-Mou.component';
 import { CifMenuBarModule } from '../cif-menu-bar/cif-menu-bar.module';
+import { ArchwizardModule } from "angular-archwizard";
 
 const routes: Routes = [
   { path: '', component: NewUserMouComponent }
@@ -17,11 +18,12 @@ const routes: Routes = [
     NewUserMouComponent,   
   ],
   imports: [
-    CommonModule,          
-    FormsModule,           
-    NgbModalModule,        
-    CifMenuBarModule,      
-    RouterModule.forChild(routes),   
-  ],
+    CommonModule,
+    FormsModule,
+    NgbModalModule,
+    CifMenuBarModule,
+    RouterModule.forChild(routes),
+    ArchwizardModule
+],
 })
 export class NewMouModule { }

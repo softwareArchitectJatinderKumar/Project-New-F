@@ -140,7 +140,7 @@
 
 
        
-        <li class="nav-item " *ngIf="this.UserRole!='40000011'">
+        <li class="nav-item " *ngIf="this.UserRole==='400001' || this.UserRole==='400002' ">
           <a
           class="nav-link custom-nav-link"
           (click)="goto('UserCIFMou')"> Upload MOU </a

@@ -1,17 +1,21 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/_services/auth.service';
-import { StorageService } from 'src/app/_services/storage.service';
+
 import { UntypedFormBuilder, Validators } from '@angular/forms';
 import swal from 'sweetalert2';
 import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 import Swal from 'sweetalert2';
 import { CookieService } from 'ngx-cookie-service';
-import { LoginSessionService } from 'src/app/_services/login-session.service';
-import { forkJoin } from 'rxjs';
+
+import { forkJoin, Subject, takeUntil } from 'rxjs';
+// import { MOUCrudOperation } from 'src/app/_services/mou-crud-operation.service';
+
+import {
+  MOUCrudOperation,
+  MouRecord,
+} from 'src/app/_services/mou-crud-operation.service';
 
 @Component({
   selector: 'app-new-bookings',
@@ -19,6 +23,8 @@ import { forkJoin } from 'rxjs';
   styleUrls: ['./new-bookings.component.scss']
 })
 export class NewBookingsComponent implements OnInit {
+
+  private readonly destroy$ = new Subject<void>();
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement>;
   InstrumentData: any[] = []; InstrumentDataInactive: any[] = []; AnalysisData: any[] = []; UserRole: any;
@@ -73,7 +79,7 @@ export class NewBookingsComponent implements OnInit {
 
   })
   constructor(
-    private CIFwebService: LpuCIFWebService,
+    private CIFwebService: LpuCIFWebService, private readonly mouService: MOUCrudOperation,
     public formBuilder: UntypedFormBuilder,
     private router: Router, private cookieService: CookieService
   ) { }
@@ -89,6 +95,7 @@ export class NewBookingsComponent implements OnInit {
     this.MobileNo = retrievedCookies.MobileNo;
     // console.log(retrievedCookies);
     this.getInstrumentData();
+    this.loadMyMous();
   }
 
 
@@ -162,6 +169,48 @@ export class NewBookingsComponent implements OnInit {
       }
     });
   }
+
+  mouList: MouRecord[] = [];
+  currentPage: any = '';
+
+  // loadMyMous(): void {
+  //   this.mouService.viewMyMous(this.user_Email )   
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe({
+  //       next: res => {
+  //         this.mouList    = res.item1 ?? [];   
+  //         console.log(JSON.stringify(this.mouList) + ' mou lists ')  
+  //         this.currentPage = 1;                  
+  //       },
+  //       error: () => {
+  //       },
+  //     });
+  // }
+
+
+  loadMyMous(): void {
+    this.mouService.viewMyMous(this.user_Email)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: res => {
+          this.mouList = res.item1 ?? [];
+          // console.log(JSON.stringify(this.mouList) + ' mou lists ');
+
+          const hasApprovedMou = this.mouList.some(
+            mou => mou.isApproved?.toLowerCase() === 'true' && mou.mouStatus?.toLowerCase() === '1'
+          );
+
+          if (hasApprovedMou) {
+            this.UserRole = '400000';
+          }
+          // console.log("USERROLE = " + this.UserRole)
+          this.currentPage = 1;
+        },
+        error: () => {
+        },
+      });
+  }
+
   InstrumentName: any; SampleExcelSheet: any;
   getAllAnalysis(event: Event) {
     this.Duration = this.AnalysisId = this.PriceValue = '';
@@ -267,6 +316,8 @@ export class NewBookingsComponent implements OnInit {
       this.selectedDuration = selectedTypeName; // Set the selected duration (typeName)
 
       // Fetch price using both analysisId and selected typeName
+
+      // alert(this.UserRole + 'user role ' )
       this.CIFwebService.GetDuationAndPrice(selectedAnalysisId, this.UserRole, this.selectedDuration).subscribe({
         next: response => {
           if (response.item1 && response.item1.length > 0) {
@@ -369,7 +420,7 @@ export class NewBookingsComponent implements OnInit {
   testClick(a: any) {
     let aa = a;
     const fileName = this.serverUrl + `${a}.xlsx`;
-    console.log(fileName+ "  *** **  File Name ")
+    console.log(fileName + "  *** **  File Name ")
     this.onDownloadFile(this.serverUrl + a);
     // window.open(fileName, '_blank');
   }
