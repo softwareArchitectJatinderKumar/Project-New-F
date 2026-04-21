@@ -154,13 +154,13 @@ footer {
   flex: 1;
   min-width: 0;
   padding: 28px 28px 0 28px;
-  display: flex;
+  // display: flex;
   flex-direction: column;
 }
 
 /* ---- TOP ICON ROW ---- */
 .footer-icon-links {
-  display: flex;
+  // display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 10px 0;
@@ -175,7 +175,6 @@ footer {
 .footer-academics,
 .footer-others {
   padding-right: 36px;
-
   .heading {
     font-size: 14px;
     font-weight: 700;

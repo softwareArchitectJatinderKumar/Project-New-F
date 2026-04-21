@@ -11,6 +11,6 @@ export const environment = {
     measurementId: "G-SRK4QGDCXD"
   },
   headerUrl: 'https://includepages.lpu.in/newlpu/header.php',
-  footerUrl: 'https://includepages.lpu.in/newlpu/footer.php'
-  
+  footerUrl: 'https://includepages.lpu.in/newlpu/footer.php',
+  authToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMb2dpbk5hbWUiOiJDSUYiLCJuYmYiOjE3NzA4Njk4NjMsImV4cCI6MTgwMjQwNTg2MywiaWF0IjoxNzcwODY5ODYzLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTI1LyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcxMjUvIn0.x7GIMap1-qxhY9UDL3HOluXig80_PjVZ5HEcGjZ_Hao'  
 };

@@ -48,16 +48,16 @@ export class NewUserMouComponent implements OnInit, OnDestroy {
   UserId:     any;
   user_Email: any;
 
-  userEmail = '';   // was: signal<string>('')
-  userName  = '';   // was: signal<string>('')
+  userEmail = ''; 
+  userName  = ''; 
 
-  mouList:   MouRecord[] = [];   // was: signal<MouRecord[]>([])
-  isLoading  = false;            // was: signal<boolean>(false)
-  formMode:  FormMode = null;    // was: signal<FormMode>(null)
+  mouList:   MouRecord[] = [];  
+  isLoading  = false;           
+  formMode:  FormMode = null;   
 
-  searchQuery = '';   // was: signal<string>('')
-  currentPage = 1;    // was: signal<number>(1)
-  pageSize    = 8;    // was: signal<number>(8)
+  searchQuery = '';  
+  currentPage = 1;   
+  pageSize    = 8;   
 
   get filteredList(): MouRecord[] {
     const q = this.searchQuery.toLowerCase().trim();
