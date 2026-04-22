@@ -1,0 +1,418 @@
+<app-AdminDashboard></app-AdminDashboard>
+
+<div class="ap-page">
+
+  <!-- ── Page Header ──────────────────────────────────────────────────────── -->
+  <div class="ap-header">
+    <div class="ap-header-inner">
+      <div class="ap-header-text">
+        <span class="ap-eyebrow">CIF Configuration</span>
+        <h1 class="ap-title">Analysis & Pricing</h1>
+        <p class="ap-subtitle">Manage instrument analysis types and sample pricing by user category</p>
+      </div>
+      <div class="ap-header-badge">
+        <span class="badge-count">{{ instruments.length }}</span>
+        <span class="badge-label">Instruments</span>
+      </div>
+    </div>
+    <div class="ap-header-stripe"></div>
+  </div>
+
+  <!-- ── Tab Navigation ────────────────────────────────────────────────────── -->
+  <div class="ap-tabs-wrapper">
+    <div class="ap-tabs">
+      <button class="ap-tab"
+        [class.active]="activeTab === 'analysis'"
+        (click)="switchTab('analysis')">
+        <span class="tab-icon">🔬</span>
+        <span class="tab-label">Analysis Types</span>
+        <span class="tab-count">{{ analysisList.length }}</span>
+      </button>
+      <button class="ap-tab"
+        [class.active]="activeTab === 'prices'"
+        (click)="switchTab('prices')">
+        <span class="tab-icon">💰</span>
+        <span class="tab-label">Analysis Pricing</span>
+        <span class="tab-count">{{ priceList.length }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+       TAB 1 — ANALYSIS TYPES
+  ════════════════════════════════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'analysis'" class="ap-content">
+
+    <!-- Toolbar -->
+    <div class="ap-toolbar">
+      <div class="toolbar-left">
+
+        <!-- Instrument filter dropdown -->
+        <div class="instrument-select-wrap">
+          <span class="select-icon">🏭</span>
+          <select class="instrument-select"
+            [(ngModel)]="selectedInstrumentId"
+            (change)="onAnalysisInstrumentChange()">
+            <option value="">All Instruments</option>
+            <option *ngFor="let inst of instruments" [value]="inst.instrumentId">
+              {{ inst.instrumentName }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Search -->
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input"
+            placeholder="Search analysis types…"
+            [(ngModel)]="analysisSearch" />
+        </div>
+
+      </div>
+      <div class="toolbar-right">
+        <span class="record-pill">{{ filteredAnalysisList.length }} records</span>
+        <button class="btn-add" (click)="openAnalysisModal()">
+          <span>＋</span> Add Analysis
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="analysisLoading" class="ap-loader">
+      <div class="loader-ring"></div>
+      <p>Loading analysis types…</p>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!analysisLoading && filteredAnalysisList.length === 0" class="ap-empty">
+      <div class="empty-icon">🔬</div>
+      <p class="empty-title">No Analysis Types Found</p>
+      <p class="empty-sub">Select an instrument or add a new analysis type.</p>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!analysisLoading && filteredAnalysisList.length > 0" class="ap-table-wrap">
+      <table class="ap-table">
+        <thead>
+          <tr>
+            <th class="th-num">#</th>
+            <th>Analysis Type</th>
+            <th>Instrument</th>
+            <!-- <th>Created By</th> -->
+            <!-- <th>Created On</th> -->
+            <th class="th-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of filteredAnalysisList; let i = index" class="ap-row">
+            <td class="td-num">{{ i + 1 }}</td>
+            <td class="td-main">
+              <span class="analysis-name">{{ row.analysisType }}</span>
+            </td>
+            <td>
+              <span class="instrument-chip">{{ row.instrumentName }}</span>
+            </td>
+            <!-- <td class="td-muted">{{ row.createdBy }}</td> -->
+            <!-- <td class="td-muted">{{ row.createdOn }}</td> -->
+            <td class="td-actions">
+              <button class="btn-delete" (click)="confirmDeleteAnalysis(row)" title="Delete">
+                🗑 Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /Tab 1 -->
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+       TAB 2 — ANALYSIS PRICING
+  ════════════════════════════════════════════════════════════════════════ -->
+  <div *ngIf="activeTab === 'prices'" class="ap-content">
+
+    <!-- Toolbar -->
+    <div class="ap-toolbar">
+      <div class="toolbar-left">
+
+        <div class="instrument-select-wrap">
+          <span class="select-icon">🏭</span>
+          <select class="instrument-select"
+            [(ngModel)]="selectedInstrumentIdP"
+            (change)="onPriceInstrumentChange()">
+            <option value="">All Instruments</option>
+            <option *ngFor="let inst of instruments" [value]="inst.instrumentId">
+              {{ inst.instrumentName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input"
+            placeholder="Search prices…"
+            [(ngModel)]="priceSearch" />
+        </div>
+
+      </div>
+      <div class="toolbar-right">
+        <span class="record-pill">{{ filteredPriceList.length }} records</span>
+        <button class="btn-add" (click)="openPriceModal()">
+          <span>＋</span> Add Price
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="priceLoading" class="ap-loader">
+      <div class="loader-ring"></div>
+      <p>Loading price entries…</p>
+    </div>
+
+    <!-- Empty -->
+    <div *ngIf="!priceLoading && filteredPriceList.length === 0" class="ap-empty">
+      <div class="empty-icon">💰</div>
+      <p class="empty-title">No Price Entries Found</p>
+      <p class="empty-sub">Select an instrument or add a new price entry.</p>
+    </div>
+
+    <!-- Table -->
+    <div *ngIf="!priceLoading && filteredPriceList.length > 0" class="ap-table-wrap">
+      <table class="ap-table">
+        <thead>
+          <tr>
+            <th class="th-num">#</th>
+            <th>Instrument</th>
+            <th>Analysis Type</th>
+            <th>User Category</th>
+            <th>Type Name</th>
+            <th>Price (₹)</th>
+            <th class="th-actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of filteredPriceList; let i = index" class="ap-row">
+            <td class="td-num">{{ i + 1 }}</td>
+            <td>
+              <span class="instrument-chip">{{ row.instrumentName }}</span>
+            </td>
+            <td class="td-main">{{ row.analysisType }}</td>
+            <td>
+              <span class="usertype-chip">{{ userTypeName(row.userTypeId) }}</span>
+            </td>
+            <td>{{ row.typeName }}</td>
+            <td>
+              <span class="price-badge">₹ {{ row.price }}</span>
+            </td>
+            <td class="td-actions">
+              <button class="btn-delete" (click)="confirmDeletePrice(row)" title="Delete">
+                🗑 Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /Tab 2 -->
+
+</div><!-- /ap-page -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     MODAL: ADD ANALYSIS TYPE
+════════════════════════════════════════════════════════════════════════ -->
+<ng-template #analysisModal let-modal>
+  <div class="ap-modal">
+    <div class="ap-modal-header">
+      <div class="modal-header-text">
+        <span class="modal-icon">🔬</span>
+        <h3 class="modal-title">Add Analysis Type</h3>
+      </div>
+      <button class="modal-close-btn" (click)="modal.dismiss()">✕</button>
+    </div>
+
+    <div class="ap-modal-body">
+      <form [formGroup]="CIFAnalysisForm" (ngSubmit)="LoadNewForm()" class="forms-sample" novalidate>
+         <div class="form-field">
+          <label class="form-label">Instrument <span class="req">*</span></label>
+          <select class="form-select-input"
+            name="instrumentId"
+            [(ngModel)]="this.selectedInstrumentId"
+            required
+            #instRef="ngModel"
+            [class.invalid]="instRef.invalid && instRef.touched">
+            <option value="">— Select Instrument —</option>
+            <option *ngFor="let inst of instruments" [value]="inst.instrumentId">
+              {{ inst.instrumentName }}
+            </option>
+          </select>
+          <span *ngIf="instRef.invalid && instRef.touched" class="err-msg">Instrument is required.</span>
+        </div>
+            <fieldset class="border p-3 mb-4">
+                <legend class="w-auto px-2">Analysis Details</legend>
+               
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                         <label class="form-label">Analysis Type <span class="req">*</span></label>
+                        <input type="text" id="AnalysisType" class="form-control" placeholder="Enter Analysis Type"
+                            formControlName="AnalysisType" />
+                        <div *ngIf="CIFAnalysisForm.get('AnalysisType')?.invalid && (CIFAnalysisForm.get('AnalysisType')?.touched || isForm1Submitted)"
+                            class="text-danger">
+                            Please enter a valid Event Name.
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </fieldset>
+
+            
+            <div class="d-flex justify-content-center">
+                 
+                <button type="submit" class="btn btn-primary px-5"
+                    [disabled]="CIFAnalysisForm.invalid   || isLoading">
+                    {{ isLoading ? 'Submitting...' : 'Submit' }}
+                </button>
+
+            </div>
+            <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="modal.dismiss()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="submitting">
+            <span *ngIf="submitting" class="spinner"></span>
+            {{ submitting ? 'Saving…' : 'Add Analysis' }}
+          </button>
+        </div>
+        </form>
+      <!-- <form [formGroup]="CIFAnalysisForm" (ngSubmit)="updateEvent()" class="forms-sample" novalidate>
+         
+        <div class="form-field">
+          <label class="form-label">Instrument <span class="req">*</span></label>
+          <select class="form-select-input"
+            name="instrumentId"
+            [(ngModel)]="this.selectedInstrumentId"
+            required
+            #instRef="ngModel"
+            [class.invalid]="instRef.invalid && instRef.touched">
+            <option value="">— Select Instrument —</option>
+            <option *ngFor="let inst of instruments" [value]="inst.instrumentId">
+              {{ inst.instrumentName }}
+            </option>
+          </select>
+          <span *ngIf="instRef.invalid && instRef.touched" class="err-msg">Instrument is required.</span>
+        </div>
+
+    
+        <div class="form-field">
+          <label class="form-label">Analysis Type <span class="req">*</span></label>
+          <input type="text" class="form-text-input"
+            name="analysisType"
+            [(ngModel)]="CIFAnalysisForm.analysisType"
+            required
+            #typeRef="ngModel"
+            placeholder="e.g. XRD, FESEM, TGA…"
+            [class.invalid]="typeRef.invalid && typeRef.touched" />
+          <span *ngIf="typeRef.invalid && typeRef.touched" class="err-msg">Analysis type is required.</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="modal.dismiss()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="submitting">
+            <span *ngIf="submitting" class="spinner"></span>
+            {{ submitting ? 'Saving…' : 'Add Analysis' }}
+          </button>
+        </div>
+
+      </form> -->
+    </div>
+  </div>
+</ng-template>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     MODAL: ADD ANALYSIS PRICE
+════════════════════════════════════════════════════════════════════════ -->
+<ng-template #analysisPriceModal let-modal>
+  <div class="ap-modal">
+    <div class="ap-modal-header">
+      <div class="modal-header-text">
+        <span class="modal-icon">💰</span>
+        <h3 class="modal-title">Add Price Entry</h3>
+      </div>
+      <button class="modal-close-btn" (click)="modal.dismiss()">✕</button>
+    </div>
+
+    <div class="ap-modal-body">
+      <form #priceFormRef="ngForm" (ngSubmit)="submitPrice(priceFormRef, modal)" novalidate>
+
+        <!-- Analysis Type -->
+        <div class="form-field">
+          <label class="form-label">Analysis Type <span class="req">*</span></label>
+          <select class="form-select-input"
+            name="analysisId"
+            [(ngModel)]="priceForm.analysisId"
+            required
+            #anlRef="ngModel"
+            [class.invalid]="anlRef.invalid && anlRef.touched">
+            <option value="">— Select Analysis Type —</option>
+            <option *ngFor="let a of analysisForPrice" [value]="a.recordId">
+              {{ a.analysisType }} — {{ a.instrumentName || instrumentName(a.instrumentId) }}
+            </option>
+          </select>
+          <span *ngIf="anlRef.invalid && anlRef.touched" class="err-msg">Analysis type is required.</span>
+        </div>
+
+        <!-- User Type -->
+        <div class="form-field">
+          <label class="form-label">User Category <span class="req">*</span></label>
+          <select class="form-select-input"
+            name="userTypeId"
+            [(ngModel)]="priceForm.userTypeId"
+            required
+            #utRef="ngModel"
+            [class.invalid]="utRef.invalid && utRef.touched">
+            <option value="">— Select Category —</option>
+            <option *ngFor="let ut of userTypeOptions" [value]="ut.id">{{ ut.label }}</option>
+          </select>
+          <span *ngIf="utRef.invalid && utRef.touched" class="err-msg">User category is required.</span>
+        </div>
+
+        <!-- Type Name -->
+        <div class="form-field">
+          <label class="form-label">Type Name <span class="req">*</span></label>
+          <input type="text" class="form-text-input"
+            name="typeName"
+            [(ngModel)]="priceForm.typeName"
+            required
+            #tnRef="ngModel"
+            placeholder="e.g. Per Sample, Per Hour…"
+            [class.invalid]="tnRef.invalid && tnRef.touched" />
+          <span *ngIf="tnRef.invalid && tnRef.touched" class="err-msg">Type name is required.</span>
+        </div>
+
+        <!-- Price -->
+        <div class="form-field">
+          <label class="form-label">Price (₹) <span class="req">*</span></label>
+          <div class="price-input-wrap">
+            <span class="currency-prefix">₹</span>
+            <input type="number" class="form-text-input price-input"
+              name="price"
+              [(ngModel)]="priceForm.price"
+              required min="0"
+              #prRef="ngModel"
+              placeholder="0"
+              [class.invalid]="prRef.invalid && prRef.touched" />
+          </div>
+          <span *ngIf="prRef.invalid && prRef.touched" class="err-msg">Valid price is required.</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="modal.dismiss()">Cancel</button>
+          <button type="submit" class="btn-submit" [disabled]="submitting">
+            <span *ngIf="submitting" class="spinner"></span>
+            {{ submitting ? 'Saving…' : 'Add Price' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</ng-template>

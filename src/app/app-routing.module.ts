@@ -184,6 +184,10 @@ const routes: Routes = [
 // Admin Dashboard
 
 {
+  path: "CifAnalysisCrud",
+  loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Analysis/analysis-price.module').then(m => m.AnalysisPriceModule),
+},
+{
   path: "CifMouCrud",
   loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Mou/adminMou.module').then(m => m.AdminMouModule),
 },
