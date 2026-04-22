@@ -50,12 +50,12 @@
         <!-- Instrument filter dropdown -->
         <div class="instrument-select-wrap">
           <span class="select-icon">🏭</span>
-          <select class="instrument-select"
+          <select class="instrument-select p-1"
             [(ngModel)]="selectedInstrumentId"
             (change)="onAnalysisInstrumentChange()">
-            <option value="">All Instruments</option>
+            <option value="">Select Instrument</option>
             <option *ngFor="let inst of instruments" [value]="inst.instrumentId">
-              {{ inst.instrumentName }}
+              {{ inst.instrumentName }}  
             </option>
           </select>
         </div>
@@ -137,12 +137,12 @@
 
         <div class="instrument-select-wrap">
           <span class="select-icon">🏭</span>
-          <select class="instrument-select"
+          <select class="instrument-select p-2 "
             [(ngModel)]="selectedInstrumentIdP"
             (change)="onPriceInstrumentChange()">
-            <option value="">All Instruments</option>
+            <option value="">Select Instrument</option>
             <option *ngFor="let inst of instruments" [value]="inst.instrumentId">
-              {{ inst.instrumentName }}
+             {{ inst.instrumentName }} 
             </option>
           </select>
         </div>

@@ -119,10 +119,10 @@ export class AnalysisPriceService {
   /** GET all active instruments for the instrument dropdown */
   getAllInstruments(): Observable<CIFInstrumentViewResponse> {
     return this.http.get<CIFInstrumentViewResponse>(
-      `${this.baseUrl}/GetAllInstruments`,
+      `${this.baseUrl}/GetInstrumentsDetails`,
       { headers: this.authHeaders }
     ).pipe(
-      catchError(this.handleError('getAllInstruments', { item1: [] }))
+      catchError(this.handleError('GetInstrumentsDetails', { item1: [] }))
     );
   }
 

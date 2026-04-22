@@ -175,7 +175,6 @@ export class AnalysisPriceComponent implements OnInit, OnDestroy {
       .subscribe({
         next: res => {
           this.instruments = res.item1 ?? [];
-          // Auto-load all on startup
           this.loadAnalysis();
           this.loadPrices();
         },
@@ -190,12 +189,11 @@ export class AnalysisPriceComponent implements OnInit, OnDestroy {
   // ── Tab 1: Analysis ───────────────────────────────────────────────────────
   loadAnalysis(): void {
     this.analysisLoading = true;
-    this.service.viewAnalysis(this.selectedInstrumentId )
+    this.service.viewAnalysis(this.selectedInstrumentId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: res => {
           this.analysisList    = res.item1 ?? [];
-          console.log(JSON.stringify(this.analysisList) + ' data')
           this.analysisLoading = false;
         },
         error: () => { this.analysisLoading = false; },
@@ -264,12 +262,11 @@ export class AnalysisPriceComponent implements OnInit, OnDestroy {
   // ── Tab 2: Analysis Prices ────────────────────────────────────────────────
   loadPrices(): void {
     this.priceLoading = true;
-    this.service.viewAnalysisPrice(this.selectedInstrumentIdP || undefined)
+    this.service.viewAnalysisPrice(this.selectedInstrumentId || undefined)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: res => {
           this.priceList    = res.item1 ?? [];
-          console.log(JSON.stringify(this.priceList) + ' data priceList')
           this.priceLoading = false;
         },
         error: () => { this.priceLoading = false; },
@@ -279,11 +276,11 @@ export class AnalysisPriceComponent implements OnInit, OnDestroy {
   onPriceInstrumentChange(): void {
     this.priceSearch = '';
     this.priceForm.analysisId = '';
-    // Load analysis filtered by this instrument for the price form dropdown
-    this.service.viewAnalysis(this.selectedInstrumentIdP || undefined)
+    this.service.viewAnalysisPrice(this.selectedInstrumentIdP)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({ next: res => { this.analysisForPrice = res.item1 ?? []; } });
-    this.loadPrices();
+      .subscribe({ next: res => { this.priceList = res.item1 ?? []; } });
+      // .subscribe({ next: res => { this.analysisForPrice = res.item1 ?? []; } });
+    // this.loadPrices();
   }
 
   openPriceModal(): void {
