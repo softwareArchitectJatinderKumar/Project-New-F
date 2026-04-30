@@ -8,7 +8,7 @@
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-            <!-- <p>Loading...</p>-->  
+            <!-- <p>Loading...</p>-->
         </div>
     </div>
 </div>
@@ -31,7 +31,7 @@
 
                     </div>
 
-                    
+
                     <div class="col-sm-4 col-3  mb-4 mt-3 text-center">
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
                             class="form-control w-50 " placeholder="Search Your Text Here" aria-label="Search"
@@ -47,7 +47,7 @@
 
 
                 </div>
-                <hr/>
+                <hr />
                 <div *ngIf="showAdvancedSearch"
                     class="row mb-3 p-2 d-flex justify-content-center align-items-center bg-light rounded">
 
@@ -75,8 +75,7 @@
                     <div class="col-6 col-md-3 mb-3 mb-md-0">
                         <ng-select [(ngModel)]="IsAssigned" [items]="assignedOptions"
                             (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
-                            placeholder="-- Select --" class="w-100"
-                            [disabled]="tmpsAllBookingTestsData.length == 0">
+                            placeholder="-- Select --" class="w-100" [disabled]="tmpsAllBookingTestsData.length == 0">
                             <ng-template ng-option-tmp let-item="item">
                                 <span *ngIf="item.value === ''">-- All Tests--</span>
                                 <span *ngIf="item.value === 'Assigned'">All Assigned</span>
@@ -115,17 +114,20 @@
                     </span>
                 </div>
                 <!-- Top Pagination and Controls -->
-                <div class="row d-flex justify-content-center align-items-center mb-3" *ngIf="tmpsAllBookingTestsData.length > 0">
+                <div class="row d-flex justify-content-center align-items-center mb-3"
+                    *ngIf="tmpsAllBookingTestsData.length > 0">
                     <div class="col-md-4 text-end">
-                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                        <span class="text-dark fs-5 fw-bolder me-4"
+                            style="border:1px solid #ef7d00; padding: 8px 12px;">
                             Records: {{ getTotalRecords() }}
                         </span>
                     </div>
                     <div class="col-md-4 text-start">
-                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
-                        <select class="form-select d-inline-block ms-2" style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;" 
-                            [value]="isAllSelected ? 'all' : itemsPerPage"
-                            (change)="onItemsPerPageChange($event)">
+                        <span class="text-dark fs-5 fw-bolder me-4"
+                            style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
+                        <select class="form-select d-inline-block ms-2"
+                            style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;"
+                            [value]="isAllSelected ? 'all' : itemsPerPage" (change)="onItemsPerPageChange($event)">
                             <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
                                 {{ option.label }}
                             </option>
@@ -144,7 +146,7 @@
                             </a>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <ng-container *ngIf="tmpsAllBookingTestsData.length > 0; else noRecords">
@@ -236,9 +238,12 @@
                                             : '-NA-'
                                             }}
                                         </td>
-                                        <ng-container *ngIf="AllBookingTestsDataRow.assignedUserId?.length<=0; else Assigned">
-                                            <td class="fw-bold" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
-                                                <button class="btn btn-dark" (click)="openPaymentModal(AllBookingTestsDataRow)">
+                                        <ng-container
+                                            *ngIf="AllBookingTestsDataRow.assignedUserId?.length<=0; else Assigned">
+                                            <td class="fw-bold"
+                                                *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
+                                                <button class="btn btn-dark"
+                                                    (click)="openPaymentModal(AllBookingTestsDataRow)">
                                                     <!-- Assign Staff -->
                                                     <i class="bi bi-tools"></i>
                                                 </button>
@@ -248,15 +253,17 @@
                                             </ng-template>
                                         </ng-container>
                                         <ng-template #Assigned>
-                                            <td class="ms-4" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
+                                            <td class="ms-4"
+                                                *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA">
                                                 <button class="btn btn-primary "
-                                                (click)="openEditModal(AllBookingTestsDataRow)">
-                                                Modify Staff 
-                                                <!-- <i class="bi bi-pencil-square"></i>  -->
-                                            </button> <br/>
-                                            <span class="badge text-bg-info m-2 fs-5">Assinged to : - {{AllBookingTestsDataRow.assignedUserId}}</span><br/>
+                                                    (click)="openEditModal(AllBookingTestsDataRow)">
+                                                    Modify Staff
+                                                    <!-- <i class="bi bi-pencil-square"></i>  -->
+                                                </button> <br />
+                                                <span class="badge text-bg-info m-2 fs-5">Assinged to : -
+                                                    {{AllBookingTestsDataRow.assignedUserId}}</span><br />
                                             </td>
-                                             <ng-template #NA>
+                                            <ng-template #NA>
                                                 <td> <span class="badge bg-success">NA</span> </td>
                                             </ng-template>
                                         </ng-template>
@@ -363,7 +370,7 @@
         <h5 class="modal-title">Reassign Test Form</h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
     </div>
-  <div class="modal-body">
+    <div class="modal-body">
         <div class="col-md-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
@@ -381,7 +388,8 @@
                                 <tbody>
                                     <tr>
                                         <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['recordId'] }}</td>
-                                        <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['instrumentName'] }}</td>
+                                        <td class="fs-5 p-4" style="width: 20%;">{{ this.editEvent['instrumentName'] }}
+                                        </td>
                                         <td class="fs-5 p-4" style="width: 20%;"> {{this.editEvent['assignedUserId']}}
                                             <select id="staffName" (change)="onActivitySelected($event)"
                                                 class="col-12 p-2 form-control" required [(ngModel)]="AssignedToNew"
