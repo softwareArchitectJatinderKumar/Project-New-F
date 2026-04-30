@@ -185,6 +185,7 @@ const routes: Routes = [
 
 {
   path: "CifAnalysisCrud",
+  // loadChildren: () => import('./views/pages/AdminDashboard/A-Analysis-CIF/cif-analysis.module').then(m => m.CIFAnalysisModule),
   loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Analysis/analysis-price.module').then(m => m.AnalysisPriceModule),
 },
 {

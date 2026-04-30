@@ -1,0 +1,476 @@
+<div class="analysis-price-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <h1>
+        <span class="icon">⚗️</span>
+        CIF Analysis & Price Management
+      </h1>
+      <p class="subtitle">Manage chemical analysis types and pricing</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-wrapper">
+    <div class="nav-tabs" role="tablist">
+      <button class="nav-link active" id="analysis-tab" type="button" role="tab" aria-controls="analysis-content"
+        data-bs-toggle="tab" data-bs-target="#analysis-content">
+        <span class="icon">📊</span>
+        Analysis Management
+      </button>
+      <button class="nav-link" id="price-tab" type="button" role="tab" aria-controls="price-content"
+        data-bs-toggle="tab" data-bs-target="#price-content">
+        <span class="icon">💰</span>
+        Analysis Pricing
+      </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
+      <!-- ANALYSIS TAB -->
+      <div class="tab-pane fade show active" id="analysis-content" role="tabpanel">
+        <!-- Instrument Selection -->
+        <div class="section-header">
+          <div class="instrument-selector">
+            <label for="analysisInstrument" class="form-label">
+              <span class="label-icon">🔬</span>
+              Select Instrument
+            </label>
+            <select id="analysisInstrument" class="form-select select-lg" [(ngModel)]="selectedInstrumentId"
+              (change)="onInstrumentChange('analysis')">
+              <option value="">-- Choose an instrument --</option>
+              <option *ngFor="let instr of instruments" [value]="instr.instrumentId">
+                {{ instr.instrumentName }} (ID: {{ instr.instrumentId }})
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div *ngIf="selectedInstrumentId" class="content-area">
+          <!-- Toolbar -->
+          <div class="toolbar">
+            <div class="search-box-wrapper">
+              <input type="text" class="search-box" placeholder="🔍 Search analysis type or creator..."
+                [(ngModel)]="analysisSearchText" >
+                <!-- (keyup)="onAnalysisSearch($event.target.value)"> -->
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn btn-export" (click)="exportAnalysisToExcel()"
+                [disabled]="filteredAnalyses.length === 0">
+                <span class="icon">📥</span>
+                Export to Excel
+              </button>
+              <button class="btn btn-primary btn-add" (click)="openAddAnalysisModal()">
+                <span class="icon">➕</span>
+                Add Analysis
+              </button>
+            </div>
+          </div>
+
+          <!-- Page Size Selector -->
+          <div class="pagination-header">
+            <div class="page-size-selector">
+              <label for="analysisPageSize">Records per page:</label>
+              <select id="analysisPageSize" class="form-select form-select-sm" [(ngModel)]="analysisPageSize"
+                (change)="onAnalysisPageSizeChange()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Data Grid -->
+          <div class="table-wrapper">
+            <div *ngIf="isLoadingAnalysis" class="loading-state">
+              <div class="spinner"></div>
+              <p>Loading analyses...</p>
+            </div>
+
+            <table *ngIf="!isLoadingAnalysis && analysisPaginatedData.length > 0" class="data-table">
+              <thead>
+                <tr>
+                  <th>Analysis Type</th>
+                  <th>Instrument ID</th>
+                  <th>Created By</th>
+                  <th>Created On</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let analysis of analysisPaginatedData" class="data-row">
+                  <td class="col-analysis">{{ analysis.analysisType }}</td>
+                  <td class="col-id">{{ analysis.instrumentId }}</td>
+                  <td class="col-created">{{ analysis.createdBy }}</td>
+                  <td class="col-date">{{ analysis.createdOn | date: 'short' }}</td>
+                  <td class="col-actions">
+                    <button class="action-btn edit-btn" (click)="openEditAnalysisModal(analysis)" title="Edit">
+                      ✏️
+                    </button>
+                    <button class="action-btn delete-btn" (click)="deleteAnalysis(analysis)" title="Delete">
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div *ngIf="!isLoadingAnalysis && analysisPaginatedData.length === 0" class="empty-state">
+              <span class="empty-icon">📭</span>
+              <p>No analyses found for this instrument</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div *ngIf="filteredAnalyses.length > 0" class="pagination">
+            <button (click)="analysisCurrentPage = analysisCurrentPage - 1" [disabled]="analysisCurrentPage === 1"
+              class="pagination-btn">
+              ← Previous
+            </button>
+            <span class="page-info">
+              Page {{ analysisCurrentPage }} of {{ getTotalAnalysisPages() }}
+            </span>
+            <button (click)="analysisCurrentPage = analysisCurrentPage + 1"
+              [disabled]="analysisCurrentPage === getTotalAnalysisPages()" class="pagination-btn">
+              Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!selectedInstrumentId" class="empty-state-large">
+          <span class="empty-icon">🔬</span>
+          <p>Please select an instrument to view analyses</p>
+        </div>
+      </div>
+
+      <!-- ANALYSIS PRICE TAB -->
+      <div class="tab-pane fade" id="price-content" role="tabpanel">
+        <!-- Instrument Selection -->
+        <div class="section-header">
+          <div class="instrument-selector">
+            <label for="priceInstrument" class="form-label">
+              <span class="label-icon">🔬</span>
+              Select Instrument
+            </label>
+            <select id="priceInstrument" class="form-select select-lg" [(ngModel)]="selectedInstrumentId"
+              (change)="onInstrumentChange('price')">
+              <option value="">-- Choose an instrument --</option>
+              <option *ngFor="let instr of instruments" [value]="instr.instrumentId">
+                {{ instr.instrumentName }} (ID: {{ instr.instrumentId }})
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Content Area -->
+        <div *ngIf="selectedInstrumentId" class="content-area">
+          <!-- Toolbar -->
+          <div class="toolbar">
+            <div class="search-box-wrapper">
+              <input type="text" class="search-box" placeholder="🔍 Search analysis, user type or price..."
+                [(ngModel)]="priceSearchText" >
+                <!-- (keyup)="onPriceSearch($event.target.value)"> -->
+            </div>
+            <div class="toolbar-actions">
+              <button class="btn btn-export" (click)="exportAnalysisPriceToExcel()"
+                [disabled]="filteredAnalysisPrices.length === 0">
+                <span class="icon">📥</span>
+                Export to Excel
+              </button>
+              <button class="btn btn-primary btn-add" (click)="openAddAnalysisPriceModal()">
+                <span class="icon">➕</span>
+                Add Price
+              </button>
+            </div>
+          </div>
+
+          <!-- Page Size Selector -->
+          <div class="pagination-header">
+            <div class="page-size-selector">
+              <label for="pricePageSize">Records per page:</label>
+              <select id="pricePageSize" class="form-select form-select-sm" [(ngModel)]="pricePageSize"
+                (change)="onPricePageSizeChange()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Data Grid -->
+          <div class="table-wrapper">
+            <div *ngIf="isLoadingPrice" class="loading-state">
+              <div class="spinner"></div>
+              <p>Loading analysis prices...</p>
+            </div>
+
+            <table *ngIf="!isLoadingPrice && pricePaginatedData.length > 0" class="data-table">
+              <thead>
+                <tr>
+                  <th>Analysis Type</th>
+                  <th>Instrument</th>
+                  <th>User Type</th>
+                  <th>Price</th>
+                  <th>Created On</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let price of pricePaginatedData" class="data-row">
+                  <td class="col-analysis">{{ price.analysisType }}</td>
+                  <td class="col-instrument">{{ price.instrumentName }}</td>
+                  <td class="col-type">{{ price.typeName }}</td>
+                  <td class="col-price">₹{{ price.price }}</td>
+                  <td class="col-date">{{ price.createdOn | date: 'short' }}</td>
+                  <td class="col-actions">
+                    <button class="action-btn edit-btn" (click)="openEditAnalysisPriceModal(price)" title="Edit">
+                      ✏️
+                    </button>
+                    <button class="action-btn delete-btn" (click)="deleteAnalysisPrice(price)" title="Delete">
+                      🗑️
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div *ngIf="!isLoadingPrice && pricePaginatedData.length === 0" class="empty-state">
+              <span class="empty-icon">📭</span>
+              <p>No price records found for this instrument</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div *ngIf="filteredAnalysisPrices.length > 0" class="pagination">
+            <button (click)="priceCurrentPage = priceCurrentPage - 1" [disabled]="priceCurrentPage === 1"
+              class="pagination-btn">
+              ← Previous
+            </button>
+            <span class="page-info">
+              Page {{ priceCurrentPage }} of {{ getTotalPricePages() }}
+            </span>
+            <button (click)="priceCurrentPage = priceCurrentPage + 1"
+              [disabled]="priceCurrentPage === getTotalPricePages()" class="pagination-btn">
+              Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!selectedInstrumentId" class="empty-state-large">
+          <span class="empty-icon">🔬</span>
+          <p>Please select an instrument to view pricing</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+
+<!-- Add Analysis Modal -->
+<div class="modal fade" id="addAnalysisModal" #addAnalysisModal tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <span class="icon">➕</span>
+          {{ isEditingAnalysis ? 'Edit Analysis' : 'Add New Analysis' }}
+        </h5>
+        <button type="button" class="btn-close" ></button>
+        <!-- (click)="addAnalysisModal.hide()"></button> -->
+      </div>
+      <form [formGroup]="analysisForm" (ngSubmit)="submitAnalysis()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="analysisType" class="form-label">
+              Analysis Type <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" id="analysisType" formControlName="analysisType"
+              placeholder="e.g., Elemental analysis(EDS)+ Gold Coating (GC)">
+            <div class="form-text">
+              Enter the type of analysis (e.g., Elemental Analysis, Elemental analysis(EDS)+ Gold Coating (GC), etc.)
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" >
+          <!-- (click)="addAnalysisModal.hide()"> -->
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmittingAnalysis || analysisForm.invalid">
+            <span *ngIf="isSubmittingAnalysis" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isEditingAnalysis ? 'Update' : 'Add' }} Analysis
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Analysis Modal -->
+<div class="modal fade" id="editAnalysisModal" #editAnalysisModal tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <span class="icon">✏️</span>
+          Edit Analysis
+        </h5>
+        <button type="button" class="btn-close" >
+        <!-- (click)="editAnalysisModal.hide()"> -->
+      </button>
+      </div>
+      <form [formGroup]="analysisForm" (ngSubmit)="submitAnalysis()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editAnalysisType" class="form-label">
+              Analysis Type <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" id="editAnalysisType" formControlName="analysisType"
+              placeholder="e.g., Elemental analysis(EDS)+ Gold Coating (GC)">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" > 
+            <!-- (click)="editAnalysisModal.hide()"> -->
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmittingAnalysis || analysisForm.invalid">
+            <span *ngIf="isSubmittingAnalysis" class="spinner-border spinner-border-sm me-2"></span>
+            Update Analysis
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add Analysis Price Modal -->
+<div class="modal fade" id="addAnalysisPriceModal" #addAnalysisPriceModal tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <span class="icon">💰</span>
+          {{ isEditingPrice ? 'Edit Price' : 'Add New Analysis Price' }}
+        </h5>
+        <button type="button" class="btn-close" ></button>
+        <!-- (click)="addAnalysisPriceModal.hide()"></button> -->
+      </div>
+      <form [formGroup]="analysisPriceForm" (ngSubmit)="submitAnalysisPrice()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="priceAnalysisType" class="form-label">
+              Analysis Type <span class="required">*</span>
+            </label>
+            <select id="priceAnalysisType" class="form-select" formControlName="analysisType">
+              <option value="">-- Select Analysis Type --</option>
+              <option *ngFor="let analysis of analyses" [value]="analysis.id">
+                {{ analysis.analysisType }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="userType" class="form-label">
+              User Type <span class="required">*</span>
+            </label>
+            <select id="userType" class="form-select" formControlName="userTypeId">
+              <option value="">-- Select User Type --</option>
+              <option *ngFor="let type of userTypes" [value]="type.id">
+                {{ type.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="price" class="form-label">
+              Price (₹) <span class="required">*</span>
+            </label>
+            <input type="number" class="form-control" id="price" formControlName="price" placeholder="e.g., 350"
+              min="0">
+            <div class="form-text">
+              Enter the price for this analysis and user type combination
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" >
+            <!-- (click)="addAnalysisPriceModal.hide()"> -->
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmittingPrice || analysisPriceForm.invalid">
+            <span *ngIf="isSubmittingPrice" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isEditingPrice ? 'Update' : 'Add' }} Price
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Analysis Price Modal -->
+<div class="modal fade" id="editAnalysisPriceModal" #editAnalysisPriceModal tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <span class="icon">✏️</span>
+          Edit Price
+        </h5>
+        <button type="button" class="btn-close" ></button>
+        <!-- (click)="editAnalysisPriceModal.hide()"></button> -->
+      </div>
+      <form [formGroup]="analysisPriceForm" (ngSubmit)="submitAnalysisPrice()">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editPriceAnalysisType" class="form-label">
+              Analysis Type <span class="required">*</span>
+            </label>
+            <select id="editPriceAnalysisType" class="form-select" formControlName="analysisType">
+              <option value="">-- Select Analysis Type --</option>
+              <option *ngFor="let analysis of analyses" [value]="analysis.id">
+                {{ analysis.analysisType }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editUserType" class="form-label">
+              User Type <span class="required">*</span>
+            </label>
+            <select id="editUserType" class="form-select" formControlName="userTypeId">
+              <option value="">-- Select User Type --</option>
+              <option *ngFor="let type of userTypes" [value]="type.id">
+                {{ type.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="editPrice" class="form-label">
+              Price (₹) <span class="required">*</span>
+            </label>
+            <input type="number" class="form-control" id="editPrice" formControlName="price" placeholder="e.g., 350"
+              min="0">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" >
+          <!-- (click)="editAnalysisPriceModal.hide()"> -->
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSubmittingPrice || analysisPriceForm.invalid">
+            <span *ngIf="isSubmittingPrice" class="spinner-border spinner-border-sm me-2"></span>
+            Update Price
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
