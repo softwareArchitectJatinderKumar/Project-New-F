@@ -1,9 +1,12 @@
 .selected-instrument {
-    // background-color: #ef7d00 !important;
-    margin: 1.0rem;
-    color: white;
-    transform: scale(1.1);  
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  
+  margin: 1rem;
+  color: #fff;
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  background:  #ef7d00 !important;//linear-gradient(90deg, #ef7d00 0%, #ffb457 100%);
+  border-left: 6px solid #ff6a00;
+  outline: 2px solid rgba(239,125,0,0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, outline 0.15s ease;
 }
 .ImageSizes{
     height: 35rem;

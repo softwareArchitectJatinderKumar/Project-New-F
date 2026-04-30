@@ -20,10 +20,10 @@
         <div class="instrument-grid" id="instrumentGrid">
             <div class="instrument-block g-col-lg-3 g-col-6 d-grid"
                 *ngFor="let instrument of tmpscifInstrumentsDataData"
-                [ngClass]="{'selected-instrument': instrument.id === this.InstrumentId}">
+                [ngClass]="{'selected-instrument': (instrument.id == this.InstrumentId) || (instrument.instrumentId == this.InstrumentId)}">
                 <a class="instrument-link" href="javascript:void(0)"
-                    (click)="fetchSpecifications(instrument.categoryId, instrument.id)"
-                    data-is-active="instrument.isActive ? 'true' : 'false'}">
+                    (click)="fetchSpecifications(instrument.categoryId, instrument.id || instrument.instrumentId); $event.preventDefault()"
+                    [attr.data-is-active]="instrument.isActive ? 'true' : 'false'">
                     {{instrument.instrumentName}}
                 </a>
             </div>
@@ -31,8 +31,7 @@
     </div>
 </section>
 
-<section class="section bg-dark-yellow" *ngIf="isInstrumentActive"
-    [ngClass]="{'d-block': !isInstrumentActive, 'bg-dark-yellow': isInstrumentActive}">
+<section class="section bg-dark-yellow" *ngIf="InstrumentId != null" id="DetailsSection">
     <div class="container">
         <div class="row">
             <div class="col-lg-9">
@@ -78,7 +77,7 @@
 </section>
 
 
-<section class="section bg-dark-yellow" #facilitiesSection>
+<section class="section bg-dark-yellow d-none" #facilitiesSection>
     <div class="container">
         <div class="heading-wraper mb-4">
             <div class="main-head">
@@ -109,14 +108,11 @@
                         loading="lazy" (load)="onImageLoad(i)" (error)="onImageError($event, i)" />
                 </div>
                 <div class="mb-5">
-                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,tmpsInstrumentsDataData.length), InstrumentData.id, InstrumentData.categoryId)"
-                        data-is-active="instrument.isActive ? 'true' : 'false'}">
+                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,tmpsInstrumentsDataData.length), InstrumentData.id, InstrumentData.categoryId); $event.preventDefault()"
+                        [attr.data-is-active]="InstrumentData.isActive ? 'true' : 'false'">
                         {{InstrumentData.instrumentName}}
                     </a>
-                    <!-- <a
-                      (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id, InstrumentData.categoryId)">
-                      {{InstrumentData.instrumentName}}
-                  </a> -->
+                    
                 </div>
             </div>
         </div>

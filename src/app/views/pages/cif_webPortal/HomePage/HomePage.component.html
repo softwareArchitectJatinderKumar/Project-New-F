@@ -86,28 +86,24 @@
                 following table to view their description.</p>
         </div>
 
-        <!--
-          ✅ FIX #1 & #2:
-          - Removed isLoadingFacilities spinner entirely (no loading state UI).
-          - areFacilityImagesLoaded is set to true only after fetch() pre-caches all images,
-            so the grid appears all at once with a smooth fade-in.
-          - The *ngIf condition no longer needs isLoadingFacilities; it just waits for the
-            bulk-fetch Promise to resolve before revealing the grid.
-        -->
-        <div class="row cif-facilties facilities-grid"
+        
+        <div class="row cif-facilties facilities-grid" id="InstrumentDetailsData"
              *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 1; else ErrorCard">
             <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index"
                 [attr.data-index]="i">
                 <div class="mb-4">
-                    <img [src]="InstrumentData.imageUrl"
-                         alt="{{InstrumentData.instrumentName}}"
-                         class="img-fluid" />
+                <img [src]="InstrumentData.cachedImageUrl || InstrumentData.imageUrl"
+                    alt="{{InstrumentData.instrumentName}}"
+                    class="img-fluid"
+                    loading="eager"
+                    (error)="onImageTagError($event, InstrumentData)" />
                 </div>
-                <div class="mb-5">
-                    <a (click)="VisitUrl('/ourInstruments', InstrumentData.instrumentName.slice(0,15), InstrumentData.id, InstrumentData.categoryId)"
-                        data-is-active="instrument.isActive ? 'true' : 'false'">
+                <div class="mb-5" id="InstrumentsPage">
+                      <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id || InstrumentData.instrumentId, InstrumentData.categoryId); $event.preventDefault()"
+                        [attr.data-is-active]="InstrumentData.isActive ? 'true' : 'false'">
                         {{InstrumentData.instrumentName}}
                     </a>
+                    
                 </div>
             </div>
         </div>
@@ -256,8 +252,8 @@
                         loading="lazy" (load)="onImageLoad(i)" (error)="onImageError($event, i)" />
                 </div>
                 <div class="mb-5">
-                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,15), InstrumentData.id, InstrumentData.categoryId)"
-                        data-is-active="instrument.isActive ? 'true' : 'false'}">
+                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,15), InstrumentData.id || InstrumentData.instrumentId, InstrumentData.categoryId); $event.preventDefault()"
+                        [attr.data-is-active]="InstrumentData.isActive ? 'true' : 'false'">
                         {{InstrumentData.instrumentName}}
                     </a>
                  
@@ -332,9 +328,9 @@
                         <a href="">Application Form</a>
                     </li> -->
 
-                    <li>
+                    <!-- <li>
                         <a href="">Test Charges</a>
-                    </li>
+                    </li> -->
 
                     <!-- <li>
                         <a href="">Payment Options</a>
