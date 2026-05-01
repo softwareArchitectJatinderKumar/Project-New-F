@@ -3,6 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from 'src/environments/environment';
+
+// CORS proxy services - these allow bypassing CORS restrictions
+const CORS_PROXIES = [
+  'https://api.allorigins.win/raw?url=',
+  'https://corsproxy.io/?'
+];
+
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
@@ -18,15 +25,32 @@ export class FooterComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.http
-    .get(environment.footerUrl, { responseType: 'text' })
-      // .get('/api/footer', { responseType: 'text' })   // ← changed
-      .subscribe({
-        next: html => {
-          this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-        },
-        error: err => console.error('Error fetching footer:', err),
-      });
+    this.loadFooterWithCorsWorkaround(environment.footerUrl, 0);
+  }
+
+  private loadFooterWithCorsWorkaround(url: string, proxyIndex: number): void {
+    const targetUrl = proxyIndex === 0 ? url : CORS_PROXIES[proxyIndex - 1] + encodeURIComponent(url);
+    
+    this.http.get(targetUrl, { responseType: 'text' }).subscribe({
+      next: html => {
+        this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+      },
+      error: (err) => {
+        console.error('Error fetching footer (attempt ' + (proxyIndex + 1) + '):', err);
+        // Try next CORS proxy if available
+        if (proxyIndex < CORS_PROXIES.length) {
+          console.log('Trying CORS proxy: ' + CORS_PROXIES[proxyIndex]);
+          this.loadFooterWithCorsWorkaround(url, proxyIndex + 1);
+        } else {
+          // All proxies failed, show empty fallback
+          const fallback = `<div class="local-footer-fallback" style="padding:20px;text-align:center;background:#f5f5f5;border-top:1px solid #e0e0e0;">
+            <small>Footer unavailable. </small>
+            <a href="${url}" target="_blank">Click here to view</a>
+          </div>`;
+          this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(fallback);
+        }
+      }
+    });
   }
 
   ngAfterViewInit(): void {

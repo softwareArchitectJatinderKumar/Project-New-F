@@ -3,6 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { environment } from 'src/environments/environment';
+
+// CORS proxy services - these allow bypassing CORS restrictions
+const CORS_PROXIES = [
+  'https://api.allorigins.win/raw?url=',
+  'https://corsproxy.io/?'
+];
 ;
 @Component({
   selector: 'app-header',
@@ -22,27 +28,43 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     @Inject(DOCUMENT) private document: Document
   ) {}
 
-  ngOnInit() {
-    this.http
-      // .get('/api/header', { responseType: 'text' })
-      .get(environment.headerUrl, { responseType: 'text' })
-      .subscribe({
-        next: html => {
-          this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+ngOnInit() {
+    this.loadHeaderWithCorsWorkaround(environment.headerUrl, 0);
+  }
+
+  private loadHeaderWithCorsWorkaround(url: string, proxyIndex: number): void {
+    const targetUrl = proxyIndex === 0 ? url : CORS_PROXIES[proxyIndex - 1] + encodeURIComponent(url);
+    
+    this.http.get(targetUrl, { responseType: 'text' }).subscribe({
+      next: html => {
+        this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+        this.cdRef.detectChanges();
+        // Disconnect observer before setTimeout fires to prevent double execution
+        this.observer?.disconnect();
+        setTimeout(() => {
+          if (!this.scriptsExecuted) {
+            this.reExecuteScripts('fixed-header');
+            this.scriptsExecuted = true;
+          }
+        }, 500);
+      },
+      error: (err) => {
+        console.error('Error fetching header (attempt ' + (proxyIndex + 1) + '):', err);
+        // Try next CORS proxy if available
+        if (proxyIndex < CORS_PROXIES.length) {
+          console.log('Trying CORS proxy: ' + CORS_PROXIES[proxyIndex]);
+          this.loadHeaderWithCorsWorkaround(url, proxyIndex + 1);
+        } else {
+          // All proxies failed, show fallback
+          const fallback = `<div class="local-header-fallback" style="padding:10px;text-align:center;background:#ffffff;border-bottom:1px solid #e0e0e0;">
+            <small>Header unavailable. </small>
+            <a href="${url}" target="_blank">Click here to view</a>
+          </div>`;
+          this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(fallback);
           this.cdRef.detectChanges();
-          // Disconnect observer before setTimeout fires to prevent double execution
-          this.observer?.disconnect();
-          setTimeout(() => {
-            if (!this.scriptsExecuted) {
-              this.reExecuteScripts('fixed-header');
-              this.scriptsExecuted = true;
-            }
-          }, 500);
-        },
-        error: err => {
-          console.error('Error fetching PHP header:', err);
         }
-      });
+      }
+    });
   }
 
   private reExecuteScripts(containerId: string): void {
