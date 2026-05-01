@@ -11,7 +11,7 @@ import swal from 'sweetalert2';
 @Component({
   selector: 'app-HomePageTopBar',
   templateUrl: './HomePageTopBar.component.html',
-  styleUrls: ['./HomePageTopBar.component.scss'],
+  styleUrls: ['./ResponsiveStyles.scss'],
 
 })
 

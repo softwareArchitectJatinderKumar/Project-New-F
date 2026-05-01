@@ -31,12 +31,29 @@
 }
 
 /* CSS file (e.g., styles.css) */
-.instrument-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);  
-    gap: 16px;  
-    margin: 0 auto;  
-    padding: 10px;  
+.instrument-grid,
+#instrumentGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* default: 5 columns */
+  gap: 16px;
+  margin: 0 auto;
+  padding: 10px;
+  align-items: start;
+
+  /* ensure each block fills the grid cell and preserves existing padding */
+  .instrument-block {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+
+  /* instrument link should be full-width, wrap long names and remain accessible */
+  .instrument-link {
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
 }
 
 .instrument-block {
@@ -60,6 +77,25 @@
     color: #000; 
     text-decoration: none;
     font-weight: bold;
+}
+
+/* Responsive breakpoints: tune visible columns per viewport */
+@media (max-width: 1200px) {
+  .instrument-grid, #instrumentGrid { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .instrument-grid, #instrumentGrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .instrument-grid, #instrumentGrid { grid-template-columns: repeat(2, 1fr); }
+  .instrument-block { padding: 12px; }
+}
+
+@media (max-width: 480px) {
+  .instrument-grid, #instrumentGrid { grid-template-columns: 1fr; }
+  .instrument-block { padding: 10px; }
 }
 
 // .instrument-link:hover {

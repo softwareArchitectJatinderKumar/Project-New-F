@@ -3,6 +3,9 @@
     display: none;
 }
 
+  .topMargin{
+    margin-top: 3.5rem !important;
+  }
 /* Desktop menu styles */
 .nest-nav nav ul.menu {
     list-style: none;
@@ -646,69 +649,4 @@
   }
  
 
-
-// .marquee-wrapper {
-//   overflow: hidden; /* Hide overflowing content */
-//   width: 100%;
-//   background-color: #f8f9fa; /* Optional: Light background for contrast */
-//   padding: 20px 0; /* Optional: Vertical padding for spacing */
-// }
-
-// .marquee-track {
-//   display: flex;
-//   flex-direction: row;
-//   align-items: flex-start; /* Align cards to top */
-//   animation: scroll-left 40s linear infinite; /* Adjust duration (40s) for speed; linear for smooth continuous motion */
-//   gap: 30px; /* Space between event cards */
-//   width: max-content; /* Allow track to expand based on content */
-//   padding: 0 20px; /* Optional: Horizontal padding to prevent edge clipping */
-// }
-
-// .event-card {
-//   flex: 0 0 300px; /* Fixed width for each card (adjust as needed; ~col-md-4 equivalent) */
-//   /* For responsive: Use min-width or media queries */
-//   box-sizing: border-box;
-// }
-
-// .event-card img {
-//   width: 100%;
-//   height: auto;
-//   border-radius: 8px; /* Optional: Rounded corners for images */
-// }
-
-// .event-card strong {
-//   font-size: 1.1em;
-//   color: #333;
-// }
-
-// .event-card div.mt-1 {
-//   background-color: rgba(255, 255, 255, 0.8); /* Optional: Semi-transparent background for details */
-//   border-radius: 4px;
-// }
-
-// /* Animation Keyframes */
-// @keyframes scroll-left {
-//   0% {
-//     transform: translateX(0);
-//   }
-//   100% {
-//     transform: translateX(-50%); /* Moves exactly half the track width (since content is duplicated) */
-//   }
-// }
-
-// /* Pause on hover (optional, similar to carousel behavior) */
-// .marquee-wrapper:hover .marquee-track {
-//   animation-play-state: paused;
-// }
-
-// /* Responsive adjustments */
-// @media (max-width: 768px) {
-//   .event-card {
-//     flex: 0 0 250px; /* Smaller cards on mobile */
-//   }
-  
-//   .marquee-track {
-//     gap: 20px;
-//     animation-duration: 50s; /* Slower on mobile for better readability */
-//   }
-// }
+ 

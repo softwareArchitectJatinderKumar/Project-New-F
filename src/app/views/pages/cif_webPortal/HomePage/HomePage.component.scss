@@ -156,6 +156,53 @@
   }
 }
 
+/* Responsive layout for instrument list */
+#InstrumentDetailsData {
+  /* use grid to ensure predictable columns across breakpoints */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens (matches col-md-3) */
+  gap: 1rem; /* small gap between items; margins inside items are preserved */
+  align-items: start;
+
+  /* ensure each bootstrap column behaves well as a grid item */
+  > .col-md-3 {
+    /* let inner margins/padding remain, but make the element fill the grid cell */
+    width: 100%;
+    max-width: 100%;
+    display: block;
+  }
+
+  img.img-fluid {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain; /* preserve image aspect while fitting */
+  }
+
+  /* instrument name link: allow wrapping and full width click area */
+  #InstrumentsPage a {
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Tablet: 3 columns for medium-wide screens (e.g., 768px - 1024px) */
+@media (max-width: 1024px) {
+  #InstrumentDetailsData { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Small tablets / large phones: 2 columns */
+@media (max-width: 768px) {
+  #InstrumentDetailsData { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 480px) {
+  #InstrumentDetailsData { grid-template-columns: 1fr; }
+}
+
  
 // .promo-banner {
  
