@@ -269,8 +269,8 @@ export class CifInstrumentsComponent implements OnInit {
   ];
 
   getAllInstruments(): void {
-    this.loadingIndicator = true;
-    const startTime = new Date().getTime();
+    // this.loadingIndicator = true;
+    // const startTime = new Date().getTime();
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
@@ -296,19 +296,19 @@ export class CifInstrumentsComponent implements OnInit {
             }
           }
         }
-        const elapsed = new Date().getTime() - startTime;
-        const remainingDelay = Math.max(2500 - elapsed, 0);
+        // const elapsed = new Date().getTime() - startTime;
+        // const remainingDelay = Math.max(2500 - elapsed, 0);
 
-        setTimeout(() => {
-          this.loadingIndicator = false;
-        }, remainingDelay);
+        // setTimeout(() => {
+        //   this.loadingIndicator = false;
+        // }, remainingDelay);
       },
       error: err => {
         this.InstrumentsDataData = this.DataItems; // added on 17-Feb-26 for static Instrument data when API fails
         this.tmpscifInstrumentsDataData = this.tmpsInstrumentsDataData = this.InstrumentsDataData.slice(0, this.InstrumentsDataData.length);
         this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
-        this.loadingIndicator = false;
-        console.error(err);
+        // this.loadingIndicator = false;
+        // console.error(err);
       }
     });
   }
@@ -433,7 +433,7 @@ export class CifInstrumentsComponent implements OnInit {
           this.headHtmlData = this.tmpscifInstrumentsCharges[0];
           this.columns = Object.keys(this.tmpscifInstrumentsCharges[0]);
           this.columns = this.columns.filter((item: any) => item !== 'ResultFile' && item !== 'userId' && item !== 'id' && item !== 'analysisId');
-          this.loadingIndicator = false;
+          // this.loadingIndicator = false;
         } else {
           this.cifInstrumentsCharges = [];
         }
@@ -759,8 +759,8 @@ export class CifInstrumentsComponent implements OnInit {
   InstrumentsDataData: any[] = [];
   tmpsInstrumentsDataData: any[] = []; tmpsResultData: any[] = [];
   getAllInstrumentss(): void {
-    this.loadingIndicator = true;
-    const startTime = new Date().getTime();
+    // this.loadingIndicator = true;
+    // const startTime = new Date().getTime();
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
         if (response.item1 && response.item1.length > 0) {
@@ -784,16 +784,16 @@ export class CifInstrumentsComponent implements OnInit {
             }
           }
         }
-        const elapsed = new Date().getTime() - startTime;
-        const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 5s
+        // const elapsed = new Date().getTime() - startTime;
+        // const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 5s
 
-        setTimeout(() => {
-          this.loadingIndicator = false;
-        }, remainingDelay);
+        // setTimeout(() => {
+        //   this.loadingIndicator = false;
+        // }, remainingDelay);
       },
       error: err => {
-        this.loadingIndicator = false;
-        console.error(err);
+      //   this.loadingIndicator = false;
+      //   console.error(err);
       }
     });
   }

@@ -1,6 +1,6 @@
-<div *ngIf="loadingIndicator">Loading...</div>
-<div *ngIf="!loadingIndicator">
-  <div>
+<div *ngIf="loadingIndicator" class="d-none">Loading...</div>
+<div>
+  <div  >
     <input 
       type="text" 
       [(ngModel)]="searchTerm" 

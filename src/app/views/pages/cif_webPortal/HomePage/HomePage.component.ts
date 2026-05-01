@@ -297,9 +297,9 @@ export class HomePageComponent implements OnInit {
   ];
 
   getAllInstruments(): void {
-    this.loadingIndicator = true;
-    this.areFacilityImagesLoaded = false;
-    const startTime = new Date().getTime();
+    // this.loadingIndicator = true;
+    // this.areFacilityImagesLoaded = false;
+    // const startTime = new Date().getTime();
 
     this.CIFwebService.GetAllInstrumentsData().subscribe({
       next: response => {
@@ -317,11 +317,11 @@ export class HomePageComponent implements OnInit {
             ...item,
             cachedImageUrl: this.preloadedObjectUrls.get(item.imageUrl) || undefined
           }));
-          const elapsed = new Date().getTime() - startTime;
-          const remainingDelay = Math.max(2500 - elapsed, 0);
-          setTimeout(() => {
-            this.loadingIndicator = false;
-          }, remainingDelay);
+          // const elapsed = new Date().getTime() - startTime;
+          // const remainingDelay = Math.max(2500 - elapsed, 0);
+          // setTimeout(() => {
+          //   this.loadingIndicator = false;
+          // }, remainingDelay);
         });
       },
       error: err => {
@@ -334,11 +334,11 @@ export class HomePageComponent implements OnInit {
             ...item,
             cachedImageUrl: this.preloadedObjectUrls.get(item.imageUrl) || undefined
           }));
-          const elapsed = new Date().getTime() - startTime;
-          const remainingDelay = Math.max(2500 - elapsed, 0);
-          setTimeout(() => {
-            this.loadingIndicator = false;
-          }, remainingDelay);
+          // const elapsed = new Date().getTime() - startTime;
+          // const remainingDelay = Math.max(2500 - elapsed, 0);
+          // setTimeout(() => {
+          //   this.loadingIndicator = false;
+          // }, remainingDelay);
         });
 
         this.serverError = true;

@@ -2,12 +2,18 @@ import {
   Component,
   OnInit,
   OnDestroy,
+  AfterViewInit,
   HostListener,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 
 export interface TopLink {
   label: string;
@@ -44,7 +50,7 @@ export interface StickyItem {
   styleUrls: ['./atop-header-new.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StaticHeaderComponent implements OnInit, OnDestroy {
+export class StaticHeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /* ── State ─────────────────────────────────────────── */
   isSticky        = false;
@@ -263,10 +269,24 @@ export class StaticHeaderComponent implements OnInit, OnDestroy {
     },
   ];
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient,
+    private sanitizer: DomSanitizer
+  ) {}
+
+  /* ── Remote header HTML ─────────────────────────── */
+  trustedHeaderHtml: SafeHtml | null = null;
+  private headerSub?: Subscription;
+  @ViewChild('remoteFrame', { static: false }) remoteFrame?: ElementRef<HTMLIFrameElement>;
+  iframeVisible = true;
+  showHtmlContainer = false;
 
   /* ── Lifecycle ───────────────────────────────────── */
   ngOnInit(): void {
+    // Load remote header HTML (dynamic header)
+    // attempt iframe first; HTTP fallback will be triggered if iframe blocked
+
     this.announcementTimer = setInterval(() => {
       this.currentAnnouncement = (this.currentAnnouncement + 1) % this.announcements.length;
       this.cdr.markForCheck();
@@ -286,6 +306,161 @@ export class StaticHeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     clearInterval(this.announcementTimer);
     clearTimeout(this.hoverTimer);
+    if (this.headerSub) this.headerSub.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    // If iframe is present, attach load/error handlers and a fallback timer
+    setTimeout(() => {
+      const frame = this.remoteFrame?.nativeElement;
+      if (!frame) {
+        // no iframe available - try HTTP fallback
+        this.triggerHttpFallback();
+        return;
+      }
+
+      let loaded = false;
+
+      const onLoad = () => {
+        loaded = true;
+        // iframe loaded; keep visible
+        this.iframeVisible = true;
+        this.showHtmlContainer = false;
+        this.cdr.markForCheck();
+      };
+
+      const onError = () => {
+        loaded = false;
+        this.triggerHttpFallback();
+      };
+
+      frame.addEventListener('load', onLoad);
+      frame.addEventListener('error', onError);
+
+      // If iframe load doesn't fire within X ms, assume blocked or slow and fallback
+      setTimeout(() => {
+        if (!loaded) {
+          this.triggerHttpFallback();
+        }
+      }, 5000); // increased wait to allow slower connections
+    }, 0);
+  }
+
+  private triggerHttpFallback(): void {
+    // hide iframe and show HTML container; attempt to fetch HTML
+    this.iframeVisible = false;
+    this.showHtmlContainer = true;
+    this.cdr.markForCheck();
+    this.loadRemoteHeader();
+  }
+
+  private loadRemoteHeader(): void {
+    const url = 'https://includepages.lpu.in/newlpu/header.php';
+    const base = 'https://includepages.lpu.in/newlpu/';
+    try {
+      this.headerSub = this.http.get(url, { responseType: 'text' }).subscribe(
+        (html) => {
+          try {
+            // Parse HTML and rewrite relative asset URLs to absolute ones
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // Fix link[href], img[src], script[src] to absolute URLs where needed
+            const fixAttr = (selector: string, attr: string) => {
+              const els = Array.from(doc.querySelectorAll(selector)) as Element[];
+              els.forEach(el => {
+                const val = el.getAttribute(attr);
+                if (val && !/^https?:\/\//i.test(val) && !val.startsWith('//')) {
+                  const abs = new URL(val, base).href;
+                  el.setAttribute(attr, abs);
+                } else if (val && val.startsWith('//')) {
+                  el.setAttribute(attr, window.location.protocol + val);
+                }
+              });
+            };
+
+            fixAttr('link', 'href');
+            fixAttr('img', 'src');
+            fixAttr('a', 'href');
+            fixAttr('script', 'src');
+
+            // Collect external scripts (with src) so we can load them dynamically
+            const scriptEls = Array.from(doc.querySelectorAll('script[src]')) as HTMLScriptElement[];
+            const scriptSrcs = scriptEls.map(s => s.getAttribute('src')!).filter(Boolean);
+
+            // Remove script tags from the HTML to avoid inline execution when setting innerHTML
+            scriptEls.forEach(s => s.remove());
+
+            // Inject stylesheet links from fetched doc.head into our document.head
+            const headLinks = Array.from(doc.querySelectorAll('link[rel="stylesheet"], link[rel="preload"][as="style"]')) as HTMLLinkElement[];
+            headLinks.forEach(link => {
+              try {
+                const href = link.getAttribute('href');
+                if (!href) return;
+                const abs = /^https?:\/\//i.test(href) || href.startsWith('//') ? (href.startsWith('//') ? window.location.protocol + href : href) : new URL(href, base).href;
+                // avoid duplicates
+                if (!document.querySelector(`link[href="${abs}"]`)) {
+                  const newLink = document.createElement('link');
+                  newLink.rel = 'stylesheet';
+                  newLink.href = abs;
+                  document.head.appendChild(newLink);
+                }
+              } catch (e) {
+                console.warn('Failed to inject stylesheet link', link, e);
+              }
+            });
+
+            // Inject inline <style> tags from fetched doc into our document.head
+            const styleEls = Array.from(doc.querySelectorAll('style')) as HTMLStyleElement[];
+            styleEls.forEach(s => {
+              try {
+                const newStyle = document.createElement('style');
+                newStyle.type = 'text/css';
+                newStyle.textContent = s.textContent || '';
+                document.head.appendChild(newStyle);
+              } catch (e) {
+                console.warn('Failed to inject inline style', e);
+              }
+            });
+
+            const bodyHtml = doc.body.innerHTML;
+
+            // Trust the sanitized HTML (scripts will be loaded separately)
+            this.trustedHeaderHtml = this.sanitizer.bypassSecurityTrustHtml(bodyHtml);
+            this.cdr.markForCheck();
+
+            // Dynamically load external scripts sequentially to preserve order
+            (async () => {
+              for (const src of scriptSrcs) {
+                try {
+                  await new Promise<void>((resolve, reject) => {
+                    const s = document.createElement('script');
+                    s.src = src;
+                    s.async = false;
+                    s.onload = () => resolve();
+                    s.onerror = () => reject(new Error('Failed to load script ' + src));
+                    document.body.appendChild(s);
+                  });
+                } catch (e) {
+                  console.warn('Failed to load remote header script', src, e);
+                }
+              }
+            })();
+
+          } catch (e) {
+            console.error('Error processing remote header HTML', e);
+            // fallback: set raw html
+            this.trustedHeaderHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+            this.cdr.markForCheck();
+          }
+        },
+        (err) => {
+          console.error('Failed to load remote header from', url, err);
+        }
+      );
+    } catch (e) {
+      console.error('Exception while requesting remote header', e);
+    }
   }
 
   /* ── Scroll ──────────────────────────────────────── */

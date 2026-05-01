@@ -3,7 +3,10 @@
   width: 7rem !important;
   position: relative;
 }
-
+.imgSize{
+  height:12rem !important;
+  width: 18rem !important;
+}
 /* Blinking Animation */
 .blinking-text {
   animation: blink 1s ease-in-out infinite alternate;

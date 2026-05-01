@@ -1,6 +1,6 @@
 <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
 
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
   <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
     <div class="custom-spinner-content text-center">
       <img src="assets/images/spinner.gif" alt="Loading..." />
@@ -57,7 +57,7 @@
     </div>
   </div>
 </section>
-<section class="section bg-dark-yellow" #facilitiesSection>
+<section class="section bg-dark-yellow d-none" #facilitiesSection>
   <div class="container">
     <div class="heading-wraper mb-4">
       <div class="main-head">
