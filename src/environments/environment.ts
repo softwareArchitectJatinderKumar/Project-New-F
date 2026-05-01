@@ -10,8 +10,9 @@ export const environment = {
     appId: "1:725668905079:web:d3c1542ab17479b45d4672",
     measurementId: "G-SRK4QGDCXD"
   },
-   headerUrl: '/api/header',
-  footerUrl: '/api/footer',
+  // Use remote include pages for dynamic header/footer (no iframe/proxy)
+  headerUrl: 'https://includepages.lpu.in/newlpu/header.php',
+  footerUrl: 'https://includepages.lpu.in/newlpu/footer.php',
   //apiUrl:'https://devums.lpu.in/webapi/api/'
   // apiUrl: 'https://ums.lpu.in/obpapi/api/'
   // apiUrl:'https://localhost:7178/api/'

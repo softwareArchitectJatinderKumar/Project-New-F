@@ -43,10 +43,7 @@ export class FooterComponent implements OnInit, AfterViewInit {
           this.loadFooterWithCorsWorkaround(url, proxyIndex + 1);
         } else {
           // All proxies failed, show empty fallback
-          const fallback = `<div class="local-footer-fallback" style="padding:20px;text-align:center;background:#f5f5f5;border-top:1px solid #e0e0e0;">
-            <small>Footer unavailable. </small>
-            <a href="${url}" target="_blank">Click here to view</a>
-          </div>`;
+          const fallback = ` `;
           this.footerHtml = this.sanitizer.bypassSecurityTrustHtml(fallback);
         }
       }

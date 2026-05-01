@@ -56,10 +56,7 @@ ngOnInit() {
           this.loadHeaderWithCorsWorkaround(url, proxyIndex + 1);
         } else {
           // All proxies failed, show fallback
-          const fallback = `<div class="local-header-fallback" style="padding:10px;text-align:center;background:#ffffff;border-bottom:1px solid #e0e0e0;">
-            <small>Header unavailable. </small>
-            <a href="${url}" target="_blank">Click here to view</a>
-          </div>`;
+          const fallback = ` `;
           this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(fallback);
           this.cdRef.detectChanges();
         }
