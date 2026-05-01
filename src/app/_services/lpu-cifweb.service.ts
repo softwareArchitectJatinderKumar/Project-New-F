@@ -61,12 +61,10 @@ export class LpuCIFWebService {
 
 
   getLpuHeader(): Observable<any> {
-      // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuHeader');
       return this.http.get(AUTH_API +'api/LpuCIFHeaderFooter/GetLpuHeader');
    }
 
      getLpuFooter(): Observable<any> {
-      // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuFooter');
       return this.http.get(AUTH_API +'api/LpuCIFHeaderFooter/GetLpuFooter');
    }
 
@@ -211,7 +209,6 @@ export class LpuCIFWebService {
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/CIFGetAllAssignedTesttoStaff',
-      // 'https://localhost:7125/api/LpuCIF/CIFGetAllAssignedTesttoStaff',
       { headers }
     ).pipe(catchError(this.handleError('GetAllBooking', [])));
   }

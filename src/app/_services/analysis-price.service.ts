@@ -70,7 +70,7 @@ export class AnalysisPriceService {
   // ✅ Update to your actual API base URL
   // private readonly baseUrl = 'https://your-api-domain.com/api/LpuCIF';
 
-   private readonly baseUrl = 'https://localhost:7125/api/LpuCIF';//https://projectsapi.lpu.in/api/LpuCIF';//'; 'https://localhost:7125/api/LpuCIF';//
+   private readonly baseUrl = 'https://projectsapi.lpu.in/api/LpuCIF';//'; 'https://localhost:7125/api/LpuCIF';// 'https://localhost:7125/api/LpuCIF';
   
     private readonly authToken = environment.authToken;
     // private get authHeadersFormData(): HttpHeaders {

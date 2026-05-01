@@ -23,7 +23,6 @@ export class UpcomingEventsComponent implements OnInit {
     @ViewChild('ngbCarousel', { static: false }) carousel!: NgbCarousel;
 
 
-    // set to 0 to disable auto-slide, or ms (e.g. 5000)
     autoSlideInterval = 4000;
     ngOnInit(): void {
         this.GetAllEventDetails();
@@ -35,7 +34,6 @@ export class UpcomingEventsComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router, private route: ActivatedRoute) { }
 
-    // ── REQ #3: Carousel shows only 'Happenings' events ──────────────────────
     chunkedEvents: any[][] = [];
     UpcomingchunkedEvents: any[][] = [];
     ServerUrl: string = 'https://files.lpu.in/umsweb/CIFDocuments/';
@@ -135,40 +133,33 @@ export class UpcomingEventsComponent implements OnInit {
     //     });
     // }
 
-updateChunks(): void {
-    const width = window.innerWidth;
-    let itemsPerSlide = 3;
-    
-    // 1. Determine items per slide based on screen width
-    if (width < 768) { itemsPerSlide = 1; }
-    else if (width < 992) { itemsPerSlide = 2; }
+    updateChunks(): void {
+        const width = window.innerWidth;
+        let itemsPerSlide = 3;
+        if (width < 768) { itemsPerSlide = 1; }
+        else if (width < 992) { itemsPerSlide = 2; }
 
-    /**
-     * Helper to process, sort, and chunk events by category
-     */
-    const getSortedChunks = (category: string) => {
-        const filteredAndSorted = this.events
-            .filter(e => e.eventCategory === category)
-            .sort((a, b) => {
-                // Convert to Date objects for comparison
-                const dateA = new Date(a.eventDate).getTime();
-                const dateB = new Date(b.eventDate).getTime();
-                
-                // Descending order: newest/future dates first
-                return dateB - dateA;
-            });
 
-        const groups: any[][] = [];
-        for (let i = 0; i < filteredAndSorted.length; i += itemsPerSlide) {
-            groups.push(filteredAndSorted.slice(i, i + itemsPerSlide));
-        }
-        return groups;
-    };
+        const getSortedChunks = (category: string) => {
+            const filteredAndSorted = this.events
+                .filter(e => e.eventCategory === category)
+                .sort((a, b) => {
+                    const dateA = new Date(a.eventDate).getTime();
+                    const dateB = new Date(b.eventDate).getTime();
 
-    // 2. Assign the chunked data to your class properties
-    this.chunkedEvents = getSortedChunks('Happenings');
-    this.UpcomingchunkedEvents = getSortedChunks('Upcoming');
-}
+                    return dateB - dateA;
+                });
+
+            const groups: any[][] = [];
+            for (let i = 0; i < filteredAndSorted.length; i += itemsPerSlide) {
+                groups.push(filteredAndSorted.slice(i, i + itemsPerSlide));
+            }
+            return groups;
+        };
+
+        this.chunkedEvents = getSortedChunks('Happenings');
+        this.UpcomingchunkedEvents = getSortedChunks('Upcoming');
+    }
     // updateChunks(): void {
     //     const width = window.innerWidth;
     //     let itemsPerSlide = 3;
