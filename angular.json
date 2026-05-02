@@ -41,21 +41,14 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "./node_modules"
-              ]
+              "includePaths": ["./node_modules"]
             },
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
-              "src/.htaccess"
-            ],
+            "assets": ["src/favicon.ico", "src/assets", "src/.htaccess"],
             "styles": [
               "./node_modules/@fullcalendar/common/main.css",
               "./node_modules/@fullcalendar/daygrid/main.css",
               "./node_modules/@fullcalendar/timegrid/main.css",
               "./node_modules/@fullcalendar/list/main.css",
-              "src/styles.scss",
               "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css"
             ],
             "scripts": [
@@ -64,7 +57,8 @@
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.min.js",
               "node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {
@@ -129,13 +123,8 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }

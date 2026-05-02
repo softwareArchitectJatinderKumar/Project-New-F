@@ -207,7 +207,7 @@ export class AnalysisPriceComponent implements OnInit, OnDestroy {
 
   openAnalysisModal(): void {
     this.analysisForm = { analysisType: '', instrumentId: this.selectedInstrumentId, analysisId: '' };
-    this.modalService.open(this.analysisModal, { size: 'md', centered: true });
+    this.modalService.open(this.analysisModal, { size: 'lg', centered: true });
   }
 
   submitAnalysis(ngForm: NgForm, modal: any): void {
@@ -289,7 +289,7 @@ export class AnalysisPriceComponent implements OnInit, OnDestroy {
     this.service.viewAnalysis(this.selectedInstrumentIdP || undefined)
       .pipe(takeUntil(this.destroy$))
       .subscribe({ next: res => { this.analysisForPrice = res.item1 ?? []; } });
-    this.modalService.open(this.analysisPriceModal, { size: 'md', centered: true });
+    this.modalService.open(this.analysisPriceModal, { size: 'lg', centered: true });
   }
 
   submitPrice(ngForm: NgForm, modal: any): void {

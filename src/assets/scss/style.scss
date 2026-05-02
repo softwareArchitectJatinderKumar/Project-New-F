@@ -1,13 +1,4 @@
-/*
-* NobleUI - Angular Admin Dashboard Template v2.1.0
-* Copyright © 2022 NobleUI
-* Licensed under ThemeForest License
-*/
-
-// Theme style for demo1 (Vertical-Menu-Light & Vertical-Menu-Light-RTL)
-
-
-// Custom variables
+ 
 @import './variables';
 
 
@@ -49,78 +40,75 @@
 @import "bootstrap/scss/carousel";
 @import "bootstrap/scss/spinners";
 
-// Bootstrap helpers
-@import "bootstrap/scss/helpers";
+ 
+// @import "bootstrap/scss/helpers";
 
-// Bootstrap utilities
-@import './utilities';
-@import "bootstrap/scss/utilities/api";
-
-
-// Custom mixins
-@import './mixins/animation';
-@import './mixins/buttons';
-@import './mixins/misc';
-@import './mixins/width';
+ 
+// @import './utilities';
+// @import "bootstrap/scss/utilities/api";
 
 
-// Core styles
-@import './background';
-@import './reset';
-@import './functions';
-@import './misc';
-@import './helpers';
-@import './typography';
-@import './demo';
-@import './spinner';
+ 
+// @import './mixins/animation';
+// @import './mixins/buttons';
+// @import './mixins/misc';
+// @import './mixins/width';
 
-// Layout
-@import './vertical-wrapper';
-@import './navbar';
-@import './sidebar';
-@import './layouts';
+ 
+// @import './background';
+// @import './reset';
+// @import './functions';
+// @import './misc';
+// @import './helpers';
+// @import './typography';
+// @import './demo';
+// @import './spinner';
 
-// components
-@import "./components/badges";
-@import "./components/bootstrap-alert";
-@import "./components/breadcrumbs";
-@import "./components/buttons";
-@import "./components/cards";
-@import "./components/datepicker";
-@import "./components/dropdown";
-@import "./components/forms";
-@import "./components/icons";
-@import "./components/nav";
-@import "./components/pagination";
-@import "./components/rating";
-@import "./components/tables";
+// // Layout
+// @import './vertical-wrapper';
+// @import './navbar';
+// @import './sidebar';
+// @import './layouts';
 
-// Pages
-@import "./components/dashboard";
-@import "./components/timeline";
-@import "./components/auth";
-@import "./components/chat";
+ 
+// @import "./components/badges";
+// @import "./components/bootstrap-alert";
+// @import "./components/breadcrumbs";
+// @import "./components/buttons";
+// @import "./components/cards";
+// @import "./components/datepicker";
+// @import "./components/dropdown";
+// @import "./components/forms";
+// @import "./components/icons";
+// @import "./components/nav";
+// @import "./components/pagination";
+// @import "./components/rating";
+// @import "./components/tables";
+ 
+// @import "./components/dashboard";
+// @import "./components/timeline";
+// @import "./components/auth";
+// @import "./components/chat";
 
-// Email
-@import "./components/email/inbox";
-
-
-// Plugin overrides
-@import "./components/plugin-overrides/full-calendar";
-@import "./components/plugin-overrides/ng-select";
-@import "./components/plugin-overrides/ngx-chips";
-@import "./components/plugin-overrides/ngx-quill";
-@import "./components/plugin-overrides/perfect-scrollbar";
-@import "./components/plugin-overrides/sweet-alert";
-@import "./components/plugin-overrides/dropzone";
-@import "./components/plugin-overrides/angular-archwizard";
-@import "./components/plugin-overrides/apex-charts";
-@import "./components/plugin-overrides/data-tables";
-@import "./components/plugin-overrides/ngx-datatable";
+ 
+// @import "./components/email/inbox";
 
 
-// Custom scss
-@import "./custom";
+ 
+// @import "./components/plugin-overrides/full-calendar";
+// @import "./components/plugin-overrides/ng-select";
+// @import "./components/plugin-overrides/ngx-chips";
+// @import "./components/plugin-overrides/ngx-quill";
+// @import "./components/plugin-overrides/perfect-scrollbar";
+// @import "./components/plugin-overrides/sweet-alert";
+// @import "./components/plugin-overrides/dropzone";
+// @import "./components/plugin-overrides/angular-archwizard";
+// @import "./components/plugin-overrides/apex-charts";
+// @import "./components/plugin-overrides/data-tables";
+// @import "./components/plugin-overrides/ngx-datatable";
+
+ 
+// @import "./custom";
 
 .fullscreen-loader {
     position: fixed;

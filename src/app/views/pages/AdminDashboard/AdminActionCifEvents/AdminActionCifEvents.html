@@ -71,8 +71,10 @@
 
                         </table>
                         <div class="pagination">
-                            <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
-                                    class="mdi mdi-chevron-left  fs-2"> </i> </a>
+                            <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> 
+                                <i class="mdi mdi-chevron-left  fs-2"> </i> 
+                                
+                                </a>
                             <span class=" p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
                             <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
                                     class="mdi mdi-chevron-right  fs-2"> </i></a>

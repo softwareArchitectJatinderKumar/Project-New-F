@@ -1,0 +1,170 @@
+<app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
+
+<section class="section pb-0">
+    <div class="container">
+        <div class="heading-wraper mb-4">
+            <div class="main-head">
+                <h1>Central Instrumentation Facility</h1>
+                <div class="call-action">
+                    <a style="margin-right: 1rem !important;" class="lpu-btn" (click)="openSampleInstructions()">
+                        Address for Sending Samples </a>
+                </div>
+            </div>
+        </div>
+        <p class="mb-5">Central Instrumentation Facility (CIF) of Lovely Professional University (LPU) houses a wide
+            range of high-end instruments for pushing the boundaries of research in science and technology to higher
+            level. These instruments and facilities help the faculties, research scholars and students to carry out
+            globally competitive research in basic, applied and medical sciences. The center also hopes for expansion of
+            the facilities each year making it a core facility in the country. By realizing CIF, we expect a prominent
+            hub for pioneering and collaborative analytical research in our country. CIF runs under the purview of
+            Research and Development Cell of the university and is expected to self-sustain by revenue generation for
+            the upkeep and maintenance of the instruments.</p>
+        <div class="banner mb-5">
+            <img src="https://www.lpu.in/lpu-assets/images/cif/banner.jpg" class="img-fluid" alt="Banner" />
+        </div>
+    </div>
+</section>
+
+<!-- Facilities Section with Large Image Fix -->
+<section class="section bg-dark-yellow" #facilitiesSection>
+    <div class="container">
+        <div class="heading-wraper mb-4">
+            <div class="main-head">
+                <h2 id="CIF_Facilities">Facilities</h2>
+                <div class="call-action">
+                    <a (click)="goto('/ourInstruments')" class="link-btn">
+                        <img src="https://www.lpu.in/lpu-assets/images/icons/chevron-right.svg" alt="Icon">Know more</a>
+                </div>
+            </div>
+             <p>CIF of Lovely Professional University is equipped with sophisticated instruments to carry out
+                spectral
+                measurements, structure determination and chemical analysis. Click on the instrument name in the
+                following table to view their description.</p>
+        </div>
+
+        <div class="cif-grid-layout" *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 0">
+            <div class="cif-grid-item" *ngFor="let InstrumentData of tmpsInstrumentsDataData">
+                <div class="cif-img-frame">
+                    <img [src]="InstrumentData.cachedImageUrl || InstrumentData.imageUrl"
+                        [alt]="InstrumentData.instrumentName" 
+                        class="cif-fit-img img-fluid imgSize" 
+                        loading="eager" />
+                </div>
+                <div class="cif-link-frame" id="InstrumentsPage">
+                    <!-- <a (click)="VisitUrl('/ourInstruments', InstrumentData.instrumentName, InstrumentData.id, InstrumentData.categoryId)" -->
+                      <a (click)="VisitUrl('/ourInstruments', InstrumentData.instrumentName.slice(0,10), InstrumentData.instrumentId, InstrumentData.categoryId)"
+                        [attr.data-is-active]="InstrumentData.isActive">
+                        {{ InstrumentData.instrumentName }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What We Offer Section - Fully Restored -->
+<section>
+    <div class="container section-red p-4 mb-4">
+        <div class="heading-wraper mb-4">
+            <div class="main-head">
+                <h2 class="white">What we offer</h2>
+            </div>
+            <div class="bottom-line"></div>
+            <div class="cif-fact row">
+                <div class="facts col-lg-4 col-12">
+                    <div class="icon"><img src="https://www.lpu.in/lpu-assets/images/cif/icon.svg" alt="icon"></div>
+                    <span class="head">Leading class testing equipments</span>
+                    <p>CIF of Lovely Professional University is equipped with sophisticated instruments to carry
+                        out spectral measurements, structure determination, and chemical analysis.</p>
+                </div>
+                <div class="facts col-lg-4 col-12">
+                    <div class="icon"><img src="https://www.lpu.in/lpu-assets/images/cif/icon.svg" alt="icon"></div>
+                    <span class="head">High degree of reliable and quick test results</span>
+                    <p>Given the time-tested machines & committed research base, CIF can assure authentic &
+                        reproducible results</p>
+                </div>
+                <div class="facts col-lg-4 col-12">
+                    <div class="icon"><img src="https://www.lpu.in/lpu-assets/images/cif/icon.svg" alt="icon"></div>
+                    <span class="head">Dedicated CIF team</span>
+                    <p>We have committed faculty members, scientific operators, and administrative officers
+                        working round the clock to support you with quality services.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<app-UpcomingEvents></app-UpcomingEvents>
+<!-- <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
+
+ 
+<div *ngIf="loadingIndicator" class="custom-spinner-overlay">
+    <div class="custom-spinner-content">
+        <img src="assets/images/spinner.gif" alt="Loading..." />
+    </div>
+</div>
+
+<section class="section">
+    <div class="container">
+        <div class="heading-wrapper">
+            <div class="main-head">
+                <h1>Central Instrumentation Facility</h1>
+                <div class="call-action">
+                    <button class="lpu-btn" (click)="openSampleInstructions()">
+                        Address for Sending Samples
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <p class="description-text">
+            The Central Instrumentation Facility (CIF) at LPU houses a wide range of high-end instruments 
+            to push the boundaries of research in science and technology. We provide globally competitive 
+            analytical research services to students, faculty, and external researchers.
+        </p>
+
+        <div class="banner-wrapper">
+            <img src="https://www.lpu.in/lpu-assets/images/cif/banner.jpg" class="banner-img" alt="CIF Banner" />
+        </div>
+    </div>
+</section>
+
+ 
+<section class="section bg-light-gray" #facilitiesSection>
+    <div class="container">
+        <div class="heading-wrapper">
+            <div class="main-head">
+                <h2 id="CIF_Facilities">Facilities</h2>
+                <div class="call-action">
+                    <a (click)="goto('/ourInstruments')" class="link-btn">
+                        Know more &rarr;
+                    </a>
+                </div>
+            </div>
+            <p>Click on an instrument name to view full specifications and booking details.</p>
+        </div>
+
+         
+        <div class="facilities-grid" *ngIf="areFacilityImagesLoaded; else errorTemplate">
+            <div class="instrument-card" *ngFor="let item of tmpsInstrumentsDataData">
+                <div class="img-container">
+                    <img [src]="item.cachedImageUrl" [alt]="item.instrumentName" loading="eager">
+                </div>
+                <div class="info-container">
+                    <a (click)="VisitUrl('/ourInstruments', item.instrumentName, item.id, item.categoryId)"
+                       [class.disabled-link]="!item.isActive">
+                        {{ item.instrumentName }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #errorTemplate>
+            <div class="error-msg" *ngIf="serverError">
+                <h3>{{ errorMessage }}</h3>
+            </div>
+        </ng-template>
+    </div>
+</section>
+
+<app-UpcomingEvents></app-UpcomingEvents> -->

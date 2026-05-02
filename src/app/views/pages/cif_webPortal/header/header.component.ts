@@ -5,7 +5,7 @@ import { DOCUMENT } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { LpuCIFWebService } from 'src/app/_services/lpu-cifweb.service';
 import { AssetLoaderService } from 'src/app/_services/asset-load.service';
-
+import * as $ from 'jquery';
 // CORS proxy services - these allow bypassing CORS restrictions
 const CORS_PROXIES = [
   'https://api.allorigins.win/raw?url=',
@@ -36,10 +36,9 @@ ngOnInit() {
     //this.loadHeaderWithCorsWorkaround(environment.headerUrl, 0);
     this.loadHeader();
   }
+  loadHeader() {
+    this.CIFwebService.getLpuHeader().subscribe(async (res) => {
 
-
-loadHeader() {
-    this.CIFwebService.getLpuHeader().subscribe(res => {
 
       // load css
       res.css.forEach((css: string) => this.assetLoader.loadCss(css));
@@ -49,13 +48,81 @@ loadHeader() {
 
       // inject html
       this.headerDiv.nativeElement.innerHTML = res.html;
-
+     
       // execute inline events after load
       setTimeout(() => {
-        this.rebindScripts();
+      this.executeSafeInlineScripts(res.inlineScripts);
+     this.initializeAnnouncementBar();
       }, 1500);
     });
   }
+
+
+executeSafeInlineScripts(scripts: string[]) {
+  if (!scripts) return;
+
+  scripts.forEach((code: string) => {
+    try {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.text = code;
+      document.body.appendChild(script);
+    } catch (e) {
+      console.log('safe script skipped');
+    }
+  });
+}
+
+
+initializeAnnouncementBar() {
+  fetch("https://webapi.lpu.in/LPUAnnouncement/api/Announcement/GetAll", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({})
+  })
+  .then(res => res.json())
+  .then(response => {
+
+    if (!response.taskStatus || !response.data || response.data.length === 0) {
+      const bar = document.querySelector(".announcement-bar");
+      if (bar) (bar as HTMLElement).style.display = "none";
+      return;
+    }
+
+    const slider = document.querySelector(".topbar-slider");
+    if (!slider) return;
+
+    slider.innerHTML = "";
+
+    response.data
+      .filter((x: any) => x.isActive)
+      .sort((a: any, b: any) => a.displayOrder - b.displayOrder)
+      .forEach((item: any) => {
+
+        const div = document.createElement("div");
+
+        if (item.isCountdown && item.targetDate) {
+          div.classList.add("notice");
+
+          div.innerHTML = `
+            <a href="${item.redirectUrl}" target="_blank">
+              <span class="last-date" data-date="${item.targetDate}"></span>
+              ${item.title}
+            </a>
+          `;
+        } else {
+          div.innerHTML = `
+            <a href="${item.redirectUrl}" target="_blank">${item.title}</a>
+          `;
+        }
+
+        slider.appendChild(div);
+      });
+
+  });
+}
 
   rebindScripts() {
     const scripts = this.headerDiv.nativeElement.querySelectorAll('script');
@@ -65,6 +132,43 @@ loadHeader() {
       document.body.appendChild(script);
     });
   }
+
+  executeInlineScripts1(scripts: string[]) {
+  if (!scripts || scripts.length === 0) return;
+
+  scripts.forEach((code: string) => {
+    try {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.text = code;
+      document.body.appendChild(script);
+    } catch (e) {
+      console.log('inline script skipped');
+    }
+  });
+}
+// async loadHeader() {
+//   this.CIFwebService.getLpuHeader().subscribe(async (res) => {
+
+//     // wait css files
+//     for (const css of res.css) {
+//       await this.assetLoader.loadCss(css);
+//     }
+
+//     // wait js files
+//     for (const js of res.js) {
+//       await this.assetLoader.loadJs(js);
+//     }
+
+//     let cleanedHtml = this.removeJunkTags(res.html);
+//     this.headerDiv.nativeElement.innerHTML = cleanedHtml;
+
+//     setTimeout(() => {
+//       this.initializeHeaderMenus();
+//     }, 500);
+//   });
+// }
+
 
 
   // private loadHeaderWithCorsWorkaround(url: string, proxyIndex: number): void {

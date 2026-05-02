@@ -162,7 +162,7 @@ export class AdminMouComponent implements OnInit, OnDestroy {
     this.pendingAction  = action;
     this.pendingRow     = row;
     this.approvalRemark = '';
-    this.modalService.open(this.remarksModal, { size: 'md', centered: true });
+    this.modalService.open(this.remarksModal, { size: 'lg', centered: true });
   }
 
   // ── Modal: confirm ────────────────────────────────────────────────────────

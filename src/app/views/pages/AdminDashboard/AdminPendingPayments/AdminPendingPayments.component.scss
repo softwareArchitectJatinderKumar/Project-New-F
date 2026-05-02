@@ -53,6 +53,46 @@
     background-color: rgba(0, 0, 0, 0.05);
   }
   
+   /* Target the ng-select container to match Bootstrap's form-control look */
+::ng-deep .custom-filter {
+    .ng-select-container {
+        border: 1px solid #ced4da !important; // Restore the border seen missing in the image
+        border-radius: 4px !important;
+        min-height: 38px !important; // Match height of 'Search All Columns'
+        background-color: #ffffff !important;
+        box-shadow: none !important;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Fix the text positioning inside the box */
+    .ng-value-container {
+        padding-left: 10px !important;
+    }
+
+    /* Style the dropdown panel to prevent it from looking like plain text */
+    .ng-dropdown-panel {
+        border: 1px solid #ced4da !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        background: #fff;
+        z-index: 1050;
+    }
+
+    .ng-option {
+        padding: 8px 12px !important;
+        border-bottom: 1px solid #f1f1f1;
+        
+        &:hover {
+            background-color: #f8f9fa !important;
+            color: #c82333 !important; // Highlight with your brand red
+        }
+    }
+
+    /* Hide the arrow if it's cluttering the UI, or style it */
+    .ng-arrow-wrapper {
+        padding-right: 10px;
+    }
+}
 // .label
 // {
 //     height:3.125rem;

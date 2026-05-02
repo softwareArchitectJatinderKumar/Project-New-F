@@ -207,7 +207,7 @@ isStatusDisabled(bookingId: string, instrumentId: string): boolean {
 
   openUpdateStatusModal(a: any) {
     this.BookingCase = a;
-    this.modalService.open(this.ViewUpdateStatusModal, { size: 'sm' }).result.then(
+    this.modalService.open(this.ViewUpdateStatusModal, { size: 'lg' }).result.then(
       (result: string) => {
         console.log("Modal closed");
       }

@@ -1,0 +1,36 @@
+/* Static Pagination - No Hover Effects */
+.static-pag-btn {
+    color: #ef7d00 !important; /* Your brand orange */
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    /* Removed transition and :hover blocks */
+    
+    &:disabled {
+        color: #ccc !important;
+        background-color: #f8f9fa !important;
+        cursor: not-allowed;
+    }
+}
+
+.current-page-display {
+    background-color: #ffffff !important;
+    color: #333 !important;
+    font-weight: bold;
+    border: 1px solid #dee2e6;
+    pointer-events: none; /* Makes the center span non-clickable */
+}
+
+.theme-text {
+    color: #ef7d00 !important;
+}
+
+/* Ensure no global hover styles interfere */
+.page-link:hover {
+    background-color: inherit !important;
+    color: inherit !important;
+    border-color: #dee2e6 !important;
+}

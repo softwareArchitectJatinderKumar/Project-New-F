@@ -56,12 +56,15 @@
           </div>
           <div class="col-md-4 text-center">
             <div class="pagination">
-              <a class="btn btn-outline-primary m-3" (click)="prevPage()" [class.disabled]="currentPage === 1">
-                <i class="mdi mdi-chevron-left fs-4"></i>
+              <a class="btn lpu-btn m-3" (click)="prevPage()" [class.disabled]="currentPage === 1"> 
+                 <i class="bi bi-arrow-left"></i>
+                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
               </a>
               <span class="fs-5 mt-4">{{ currentPage }} / {{ totalPages }}</span>
-              <a class="btn btn-outline-primary m-3" (click)="nextPage()" [class.disabled]="currentPage === totalPages">
-                <i class="mdi mdi-chevron-right fs-4"></i>
+              <a class="btn lpu-btn m-3" (click)="nextPage()" [class.disabled]="currentPage === totalPages"> 
+                 <i class="bi bi-arrow-right"></i>
+                <!-- Next -->
+                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
               </a>
             </div>
           </div>
@@ -116,13 +119,13 @@
 
           <div class="row" *ngIf="hasFilteredData">
             <div class="col-sm-3 pagination d-flex justify-content-center align-items-center mt-3">
-              <a class="btn btn-outline-primary me-3" (click)="prevPage()" [class.disabled]="currentPage === 1">
-                <i class="mdi mdi-chevron-left fs-4"></i>
+              <a class="btn lpu-btn me-3" (click)="prevPage()" [class.disabled]="currentPage === 1"> Prev
+                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
               </a>
               <span class="fs-5">{{ currentPage }} / {{ totalPages }}</span>
-              <a class="btn btn-outline-primary ms-3" (click)="nextPage()"
-                [class.disabled]="currentPage === totalPages">
-                <i class="mdi mdi-chevron-right fs-4"></i>
+              <a class="btn lpu-btn ms-3" (click)="nextPage()"
+                [class.disabled]="currentPage === totalPages"> Next
+                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
               </a>
             </div>
           </div>

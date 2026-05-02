@@ -11,8 +11,8 @@
                 <h2 class="fs-1 text-center">User Payments Details </h2>
             </div>
             <hr />
-            <div class="card-body">              
-           
+            <div class="card-body">
+
                 <div class="row d-flex justify-content-center">
                     <div class="col-sm-3">
                         <div class="mb-3">
@@ -25,7 +25,30 @@
                             <Label class="fs-5">Select Payment to filter</Label>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-3 mb-4">
+                         <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
+                            bindValue="value" [clearable]="false" [searchable]="false" class="custom-filter w-100">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span
+                                    [ngStyle]="{'color': item.value === 'success' ? '#28a745' :  item.value === 'failure' ? '#dc3545' :  item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span *ngIf="item.value === ''">-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'">Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'">Failed Payments</span>
+                                <span *ngIf="item.value === 'null'">Pending Payments</span>
+                            </ng-template>
+                        
+                            <ng-template ng-label-tmp let-item="item">
+                                <span *ngIf="item.value === ''">-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'">Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'">Failed Payments</span>
+                                <span *ngIf="item.value === 'null'">Pending Payments</span>
+                            </ng-template>
+                        
+                        </ng-select>
+                        </div>
+                    <!-- <div class="col-sm-3">
                         <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
                             bindValue="value" placeholder="-- Select Payment --" class="w-100">
                              <ng-template ng-option-tmp let-item="item">
@@ -35,7 +58,7 @@
                                 <span *ngIf="item.value === 'null'" >Pending Payments</span>
                             </ng-template>
                 
-                            <!-- Custom Selected Item Template -->
+                         
                             <ng-template ng-label-tmp let-item="item">
                                 <span *ngIf="item.value === ''" >-- All Payments --</span>
                                 <span *ngIf="item.value === 'success'" >Paid Payments</span>
@@ -45,8 +68,8 @@
                         </ng-select>
                     
                     
-                    </div>
-                   
+                    </div> -->
+
                     <div class="col-sm-3 mb-4 ">
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
                             class="form-control " placeholder="Search" aria-label="Search"
@@ -55,7 +78,7 @@
                     <hr />
                 </div>
                 <hr />
-                 <div class="row m-4 p-2 ">
+                <div class="row m-4 p-2 ">
                     <span class="fs-3 themeClr" *ngIf=" searchQuery">
                         Search Result :- <span class="text-muted">Found {{ tmpsAllPaymentData.length }}
                             Records</span>
@@ -97,24 +120,24 @@
                                         <td class="fw-bold ">{{AllPaymentDataRow.userEmailId}} </td>
                                         <td class="fw-bold "> {{AllPaymentDataRow.noOfSamples}}</td>
                                         <td class="fw-bold ">{{ AllPaymentDataRow.requestDate }}</td>
-                                        <td class="fw-bold"> {{AllPaymentDataRow?.amount && AllPaymentDataRow.amount!='null'
+                                        <td class="fw-bold"> {{AllPaymentDataRow?.amount &&
+                                            AllPaymentDataRow.amount!='null'
                                             ? (AllPaymentDataRow.amount | currency:'INR':'symbol'): 'NA'}}</td>
-                                       
+
                                         <td>
-                                            <span class="badge"
-                                                  [ngClass]="{
+                                            <span class="badge" [ngClass]="{
                                                     'bg-success': AllPaymentDataRow?.paymentStatus === 'success',
                                                     'bg-danger': AllPaymentDataRow?.paymentStatus === 'failure',
                                                     'bg-warning text-dark': !AllPaymentDataRow?.paymentStatus || AllPaymentDataRow?.paymentStatus === 'null'
                                                   }">
-                                              {{
+                                                {{
                                                 AllPaymentDataRow?.paymentStatus === 'success' ? 'Done' :
                                                 AllPaymentDataRow?.paymentStatus === 'failure' ? 'Failed' :
                                                 'Pending'
-                                              }}
+                                                }}
                                             </span>
-                                          </td>
-                                          
+                                        </td>
+
 
                                         <td>
                                             <button class="btn btn-success btn-sm"
@@ -126,14 +149,43 @@
                                 </ng-container>
                             </tbody>
                         </table>
-                        <div class="pagination">
-                            <a (click)="prevPage()" class="btn btn-dark" [class.disabled]="currentPage === 1"> <i
-                                    class="mdi mdi-chevron-left  fs-4"> </i> </a>
+                        <div class="d-flex justify-content-between align-items-center mt-3 p-3 bg-light border rounded">
+                            <div class="text-muted small fw-bold">
+                                Showing Page <span class="theme-text">{{ currentPage }}</span> of {{ getTotalPages() }}
+                            </div>
+
+                            <nav aria-label="Table navigation">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item" [class.disabled]="currentPage === 1">
+                                        <button class="page-link static-pag-btn" (click)="prevPage()"
+                                            [disabled]="currentPage === 1">
+                                            <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
+                                            Prev
+                                        </button>
+                                    </li>
+                                    <li class="page-item">
+                                        <span class="page-link current-page-display">{{ currentPage }} / {{
+                                            getTotalPages() }}</span>
+                                    </li>
+                                    <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                                        <button class="page-link static-pag-btn" (click)="nextPage()"
+                                            [disabled]="currentPage === getTotalPages()">
+                                            <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
+                                            Next
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <!-- <div class="pagination">
+                            <a (click)="prevPage()" class="btn btn-dark" [class.disabled]="currentPage === 1"> 
+                                < </a>
+                                 
                             <span class=" p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
                             <a class="btn btn-dark" (click)="nextPage()"
-                                [class.disabled]="currentPage === getTotalPages()"><i
-                                    class="mdi mdi-chevron-right  fs-4"> </i></a>
-                        </div>
+                                [class.disabled]="currentPage === getTotalPages()"> > </a>
+                                 
+                        </div> -->
                     </div>
                 </ng-container>
                 <ng-template #noRecords>

@@ -84,7 +84,7 @@ export class AdminUserFeedbackDetailsComponent implements OnInit {
   BookingCase: any;
  
   currentPage = 1;
-  itemsPerPage = 10; // 
+  itemsPerPage = 5; // 
   tmpsAllFeedbackData: any[]=[];
   InstrumentId: any;
   UserId: any;

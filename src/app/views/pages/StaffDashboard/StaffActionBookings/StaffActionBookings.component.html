@@ -23,11 +23,32 @@
                             [disabled]="NoResults=='No Details'">Export to
                             Excel <i class="bi bi-download ms-3"></i></button>
                     </div>
-
                     <div class="col-sm-3 mb-4">
-                        <!-- <label class="form-label fs-5 fw-bold">Payment Status</label> -->
+                        <!-- Using the 'custom-filter' class we defined in SCSS -->
+                        <ng-select [(ngModel)]="selectedStatus" (change)="applyFilters()" [items]="statusOptions" bindLabel="label"
+                            bindValue="value" [clearable]="false" [searchable]="false" class="custom-filter w-100">
+                    
+                            <!-- Customizing the look of items in the dropdown list -->
+                            <ng-template ng-option-tmp let-item="item">
+                                <span [ngStyle]="{'color': item.value === 'success' ? '#28a745' : 
+                                                         item.value === 'failure' ? '#dc3545' : 
+                                                         item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span class="ms-1">{{ item.label }}</span>
+                            </ng-template>
+                    
+                            <!-- Customizing the look of the selected value -->
+                            <ng-template ng-label-tmp let-item="item">
+                                <span class="fw-bold" style="color: #444;">{{ item.label }}</span>
+                            </ng-template>
+                    
+                        </ng-select>
+                    </div>
+                    <!-- <div class="col-sm-3 mb-4">
+                       
                         <ng-select [(ngModel)]="selectedStatus" (change)="applyFilters()" [items]="statusOptions"
-                            bindLabel="label" bindValue="value" placeholder="-- All Payments --" class="w-100">
+                            bindLabel="label" bindValue="value"  placeholder="-- All Payments --" class="w-100">
                             <ng-template ng-option-tmp let-item="item">
                                 <span *ngIf="item.value === ''" >-- All Payments --</span>
                                 <span *ngIf="item.value === 'success'" >Paid Payments</span>
@@ -41,7 +62,7 @@
                                 <span *ngIf="item.value === 'null'" >Pending Payments</span>
                             </ng-template>
                         </ng-select>
-                    </div>
+                    </div> -->
 
                     <!-- <div class="col-sm-3 mb-4">
                         <label class="form-label fs-5 fw-bold">Result Status</label>
@@ -147,13 +168,38 @@
                                 </ng-container>
                             </tbody>
                         </table>
-                        <div class="pagination">
+                        <div class="d-flex justify-content-between align-items-center mt-3 p-2 bg-light border-top">
+        <div class="text-muted small fw-bold">
+            Showing Page {{ currentPage }} of {{ getTotalPages() }}
+        </div>
+        
+        <nav aria-label="Table navigation">
+            <ul class="pagination mb-0">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <button class=" custom-pag-btn" (click)="prevPage()" aria-label="Previous">
+                        <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
+                         Prev <
+                    </button>
+                </li>
+                <li class="page-item active">
+                    <span class="page-link theme-bg text-white">{{ currentPage }}</span>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                    <button class="  custom-pag-btn" (click)="nextPage()" aria-label="Next">
+                        <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
+                         Next >
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+                        <!-- <div class="pagination">
                             <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
                                     class="mdi mdi-chevron-left  fs-2"> </i> </a>
                             <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
                             <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
                                     class="mdi mdi-chevron-right  fs-2"> </i></a>
-                        </div>
+                        </div> -->
                     </div>
                 </ng-container>
                 <ng-template #noRecords>

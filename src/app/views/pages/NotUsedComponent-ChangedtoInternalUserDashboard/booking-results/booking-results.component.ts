@@ -219,7 +219,7 @@ export class BookingResultsComponent implements OnInit {
           this.columns = this.columns.filter((item: any) => item !== 'candidateName' && item !== 'userEmail' && item !== 'id' && item !== 'analysisId');
           this.columns.push()
 
-          this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
+          this.modalService.open(this.viewDescModal2, { size: 'lg' }).result.then(
             (result: string) => {
               console.log("Modal closed");
             }

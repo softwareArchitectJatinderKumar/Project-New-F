@@ -16,7 +16,7 @@
                     <div class="row mt-2 mb-3 align-items-center">
                         <div class="col-12 col-md-4 col-lg-3 text-center text-md-start mb-2 mb-md-0">
                             <button (click)="exportToExcel()" class="btn btn-dark" [disabled]="tmpsBookingData.length == 0">
-                                <i class="mdi mdi-file-excel"></i> Export to Excel
+                                  Export to Excel
                             </button>
                         </div>
                         <div class="col-12 col-md-4 col-lg-6 text-center text-md-start mb-2 mb-md-0">
@@ -64,7 +64,8 @@
                                             <td class="fw-bold d-none d-lg-table-cell">
                                                 <ng-container *ngIf="BookingDataRow.fileName; else NoFile">
                                                     <button class="btn-dark btn ms-3" (click)="downloadFile(BookingDataRow.fileName)">
-                                                        <i class="mdi mdi-eye-check fs-5"></i>
+                                                        <!-- <i class="mdi mdi-eye-check fs-5"></i> -->
+                                                        <i class="fa icon-eye"></i> 
                                                     </button>
                                                 </ng-container>
                                                 <ng-template #NoFile>
@@ -87,19 +88,22 @@
                                             <td>
                                                 <ng-container *ngIf="hasProofUploaded(BookingDataRow.id); else uploadBtnTemplate">
                                                     <span class="badge bg-success">
-                                                        <i class="mdi mdi-check-circle me-1 fs-5"></i> Already Uploaded
+                                                        <!-- <i class="mdi mdi-check-circle me-1 fs-5"></i> Already Uploaded -->
+                                                        <i class="fa icon-check-circle me-1"></i> Already Uploaded
                                                     </span>
                                                     
                                                 </ng-container>
                                                 <ng-template #uploadBtnTemplate>
                                                     <button class="btn btn-dark btn-sm" (click)="openReceiptUploadModal(BookingDataRow)">
-                                                        <i class="mdi mdi-upload fs-5"></i>
+                                                        <!-- <i class="mdi mdi-upload fs-5"></i> -->
+                                                        <i class="fa icon-upload "></i> 
                                                     </button>
                                                 </ng-template>
                                             </td>
                                             <td>
-                                                <button type="submit" class="btn btn-dark me-2" (click)="GetStatus(BookingDataRow);">
-                                                    <i class="mdi mdi-check-circle fs-5"></i>
+                                                <button type="submit" class="btn btn-dark me-1" (click)="GetStatus(BookingDataRow);">
+                                                    <!-- <i class="mdi mdi-check-circle"></i> -->
+                                                        <i class="fa icon-eye me-1"></i>
                                                 </button>
                                             </td>
                                         </tr>

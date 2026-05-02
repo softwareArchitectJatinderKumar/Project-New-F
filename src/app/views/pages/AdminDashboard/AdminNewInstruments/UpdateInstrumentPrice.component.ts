@@ -232,7 +232,7 @@ export class UpdateInstrumentPriceComponent implements OnInit {
     // alert(JSON.stringify(aa))
     this.InstrumentId = aa['instrumentId'];
     this.InstrumentTitles = aa['instrumentName'];
-    this.modalService.open(this.viewDescModal, { size: 'sm' }).result.then((result) => {
+    this.modalService.open(this.viewDescModal, { size: 'lg' }).result.then((result) => {
 
       console.log("Modal closed" + result);
     }).catch((res) => { });

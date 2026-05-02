@@ -17,27 +17,37 @@
                                 Excel</button>
                         </div>
                     </div>
-                     <div class="col-sm-5">
-                        <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
-                            bindValue="value" placeholder="-- Select Payment --" class="w-100">
-                             <ng-template ng-option-tmp let-item="item">
-                                <span *ngIf="item.value === ''" >-- All User --</span>
-                                <span *ngIf="item.value === '400000'" >Internal User</span>
-                                <span *ngIf="item.value === '400001'" >External User</span>
-                                <span *ngIf="item.value === '400002'" >Industry User</span>
-                            </ng-template>
+                    <div class="col-sm-5 mb-4">
+    <ng-select [(ngModel)]="selectedStatus" 
+               (change)="filterData()" 
+               [items]="statusOptions" 
+               bindLabel="label"
+               bindValue="value" 
+               [clearable]="false"
+               [searchable]="false"
+               class="custom-filter w-100">
+        
+        <!-- Dropdown Options Template -->
+        <ng-template ng-option-tmp let-item="item">
+            <div class="p-1">
+                <span *ngIf="item.value === ''">-- All Users --</span>
+                <span *ngIf="item.value === '400000'">Internal User</span>
+                <span *ngIf="item.value === '400001'">External User</span>
+                <span *ngIf="item.value === '400002'">Industry User</span>
+            </div>
+        </ng-template>
+
+        <!-- Selected Label Template -->
+        <ng-template ng-label-tmp let-item="item">
+            <span class="fw-bold text-dark">
+                {{ item.value === '' ? '-- All Users --' : 
+                   item.value === '400000' ? 'Internal User' : 
+                   item.value === '400001' ? 'External User' : 'Industry User' }}
+            </span>
+        </ng-template>
+    </ng-select>
+</div>
                 
-                            <!-- Custom Selected Item Template -->
-                            <ng-template ng-label-tmp let-item="item">
-                                <span *ngIf="item.value === ''" >-- All User --</span>
-                                <span *ngIf="item.value === '400000'" >Internal User</span>
-                                <span *ngIf="item.value === '400001'" >External User</span>
-                                <span *ngIf="item.value === '400002'" >Industry User</span>
-                            </ng-template>
-                        </ng-select>
-                    
-                    
-                    </div>
                     <div class="col-sm-5 mb-4 ">
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
                             class="form-control " placeholder="Search" aria-label="Search"
@@ -108,13 +118,34 @@
                                 </ng-container>
                             </tbody>
                         </table>
-                        <div class="pagination">
+                        <div class="pagination-container d-flex justify-content-between align-items-center mt-3 mb-4">
+        <div class="text-muted small">
+            Showing records for page {{ currentPage }} of {{ getTotalPages() }}
+        </div>
+        <div class="custom-pagination d-flex align-items-center">
+            <button class="pag-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
+                 Prev
+            </button>
+            
+            <div class="page-indicator mx-3">
+                <span class="fw-bold themeClr">{{ currentPage }}</span>
+                <span class="text-muted"> / </span>
+                <span>{{ getTotalPages() }}</span>
+            </div>
+
+            <button class="pag-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">
+               Next >
+            </button>
+        </div>
+    </div>
+                        <!-- <div class="pagination">
                             <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
                                     class="mdi mdi-chevron-left  fs-2"> </i> </a>
                             <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
                             <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
                                     class="mdi mdi-chevron-right  fs-2"> </i></a>
-                        </div>
+                        </div> -->
                     </div>
                 </ng-container>
                 <ng-template #noRecords>

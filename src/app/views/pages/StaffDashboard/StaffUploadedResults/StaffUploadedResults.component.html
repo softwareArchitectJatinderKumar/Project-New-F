@@ -53,8 +53,7 @@
         </div>
         <!-- Table -->
         <div class="table-responsive mt-3" *ngIf="tmpsBookingData.length > 0; else NoData">
-          <table id="BookingDetailsDataTable" #table
-            >
+          <table id="BookingDetailsDataTable" #table >
             <thead >
               <tr>
                 <th>User Email Id</th>                
@@ -103,7 +102,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="pagination d-flex justify-content-center align-items-center mt-3">
+        <!-- <div class="pagination d-flex justify-content-center align-items-center mt-3">
           <a (click)="prevPage()" [class.disabled]="currentPage === 1" class="btn btn-link">
             <i class="mdi mdi-chevron-left fs-2"></i>
           </a>
@@ -111,7 +110,33 @@
           <a (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()" class="btn btn-link">
             <i class="mdi mdi-chevron-right fs-2"></i>
           </a>
-        </div>
+        </div> -->
+        <!-- Pagination Area -->
+<div class="d-flex justify-content-between align-items-center mt-3 p-3 bg-light border rounded">
+    <div class="text-muted small fw-bold">
+        Showing Page <span class="theme-text">{{ currentPage }}</span> of {{ getTotalPages() }}
+    </div>
+
+    <nav aria-label="Table navigation">
+        <ul class="pagination mb-0">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+                <button class="page-link static-pag-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+                    <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
+                     Prev
+                </button>
+            </li>
+            <li class="page-item">
+                <span class="page-link current-page-display">{{ currentPage }} / {{ getTotalPages() }}</span>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                <button class="page-link static-pag-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">
+                    <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
+                     Next 
+                </button>
+            </li>
+        </ul>
+    </nav>
+</div>
 
       </div>
     </div>

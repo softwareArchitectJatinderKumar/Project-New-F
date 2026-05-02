@@ -1,14 +1,8 @@
 <app-AdminDashboard></app-AdminDashboard>
-<!-- <div *ngIf="loadingIndicator" class="fullscreen-loader">
-    <div class="loader-spinner"></div>
-    <div class="loader-text">Loading, please wait...</div>
-</div> -->
-
 <div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-            <!-- <p>Loading...</p>-->
         </div>
     </div>
 </div>
@@ -51,8 +45,27 @@
                 <div *ngIf="showAdvancedSearch"
                     class="row mb-3 p-2 d-flex justify-content-center align-items-center bg-light rounded">
 
-                    <div class="col-6 col-md-3 mb-3 mb-md-0">
-                        <ng-select [(ngModel)]="selectedStatus" [items]="statusOptions"
+
+
+                    <div class="col-6 col-md-3 mb-3 mb-md-0"> Select Payment Type
+                        <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions"
+                            bindLabel="label" bindValue="value" [clearable]="false" [searchable]="false"
+                            class="custom-filter w-100">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span
+                                    [ngStyle]="{'color': item.value === 'success' ? '#28a745' :  item.value === 'failure' ? '#dc3545' :  item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span class="ms-1">{{ item.label }}</span>
+                            </ng-template>
+
+                            <ng-template ng-label-tmp let-item="item">
+                                <span class="fw-bold" style="color: #444;">{{ item.label }}</span>
+                            </ng-template>
+
+                        </ng-select>
+
+                        <!-- <ng-select [(ngModel)]="selectedStatus" [items]="statusOptions"
                             (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
                             placeholder="-- Select Status --" class="w-100"
                             [disabled]="tmpsAllBookingTestsData.length == 0">
@@ -69,11 +82,27 @@
                                 <span *ngIf="item.value === 'failure'">Failure</span>
                                 <span *ngIf="item.value === 'null'">Pending</span>
                             </ng-template>
-                        </ng-select>
+                        </ng-select> -->
                     </div>
 
-                    <div class="col-6 col-md-3 mb-3 mb-md-0">
+                    <div class="col-6 col-md-3 mb-3 mb-md-0"> Select Test Type
                         <ng-select [(ngModel)]="IsAssigned" [items]="assignedOptions"
+                            (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
+                            [clearable]="false" [searchable]="false" class="custom-filter w-100">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span
+                                    [ngStyle]="{'color': item.value === 'Assigned' ? '#28a745' :  item.value === 'Pending' ? '#dc3545' :  item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span class="ms-1">{{ item.label }}</span>
+                            </ng-template>
+
+                            <ng-template ng-label-tmp let-item="item">
+                                <span class="fw-bold" style="color: #444;">{{ item.label }}</span>
+                            </ng-template>
+
+                        </ng-select>
+                        <!-- <ng-select [(ngModel)]="IsAssigned" [items]="assignedOptions"
                             (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
                             placeholder="-- Select --" class="w-100" [disabled]="tmpsAllBookingTestsData.length == 0">
                             <ng-template ng-option-tmp let-item="item">
@@ -87,12 +116,12 @@
                                 <span *ngIf="item.value === 'Assigned'">All Assigned</span>
                                 <span *ngIf="item.value === 'Pending'">Not Assigned </span>
                             </ng-template>
-                        </ng-select>
+                        </ng-select> -->
                     </div>
 
 
 
-                    <div class="row d-flex justify-content-center align-items-center">
+                    <div class="row d-flex justify-content-center align-items-center mt-5">
                         <div class="col-6 col-md-3 mt-2">
                             <button (click)="applyAdvancedSearch()" class="btn btn-dark w-100"
                                 [disabled]="!hasAnySearchCriteria" [class.btn-disabled]="!hasAnySearchCriteria">
@@ -135,14 +164,15 @@
                     </div>
                     <div class="col-md-4 text-center">
                         <div class="pagination">
-                            <a class="btn btn-outline-primary m-3" (click)="prevPage()"
-                                [class.disabled]="currentPage === 1">
-                                <i class="mdi mdi-chevron-left fs-4"></i>
+                            <a class="btn lpu-btn m-3" (click)="prevPage()" [class.disabled]="currentPage === 1">
+                                Prev
+                                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                             </a>
                             <span class="fs-5 mt-4">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="btn btn-outline-primary m-3" (click)="nextPage()"
+                            <a class="btn lpu-btn m-3" (click)="nextPage()"
                                 [class.disabled]="currentPage === getTotalPages()">
-                                <i class="mdi mdi-chevron-right fs-4"></i>
+                                Next
+                                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
                             </a>
                         </div>
                     </div>
@@ -273,14 +303,15 @@
                         </table>
                         <div class="row" *ngIf="tmpsAllBookingTestsData.length > 0">
                             <div class="col-sm-3 pagination d-flex justify-content-center align-items-center mt-3">
-                                <a class="btn btn-outline-primary me-3" (click)="prevPage()"
-                                    [class.disabled]="currentPage === 1">
-                                    <i class="mdi mdi-chevron-left fs-4"></i>
+                                <a class="btn lpu-btn me-3" (click)="prevPage()" [class.disabled]="currentPage === 1">
+                                    Prev
+                                    <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                                 </a>
                                 <span class="fs-5">{{ currentPage }} / {{ getTotalPages() }}</span>
-                                <a class="btn btn-outline-primary ms-3" (click)="nextPage()"
+                                <a class="btn lpu-btn ms-3" (click)="nextPage()"
                                     [class.disabled]="currentPage === getTotalPages()">
-                                    <i class="mdi mdi-chevron-right fs-4"></i>
+                                    Next
+                                    <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
                                 </a>
                             </div>
                         </div>

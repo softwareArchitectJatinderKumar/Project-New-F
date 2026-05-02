@@ -21,7 +21,7 @@ export class AdminUpdateSampleStatusComponent implements OnInit {
   AllStatusData: any[] = [];
 
   currentPage = 1;
-  itemsPerPage = 10;
+  itemsPerPage = 5;
   
   // Items per page dropdown options
   itemsPerPageOptions = [

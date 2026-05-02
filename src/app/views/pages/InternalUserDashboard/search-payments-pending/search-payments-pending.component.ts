@@ -396,7 +396,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
   // ============================================
   paymentReceiptScreen(data: any): void {
     this.PaymentReceipt = data;
-    this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
+    this.modalService.open(this.viewDescModal2, { size: 'lg' }).result.then(
       (result: string) => console.log('Modal closed:'),
       () => {}
     );
@@ -414,7 +414,7 @@ export class SearchPaymentsPendingComponent implements OnInit {
     }
     
     this.BookingCase = booking;
-    this.modalService.open(this.viewDescModal5, { size: 'sm' }).result.then(
+    this.modalService.open(this.viewDescModal5, { size: 'lg' }).result.then(
       (result: string) => console.log('Modal closed:'),
       () => {}
     );

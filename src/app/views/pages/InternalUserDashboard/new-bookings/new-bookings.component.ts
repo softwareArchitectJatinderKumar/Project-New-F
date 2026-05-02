@@ -524,6 +524,8 @@ export class NewBookingsComponent implements OnInit {
   }
   deleteEntry(index: number) {
     this.Datagrid.splice(index, 1);
+
+    this.prevStep();
   }
   saveAllRecords() {
     this.loadingIndicator = true;
@@ -561,7 +563,7 @@ export class NewBookingsComponent implements OnInit {
         });
         if (allSuccess) {
           swal.fire({
-            title: 'Uploaded all Documents',
+            title: 'Tests Stored Successfully',
             text: 'All records have been uploaded successfully.',
             icon: 'success'
           }).then(() => {

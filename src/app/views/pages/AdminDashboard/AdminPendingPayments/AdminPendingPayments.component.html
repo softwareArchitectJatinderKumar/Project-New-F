@@ -1,8 +1,5 @@
 <app-AdminDashboard></app-AdminDashboard>
-<!-- <div *ngIf="loadingIndicator" class="fullscreen-loader">
-    <div class="loader-spinner"></div>
-    <div class="loader-text">Loading, please wait...</div>
-</div> -->
+ 
 <div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
         <div class="custom-spinner-content text-center">
@@ -27,12 +24,31 @@
                             [disabled]="tmpsAllPaymentData.length === 0">Export to Excel</button>
                     </div>
 
-                    <div class="col-sm-4">
-
-                        <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions"
+                    <div class="col-sm-4">  
+                        <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
+                            bindValue="value" [clearable]="false" [searchable]="false" class="custom-filter w-100">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span
+                                    [ngStyle]="{'color': item.value === 'success' ? '#28a745' :  item.value === 'failure' ? '#dc3545' :  item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span *ngIf="item.value === ''">-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'">Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'">Failed Payments</span>
+                                <span *ngIf="item.value === 'null'">Pending Payments</span>
+                            </ng-template>
+                        
+                            <ng-template ng-label-tmp let-item="item">
+                                <span *ngIf="item.value === ''">-- All Payments --</span>
+                                <span *ngIf="item.value === 'success'">Paid Payments</span>
+                                <span *ngIf="item.value === 'failure'">Failed Payments</span>
+                                <span *ngIf="item.value === 'null'">Pending Payments</span>
+                            </ng-template>
+                        
+                        </ng-select>
+                        <!-- <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions"
                             bindLabel="label" bindValue="value" placeholder="-- Select Payments --" class="w-100"
                             [disabled]="tmpsAllPaymentData.length === 0">
-                            <!-- Custom Option Template -->
                             <ng-template ng-option-tmp let-item="item">
                                 <span *ngIf="item.value === ''">-- All Payments --</span>
                                 <span *ngIf="item.value === 'success'">Paid Payments</span>
@@ -40,14 +56,13 @@
                                 <span *ngIf="item.value === 'null'">Pending Payments</span>
                             </ng-template>
 
-                            <!-- Custom Selected Item Template -->
                             <ng-template ng-label-tmp let-item="item">
                                 <span *ngIf="item.value === ''">-- All Payments --</span>
                                 <span *ngIf="item.value === 'success'">Paid Payments</span>
                                 <span *ngIf="item.value === 'failure'">Failed Payments</span>
                                 <span *ngIf="item.value === 'null'">Pending Payments</span>
                             </ng-template>
-                        </ng-select>
+                        </ng-select> -->
 
 
                     </div>
@@ -80,12 +95,14 @@
                     </div>
                     <div class="col-md-4 text-center">
                         <div class="pagination">
-                            <a (click)="prevPage()" class="btn btn-dark" [class.disabled]="currentPage === 1"> <i
-                                    class="mdi mdi-chevron-left  fs-4"> </i> </a>
+                            <a (click)="prevPage()" class="btn lpu-btn" [class.disabled]="currentPage === 1"> Prev
+                                <!-- <i class="mdi mdi-chevron-left  fs-4"> </i>  -->
+                                </a>
                             <span class="p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="btn btn-dark" (click)="nextPage()"
-                                [class.disabled]="currentPage === getTotalPages()"><i
-                                    class="mdi mdi-chevron-right  fs-4"> </i></a>
+                            <a class="btn lpu-btn" (click)="nextPage()"
+                                [class.disabled]="currentPage === getTotalPages()"> Next 
+                                <!-- <i class="mdi mdi-chevron-right  fs-4"> </i> -->
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -147,12 +164,14 @@
                             </tbody>
                         </table>
                         <div class="pagination mt-3" *ngIf="tmpsAllPaymentData.length > 0">
-                            <a (click)="prevPage()" class="btn btn-dark" [class.disabled]="currentPage === 1"> <i
-                                    class="mdi mdi-chevron-left  fs-4"> </i> </a>
+                            <a (click)="prevPage()" class="btn lpu-btn" [class.disabled]="currentPage === 1"> Prev
+                                <!-- <i class="mdi mdi-chevron-left  fs-4"> </i>  -->
+                            </a>
                             <span class=" p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="btn btn-dark" (click)="nextPage()"
-                                [class.disabled]="currentPage === getTotalPages()"><i
-                                    class="mdi mdi-chevron-right  fs-4"> </i></a>
+                            <a class="btn lpu-btn" (click)="nextPage()"
+                                [class.disabled]="currentPage === getTotalPages()"> Next
+                                <!-- <i class="mdi mdi-chevron-right  fs-4"> </i> -->
+                            </a>
                         </div>
 
                     </div>

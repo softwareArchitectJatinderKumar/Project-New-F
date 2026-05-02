@@ -43,7 +43,7 @@
             </span>
           </div>
      
-          <div class="col-md-2 ">
+          <div class="col-md-4 ">
             <span class="text-dark fs-5 fw-bolder me-3" style="border:1px solid #ef7d00; padding: 8px 12px;">Select Items per page:</span>
             <select class="form-select d-inline-block ms-2" style="width: auto;" 
               [value]="isAllSelected ? 'all' : itemsPerPage"
@@ -56,12 +56,14 @@
 
           <div class="col-md-4 text-start">
             <div class="pagination d-flex justify-content-center align-items-center gap-3">
-              <button class="btn btn-sm btn-outline-primary" (click)="prevPage()" [disabled]="currentPage === 1">
-                <i class="mdi mdi-chevron-left fs-4"></i>
+              <button class="btn btn-sm lpu-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
+                <i class="bi bi-arrow-left"></i>
               </button>
               <span>{{ currentPage }} / {{ getTotalPages() }}</span>
-              <button class="btn btn-sm btn-outline-primary" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">
-                <i class="mdi mdi-chevron-right fs-4"></i>
+              <button class="btn btn-sm lpu-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">
+                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
+                 <i class="bi bi-arrow-right"></i>
               </button>
             </div>
           </div>
@@ -102,12 +104,14 @@
             </table>
 
             <div class="pagination d-flex justify-content-center align-items-center gap-3">
-              <button class="btn btn-outline-primary" (click)="prevPage()" [disabled]="currentPage === 1">
-                <i class="mdi mdi-chevron-left fs-4"></i>
+              <button class="btn lpu-btn" (click)="prevPage()" [disabled]="currentPage === 1">
+                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
+                 <i class="bi bi-arrow-left"></i>
               </button>
               <span>{{ currentPage }} / {{ getTotalPages() }}</span>
-              <button class="btn btn-outline-primary" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">
-                <i class="mdi mdi-chevron-right fs-4"></i>
+              <button class="btn lpu-btn" (click)="nextPage()" [disabled]="currentPage === getTotalPages()">
+                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
+                 <i class="bi bi-arrow-right"></i>
               </button>
             </div>
           </div>

@@ -61,10 +61,12 @@ export class LpuCIFWebService {
 
 
   getLpuHeader(): Observable<any> {
+      // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuHeader');
       return this.http.get(AUTH_API +'api/LpuCIFHeaderFooter/GetLpuHeader');
    }
 
      getLpuFooter(): Observable<any> {
+      // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuFooter');
       return this.http.get(AUTH_API +'api/LpuCIFHeaderFooter/GetLpuFooter');
    }
 

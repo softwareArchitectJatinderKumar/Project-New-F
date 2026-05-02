@@ -25,10 +25,32 @@
                  
                      <div class="col-sm-4">
                          
-                        <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
+                         <ng-select  [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
+                            bindValue="value"   class="w-100"
+                            [disabled]="tmpsUserDetailsData.length === 0" [clearable]="false" [searchable]="false" class="custom-filter w-100">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span
+                                    [ngStyle]="{'color': item.value === 'success' ? '#28a745' :  item.value === 'failure' ? '#dc3545' :  item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span *ngIf="item.value === ''" >-- All User --</span>
+                                <span *ngIf="item.value === '400000'" >Internal User</span>                                
+                                <span *ngIf="item.value === '400001'" >External User</span> 
+                                <span *ngIf="item.value === '400002'" >Industry User</span>  
+                            </ng-template>
+                        
+                            <ng-template ng-label-tmp let-item="item">
+                                <span *ngIf="item.value === ''" >-- All User --</span>
+                                <span *ngIf="item.value === '400000'" >Internal User</span>                                
+                                <span *ngIf="item.value === '400001'" >External User</span> 
+                                <span *ngIf="item.value === '400002'" >Industry User</span>  
+                            </ng-template>
+                        
+                        </ng-select>
+
+                        <!-- <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions" bindLabel="label"
                             bindValue="value" placeholder="-- Select Status --" class="w-100"
                             [disabled]="tmpsUserDetailsData.length === 0">
-                            <!-- Custom Option Template -->
                             <ng-template ng-option-tmp let-item="item">
                                 <span *ngIf="item.value === ''" >-- All User --</span>
                                 <span *ngIf="item.value === '400000'" >Internal User</span>                                
@@ -36,14 +58,13 @@
                                 <span *ngIf="item.value === '400002'" >Industry User</span>                                                                                                                                                           
                             </ng-template>
                     
-                            <!-- Custom Selected Item Template -->
                             <ng-template ng-label-tmp let-item="item">
                             <span *ngIf="item.value === ''" >-- All User --</span>
                                 <span *ngIf="item.value === '400000'" >Internal User</span>                                
                                 <span *ngIf="item.value === '400001'" >External User</span> 
                                 <span *ngIf="item.value === '400002'" >Industry User</span>                                                                                              
                             </ng-template>
-                        </ng-select>
+                        </ng-select> -->
                     
                     
                     </div>
@@ -80,14 +101,14 @@
                     </div>
                     <div class="col-md-4 text-center">
                         <div class="pagination">
-                            <a class="btn btn-outline-primary m-3" (click)="prevPage()"
-                                [class.disabled]="currentPage === 1">
-                                <i class="mdi mdi-chevron-left fs-4"></i>
+                            <a class="btn lpu-btn m-3" (click)="prevPage()"
+                                [class.disabled]="currentPage === 1"> Prev
+                                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                             </a>
                             <span class="fs-5 mt-4">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="btn btn-outline-primary m-3" (click)="nextPage()"
-                                [class.disabled]="currentPage === getTotalPages()">
-                                <i class="mdi mdi-chevron-right fs-4"></i>
+                            <a class="btn lpu-btn m-3" (click)="nextPage()"
+                                [class.disabled]="currentPage === getTotalPages()"> Next
+                                <!-- <i class="mdi mdi-chevron-right fs-4"></i>  -->
                             </a>
                         </div>
                     </div>
@@ -151,14 +172,16 @@
                         </table>
                         <div class="row" *ngIf="tmpsUserDetailsData.length > 0">
                             <div class="col-sm-3 pagination d-flex justify-content-center align-items-center mt-3">
-                                <a class="btn btn-outline-primary me-3" (click)="prevPage()"
-                                    [class.disabled]="currentPage === 1">
-                                    <i class="mdi mdi-chevron-left fs-4"></i>
+                                <a class="btn lpu-btn me-3" (click)="prevPage()"
+                                    [class.disabled]="currentPage === 1"> 
+                                     <i class="bi bi-arrow-left"></i>
+                                    <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                                 </a>
                                 <span class="fs-5">{{ currentPage }} / {{ getTotalPages() }}</span>
-                                <a class="btn btn-outline-primary ms-3" (click)="nextPage()"
-                                    [class.disabled]="currentPage === getTotalPages()">
-                                    <i class="mdi mdi-chevron-right fs-4"></i>
+                                <a class="btn lpu-btn ms-3" (click)="nextPage()"
+                                    [class.disabled]="currentPage === getTotalPages()"> 
+                                     <i class="bi bi-arrow-right"></i>
+                                    <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
                                 </a>
                             </div>
                         </div>

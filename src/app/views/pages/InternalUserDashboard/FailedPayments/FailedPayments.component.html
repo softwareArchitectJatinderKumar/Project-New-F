@@ -83,12 +83,14 @@
                                                         <i class="feather icon-check-circle me-1"></i> Uploaded
                                                     </span>
                                                     <button class="btn btn-sm btn-dark" (click)="downloadFile(BookingStatusDataRow.receiptProofFile)">
-                                                         <i class=" feather icon-eye ms-1 me-1"></i>
+                                                         <!-- <i class=" feather icon-eye ms-1 me-1"></i> -->
+                                                            <i class="fa icon-eye ms-1 me-1"></i>
                                                     </button>
                                                 </ng-container>
                                                 <ng-template #uploadBtn>
                                                     <button class="btn btn-dark btn-sm" (click)="openReceiptUploadModal(BookingStatusDataRow)">
-                                                        <i class="mdi mdi-upload"></i>
+                                                        <!-- <i class="mdi mdi-upload"></i> -->
+                                                         <i class="fa icon-upload"></i>
                                                     </button>
                                                 </ng-template>
                                             </td>
@@ -178,9 +180,12 @@
         <h5 class="modal-title" id="exampleModalLabel">Payment Receipt</h5>
         <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
     </div>
-    <div class="modal-body" #modalBody>
-        <div class="col-md-12" id="ReceiptData">
-            <div class="modal-body">
+       <div class="modal-body"  #modalBody>
+        <div class="card">
+            <div class="card-body">
+                    <div class="row"  id="ReceiptData">
+ 
+            <!-- <div class="modal-body"> -->
                 <div class="container-fluid">
                     <p class="text-center mb-5" style="font-size: 30px; border: 2px solid black;">Payment Receipt</p>
                     
@@ -235,7 +240,10 @@
             </div>
         </div>
     </div>
+    </div>
 </ng-template>
+
+
 
 <!-- Payment Screen Modal -->
 <ng-template #viewDescModal5 let-modal>

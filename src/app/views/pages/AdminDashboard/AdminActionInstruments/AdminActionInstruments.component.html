@@ -1,11 +1,11 @@
 <app-AdminDashboard></app-AdminDashboard>
- 
+
 
 <div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator ">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-         
+
         </div>
     </div>
 </div>
@@ -30,23 +30,26 @@
                     </div>
 
                     <div class="col-sm-3 text-start">
-                     
+
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control"
                             [disabled]="tmpsInstrumentData.length === 0" />
                     </div>
                 </div>
                 <!-- Top Pagination and Controls -->
-                <div class="row d-flex justify-content-center align-items-center mb-3" *ngIf="tmpsInstrumentData.length > 0">
+                <div class="row d-flex justify-content-center align-items-center mb-3"
+                    *ngIf="tmpsInstrumentData.length > 0">
                     <div class="col-md-4 text-end">
-                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                        <span class="text-dark fs-5 fw-bolder me-4"
+                            style="border:1px solid #ef7d00; padding: 8px 12px;">
                             Records: {{ getTotalRecords() }}
                         </span>
                     </div>
                     <div class="col-md-4 text-start">
-                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
-                        <select class="form-select d-inline-block ms-2" style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;" 
-                            [value]="isAllSelected ? 'all' : itemsPerPage"
-                            (change)="onItemsPerPageChange($event)">
+                        <span class="text-dark fs-5 fw-bolder me-4"
+                            style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
+                        <select class="form-select d-inline-block ms-2"
+                            style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;"
+                            [value]="isAllSelected ? 'all' : itemsPerPage" (change)="onItemsPerPageChange($event)">
                             <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
                                 {{ option.label }}
                             </option>
@@ -54,14 +57,14 @@
                     </div>
                     <div class="col-md-4 text-center">
                         <div class="pagination">
-                            <a class="btn btn-outline-primary m-3" (click)="prevPage()"
-                                [class.disabled]="currentPage === 1">
-                                <i class="mdi mdi-chevron-left fs-4"></i>
+                            <a class="btn lpu-btn m-3" (click)="prevPage()"
+                                [class.disabled]="currentPage === 1"> Prev
+                                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                             </a>
                             <span class="fs-5 mt-4">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="btn btn-outline-primary m-3" (click)="nextPage()"
-                                [class.disabled]="currentPage === getTotalPages()">
-                                <i class="mdi mdi-chevron-right fs-4"></i>
+                            <a class="btn lpu-btn m-3" (click)="nextPage()"
+                                [class.disabled]="currentPage === getTotalPages()"> Next
+                                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
                             </a>
                         </div>
                     </div>
@@ -85,26 +88,30 @@
                                         <td class="fw-bold "> {{InstrumentDataRow.instrumentName}}</td>
                                         <td class="fw-bold ">
 
-                                           
-                                        <button class="btn btn-secondary ms-3" (click)="onDownloadFile(this.serverUrl+InstrumentDataRow.sampleExcelSheetUrl)" [disabled]="InstrumentDataRow.sampleExcelSheetUrl<1"> 
-                                            <i class="bi bi-download"></i>
-                                        </button>
-                                             <ng-template #noExcel> <span class="text-danger ms-2"> No Excel Uploaded
+
+                                            <button class="btn btn-secondary ms-3"
+                                                (click)="onDownloadFile(this.serverUrl+InstrumentDataRow.sampleExcelSheetUrl)"
+                                                [disabled]="InstrumentDataRow.sampleExcelSheetUrl<1">
+                                                <i class="bi bi-download"></i>
+                                            </button>
+                                            <ng-template #noExcel> <span class="text-danger ms-2"> No Excel Uploaded
                                                 </span>
                                             </ng-template>
-                                         </td>
+                                        </td>
                                         <td class="fw-bold ">
-                                            <button class="btn btn-danger btn-sm me-2" (click)="OpenModalWindow(InstrumentDataRow)"> 
+                                            <button class="btn btn-danger btn-sm me-2"
+                                                (click)="OpenModalWindow(InstrumentDataRow)">
                                                 <i class="bi bi-arrow-counterclockwise"></i>
                                             </button>
-                                            <button class="btn btn-warning  me-3" (click)="OpenReplaceModal(InstrumentDataRow)">
+                                            <button class="btn btn-warning  me-3"
+                                                (click)="OpenReplaceModal(InstrumentDataRow)">
                                                 <!-- Replace Excel Sheet -->
-    
+
                                                 <i class="bi bi-upload "></i>
                                             </button>
-                                         </td>
+                                        </td>
 
-                                         
+
                                     </tr>
                                 </ng-container>
                             </tbody>
@@ -114,14 +121,14 @@
                     <!-- Bottom Pagination -->
                     <div class="row" *ngIf="tmpsInstrumentData.length > 0">
                         <div class="col-sm-3 pagination d-flex justify-content-center align-items-center mt-3">
-                            <a class="btn btn-outline-primary me-3" (click)="prevPage()"
-                                [class.disabled]="currentPage === 1">
-                                <i class="mdi mdi-chevron-left fs-4"></i>
+                            <a class="btn lpu-btn me-3" (click)="prevPage()"
+                                [class.disabled]="currentPage === 1"> Prev
+                                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                             </a>
                             <span class="fs-5">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="btn btn-outline-primary ms-3" (click)="nextPage()"
-                                [class.disabled]="currentPage === getTotalPages()">
-                                <i class="mdi mdi-chevron-right fs-4"></i>
+                            <a class="btn lpu-btn ms-3" (click)="nextPage()"
+                                [class.disabled]="currentPage === getTotalPages()"> Next
+                                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
                             </a>
                         </div>
                     </div>
@@ -176,19 +183,22 @@
                                         <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.instrumentId}} </td>
                                         <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.instrumentName}} </td>
                                         <td class=" fs-5 p-4 " style="width: 20%;">
-                                            <button class="btn btn-secondary ms-3" (click)="onDownloadFile(this.serverUrl+BookingCase.sampleExcelSheetUrl)" [disabled]="BookingCase.sampleExcelSheetUrl<1"> 
-                                            <i class="bi bi-download"></i>
-                                        </button>
-                                            
-                                            </td>
+                                            <button class="btn btn-secondary ms-3"
+                                                (click)="onDownloadFile(this.serverUrl+BookingCase.sampleExcelSheetUrl)"
+                                                [disabled]="BookingCase.sampleExcelSheetUrl<1">
+                                                <i class="bi bi-download"></i>
+                                            </button>
 
-                                        
+                                        </td>
+
+
                                         <td class=" fs-5 ">
-                                              <input class="form-control" [(ngModel)]="fileNamesX" type="file" id="File"
-                                            name="file" (change)="onFileXSelected($event, this.InstrumentId)"
-                                            accept=".xls, .xlsx" />
-                                 
-                                            <div class="col- mt-2"><span class=" themeClr"> Allowed Documents format XLS/XLSX
+                                            <input class="form-control" [(ngModel)]="fileNamesX" type="file" id="File"
+                                                name="file" (change)="onFileXSelected($event, this.InstrumentId)"
+                                                accept=".xls, .xlsx" />
+
+                                            <div class="col- mt-2"><span class=" themeClr"> Allowed Documents format
+                                                    XLS/XLSX
                                                     and of Max size 1MB </span></div>
 
                                         </td>
@@ -208,7 +218,7 @@
         </div>
 
 
-        
+
         <div class="row" *ngIf="uploadedDataForDisplay && uploadedDataForDisplay.length > 0">
             <div class="col-md-12 stretch-card">
                 <div class="card">
@@ -235,13 +245,10 @@
                                 </tbody>
                             </table>
                         </div>
-                   
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </ng-template>
-
-
- 

@@ -200,7 +200,7 @@ export class StaffPendingPaymentsComponent implements OnInit {
 
   openPaymentModal(a: any) {
     this.BookingCase = a;
-    this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
+    this.modalService.open(this.viewDescModal2, { size: 'lg' }).result.then(
       (result: string) => {
         console.log("Modal closed"  );
       }
@@ -220,7 +220,7 @@ export class StaffPendingPaymentsComponent implements OnInit {
 
   paymentReceiptScreen(data: any) {
     this.PaymentReceipt = data;
-    this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
+    this.modalService.open(this.viewDescModal2, { size: 'lg' }).result.then(
       (result: string) => {
         console.log("Modal closed"  );
       }
@@ -296,7 +296,7 @@ export class StaffPendingPaymentsComponent implements OnInit {
     this.CurrentcandidateName = currentUserPaymentData['candidateName']
     this.CurrentrequestDate = currentUserPaymentData['requestDate']
 
-    this.modalService.open(this.PendingPaymentModal, { size: 'sm' }).result.then(
+    this.modalService.open(this.PendingPaymentModal, { size: 'lg' }).result.then(
       (result: string) => {
         console.log("Modal closed"  );
       }

@@ -33,7 +33,6 @@
         <div class="banner mb-5 img-fluid">
             <img src="https://www.lpu.in/lpu-assets/images/cif/banner.jpg" />
         </div>
-       
     </div>
 </section>
 
@@ -54,32 +53,47 @@
                 measurements, structure determination and chemical analysis. Click on the instrument name in the
                 following table to view their description.</p>
         </div>
+        <div class="facilities-grid" 
+     *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 0">
+    
+    <div class="instrument-item" *ngFor="let instrument of tmpsInstrumentsDataData">
+        <div class="image-wrapper">
+            <!-- loading="eager" combined with preloading ensures instant render -->
+            <img [src]="instrument.cachedImageUrl" 
+                 [alt]="instrument.instrumentName" 
+                 class="instrument-img" 
+                 loading="eager">
+        </div>
 
-        
-        <div class="row cif-facilties facilities-grid" id="InstrumentDetailsData"
-        [ngClass]="{'d-none': tmpsInstrumentsDataData.length < 1}"
-             *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 1">
-            <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index"
-                [attr.data-index]="i">
+        <div class="link-container">
+            <a (click)="VisitUrl('/ourInstruments', instrument.instrumentName.slice(0,10), instrument.id, instrument.categoryId)"
+               [class.inactive]="!instrument.isActive">
+                {{ instrument.instrumentName }}
+            </a>
+        </div>
+    </div>
+</div>
+        <!-- <div class="row cif-facilties facilities-grid" id="InstrumentDetailsData"
+            [ngClass]="{'d-none': tmpsInstrumentsDataData.length < 1}"
+            *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 1">
+            <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index" [attr.data-index]="i">
                 <div class="mb-4">
-                <img [src]="InstrumentData.cachedImageUrl || InstrumentData.imageUrl"
-                    alt="{{InstrumentData.instrumentName}}"
-                    class="img-fluid imgSize"
-                    loading="eager"
-                    (error)="onImageTagError($event, InstrumentData)" />
+                    <img [src]="InstrumentData.imageUrl"
+                        alt="{{InstrumentData.instrumentName}}" class="img-fluid imgSize"  />
                 </div>
                 <div class="mb-5 " id="InstrumentsPage">
-                      <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id || InstrumentData.instrumentId, InstrumentData.categoryId); $event.preventDefault()"
+                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id || InstrumentData.instrumentId, InstrumentData.categoryId); $event.preventDefault()"
                         [attr.data-is-active]="InstrumentData.isActive ? 'true' : 'false'">
                         {{InstrumentData.instrumentName}}
                     </a>
-                    
+        
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
-     
+
+
 </section>
 
 <ng-template #ErrorCard>
@@ -94,8 +108,6 @@
         </div>
     </div>
 </ng-template>
-
-<app-UpcomingEvents></app-UpcomingEvents>
 
 
 <section>
@@ -132,6 +144,12 @@
         </div>
     </div>
 </section>
+
+
+<app-UpcomingEvents></app-UpcomingEvents>
+
+
+
 <!-- Commented-out sections preserved as-is below -->
 <!-- <section class="section bg-dark-yellow">
     <div class="container">
@@ -330,7 +348,7 @@
                         <h2>CIF Resources</h2>
                     </div>
                 </div>
-                <ul>
+                <ul>-->
                     <!-- <li>
                         <a href="">Application Form</a>
                     </li> -->

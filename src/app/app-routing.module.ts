@@ -21,7 +21,8 @@ const routes: Routes = [
 },
 {
   path:'Home',  
-  loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
+  loadChildren: () => import('./views/pages/cif_webPortal/HomePage/FixedHomePageComponent.module').then(m => m.FixedHomePageComponentModule),
+  // loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
 },
 {
   path: 'Login',    

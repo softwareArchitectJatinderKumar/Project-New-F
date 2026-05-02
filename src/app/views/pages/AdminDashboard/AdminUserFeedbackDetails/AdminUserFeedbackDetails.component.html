@@ -35,11 +35,17 @@
                                 Excel</button>
                         </div>
                     </div>
-                    <!-- <div class="col-sm-3">
-                        <div class="mb-3 text-center">
-                            <Label class="fs-4 ">All User Feedback Details </Label>
+                      <div class="col-sm-3">
+                         <div class="pagination">
+                            <a class="btn lpu-btn" (click)="prevPage()" [class.disabled]="currentPage === 1"> 
+                                <i class="bi bi-arrow-left"></i>
+                                </a>
+                            <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
+                            <a class="btn lpu-btn" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()">
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
                         </div>
-                    </div> -->
+                    </div> 
                     <div class="col-sm-3 mb-4 ">
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
                             class="form-control " placeholder="Search" aria-label="Search"
@@ -75,12 +81,16 @@
                                 </ng-container>
                             </tbody>
                         </table>
-                        <div class="pagination">
-                            <a class="" (click)="prevPage()" [class.disabled]="currentPage === 1"> <i
-                                    class="mdi mdi-chevron-left  fs-2"> </i> </a>
+                        <div class="pagination text-center ">
+                            <a class="btn lpu-btn" (click)="prevPage()" [class.disabled]="currentPage === 1"> 
+                                <i class="bi bi-arrow-left"></i>
+                                <!-- <i class="mdi mdi-chevron-left  fs-2"> </i>  -->
+                                </a>
                             <span class="text-danger p-2">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()"><i
-                                    class="mdi mdi-chevron-right  fs-2"> </i></a>
+                            <a class="btn lpu-btn" (click)="nextPage()" [class.disabled]="currentPage === getTotalPages()">
+                                <i class="bi bi-arrow-right"></i>
+                                <!-- <i class="mdi mdi-chevron-right  fs-2"> </i> -->
+                            </a>
                         </div>
                     </div>
                 </ng-container>

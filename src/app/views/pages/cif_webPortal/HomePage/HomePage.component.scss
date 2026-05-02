@@ -144,21 +144,46 @@
 //    Because all images are pre-cached via fetch() before *ngIf renders the DOM,
 //    every <img> loads from the browser cache instantly — the entire grid
 //    appears at once with this gentle animation instead of popping in abruptly.
+
 .facilities-grid {
-  animation: facilitiesFadeIn 0.5s ease-in both;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
 }
 
-@keyframes facilitiesFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.instrument-item {
+    display: flex;
+    flex-direction: column;
 }
 
+.image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3; /* Keeps layout stable before image pops in */
+    background-color: #f0f0f0; /* Subtle placeholder color */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.instrument-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.link-container a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.link-container a.inactive {
+    color: #6c757d;
+    pointer-events: none;
+} 
 /* Responsive layout for instrument list */
 #InstrumentDetailsData {
   /* use grid to ensure predictable columns across breakpoints */

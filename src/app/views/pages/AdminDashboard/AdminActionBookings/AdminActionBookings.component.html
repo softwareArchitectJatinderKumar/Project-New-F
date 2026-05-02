@@ -4,7 +4,7 @@
     <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
-           </div>
+        </div>
     </div>
 </div>
 <div class="row" *ngIf="tmpsBookingData.length > 0 ;else NoData">
@@ -15,18 +15,17 @@
                 <h2 class="fs-1 text-center">Upload Results Page </h2>
             </div>
             <hr />
-             <div class="card-body">
+            <div class="card-body">
                 <div class="row d-flex justify-content-center align-items-center mt-4 mb-2">
                     <div class="col-sm-4 col-3 text-end">
 
-                        <button (click)="exportToExcel()" class="btn btn-dark"
-                            [disabled]="tmpsBookingData.length == 0">
+                        <button (click)="exportToExcel()" class="btn btn-dark" [disabled]="tmpsBookingData.length == 0">
                             Export to Excel
                         </button>
 
                     </div>
 
-                     
+
                     <div class="col-sm-4 col-3  mb-4 mt-3 text-center">
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text"
                             class="form-control w-50 " placeholder="Search Your Text Here" aria-label="Search"
@@ -42,12 +41,28 @@
 
 
                 </div>
-                <hr/>
+                <hr />
                 <div *ngIf="showAdvancedSearch"
                     class="row mb-3 p-2 d-flex justify-content-center align-items-center bg-light rounded">
 
-                    <div class="col-6 col-md-3 mb-3 mb-md-0">
-                        <ng-select [(ngModel)]="selectedStatus" [items]="statusOptions"
+                    <div class="col-6 col-md-3 mb-3 mb-md-0"> Select Payment Type
+                        <ng-select [(ngModel)]="selectedStatus" (change)="filterData()" [items]="statusOptions"
+                            bindLabel="label" bindValue="value" [clearable]="false" [searchable]="false"
+                            class="custom-filter w-100">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span
+                                    [ngStyle]="{'color': item.value === 'Assigned' ? '#28a745' :  item.value === 'Pending' ? '#dc3545' :  item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span class="ms-1">{{ item.label }}</span>
+                            </ng-template>
+
+                            <ng-template ng-label-tmp let-item="item">
+                                <span class="fw-bold" style="color: #444;">{{ item.label }}</span>
+                            </ng-template>
+
+                        </ng-select>
+                        <!-- <ng-select [(ngModel)]="selectedStatus" [items]="statusOptions"
                             (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
                             placeholder="-- Select Status --" class="w-100"
                             [disabled]="tmpsBookingData.length == 0">
@@ -64,11 +79,28 @@
                                 <span *ngIf="item.value === 'failure'">Failure</span>
                                 <span *ngIf="item.value === 'null'">Pending</span>
                             </ng-template>
-                        </ng-select>
+                        </ng-select> -->
                     </div>
 
-                    <div class="col-6 col-md-3 mb-3 mb-md-0">
+                    <div class="col-6 col-md-3 mb-3 mb-md-0"> Select Assigned Type
+
                         <ng-select [(ngModel)]="IsAssigned" [items]="assignedOptions"
+                            (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
+                            [clearable]="false" [searchable]="false" class="custom-filter w-100">
+                            <ng-template ng-option-tmp let-item="item">
+                                <span
+                                    [ngStyle]="{'color': item.value === 'Assigned' ? '#28a745' :  item.value === 'Pending' ? '#dc3545' :  item.value === 'null' ? '#ffc107' : '#666'}">
+                                    ●
+                                </span>
+                                <span class="ms-1">{{ item.label }}</span>
+                            </ng-template>
+
+                            <ng-template ng-label-tmp let-item="item">
+                                <span class="fw-bold" style="color: #444;">{{ item.label }}</span>
+                            </ng-template>
+
+                        </ng-select>
+                        <!-- <ng-select [(ngModel)]="IsAssigned" [items]="assignedOptions"
                             (ngModelChange)="checkSearchCriteria()" bindLabel="label" bindValue="value"
                             placeholder="-- Select --" class="w-100"
                             [disabled]="tmpsBookingData.length == 0">
@@ -83,12 +115,12 @@
                                 <span *ngIf="item.value === 'Assigned'">All Assigned</span>
                                 <span *ngIf="item.value === 'Pending'">Not Assigned </span>
                             </ng-template>
-                        </ng-select>
+                        </ng-select> -->
                     </div>
 
 
 
-                    <div class="row d-flex justify-content-center align-items-center">
+                    <div class="row d-flex justify-content-center align-items-center mt-5">
                         <div class="col-6 col-md-3 mt-2">
                             <button (click)="applyAdvancedSearch()" class="btn btn-dark w-100"
                                 [disabled]="!hasAnySearchCriteria" [class.btn-disabled]="!hasAnySearchCriteria">
@@ -110,17 +142,20 @@
                     </span>
                 </div>
                 <!-- Top Pagination and Controls -->
-                <div class="row d-flex justify-content-center align-items-center mb-3" *ngIf="tmpsBookingData.length > 0">
+                <div class="row d-flex justify-content-center align-items-center mb-3"
+                    *ngIf="tmpsBookingData.length > 0">
                     <div class="col-md-4 text-end">
-                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">
+                        <span class="text-dark fs-5 fw-bolder me-4"
+                            style="border:1px solid #ef7d00; padding: 8px 12px;">
                             Records: {{ getTotalRecords() }}
                         </span>
                     </div>
                     <div class="col-md-4 text-start">
-                        <span class="text-dark fs-5 fw-bolder me-4" style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
-                        <select class="form-select d-inline-block ms-2" style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;" 
-                            [value]="isAllSelected ? 'all' : itemsPerPage"
-                            (change)="onItemsPerPageChange($event)">
+                        <span class="text-dark fs-5 fw-bolder me-4"
+                            style="border:1px solid #ef7d00; padding: 8px 12px;">Items per page:</span>
+                        <select class="form-select d-inline-block ms-2"
+                            style="width: auto; border:1px solid #ef7d00; padding: 8px 12px;"
+                            [value]="isAllSelected ? 'all' : itemsPerPage" (change)="onItemsPerPageChange($event)">
                             <option *ngFor="let option of itemsPerPageOptions" [value]="option.value">
                                 {{ option.label }}
                             </option>
@@ -128,18 +163,17 @@
                     </div>
                     <div class="col-md-4 text-center">
                         <div class="pagination">
-                            <a class="btn btn-outline-primary m-3" (click)="prevPage()"
-                                [class.disabled]="currentPage === 1">
-                                <i class="mdi mdi-chevron-left fs-4"></i>
+                            <a class="btn lpu-btn m-3" (click)="prevPage()" [class.disabled]="currentPage === 1"> Prev
+                                <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                             </a>
                             <span class="fs-5 mt-4">{{ currentPage }} / {{ getTotalPages() }}</span>
-                            <a class="btn btn-outline-primary m-3" (click)="nextPage()"
-                                [class.disabled]="currentPage === getTotalPages()">
-                                <i class="mdi mdi-chevron-right fs-4"></i>
+                            <a class="btn lpu-btn m-3" (click)="nextPage()"
+                                [class.disabled]="currentPage === getTotalPages()"> Next
+                                <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
                             </a>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <ng-container *ngIf="tmpsBookingData.length > 0; else noRecords">
@@ -161,8 +195,9 @@
                                     <th class="form-label fw-bolder">Action </th>
                                 </tr>
                             </thead>
-                            <tbody>                             
-                                <ng-container *ngFor="let AllBookingTestsDataRow of getCurrentPageData(); let i = index">
+                            <tbody>
+                                <ng-container
+                                    *ngFor="let AllBookingTestsDataRow of getCurrentPageData(); let i = index">
                                     <tr>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.bookingId}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.instrumentName}}</td>
@@ -184,14 +219,17 @@
                                                 <span class="badge text-bg-info ms-3 fs-5 "> N/A </span>
                                             </td>
                                         </ng-template>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.userEmailId?.length>0 ? AllBookingTestsDataRow.userEmailId : 'Internal User' }}</td>
-                                        <td class="fw-bold ">{{AllBookingTestsDataRow.candidateName?.length<1 ? 'Internal User' : AllBookingTestsDataRow.candidateName }}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.userEmailId?.length>0 ?
+                                            AllBookingTestsDataRow.userEmailId : 'Internal User' }}</td>
+                                        <td class="fw-bold ">{{AllBookingTestsDataRow.candidateName?.length<1
+                                                ? 'Internal User' : AllBookingTestsDataRow.candidateName }}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.organisationName}}</td>
                                         <td class="fw-bold ">{{AllBookingTestsDataRow.userRole}}</td>
                                         <td>
                                             <span class="badge"
                                                 [ngClass]="{'bg-success': AllBookingTestsDataRow?.paymentStatus == 'success', 'bg-danger': AllBookingTestsDataRow?.paymentStatus == 'failure', 'bg-warning text-dark': !AllBookingTestsDataRow?.paymentStatus || AllBookingTestsDataRow?.paymentStatus == 'null' }">
-                                                {{ AllBookingTestsDataRow?.paymentStatus == 'success' ? 'Paid' : AllBookingTestsDataRow?.paymentStatus ==
+                                                {{ AllBookingTestsDataRow?.paymentStatus == 'success' ? 'Paid' :
+                                                AllBookingTestsDataRow?.paymentStatus ==
                                                 'failure' ? 'Failed' : 'Pending' }}
                                             </span>
                                         </td>
@@ -201,35 +239,38 @@
                                               'bg-danger': !AllBookingTestsDataRow?.paymentDate || AllBookingTestsDataRow?.paymentDate === 'null'
                                             }">
                                                 {{
-                                                AllBookingTestsDataRow?.paymentDate && AllBookingTestsDataRow?.paymentDate !== 'null'
+                                                AllBookingTestsDataRow?.paymentDate &&
+                                                AllBookingTestsDataRow?.paymentDate !== 'null'
                                                 ? AllBookingTestsDataRow?.paymentDate
                                                 : '-NA-'
                                                 }}
                                             </span>
                                         </td>
-                                        
-                                        <td class="fw-bold" *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA"><button
-                                                class="btn btn-dark btn-sm" (click)="openPaymentModal(AllBookingTestsDataRow)"> 
+
+                                        <td class="fw-bold"
+                                            *ngIf=" AllBookingTestsDataRow?.paymentStatus == 'success'; else NA"><button
+                                                class="btn btn-dark btn-sm"
+                                                (click)="openPaymentModal(AllBookingTestsDataRow)">
                                                 <i class="bi bi-cloud-upload"></i>
-                                            
+
                                             </button></td>
                                         <ng-template #NA>
                                             <td> <span class="badge bg-success">NA</span> </td>
                                         </ng-template>
-                                        </tr>
+                                    </tr>
                                 </ng-container>
                             </tbody>
                         </table>
                         <div class="row" *ngIf="tmpsBookingData.length > 0">
                             <div class="col-sm-3 pagination d-flex justify-content-center align-items-center mt-3">
-                                <a class="btn btn-outline-primary me-3" (click)="prevPage()"
-                                    [class.disabled]="currentPage === 1">
-                                    <i class="mdi mdi-chevron-left fs-4"></i>
+                                <a class="btn lpu-btn me-3" (click)="prevPage()" [class.disabled]="currentPage === 1">
+                                    Prev
+                                    <!-- <i class="mdi mdi-chevron-left fs-4"></i> -->
                                 </a>
                                 <span class="fs-5">{{ currentPage }} / {{ getTotalPages() }}</span>
-                                <a class="btn btn-outline-primary ms-3" (click)="nextPage()"
-                                    [class.disabled]="currentPage === getTotalPages()">
-                                    <i class="mdi mdi-chevron-right fs-4"></i>
+                                <a class="btn lpu-btn ms-3" (click)="nextPage()"
+                                    [class.disabled]="currentPage === getTotalPages()"> Next
+                                    <!-- <i class="mdi mdi-chevron-right fs-4"></i> -->
                                 </a>
                             </div>
                         </div>
@@ -243,7 +284,7 @@
     </div>
 </div>
 <ng-template #NoData>
-    <div class="text-center" >
+    <div class="text-center">
         <h3 class="text-center fs-2 m-5 text-danger pt-5 "> No Record ! </h3>
         <div class="row mt-4 mb-4">
             <div class="col-sm-12 text-center">
@@ -262,7 +303,7 @@
     </div>
     <div class="modal-body">
 
-        <div class="col-md-12 grid-margin stretch-card">
+        <div class=" container-fluid ">
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-4">
@@ -282,19 +323,22 @@
                                         <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.bookingId}} </td>
                                         <td class=" fs-5 p-4 " style="width: 20%;">{{BookingCase.instrumentName}} </td>
                                         <td class=" fs-5 ">
-                                            <input class="w-30" required type="file" id="File" name="File"
-                                            (change)="onFileSelected($event)" accept=".zip, .7z, .rar" #fileInput="ngModel"
-                                            ngModel />
-                                            <div class="col- mt-2"><span class="themeClr"> Allowed Documents format Zip and of Max size 5MB </span></div>
+                                            <input class="" required type="file" id="File" name="File"
+                                                (change)="onFileSelected($event)" accept=".zip, .7z, .rar"
+                                                #fileInput="ngModel" ngModel />
+                                            <div class="col- mt-2"><span class="themeClr"> Allowed Documents format Zip
+                                                    and of Max size 5MB </span></div>
 
                                         </td>
                                         <td class=" fs-5 p-4 " style="width: 20%;">
-                                            <textarea required name="remarks" [(ngModel)]="Remarks"  rows="5" cols="30"
-                                            class="col-12 p-2 form-control" id="remarks" #remarks="ngModel" autocomplete="off">
+                                            <textarea required name="remarks" [(ngModel)]="Remarks" rows="5" cols="30"
+                                                class="col-12 p-2 form-control" id="remarks" #remarks="ngModel"
+                                                autocomplete="off">
                                            </textarea>
                                         </td>
-                                        <td><button type="submit" class="btn btn-primary me-2" [disabled]="this.fileStatus==false "
-                                                (click)="VerifyData(BookingCase);">Upload Result</button></td>
+                                        <td><button type="submit" class="btn btn-primary me-2"
+                                                [disabled]="this.fileStatus==false "
+                                                (click)="VerifyData(BookingCase);"> <i class="bi bi-cloud-upload"></i></button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -305,4 +349,3 @@
         </div>
     </div>
 </ng-template>
-

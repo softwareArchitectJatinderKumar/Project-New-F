@@ -202,3 +202,22 @@ ul li{
         background: transparent;
     }
 }
+
+
+/* Custom Wide Modal for Terms & Conditions */
+.swal-wide {
+    width: 60rem !important;
+    max-width: 95% !important; /* Responsive for smaller screens */
+}
+
+/* Optional: Improve the scrollbar appearance inside the swal box */
+.swal2-html-container div::-webkit-scrollbar {
+    width: 8px;
+}
+.swal2-html-container div::-webkit-scrollbar-thumb {
+    background: #ef7d00; 
+    border-radius: 10px;
+}
+.swal2-html-container div::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}

@@ -243,7 +243,7 @@ export class AdminAssignTestComponent implements OnInit {
   openPaymentModal(item: any): void {
     this.BookingCase = item;
     this.AssignedTo = ''; // Reset assigned staff selection on modal open
-    this.modalService.open(this.viewDescModal2, { size: 'sm' }).result
+    this.modalService.open(this.viewDescModal2, { size: 'lg' }).result
       .then((result: string) => console.log('Modal closed:', result))
       .catch(() => { });
   }

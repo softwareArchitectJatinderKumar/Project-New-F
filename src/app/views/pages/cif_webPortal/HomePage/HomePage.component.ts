@@ -83,7 +83,7 @@ export class HomePageComponent implements OnInit {
         })
         .catch(() => {
           this.failedImageUrls.push(url);
-          console.warn('Failed to prefetch image', url);
+          // console.warn('Failed to prefetch image', url);
           return null;
         })
         .then(() => { this.preloadedImageUrls.add(url); })
@@ -103,6 +103,7 @@ export class HomePageComponent implements OnInit {
     this.getAllInstruments();
     this.chunkedEvents = this.chunkArray(this.events, 3);
     this.updateChunks();
+    
   }
 
   onImageTagError(event: Event, item: any): void {
@@ -306,7 +307,7 @@ export class HomePageComponent implements OnInit {
         if (response.item1 && response.item1.length > 0) {
           this.InstrumentsDataData = response.item1;
           this.tmpsInstrumentsDataData = response.item1.slice(0, this.InstrumentsDataData.length);
-          console.log('Fetched instruments data:', this.tmpsInstrumentsDataData);
+          // console.log('Fetched instruments data:', this.tmpsInstrumentsDataData);
         } else {
           this.InstrumentsDataData = this.DataItems;
           this.tmpsInstrumentsDataData = this.InstrumentsDataData.slice(0, this.InstrumentsDataData.length);
@@ -323,6 +324,7 @@ export class HomePageComponent implements OnInit {
           //   this.loadingIndicator = false;
           // }, remainingDelay);
         });
+        this.preloadInstrumentImages();
       },
       error: err => {
         this.InstrumentsDataData = this.DataItems;
@@ -343,7 +345,7 @@ export class HomePageComponent implements OnInit {
 
         this.serverError = true;
         this.errorMessage = 'Data Server Connection error , Try again later';
-        console.error(err);
+        // console.error(err);
       }
     });
   }
@@ -443,5 +445,34 @@ export class HomePageComponent implements OnInit {
     this.showSearchForm = !this.showSearchForm;
     this.show = !this.show;
   }
+
+
+
+  // Inside your component.ts
+async preloadInstrumentImages() {
+  const loadPromises = this.tmpsInstrumentsDataData.map(instrument => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const url = instrument.imageUrl;
+      
+      img.onload = () => {
+        // Image is now in browser cache
+        instrument.cachedImageUrl = url; 
+        resolve(true);
+      };
+      
+      img.onerror = () => {
+        // Handle error silently or set a generic fallback background
+        instrument.cachedImageUrl = 'assets/images/default-instrument.jpg';
+        resolve(false);
+      };
+      
+      img.src = url;
+    });
+  });
+
+  await Promise.all(loadPromises);
+  this.areFacilityImagesLoaded = true; // Only show the grid once ALL are ready
+}
 }
 

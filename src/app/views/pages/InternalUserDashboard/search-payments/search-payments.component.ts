@@ -201,7 +201,7 @@ export class SearchPaymentsComponent implements OnInit {
   }
   paymentReceiptScreen(data: any) {
     this.PaymentReceipt = data;
-    this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
+    this.modalService.open(this.viewDescModal2, { size: 'lg' }).result.then(
       (result: string) => {
         console.log("Modal closed" + result);
       }
