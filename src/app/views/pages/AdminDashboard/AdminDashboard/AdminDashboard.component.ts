@@ -41,7 +41,7 @@ export class AdminDashboardComponent implements OnInit {
         title: 'Login Failed',
         icon: 'warning',
       });
-      this.router.navigate(['Home']);
+      this.router.navigate(['/Home']);
     }
   }
 
@@ -66,9 +66,28 @@ export class AdminDashboardComponent implements OnInit {
    
   }
 
-  LogoutUser() {
-    this.cookieService.delete('authData');
-    this.AuthSession.clearSession();  
-    this.router.navigateByUrl('Home');  
-  }
+  // LogoutUser() {
+  //   this.cookieService.delete('authData');
+  //   this.AuthSession.clearSession();  
+  //   this.router.navigateByUrl('Home');  
+  // }
+
+    LogoutUser() {
+      swal.fire({
+        title: 'Logging out...',
+        allowOutsideClick: false,
+        didOpen: () => { },
+      });
+  
+      this.cookieService.delete('authData', '/');
+      this.AuthSession.clearSession();
+  
+      setTimeout(() => {
+        swal.close();
+        this.router.navigate(['Home'], { replaceUrl: true })
+      });//.then(() => {
+      // window.location.reload();
+      //   });
+      // }, 500);
+    }
 }

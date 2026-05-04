@@ -32,7 +32,7 @@ export class StaffMenuComponent implements OnInit {
         title: 'Login Failed',
         icon: 'warning',
       });
-      this.router.navigate(['/Login']);
+      this.router.navigate(['Login']);
     }
   }
 
@@ -56,20 +56,39 @@ export class StaffMenuComponent implements OnInit {
   //   this.router.navigateByUrl('/login'); // adjust to your login path
   // }
   loadingIndicator: any;
-  LogoutUser () {
-    this.loadingIndicator = true;
+  // LogoutUser () {
+  //   this.loadingIndicator = true;
   
-    // Clear cookies and session immediately
-    this.cookieService.delete('StaffUserAuthData');
-    this.AuthSession.clearSession();
+  //   // Clear cookies and session immediately
+  //   this.cookieService.delete('StaffUserAuthData');
+  //   this.AuthSession.clearSession();
   
-    // Wait 1 second before navigating (adjust delay as needed)
-    setTimeout(() => {
-      this.loadingIndicator = false;
-      this.router.navigate(['Home'], { replaceUrl: true }).then(() => {        
-        window.location.reload();
-      });          
+  //   // Wait 1 second before navigating (adjust delay as needed)
+  //   setTimeout(() => {
+  //     this.loadingIndicator = false;
+  //     this.router.navigate(['Home'], { replaceUrl: true }).then(() => {        
+  //       window.location.reload();
+  //     });          
        
-    }, 1000);
-  }
+  //   }, 1000);
+  // }
+
+    LogoutUser() {
+      swal.fire({
+        title: 'Logging out...',
+        allowOutsideClick: false,
+        didOpen: () => { },
+      });
+  
+      this.cookieService.delete('StaffUserAuthData', '/');
+      this.AuthSession.clearSession();
+  
+      setTimeout(() => {
+        swal.close();
+        this.router.navigate(['Home'], { replaceUrl: true })});//.then(() => {
+          // window.location.reload();
+      //   });
+      // }, 500);
+    }
+  
 }

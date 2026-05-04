@@ -101,11 +101,27 @@ export class CifMenuBarComponent implements OnInit {
 
     setTimeout(() => {
       swal.close();
-      this.router.navigate(['/Home'], { replaceUrl: true }).then(() => {
-        window.location.reload();
-      });
-    }, 500);
-  }
+      this.router.navigate(['Home'], { replaceUrl: true })
+    }); 
+     
+  }  
+  // LogoutUser() {
+  //   swal.fire({
+  //     title: 'Logging out...',
+  //     allowOutsideClick: false,
+  //     didOpen: () => { },
+  //   });
+
+  //   this.cookieService.delete('InternalUserAuthData', '/');
+  //   this.AuthSession.clearSession();
+
+  //   setTimeout(() => {
+  //     swal.close();
+  //     this.router.navigate(['Home'], { replaceUrl: true }).then(() => {
+  //       // window.location.reload();
+  //     });
+  //   }, 500);
+  // }
 
   CheckUser(): boolean {
     return String(this.UserRole) === '400000';

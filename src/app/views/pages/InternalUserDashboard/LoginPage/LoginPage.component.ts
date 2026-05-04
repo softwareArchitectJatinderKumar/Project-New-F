@@ -438,11 +438,37 @@ export class LoginPageNComponent implements OnInit {
     });
   }
 
-  LogoutUser() {
-    this.cookieService.delete('InternalUserAuthData');
-    this.AuthSession.clearSession(); // if you have a method like this
-    this.router.navigateByUrl('Login'); // adjust to your login path
-  }
+  // LogoutUser() {
+  //       this.cookieService.delete('InternalUserAuthData', '/');
+  //       this.AuthSession.clearSession();
+    
+  //       setTimeout(() => {
+  //         swal.close();
+  //         this.router.navigate(['Home'], { replaceUrl: true }).then(() => {
+  //           // window.location.reload();
+  //         });
+  //       }, 500);
+  // }
 
+
+  
+  LogoutUser() {
+    swal.fire({
+      title: 'Logging out...',
+      allowOutsideClick: false,
+      didOpen: () => { },
+    });
+
+    this.cookieService.delete('InternalUserAuthData', '/');
+    this.AuthSession.clearSession();
+
+    setTimeout(() => {
+      swal.close();
+      this.router.navigate(['Home'], { replaceUrl: true })
+    });//.then(() => {
+    // window.location.reload();
+    //   });
+    // }, 500);
+  }
 }
 
