@@ -249,7 +249,7 @@ export class AdminActionCifEvents implements OnInit {
       EventDetails: eventData.eventDetails,
       ImageUrl: '' //'' // reset file input
     });
-    this.modalService.open(this.editEventModal, { centered: true, size: 'lg' });
+    this.modalService.open(this.editEventModal, { centered: true, size: 'xl' });
   }
 
   // File change handler

@@ -34,7 +34,7 @@ export class AdminPendingPaymentsComponent implements OnInit {
   @ViewChild('ngSelectComponentStream') ngSelectComponentStream: NgSelectComponent;
   @ViewChild('verticalCenteredModal') verticalCenteredModal: TemplateRef<any>;
   @ViewChild('viewDescModal') viewDescModal: TemplateRef<any>;
-  @ViewChild('viewDescModal2') viewDescModal2: TemplateRef<any>;
+  @ViewChild('PendingPaymentsA') viewDescModal2: TemplateRef<any>;
   @ViewChild('PendingPaymentModal') PendingPaymentModal: TemplateRef<any>;
   dataSource: MatTableDataSource<any>;
 

@@ -248,7 +248,7 @@
 <!-- Payment Screen Modal -->
 <ng-template #viewDescModal5 let-modal>
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabelPayment">Payment Screen</h5>
+        <h2 class="modal-title" id="exampleModalLabelPayment">Payment Screen</h2>
         <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -272,7 +272,8 @@
                                         <td style="width: 20%;">{{BookingCase?.instrumentName}}</td>
                                         <td>{{BookingCase?.amount | currency:'INR':'symbol'}}</td>
                                         <td><button type="submit" class="btn btn-warning me-2" (click)="VerifyData(BookingCase);">
-                                             <i class="mdi mdi-credit-card-check fs-3"></i>
+                                            Pay
+                                             <!-- <i class="mdi mdi-credit-card-check fs-3"></i> -->
                                             </button></td>
                                     </tr>
                                 </tbody>

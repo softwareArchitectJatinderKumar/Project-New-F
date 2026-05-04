@@ -212,7 +212,7 @@ export class BookingStatusComponent implements OnInit {
           this.columns.push()
           this.loadingIndicator = false;
 
-          this.modalService.open(this.viewDescModal2, { size: 'sm' }).result.then(
+          this.modalService.open(this.viewDescModal2, { size: 'xl' }).result.then(
             (result: string) => {
               console.log("Modal closed" + result);
             }

@@ -530,7 +530,7 @@ export class FailedPaymentsComponent implements OnInit {
   paymentReceiptScreen(data: any) {
     this.PaymentReceipt = data;
     // console.log(JSON.stringify(data)+' dartarasads')
-    this.modalService.open(this.viewDescModal2, { size: 'lg' }).result.then(
+    this.modalService.open(this.viewDescModal2, { size: 'xl' }).result.then(
       (result: string) => {
         console.log("Modal closed" + result);
       }
@@ -650,7 +650,7 @@ export class FailedPaymentsComponent implements OnInit {
 
   openPaymentModal(a: any) {
     this.BookingCase = a;
-    this.modalService.open(this.viewDescModal5, { size: 'lg', centered: true }).result.then(
+    this.modalService.open(this.viewDescModal5, { size: 'xl', centered: true }).result.then(
       (result: string) => {
         console.log('Modal closed: ' + result);
       }

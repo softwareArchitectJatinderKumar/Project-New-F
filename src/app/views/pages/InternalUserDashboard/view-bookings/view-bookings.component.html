@@ -174,7 +174,7 @@
 <!-- Payment Screen Modal -->
 <ng-template #viewDescModal2 let-modal>
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Payment Screen</h5>
+        <h2 class="modal-title" id="exampleModalLabel">Payment Screen</h2>
         <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
     </div>
     <div class="modal-body">
@@ -203,7 +203,8 @@
                                         <td>{{BookingCase?.totalCharges | currency:'INR':'symbol'}}</td>
                                         <td>
                                             <button type="submit" class="btn btn-warning me-2" (click)="VerifyData(BookingCase);">
-                                                <i class="mdi mdi-credit-card-check fs-3"></i>
+                                                <!-- <i class="mdi mdi-credit-card-check fs-3"></i> -->
+                                                <i class="bi bi-check "></i>
                                             </button>
                                         </td>
                                     </tr>

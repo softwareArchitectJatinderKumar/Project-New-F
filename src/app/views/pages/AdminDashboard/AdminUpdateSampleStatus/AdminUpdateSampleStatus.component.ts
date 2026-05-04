@@ -214,7 +214,7 @@ export class AdminUpdateSampleStatusComponent implements OnInit {
     this.BookingCase = booking;
     this.AssignedTo = '';
     this.ReceivedDate = '';
-    this.modalRef = this.modalService.open(this.ViewUpdateStatusModal, { size: 'sm' });
+    this.modalRef = this.modalService.open(this.ViewUpdateStatusModal, { size: 'xl' });
   }
 
   onActivitySelected(event: any): void {
