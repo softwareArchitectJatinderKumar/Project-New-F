@@ -105,7 +105,8 @@ export class FailedPaymentsComponent implements OnInit {
     this.BookingCase = booking;
     this.loadForm();
     this.modalService.open(this.PaymentReceiptUploadModal, { size: 'lg', centered: true }).result.then(
-      (result: string) => console.log('Modal closed:', result),
+      (result: string) => 
+        // console.log('Modal closed:', result),
       () => { }
     );
   }

@@ -74,7 +74,6 @@ export class AdminActionInstrumentsComponent implements OnInit {
 
   OpenReplaceModal(a: any) {
     this.BookingCase = a;
-    // console.log(JSON.stringify(a))
     this.modalService.open(this.viewDescModal2, { size: 'xl' }).result.then(
       (result: string) => {
         console.log("Modal closed" + result);

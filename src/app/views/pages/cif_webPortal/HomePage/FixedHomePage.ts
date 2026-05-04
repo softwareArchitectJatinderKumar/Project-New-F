@@ -35,6 +35,39 @@ export class FixedHomePageComponent implements OnInit, OnDestroy {
       }
     });
   }
+ 
+// Add this to your component class
+  getInstrumentImage(instrumentId: any): string {
+    if (!instrumentId) {
+      return 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    }
+
+    return `assets/images/Cif-Images/${instrumentId}.jpg`;
+  }
+
+  handleImageError(event: any) {
+    const imgElement = event.target;
+    const currentSrc = imgElement.src;
+
+    if (currentSrc.includes('.jpg')) {
+      // If .jpg failed, try .png
+      imgElement.src = currentSrc.replace('.jpg', '.png');
+    } else if (currentSrc.includes('.png')) {
+      imgElement.src = currentSrc.replace('.png', '.jpg');
+    } else {
+      imgElement.style.display = 'none';
+    }
+  }
+  updateUrl(event: any) {
+    const currentSrc = event.target.src;
+
+    if (currentSrc.endsWith('.jpg')) {
+      event.target.src = currentSrc.replace('.jpg', '.png');
+    }
+    else if (currentSrc.endsWith('.png')) {
+      event.target.src = 'assets/images/Cif-Images/placeholder.jpg';
+    }
+  }
 
   getAllInstruments(): void {
     this.loadingIndicator = true;
@@ -51,6 +84,7 @@ export class FixedHomePageComponent implements OnInit, OnDestroy {
         this.handleErrorState('Data Server Connection error, Try again later');
       }
     });
+    // console.log('Fetched Instruments:', JSON.stringify(this.tmpsInstrumentsDataData));
   }
 
   private async preloadInstrumentImages() {

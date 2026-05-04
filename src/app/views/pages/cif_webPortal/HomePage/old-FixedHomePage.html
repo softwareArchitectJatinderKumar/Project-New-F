@@ -25,6 +25,7 @@
     </div>
 </section>
 
+<!-- Facilities Section with Large Image Fix -->
 <section class="section bg-dark-yellow" #facilitiesSection>
     <div class="container">
         <div class="heading-wraper mb-4">
@@ -41,7 +42,7 @@
                 following table to view their description.</p>
         </div>
 
-        <!-- <div class="cif-grid-layout" *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 0">
+        <div class="cif-grid-layout" *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 0">
             <div class="cif-grid-item" *ngFor="let InstrumentData of tmpsInstrumentsDataData">
                 <div class="cif-img-frame">
                     <img [src]="'assets/images/Instrument-Images/' + InstrumentData.instrumentId + '.jpg'"
@@ -54,28 +55,20 @@
                     </a>
                 </div>
             </div>
-           
-        </div> -->
-
-        <div class="cif-grid-layout" *ngIf="tmpsInstrumentsDataData.length > 0">
-            <div class="cif-grid-item" *ngFor="let InstrumentData of tmpsInstrumentsDataData">
-                
-                <!-- Use a container to prevent layout shift while loading -->
-                <div class="cif-img-frame" *ngIf="InstrumentData.instrumentId">
-                    <img [src]="'assets/images/Instrument-Images/' + InstrumentData.instrumentId + '.jpg'"
-                         [alt]="InstrumentData.instrumentName" 
-                         class="cif-fit-img img-fluid imgSize" 
-                         loading="eager" 
-                         fetchpriority="high" />
+            <!-- <div class="cif-grid-item" *ngFor="let InstrumentData of tmpsInstrumentsDataData">
+                <div class="cif-img-frame">
+                    <img [src]="InstrumentData.cachedImageUrl || InstrumentData.imageUrl"
+                        [alt]="InstrumentData.instrumentName" 
+                        class="cif-fit-img img-fluid imgSize" 
+                        loading="eager" />
                 </div>
-
                 <div class="cif-link-frame" id="InstrumentsPage">
-                    <a (click)="VisitUrl('/ourInstruments', InstrumentData.instrumentName.slice(0,10), InstrumentData.instrumentId, InstrumentData.categoryId)"
-                       [attr.data-is-active]="InstrumentData.isActive">
+                      <a (click)="VisitUrl('/ourInstruments', InstrumentData.instrumentName.slice(0,10), InstrumentData.instrumentId, InstrumentData.categoryId)"
+                        [attr.data-is-active]="InstrumentData.isActive">
                         {{ InstrumentData.instrumentName }}
                     </a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>

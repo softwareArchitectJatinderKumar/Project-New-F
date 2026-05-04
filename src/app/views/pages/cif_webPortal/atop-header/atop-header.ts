@@ -579,11 +579,11 @@ export class StaticHeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   /* ── Form submits ────────────────────────────────── */
   submitCallNow(): void {
     // TODO: wire to actual API
-    console.log('Call now:', this.callPhone);
+    // console.log('Call now:', this.callPhone);
   }
   submitScheduleCall(): void {
     // TODO: wire to actual API
-    console.log('Schedule call:', { name: this.scheduleName, phone: this.schedulePhone });
+    // console.log('Schedule call:', { name: this.scheduleName, phone: this.schedulePhone });
   }
 
   /* ── Template helpers ────────────────────────────── */

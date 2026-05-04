@@ -43,10 +43,8 @@ export class CohortnetworkService {
 // }
 
 postWithAuth(url: any, param ?: any): Observable<HttpResponse<any>> {
-  console.log('url: ' + url);
 
       const authToken = this.storageService.getUser();
-      console.log("token", authToken);
       const headers = new HttpHeaders({
         Authorization: `Bearer ${authToken}`
       });
@@ -56,8 +54,6 @@ postWithAuth(url: any, param ?: any): Observable<HttpResponse<any>> {
 }
 
 getRoadmap(url: string): Observable<HttpResponse<any>> {
-  console.log('url: ' + url);
- 
   
       const authToken =   this.storageService.getUser();
       const headers = new HttpHeaders({

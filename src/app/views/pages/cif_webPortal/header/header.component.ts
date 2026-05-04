@@ -143,7 +143,7 @@ initializeAnnouncementBar() {
       script.text = code;
       document.body.appendChild(script);
     } catch (e) {
-      console.log('inline script skipped');
+      // console.log('inline script skipped');
     }
   });
 }

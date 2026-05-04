@@ -40,17 +40,14 @@ export class CifLoginPageComponent implements OnInit {
   ngOnInit(): void {
     this.cookieService.delete('InternalUserAuthData');
     this.AuthSession.clearSession();
-    // Note: loadingIndicator is managed by getAllInstruments() call below
-    // to avoid race conditions between multiple loading timers
     const startTime = new Date().getTime();
 
     this.loadForm();
 
     const elapsed = new Date().getTime() - startTime;
-    const remainingDelay = Math.max(500 - elapsed, 0); // Small delay for form init
+    const remainingDelay = Math.max(500 - elapsed, 0); 
 
     setTimeout(() => {
-      // loadingIndicator will be set by getAllInstruments()
     }, remainingDelay);
 
 
@@ -223,91 +220,91 @@ export class CifLoginPageComponent implements OnInit {
       });
     } else {
       // Show terms and conditions modal
-      swal.fire({
-        title: 'Terms & Conditions',
-        width: '60rem', // Sets a specific large width
-        html: `
-    <div style="max-height: 450px; overflow-y: auto; text-align: left; padding: 15px; border: 1px solid #eee;">
-      <p>Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in</p>
-      <p><strong>You specifically agree to all of the following undertakings:</strong></p>
-      <ul style="list-style-type: disc; padding-left: 20px; font-size: 14px; line-height: 1.8; color: #333;">
-        <li>We agree to acknowledge CIF, LPU in our publications and thesis if the results from CIF instrumentation are incorporated/used in them.</li>
-        <li>I/We undertake to abide by the safety, standard sample preparation guidelines and precautions during testing of samples.</li>
-        <li>I/We understand the possibility of samples getting damaged during handling and analysis. I/We shall not claim for any loss/damage of the sample submitted to CIF and agree to resubmit the new sample requested by CIF for analysis.</li>
-        <li>CIF, LPU reserves the rights to return the samples without performing analysis and will refund the analytical charges (after deduction of GST, if applicable) under special circumstances.</li>
-        <li>I/we agree to maintain decorum during the visit in CIF labs for sample analysis and fully agree that CIF has full right to take action if decorum of CIF’s labs functionality is disturbed/hampered by me.</li>
-        <li>CIF shall not take any responsibility about the analysis, interpretation and publication of data acquired by the end user.</li>
-        <li>I/We hereby declare that the results of the analysis will not be used for the settlement of any legal issue.</li>
-      </ul>
-    </div>
-  `,
-        icon: 'info',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, Agreed',
-        cancelButtonText: 'No',
-        confirmButtonColor: '#ef7d00', // Matches your portal theme
-        customClass: {
-          popup: 'swal-wide'
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.AuthSession.addToSession(this.UserData);
-          this.router.navigateByUrl('/NewBookings').then(() => {
-            window.location.reload();
-          });
-        } else {
-          swal.fire({
-            title: 'Agreement Required',
-            text: 'You must agree to proceed further.',
-            icon: 'warning',
-            confirmButtonColor: '#d33'
-          }).then(() => {
-            this.logoutUser();
-          });
-        }
-      });
-      // swal
-      //   .fire({
-      //     title: 'Terms & Conditions',
-      //     html: `
-      //     <div style="max-height: 400px; overflow-y: auto; text-align: left; padding: 10px;">
-      //       <p>Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in</p>
-      //       <p><strong>You specifically agree to all of the following undertakings:</strong></p>
-      //       <ul style="list-style-type: disc; padding-left: 20px; font-size: 14px; line-height: 1.6;">
-      //         <li>We agree to acknowledge CIF, LPU in our publications and thesis if the results from CIF instrumentation are incorporated/used in them.</li>
-      //         <li>I/We undertake to abide by the safety, standard sample preparation guidelines and precautions during testing of samples.</li>
-      //         <li>I/We understand the possibility of samples getting damaged during handling and analysis. I/We shall not claim for any loss/damage of the sample submitted to CIF and agree to resubmit the new sample requested by CIF for analysis.</li>
-      //         <li>CIF, LPU reserves the rights to return the samples without performing analysis and will refund the analytical charges (after deduction of GST, if applicable) under special circumstances.</li>
-      //         <li>I/we agree to maintain decorum during the visit in CIF labs for sample analysis and fully agree that CIF has full right to take action if decorum of CIF’s labs functionality is disturbed/hampered by me.</li>
-      //         <li>CIF shall not take any responsibility about the analysis, interpretation and publication of data acquired by the end user.</li>
-      //         <li>I/We hereby declare that the results of the analysis will not be used for the settlement of any legal issue.</li>
-      //       </ul>
-      //     </div>
-      //   `,
-      //     icon: 'info',
-      //     showCancelButton: true,
-      //     confirmButtonText: 'Yes, Agreed',
-      //     cancelButtonText: 'No',
-      //     customClass: { popup: 'swal-wide' }
-      //   })
-      //   .then((result) => {
-      //     if (result.isConfirmed) {
-      //       this.AuthSession.addToSession(this.UserData);
-      //       this.router.navigateByUrl('/NewBookings').then(() => {
-      //         window.location.reload();
-      //       });
-      //     } else {
-      //       swal
-      //         .fire({
-      //           title: 'Agreement Required',
-      //           text: 'You must agree to proceed further.',
-      //           icon: 'warning'
-      //         })
-      //         .then(() => {
-      //           this.logoutUser();
-      //         });
-      //     }
-      //   });
+  //     swal.fire({
+  //       title: 'Terms & Conditions',
+  //       width: '60rem', // Sets a specific large width
+  //       html: `
+  //   <div style="max-height: 450px; overflow-y: auto; text-align: left; padding: 15px; border: 1px solid #eee;">
+  //     <p>Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in</p>
+  //     <p><strong>You specifically agree to all of the following undertakings:</strong></p>
+  //     <ul style="list-style-type: disc; padding-left: 20px; font-size: 14px; line-height: 1.8; color: #333;">
+  //       <li>We agree to acknowledge CIF, LPU in our publications and thesis if the results from CIF instrumentation are incorporated/used in them.</li>
+  //       <li>I/We undertake to abide by the safety, standard sample preparation guidelines and precautions during testing of samples.</li>
+  //       <li>I/We understand the possibility of samples getting damaged during handling and analysis. I/We shall not claim for any loss/damage of the sample submitted to CIF and agree to resubmit the new sample requested by CIF for analysis.</li>
+  //       <li>CIF, LPU reserves the rights to return the samples without performing analysis and will refund the analytical charges (after deduction of GST, if applicable) under special circumstances.</li>
+  //       <li>I/we agree to maintain decorum during the visit in CIF labs for sample analysis and fully agree that CIF has full right to take action if decorum of CIF’s labs functionality is disturbed/hampered by me.</li>
+  //       <li>CIF shall not take any responsibility about the analysis, interpretation and publication of data acquired by the end user.</li>
+  //       <li>I/We hereby declare that the results of the analysis will not be used for the settlement of any legal issue.</li>
+  //     </ul>
+  //   </div>
+  // `,
+  //       icon: 'info',
+  //       showCancelButton: true,
+  //       confirmButtonText: 'Yes, Agreed',
+  //       cancelButtonText: 'No',
+  //       confirmButtonColor: '#ef7d00', // Matches your portal theme
+  //       customClass: {
+  //         popup: 'swal-wide'
+  //       }
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         this.AuthSession.addToSession(this.UserData);
+  //         this.router.navigateByUrl('/NewBookings').then(() => {
+  //           window.location.reload();
+  //         });
+  //       } else {
+  //         swal.fire({
+  //           title: 'Agreement Required',
+  //           text: 'You must agree to proceed further.',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#d33'
+  //         }).then(() => {
+  //           this.logoutUser();
+  //         });
+  //       }
+  //     });
+      swal
+        .fire({
+          title: 'Terms & Conditions', width: '60rem',  
+          html: `
+          <div style="max-height: 400px; overflow-y: auto; text-align: left; padding: 10px;">
+            <p>Welcome to Lovely Professional University. These terms and conditions outline the rules and regulations for the use of Lovely Professional University's Website, located at lpu.co.in</p>
+            <p><strong>You specifically agree to all of the following undertakings:</strong></p>
+            <ul style="list-style-type: disc; padding-left: 20px; font-size: 14px; line-height: 1.6;">
+              <li>We agree to acknowledge CIF, LPU in our publications and thesis if the results from CIF instrumentation are incorporated/used in them.</li>
+              <li>I/We undertake to abide by the safety, standard sample preparation guidelines and precautions during testing of samples.</li>
+              <li>I/We understand the possibility of samples getting damaged during handling and analysis. I/We shall not claim for any loss/damage of the sample submitted to CIF and agree to resubmit the new sample requested by CIF for analysis.</li>
+              <li>CIF, LPU reserves the rights to return the samples without performing analysis and will refund the analytical charges (after deduction of GST, if applicable) under special circumstances.</li>
+              <li>I/we agree to maintain decorum during the visit in CIF labs for sample analysis and fully agree that CIF has full right to take action if decorum of CIF’s labs functionality is disturbed/hampered by me.</li>
+              <li>CIF shall not take any responsibility about the analysis, interpretation and publication of data acquired by the end user.</li>
+              <li>I/We hereby declare that the results of the analysis will not be used for the settlement of any legal issue.</li>
+            </ul>
+          </div>
+        `,
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, Agreed',
+          cancelButtonText: 'No',
+          customClass: { popup: 'swal-wide' }
+        })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.AuthSession.addToSession(this.UserData);
+            this.router.navigateByUrl('/NewBookings').then(() => {
+              window.location.reload();
+            });
+          } else {
+            swal
+              .fire({
+                title: 'Agreement Required',
+                text: 'You must agree to proceed further.',
+                icon: 'warning'
+              })
+              .then(() => {
+                this.logoutUser();
+              });
+          }
+        });
     }
   }
 

@@ -25,16 +25,17 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="mb-3 text-start">
-                            <Label class="fs-3 fw-bolder">Instruments Details</Label>
+                            <Label class="fs-3 fw-bolder">Manage Sample Excel Sheet </Label>
                         </div>
                     </div>
 
                     <div class="col-sm-3 text-start">
 
                         <input [(ngModel)]="searchQuery" (keyup)="search()" id="search" type="text" class="form-control"
-                            [disabled]="tmpsInstrumentData.length === 0" />
+                             />
                     </div>
                 </div>
+                <hr/>
                 <!-- Top Pagination and Controls -->
                 <div class="row d-flex justify-content-center align-items-center mb-3"
                     *ngIf="tmpsInstrumentData.length > 0">
