@@ -61,14 +61,14 @@ export class LpuCIFWebService {
 
 
   getLpuHeader(): Observable<any> {
-      // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuHeader');
-      return this.http.get(AUTH_API +'api/LpuCIFHeaderFooter/GetLpuHeader');
-   }
+    // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuHeader');
+    return this.http.get(AUTH_API + 'api/LpuCIFHeaderFooter/GetLpuHeader');
+  }
 
-     getLpuFooter(): Observable<any> {
-      // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuFooter');
-      return this.http.get(AUTH_API +'api/LpuCIFHeaderFooter/GetLpuFooter');
-   }
+  getLpuFooter(): Observable<any> {
+    // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuFooter');
+    return this.http.get(AUTH_API +'api/LpuCIFHeaderFooter/GetLpuFooter');
+  }
 
 
   downloadFile(fileUrl: string): Observable<Blob> {
@@ -83,7 +83,7 @@ export class LpuCIFWebService {
       // 'Authorization': `Bearer ${token}`
       'Authorization': `Bearer ${this.authToken}`
     });
-    return this.http.post(AUTH_API +'api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
+    return this.http.post(AUTH_API + 'api/Mou/DownloadMOUFiles/MOUDownloadFiles', payload, {
       headers: headers,
       responseType: 'blob'
     });
@@ -185,8 +185,8 @@ export class LpuCIFWebService {
   GetAllBookingSlot(UserEmailId: string): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + token)
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetAllBookingSlot?UserId=' + UserEmailId,
@@ -251,7 +251,8 @@ export class LpuCIFWebService {
     let token = this.storageService.getUser();
     // "Content-Type": "multipart/form-data"
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+    // .set('Authorization', 'Bearer ' + this.authToken)
     // .set('Content-Type', 'multipart/form-data');
     return this.http.post(
       AUTH_API + 'api/LpuCIF/MakePaymentNowNew', newPaymentRecord, { headers }
@@ -261,7 +262,8 @@ export class LpuCIFWebService {
   GetUserPaymentDetails(UserEmailId: string): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetUserPaymentDetails?UserId=' + UserEmailId,
@@ -281,7 +283,8 @@ export class LpuCIFWebService {
   GetAllPaymentDetails(): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetAllPaymentDetails',
@@ -295,7 +298,7 @@ export class LpuCIFWebService {
   CIFResultsUploads(dataSoft: FormData): Observable<any> {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken)
     //.set('Authorization', 'Bearer ' + this.Localtoken)
     return this.http.post(
       AUTH_API + 'api/LpuCIF/CIFResultsUploads', dataSoft, { headers }
@@ -327,7 +330,7 @@ export class LpuCIFWebService {
   CIFUpdateStatusInstruments(dataSoft: FormData): Observable<any> {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken)
     //.set('Authorization', 'Bearer ' + this.Localtoken)
     return this.http.post(
       //  AUTH_API_LOCAL + 'api/LpuCIF/CIFUpdateStatusInstruments', dataSoft, { headers }
@@ -349,7 +352,8 @@ export class LpuCIFWebService {
   GetUserResultsDetails(EmailId: any, BookingId: any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       // AUTH_API_LOCAL + 'api/LpuCIF/GetUserResultsDetails?Uid=' + EmailId +'&BookingId='+BookingId,
@@ -506,8 +510,8 @@ export class LpuCIFWebService {
   GetUserPaymentStatusDetails(UserEmailId: string): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + token)
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetUserPaymentStatusDetails?UserId=' + UserEmailId,
@@ -563,6 +567,7 @@ export class LpuCIFWebService {
     let authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
+    // .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       AUTH_API_LOCAL + 'api/LpuCIF/UpdateInstrumentImage', dataSoft,
       // AUTH_API_LOCAL + 'api/LpuCIF/CIFInstrumentUpdateData',dataSoft,
@@ -623,7 +628,8 @@ export class LpuCIFWebService {
   GetUploadedResultDetails(UserEmailId: any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       // AUTH_API + 'api/LpuCIF/GetUploadedResultDetails?UserId=' + UserEmailId, { headers }
@@ -647,7 +653,8 @@ export class LpuCIFWebService {
   GetSampleStatus(UserEmailId: string): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       AUTH_API + 'api/LpuCIF/GetSampleStatusByUserId?UserId=' + UserEmailId,
@@ -730,6 +737,7 @@ export class LpuCIFWebService {
 
   // New Logic for Login Page
   GetAuthoriseUserData(loginData: FormData): Observable<any> {
+    let authToken = this.storageService.getUser();
     const headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
@@ -830,7 +838,7 @@ export class LpuCIFWebService {
     let headers = new HttpHeaders()
       // .set('Authorization', 'Bearer ' + authToken)
       .set('Authorization', 'Bearer ' + this.authToken)
-   
+
 
     return this.http.post<any>(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation',
@@ -838,15 +846,15 @@ export class LpuCIFWebService {
       data, { headers }
     ).pipe(catchError(this.handleError('EventsCrudOperation', { success: false, message: 'Events CRUD operation failed' })));
 
-  
+
   }
 
 
   getEvents(): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    // .set('Authorization', 'Bearer ' + this.authToken)
     const viewEventModel: EventModel = {
       eventId: 0,
       eventName: '',
@@ -867,8 +875,8 @@ export class LpuCIFWebService {
   createEvent(event: EventModel): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    // .set('Authorization', 'Bearer ' + this.authToken)
     const formData = this.prepareFormData(event, 'Insert');
     return this.http.post(
       AUTH_API + 'api/LpuCIF/EventsCrudOperation', formData, { headers })
@@ -878,8 +886,8 @@ export class LpuCIFWebService {
   updateEvent(event: EventModel): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    // .set('Authorization', 'Bearer ' + this.authToken)
 
     const formData = this.prepareFormData(event, 'Update');
     return this.http.post(
@@ -890,8 +898,8 @@ export class LpuCIFWebService {
   deleteEvent(eventId: number): Observable<any> {
     var authToken = this.storageService.getUser();
     let headers = new HttpHeaders()
-      // .set('Authorization', 'Bearer ' + authToken)
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + authToken)
+    // .set('Authorization', 'Bearer ' + this.authToken)
     const deleteEventModel: EventModel = {
       eventId: eventId,
       eventName: '',
@@ -914,14 +922,15 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + token)
     return this.http.post(
       // 'https://localhost:7125/api/LpuCIF/CIFUploadPaymentReceipt', PaymentReceipt, { headers }
-       AUTH_API +  'api/LpuCIF/CIFUploadPaymentReceipt', PaymentReceipt, { headers }
+      AUTH_API + 'api/LpuCIF/CIFUploadPaymentReceipt', PaymentReceipt, { headers }
     );// for new user account creatinng
   }
 
-  GetBookingPaymentProofDetails(BookingId:any): Observable<any> {
+  GetBookingPaymentProofDetails(BookingId: any): Observable<any> {
     let token = this.storageService.getUser();
     let headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + this.authToken)
+      .set('Authorization', 'Bearer ' + token)
+      // .set('Authorization', 'Bearer ' + this.authToken)
       .set('Content-Type', 'application/json');
     return this.http.get(
       // 'https://localhost:7125/api/LpuCIF/CIFGetBookingPaymentProofDetails?BookingId=' + BookingId, { headers })
@@ -932,24 +941,21 @@ export class LpuCIFWebService {
   // Method to call the stored procedure for new instrument details with analysis
   callStoredProcedure(payload: any): Observable<any> {
     const formData = new FormData();
-    
+
     // Append all payload properties to formData
     Object.keys(payload).forEach(key => {
       if (payload[key] !== null && payload[key] !== undefined) {
         formData.append(key, payload[key]);
       }
     });
-    
-     let token = this.storageService.getUser();
+
+    let token = this.storageService.getUser();
     let headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + token)
 
-    // let headers = new HttpHeaders()
-    //   .set('Authorization', 'Bearer ' + this.authToken);
-      // Don't set Content-Type for FormData - browser will set it with boundary
-    
+
     return this.http.post(
-       'https://localhost:7125/api/LpuCIF/CIFNewInstrumentDetails', formData, { headers })
+      'https://localhost:7125/api/LpuCIF/CIFNewInstrumentDetails', formData, { headers })
       // AUTH_API + 'api/LpuCIF/CIFNewInstrumentDetails', formData, { headers })
       .pipe(catchError(this.handleError('callStoredProcedure', { NewId: null })));
   }
@@ -958,5 +964,5 @@ export class LpuCIFWebService {
 
 
 
-  
+
 }
