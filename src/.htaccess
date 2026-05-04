@@ -1,16 +1,39 @@
+# Options -MultiViews
+# RewriteEngine On
+
+# # Enable proxy for header and footer API calls
+# RewriteRule ^api/header$ https://includepages.lpu.in/newlpu/header.php [L,P]
+# RewriteRule ^api/footer$ https://includepages.lpu.in/newlpu/footer.php [L,P]
+# RewriteRule ^api/remote-header$ https://includepages.lpu.in/newlpu/header.php [L,P]
+# RewriteRule ^api/remote-footer$ https://includepages.lpu.in/newlpu/footer.php [L,P]
+
+# # If an existing asset or directory is requested go to it as it is
+# RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+# RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+# RewriteRule ^ - [L]
+
+# # If the requested resource doesn't exist, use index.html
+# RewriteRule ^(.*)$ index.html
+
+
 Options -MultiViews
 RewriteEngine On
 
-# Enable proxy for header and footer API calls
+# 1. Ensure the base for all rewrites is the subfolder
+RewriteBase /cif/
+
+# 2. Enable proxy for header and footer API calls
+# Note: Ensure mod_proxy and mod_proxy_http are enabled on your server for [P] to work
 RewriteRule ^api/header$ https://includepages.lpu.in/newlpu/header.php [L,P]
 RewriteRule ^api/footer$ https://includepages.lpu.in/newlpu/footer.php [L,P]
 RewriteRule ^api/remote-header$ https://includepages.lpu.in/newlpu/header.php [L,P]
 RewriteRule ^api/remote-footer$ https://includepages.lpu.in/newlpu/footer.php [L,P]
 
-# If an existing asset or directory is requested go to it as it is
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+# 3. If an existing asset or directory is requested, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# If the requested resource doesn't exist, use index.html
-RewriteRule ^(.*)$ index.html
+# 4. If the resource doesn't exist, redirect to the subfolder's index.html
+# This is the "Deep Linking" fix
+RewriteRule ^(.*)$ /cif/index.html [L]

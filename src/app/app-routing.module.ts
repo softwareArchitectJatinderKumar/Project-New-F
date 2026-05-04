@@ -2,127 +2,127 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ErrorPageComponent } from './views/pages/error-page/error-page.component';
 import { SearchBookingsComponent } from './views/pages/InternalUserDashboard/search-bookings/search-bookings.component';
-
+import { APP_BASE_HREF, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 const routes: Routes = [
-// Normal or Common Pages
+  // Normal or Common Pages
 
-{
-  path: 'ourInstruments',
-  loadChildren: () => import('./views/pages/cif_webPortal/CifInstruments/CifInstruments.module').then(m => m.CifInstrumentsModule),
-},
-{
-  path: 'ourInstruments/:Name/:id/:categoryId',    
-  loadChildren: () => import('./views/pages/cif_webPortal/CifInstruments/CifInstruments.module').then(m => m.CifInstrumentsModule),
-},
-{
-  path: '',    
-  loadChildren: () => import('./views/pages/cif_webPortal/HomePage/FixedHomePageComponent.module').then(m => m.FixedHomePageComponentModule),
-  // loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
-  // loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
-},
-{
-  path:'Home',  
-  loadChildren: () => import('./views/pages/cif_webPortal/HomePage/FixedHomePageComponent.module').then(m => m.FixedHomePageComponentModule),
-  // loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
-},
-{
-  path: 'Login',    
-  loadChildren: () => import('./views/pages/cif_webPortal/CifLoginPage/CifLoginPage.component.module').then(m => m.CifLoginPageModule),
-},
+  {
+    path: 'ourInstruments',
+    loadChildren: () => import('./views/pages/cif_webPortal/CifInstruments/CifInstruments.module').then(m => m.CifInstrumentsModule),
+  },
+  {
+    path: 'ourInstruments/:Name/:id/:categoryId',
+    loadChildren: () => import('./views/pages/cif_webPortal/CifInstruments/CifInstruments.module').then(m => m.CifInstrumentsModule),
+  },
+  {
+    path: '',
+    loadChildren: () => import('./views/pages/cif_webPortal/HomePage/FixedHomePageComponent.module').then(m => m.FixedHomePageComponentModule),
+    // loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
+    // loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
+  },
+  {
+    path: 'Home',
+    loadChildren: () => import('./views/pages/cif_webPortal/HomePage/FixedHomePageComponent.module').then(m => m.FixedHomePageComponentModule),
+    // loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
+  },
+  {
+    path: 'Login',
+    loadChildren: () => import('./views/pages/cif_webPortal/CifLoginPage/CifLoginPage.component.module').then(m => m.CifLoginPageModule),
+  },
 
-{
-  path: 'Register', 
-  loadChildren: () => import('./views/pages/cif_webPortal/CifRegisterPage/CifRegisterPage.component.module').then(m => m.CifRegisterPageModule),
-},
-{
-  path: 'recoverAccount',  
-  loadChildren: () => import('./views/pages/cif_webPortal/recover-account/recover-account.module').then(m => m.RecoverAccountModule),
-},
+  {
+    path: 'Register',
+    loadChildren: () => import('./views/pages/cif_webPortal/CifRegisterPage/CifRegisterPage.component.module').then(m => m.CifRegisterPageModule),
+  },
+  {
+    path: 'recoverAccount',
+    loadChildren: () => import('./views/pages/cif_webPortal/recover-account/recover-account.module').then(m => m.RecoverAccountModule),
+  },
 
-// {
-//   path: 'Events',
-//   loadChildren: () => import('./views/pages/cif_webPortal/UpcomingEventsDetails/UpcomingEventsDetails.module').then(m => m.UpcomingEventsDetailsModule),
-// },
-{
-  path: 'Events/:id',    
-  loadChildren: () => import('./views/pages/cif_webPortal/UpcomingEventsDetails/UpcomingEventsDetails.module').then(m => m.UpcomingEventsDetailsModule),
-},
-// Ended Common Pages
+  // {
+  //   path: 'Events',
+  //   loadChildren: () => import('./views/pages/cif_webPortal/UpcomingEventsDetails/UpcomingEventsDetails.module').then(m => m.UpcomingEventsDetailsModule),
+  // },
+  {
+    path: 'Events/:id',
+    loadChildren: () => import('./views/pages/cif_webPortal/UpcomingEventsDetails/UpcomingEventsDetails.module').then(m => m.UpcomingEventsDetailsModule),
+  },
+  // Ended Common Pages
 
-// INTERNAL USER DASHBOARD START
+  // INTERNAL USER DASHBOARD START
 
-{
-  path:"SecurityIssue",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/SecurePasswordChange/SecurePasswordChange.module').then(m => m.SecurePasswordChangeComponentModule),
-},
-{
-  path:"UserProfiles",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/UserProfile/UserProfile.module').then(m => m.UserProfileModule),
-},
-{
-  path: "LpuLogin", 
-  loadChildren: () => import('./views/pages/InternalUserDashboard/LoginPage/LoginPage.module').then(m => m.LoginPageNComponentModule),
-},
-{
-  path: "CifTermsConditions", 
-  loadChildren: () => import('./views/pages/InternalUserDashboard/OurTermsConditions/OutTermsConditions.module').then(m => m.OurTermsConditionsModule),
-},
-{
-  path: "NewBookings",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/new-bookings/new-bookings.module').then(m => m.NewBookingsModule),
-},
-{
-  path: "ViewBookings",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/view-bookings/view-bookings.module').then(m => m.ViewBookingsModule),
-},
+  {
+    path: "SecurityIssue",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/SecurePasswordChange/SecurePasswordChange.module').then(m => m.SecurePasswordChangeComponentModule),
+  },
+  {
+    path: "UserProfiles",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/UserProfile/UserProfile.module').then(m => m.UserProfileModule),
+  },
+  {
+    path: "LpuLogin",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/LoginPage/LoginPage.module').then(m => m.LoginPageNComponentModule),
+  },
+  {
+    path: "CifTermsConditions",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/OurTermsConditions/OutTermsConditions.module').then(m => m.OurTermsConditionsModule),
+  },
+  {
+    path: "NewBookings",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/new-bookings/new-bookings.module').then(m => m.NewBookingsModule),
+  },
+  {
+    path: "ViewBookings",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/view-bookings/view-bookings.module').then(m => m.ViewBookingsModule),
+  },
 
-{
-  path: "SearchPayments",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/search-payments/search-payments.module').then(m => m.SearchPaymentsModule),
-},
-{
-  path: "SearchPendingPayments",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/search-payments-pending/search-payments-pending.module').then(m => m.SearchPaymentsPendingModule),
-},
-{
-  path: "FailedPayments",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/FailedPayments/FailedPayments.module').then(m => m.FailedPaymentsModule),
-},
-{
-  path: "BookingStatus",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/booking-status/booking-status.module').then(m => m.BookingStatusModule),
-},
-{
-  path: "BookingResult",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/booking-results/booking-results.module').then(m => m.BookingResultsModule),
-},
-{
-  path: "FeedbackForm",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/UserFeedbackForm/UserFeedbackForm.module').then(m => m.UserFeedbackFormModule),
-},
-{
-  path: "LpuTermsConditions",//    component:OurTermsConditionsComponent
-  loadChildren: () => import('./views/pages/InternalUserDashboard/OurTermsConditions/OutTermsConditions.module').then(m => m.OurTermsConditionsModule),
-},
-{
-  path: "SampleStatus",//    component:OurTermsConditionsComponent
-  loadChildren: () => import('./views/pages/InternalUserDashboard/Sample-Status/SampleStatus.module').then(m => m.SampleStatusModule),
-},
-{
-  path: "UploadProofStatus",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/Payment-Proof-Upload-Status/UploadProofStatus.module').then(m => m.UploadProofStatusModule),
-},
-
-
-{
-  path: "UserCIFMou",
-  loadChildren: () => import('./views/pages/InternalUserDashboard/CIF-Mou-Page/new-Mou.module').then(m => m.NewMouModule),
-},
+  {
+    path: "SearchPayments",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/search-payments/search-payments.module').then(m => m.SearchPaymentsModule),
+  },
+  {
+    path: "SearchPendingPayments",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/search-payments-pending/search-payments-pending.module').then(m => m.SearchPaymentsPendingModule),
+  },
+  {
+    path: "FailedPayments",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/FailedPayments/FailedPayments.module').then(m => m.FailedPaymentsModule),
+  },
+  {
+    path: "BookingStatus",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/booking-status/booking-status.module').then(m => m.BookingStatusModule),
+  },
+  {
+    path: "BookingResult",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/booking-results/booking-results.module').then(m => m.BookingResultsModule),
+  },
+  {
+    path: "FeedbackForm",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/UserFeedbackForm/UserFeedbackForm.module').then(m => m.UserFeedbackFormModule),
+  },
+  {
+    path: "LpuTermsConditions",//    component:OurTermsConditionsComponent
+    loadChildren: () => import('./views/pages/InternalUserDashboard/OurTermsConditions/OutTermsConditions.module').then(m => m.OurTermsConditionsModule),
+  },
+  {
+    path: "SampleStatus",//    component:OurTermsConditionsComponent
+    loadChildren: () => import('./views/pages/InternalUserDashboard/Sample-Status/SampleStatus.module').then(m => m.SampleStatusModule),
+  },
+  {
+    path: "UploadProofStatus",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/Payment-Proof-Upload-Status/UploadProofStatus.module').then(m => m.UploadProofStatusModule),
+  },
 
 
+  {
+    path: "UserCIFMou",
+    loadChildren: () => import('./views/pages/InternalUserDashboard/CIF-Mou-Page/new-Mou.module').then(m => m.NewMouModule),
+  },
 
-// INTERNAL USER DASHBOARD END
+
+
+  // INTERNAL USER DASHBOARD END
 
 
   // Staff Dashboard for Upload results
@@ -155,8 +155,8 @@ const routes: Routes = [
     path: "UserDetailSS",// Add Module file 
     loadChildren: () => import('./views/pages/StaffDashboard/UserDetails/StaffUserDetails.module').then(m => m.StaffUserDetailsModule),
   },
- 
-  
+
+
   {
     path: "SearchBookings", component: SearchBookingsComponent,
     loadChildren: () => import('./views/pages/InternalUserDashboard/search-bookings/search-bookings.module').then(m => m.SearchBookingsModule),
@@ -164,55 +164,55 @@ const routes: Routes = [
 
   {
     path: "PendingPayments",
-    loadChildren: () => import('./views/pages/InternalUserDashboard/pending-payments/pending-payments.module').then(m=>m.PendingPaymentsModule),
+    loadChildren: () => import('./views/pages/InternalUserDashboard/pending-payments/pending-payments.module').then(m => m.PendingPaymentsModule),
   },
 
   {
     path: "ResponsePayments",
     loadChildren: () => import('./views/pages/InternalUserDashboard/payment-response-page/payment-response-page.module').then(m => m.PaymentResponsePageModule),
   },
- 
+
   // {path:"Refunds",component:RefundStatusComponent},
   {
     path: "ChangePassword",
     loadChildren: () => import('./views/pages/InternalUserDashboard/change-passwords/change-passwords.module').then(m => m.ChangePasswordsModule),
   },
-// ENDED STAFF DASHBOARD
+  // ENDED STAFF DASHBOARD
 
   {
     path: 'cifDashboards',
     loadChildren: () => import('./views/pages/cif_webPortal/cif-user-dashboard/cif-user-dashboard.module').then(m => m.CifUserDashboardModule),
   },
 
-// Admin Dashboard
+  // Admin Dashboard
 
-{
-  path: "CifAnalysisCrud",
-  // loadChildren: () => import('./views/pages/AdminDashboard/A-Analysis-CIF/cif-analysis.module').then(m => m.CIFAnalysisModule),
-  loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Analysis/analysis-price.module').then(m => m.AnalysisPriceModule),
-},
-{
-  path: "CifMouCrud",
-  loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Mou/adminMou.module').then(m => m.AdminMouModule),
-},
-{
-  path: "AUploadProof",
-  loadChildren: () => import('./views/pages/AdminDashboard/APayment-Proof-Upload-Status/AUploadProofStatus.module').then(m => m.AUploadProofStatusModule),
-},
-{
-  path: "EventCrud",
-  loadChildren: () => import('./views/pages/AdminDashboard/EventsCrud/event-crud.module').then(m => m.EventsCrudComponentModule),
-},
-{
-  path: "EventUploads",
-  loadChildren: () => import('./views/pages/AdminDashboard/AdminNewEventsData/AdminNewEventsData.module').then(m => m.AdminNewEventsDataModule),
-},
-{
-  path: "AllCIFEvents",
-  loadChildren: () => import('./views/pages/AdminDashboard/AdminActionCifEvents/AdminActionCifEvents.mdoule').then(m => m.AdminActionInstrumentsModule),
-},
   {
-    path: "AdminLoginX",  
+    path: "CifAnalysisCrud",
+    // loadChildren: () => import('./views/pages/AdminDashboard/A-Analysis-CIF/cif-analysis.module').then(m => m.CIFAnalysisModule),
+    loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Analysis/analysis-price.module').then(m => m.AnalysisPriceModule),
+  },
+  {
+    path: "CifMouCrud",
+    loadChildren: () => import('./views/pages/AdminDashboard/A-CIF-Mou/adminMou.module').then(m => m.AdminMouModule),
+  },
+  {
+    path: "AUploadProof",
+    loadChildren: () => import('./views/pages/AdminDashboard/APayment-Proof-Upload-Status/AUploadProofStatus.module').then(m => m.AUploadProofStatusModule),
+  },
+  {
+    path: "EventCrud",
+    loadChildren: () => import('./views/pages/AdminDashboard/EventsCrud/event-crud.module').then(m => m.EventsCrudComponentModule),
+  },
+  {
+    path: "EventUploads",
+    loadChildren: () => import('./views/pages/AdminDashboard/AdminNewEventsData/AdminNewEventsData.module').then(m => m.AdminNewEventsDataModule),
+  },
+  {
+    path: "AllCIFEvents",
+    loadChildren: () => import('./views/pages/AdminDashboard/AdminActionCifEvents/AdminActionCifEvents.mdoule').then(m => m.AdminActionInstrumentsModule),
+  },
+  {
+    path: "AdminLoginX",
     loadChildren: () => import('./views/pages/cif_webPortal/internalUser-login/internalUser-login.module').then(m => m.InternalUserLoginModule),
     // component:InternalUserLoginComponent
   },
@@ -222,17 +222,17 @@ const routes: Routes = [
     // component:AdminActionBookingsComponent
   },
   {
-    path: "AdminInstrumentPrice", 
+    path: "AdminInstrumentPrice",
     loadChildren: () => import('./views/pages/AdminDashboard/AdminUpdateInstrumentPrices/AdminUpdateInstrumentPrice.module').then(m => m.AdminUpdateInstrumentPriceModule),
     // component:AdminActionInstrumentsComponent UpdateInstrumentPriceModule
   },
   {
-    path: "AdminInstrumentAction", 
+    path: "AdminInstrumentAction",
     loadChildren: () => import('./views/pages/AdminDashboard/AdminActionInstruments/AdminActionInstruments.mdoule').then(m => m.AdminActionInstrumentsModule),
     // component:AdminActionInstrumentsComponent
   },
   {
-    path: "NewInstrumentWizard", 
+    path: "NewInstrumentWizard",
     loadChildren: () => import('./views/pages/AdminDashboard/AdminNewInstrumentWizard/AdminNewInstrumentWizard.module').then(m => m.AdminNewInstrumentWizardModule),
     // component:AdminNewInstrumentWizardComponent
   },
@@ -266,47 +266,49 @@ const routes: Routes = [
     loadChildren: () => import('./views/pages/AdminDashboard/AdminUserFeedbackDetails/AdminUserFeedbackDetails.module').then(m => m.AdminUserFeedbackDetailsModule),
     // component:AdminNewInstrumentsComponent
   },
-  
+
   {
     path: "cifUserProfile",
     loadChildren: () => import('./views/pages/InternalUserDashboard/Cifprofile/Cifprofile.module').then(m => m.CifprofileModule),
     // component: CifPorfileComponent
   },
- 
+
   {
     path: "MyTestDataXXXXXXXXXXXX/:loginName",
     loadChildren: () => import('./views/pages/AdminDashboard/ViewBookingAdmin/ViewBookingAdmin.module').then(m => m.ViewBookingAdminModule),
-    // component:ViewBookingAdminComponent
+   
   },
- 
+
   {
-    path: "LPUTermsCondition", //    component:CifTermsConditionsComponent
+    path: "LPUTermsCondition",  
     loadChildren: () => import('./views/pages/InternalUserDashboard/LPUTermsConditions/LPUTermsConditions.module').then(m => m.LPUTermsConditionsModule),
   },
 
   {
     path: 'error',
     loadChildren: () => import('./views/pages/cif_webPortal/HomePage/HomePage.module').then(m => m.HomePageModule),
-    // component: ErrorPageComponent,
-    // data: {
-    //   'type': 404,
-    //   'title': 'Page Not Found',
-    //   'desc': 'Oopps!! The page you were looking for doesn\'t exist.'
-    // }
   },
   {
     path: 'error/:type',
     component: ErrorPageComponent
   },
-  { path: '**', redirectTo: 'error', pathMatch: 'full' },
+  {
+    path: '**',
+    redirectTo: 'Home',  
+    pathMatch: 'full'
+  }
 
 
 
- 
+
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'top' })],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    { provide: APP_BASE_HREF, useValue: '/cif/' },
+    { provide: LocationStrategy, useClass: PathLocationStrategy }
+  ],
 })
 export class AppRoutingModule { }

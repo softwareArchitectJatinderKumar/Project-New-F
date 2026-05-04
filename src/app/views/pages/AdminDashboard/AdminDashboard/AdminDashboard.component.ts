@@ -45,9 +45,16 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  goto(val: any) {
-    this.router.navigateByUrl(val);
+  // goto(val: any) {
+  //   this.router.navigateByUrl(val);
+  // }
+
+    goto(path: string) {
+    this.isNavbarCollapsed = true;
+    const targetPath = path.startsWith('/') ? path : '/' + path;
+    this.router.navigate([targetPath]);
   }
+
   ngOnInit(): void {
     const GetCookieData = this.cookieService.get('authData');
     const retrievedCookies = JSON.parse(GetCookieData);

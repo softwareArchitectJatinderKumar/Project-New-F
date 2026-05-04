@@ -58,7 +58,8 @@
                     <strong>{{ isInstrumentActive ? 'Instrument is Active' : 'Instrument is Inactive' }}</strong>
                 </div>
                 <div class="mb-5">
-                    <img [src]="ImageUrl" alt="Instrument Image" class="ImageSizes" />
+                    <!-- <img [src]="ImageUrl" alt="Instrument Image" class="ImageSizes" /> -->
+                    <img [src]="'assets/images/Instrument-Images/' + this.InstrumentId + '.jpg'" class="ImageSizes" >
                 </div>
                 <p [innerHTML]="Description" style="text-align: justify;"></p>
             </div>

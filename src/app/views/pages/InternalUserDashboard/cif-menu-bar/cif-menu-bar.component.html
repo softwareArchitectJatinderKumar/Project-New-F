@@ -6,23 +6,86 @@
 <nav class="navbar navbar-light navbar-expand-lg mb-4 mt-md-5 topMargin">
   <div class="container-fluid">
     <div class="w-100 text-center py-1 promo-banner">
-       
-      <strong class="blinking-text"> <a class="w-100 d-block text-decoration-none" 
-        (click)="openSampleInstructions()"
-        style="cursor: pointer; margin-left: 0.8rem;"><span class="badge bg-info text-dark m-2 p-3 fs-5" style="background: #ff9219 !important;">
-          Address for Sending Samples </span></a> </strong>
+
+      <strong class="blinking-text"> <a class="w-100 d-block text-decoration-none" (click)="openSampleInstructions()"
+          style="cursor: pointer; margin-left: 0.8rem;"><span class="badge bg-info text-dark m-2 p-3 fs-5"
+            style="background: #ff9219 !important;">
+            Address for Sending Samples </span></a> </strong>
     </div>
-    <button
-      class="navbar-toggler bg-light"
-      type="button"
-      (click)="toggleNavbar()"
-      aria-controls="navbarNav"
-      [attr.aria-expanded]="isNavbarCollapsed ? 'false' : 'true'"
-      aria-label="Toggle navigation">
+    <button class="navbar-toggler bg-light" type="button" (click)="toggleNavbar()" aria-controls="navbarNav"
+      [attr.aria-expanded]="isNavbarCollapsed ? 'false' : 'true'" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div [ngClass]="{'collapse': isNavbarCollapsed, 'navbar-collapse': true}"  id="navbarNav"    >
+    <div [ngClass]="{'collapse': isNavbarCollapsed, 'navbar-collapse': true}" id="navbarNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 bg-transparent">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-nav-link" id="bookingsDropdown" data-bs-toggle="dropdown"
+            role="button" aria-expanded="false">
+            <span style="border-bottom:1px solid #ef7d00;">Bookings</span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="bookingsDropdown">
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('NewBookings')">New Booking</a></li>
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('ViewBookings')">My Bookings</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-nav-link" id="paymentsDropdown" data-bs-toggle="dropdown"
+            role="button" aria-expanded="false">
+            <span style="border-bottom:1px solid #ef7d00;">Payments</span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="paymentsDropdown">
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('SearchPayments')">View All Paid</a></li>
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('SearchPendingPayments')">View All
+                Pending</a></li>
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('FailedPayments')">View All Failed</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle custom-nav-link" id="statusDropdown" data-bs-toggle="dropdown"
+            role="button" aria-expanded="false">
+            <span style="border-bottom:1px solid #ef7d00;">Status</span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('SampleStatus')">Samples</a></li>
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('BookingStatus')">Test Status</a></li>
+            <li><a class="dropdown-item custom-dropdown-item" (click)="goto('UploadProofStatus')">Proof Uploads</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" (click)="goto('BookingResult')">Results</a>
+        </li>
+
+        <li class="nav-item" *ngIf="UserRole === '400001' || UserRole === '400002'">
+          <a class="nav-link custom-nav-link" (click)="goto('UserCIFMou')">Upload MOU</a>
+        </li>
+
+        <li class="nav-item" *ngIf="UserRole !== '400000'">
+          <a class="nav-link custom-nav-link" (click)="goto('UserProfiles')">My Profile</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" (click)="goto('FeedbackForm')">Feedback</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link custom-nav-link" (click)="LogoutUser()">Logout</a>
+        </li>
+        <!-- <li class="nav-item">
+          
+          <a class="nav-link custom-nav-link text-danger" (click)="LogoutUser()" style="cursor: pointer;">
+            <i class="fa fa-sign-out"></i> Logout
+          </a>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- <div [ngClass]="{'collapse': isNavbarCollapsed, 'navbar-collapse': true}"  id="navbarNav"    >
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 bg-transparent" >
   
         <li class="nav-item dropdown">
@@ -74,7 +137,7 @@
                 (click)="goto('ViewBookings')"
                 >View All Pending</a
                 >
-                <!-- (click)="goto('SearchPendingPayments')" -->
+                
             </li>
             <li>
               <a
@@ -163,12 +226,10 @@
           >
         </li>
       </ul>
-    </div>
-  </div>
-</nav>
- 
+    </div> -->
+<!-- </div>
+</nav> -->
+
 <div class="text-center mt-4">
   <h2 class="mb-0 text-center mb-4">Central Instrumentation Facility</h2>
 </div>
- 
-

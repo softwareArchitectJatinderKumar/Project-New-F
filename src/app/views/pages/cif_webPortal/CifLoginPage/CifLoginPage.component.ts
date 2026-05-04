@@ -291,7 +291,7 @@ export class CifLoginPageComponent implements OnInit {
           if (result.isConfirmed) {
             this.AuthSession.addToSession(this.UserData);
             this.router.navigateByUrl('/NewBookings').then(() => {
-              window.location.reload();
+              // window.location.reload();
             });
           } else {
             swal
