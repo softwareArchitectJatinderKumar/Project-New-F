@@ -1,4 +1,13 @@
-import { Component, OnInit, ViewEncapsulation, AfterViewInit, Inject, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation,
+  AfterViewInit,
+  Inject,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
@@ -9,37 +18,34 @@ import * as $ from 'jquery';
 // CORS proxy services - these allow bypassing CORS restrictions
 const CORS_PROXIES = [
   'https://api.allorigins.win/raw?url=',
-  'https://corsproxy.io/?'
+  'https://corsproxy.io/?',
 ];
-;
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   headerHtml: SafeHtml | null = null;
   private observer: MutationObserver | null = null;
-  private scriptsExecuted = false;  // ← GUARD FLAG
+  private scriptsExecuted = false; // ← GUARD FLAG
   @ViewChild('headerDiv', { static: true }) headerDiv!: ElementRef;
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
-   private CIFwebService: LpuCIFWebService,
+    private CIFwebService: LpuCIFWebService,
     private assetLoader: AssetLoaderService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
   ) {}
 
-ngOnInit() {
+  ngOnInit() {
     //this.loadHeaderWithCorsWorkaround(environment.headerUrl, 0);
     this.loadHeader();
   }
   loadHeader() {
     this.CIFwebService.getLpuHeader().subscribe(async (res) => {
-
-
       // load css
       res.css.forEach((css: string) => this.assetLoader.loadCss(css));
 
@@ -48,81 +54,80 @@ ngOnInit() {
 
       // inject html
       this.headerDiv.nativeElement.innerHTML = res.html;
-     
+
       // execute inline events after load
       setTimeout(() => {
-      this.executeSafeInlineScripts(res.inlineScripts);
-     this.initializeAnnouncementBar();
+        this.executeSafeInlineScripts(res.inlineScripts);
+        this.initializeAnnouncementBar();
       }, 1500);
     });
   }
 
+  executeSafeInlineScripts(scripts: string[]) {
+    if (!scripts) return;
 
-executeSafeInlineScripts(scripts: string[]) {
-  if (!scripts) return;
+    scripts.forEach((code: string) => {
+      try {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.text = code;
+        document.body.appendChild(script);
+      } catch (e) {
+        console.log('safe script skipped');
+      }
+    });
+  }
 
-  scripts.forEach((code: string) => {
-    try {
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.text = code;
-      document.body.appendChild(script);
-    } catch (e) {
-      console.log('safe script skipped');
-    }
-  });
-}
+  initializeAnnouncementBar() {
+    fetch('https://webapi.lpu.in/LPUAnnouncement/api/Announcement/GetAll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        if (
+          !response.taskStatus ||
+          !response.data ||
+          response.data.length === 0
+        ) {
+          const bar = document.querySelector('.announcement-bar');
+          if (bar) (bar as HTMLElement).style.display = 'none';
+          return;
+        }
 
+        const slider = document.querySelector('.topbar-slider');
+        if (!slider) return;
 
-initializeAnnouncementBar() {
-  fetch("https://webapi.lpu.in/LPUAnnouncement/api/Announcement/GetAll", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({})
-  })
-  .then(res => res.json())
-  .then(response => {
+        slider.innerHTML = '';
 
-    if (!response.taskStatus || !response.data || response.data.length === 0) {
-      const bar = document.querySelector(".announcement-bar");
-      if (bar) (bar as HTMLElement).style.display = "none";
-      return;
-    }
+        response.data
+          .filter((x: any) => x.isActive)
+          .sort((a: any, b: any) => a.displayOrder - b.displayOrder)
+          .forEach((item: any) => {
+            const div = document.createElement('div');
 
-    const slider = document.querySelector(".topbar-slider");
-    if (!slider) return;
+            if (item.isCountdown && item.targetDate) {
+              div.classList.add('notice');
 
-    slider.innerHTML = "";
-
-    response.data
-      .filter((x: any) => x.isActive)
-      .sort((a: any, b: any) => a.displayOrder - b.displayOrder)
-      .forEach((item: any) => {
-
-        const div = document.createElement("div");
-
-        if (item.isCountdown && item.targetDate) {
-          div.classList.add("notice");
-
-          div.innerHTML = `
+              div.innerHTML = `
             <a href="${item.redirectUrl}" target="_blank">
               <span class="last-date" data-date="${item.targetDate}"></span>
               ${item.title}
             </a>
           `;
-        } else {
-          div.innerHTML = `
+            } else {
+              div.innerHTML = `
             <a href="${item.redirectUrl}" target="_blank">${item.title}</a>
           `;
-        }
+            }
 
-        slider.appendChild(div);
+            slider.appendChild(div);
+          });
       });
-
-  });
-}
+  }
 
   rebindScripts() {
     const scripts = this.headerDiv.nativeElement.querySelectorAll('script');
@@ -134,46 +139,44 @@ initializeAnnouncementBar() {
   }
 
   executeInlineScripts1(scripts: string[]) {
-  if (!scripts || scripts.length === 0) return;
+    if (!scripts || scripts.length === 0) return;
 
-  scripts.forEach((code: string) => {
-    try {
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.text = code;
-      document.body.appendChild(script);
-    } catch (e) {
-      // console.log('inline script skipped');
-    }
-  });
-}
-// async loadHeader() {
-//   this.CIFwebService.getLpuHeader().subscribe(async (res) => {
+    scripts.forEach((code: string) => {
+      try {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.text = code;
+        document.body.appendChild(script);
+      } catch (e) {
+        // console.log('inline script skipped');
+      }
+    });
+  }
+  // async loadHeader() {
+  //   this.CIFwebService.getLpuHeader().subscribe(async (res) => {
 
-//     // wait css files
-//     for (const css of res.css) {
-//       await this.assetLoader.loadCss(css);
-//     }
+  //     // wait css files
+  //     for (const css of res.css) {
+  //       await this.assetLoader.loadCss(css);
+  //     }
 
-//     // wait js files
-//     for (const js of res.js) {
-//       await this.assetLoader.loadJs(js);
-//     }
+  //     // wait js files
+  //     for (const js of res.js) {
+  //       await this.assetLoader.loadJs(js);
+  //     }
 
-//     let cleanedHtml = this.removeJunkTags(res.html);
-//     this.headerDiv.nativeElement.innerHTML = cleanedHtml;
+  //     let cleanedHtml = this.removeJunkTags(res.html);
+  //     this.headerDiv.nativeElement.innerHTML = cleanedHtml;
 
-//     setTimeout(() => {
-//       this.initializeHeaderMenus();
-//     }, 500);
-//   });
-// }
-
-
+  //     setTimeout(() => {
+  //       this.initializeHeaderMenus();
+  //     }, 500);
+  //   });
+  // }
 
   // private loadHeaderWithCorsWorkaround(url: string, proxyIndex: number): void {
   //   const targetUrl = proxyIndex === 0 ? url : CORS_PROXIES[proxyIndex - 1] + encodeURIComponent(url);
-    
+
   //   this.http.get(targetUrl, { responseType: 'text' }).subscribe({
   //     next: html => {
   //       this.headerHtml = this.sanitizer.bypassSecurityTrustHtml(html);
@@ -211,7 +214,7 @@ initializeAnnouncementBar() {
     }
 
     const scripts = container.querySelectorAll('script');
-    scripts.forEach(oldScript => {
+    scripts.forEach((oldScript) => {
       // Skip scripts that reference localhost-only resources (Cloudflare challenge etc.)
       const src = oldScript.getAttribute('src') || '';
       if (src.includes('cdn-cgi') || src.includes('challenge-platform')) {
@@ -221,7 +224,7 @@ initializeAnnouncementBar() {
       const newScript = this.document.createElement('script');
 
       // Copy all attributes
-      Array.from(oldScript.attributes).forEach(attr => {
+      Array.from(oldScript.attributes).forEach((attr) => {
         newScript.setAttribute(attr.name, attr.value);
       });
 
@@ -235,7 +238,7 @@ initializeAnnouncementBar() {
 
     // Re-attach external CSS links
     const links = container.querySelectorAll('link[rel="stylesheet"]');
-    links.forEach(link => {
+    links.forEach((link) => {
       const href = (link as HTMLLinkElement).href;
       if (!this.document.head.querySelector(`link[href="${href}"]`)) {
         this.document.head.appendChild(link.cloneNode(true));
@@ -273,7 +276,10 @@ initializeAnnouncementBar() {
       }
     });
 
-    this.observer.observe(this.document.body, { childList: true, subtree: true });
+    this.observer.observe(this.document.body, {
+      childList: true,
+      subtree: true,
+    });
   }
 }
 // import { Component, OnInit, ViewEncapsulation, OnDestroy, AfterViewInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
@@ -295,8 +301,6 @@ initializeAnnouncementBar() {
 //   error: boolean = false;
 //   isMounted: boolean = false;
 //   private observer: MutationObserver | null = null;
-
-
 
 //   constructor(
 //     private http: HttpClient,
@@ -330,10 +334,8 @@ initializeAnnouncementBar() {
 //     this.document.head.appendChild(script);
 //   }
 
-
 //   ngAfterViewInit() {
 //     this.loadGTMScript('GTM-P8ZP9K2');
 //   }
-
 
 // }
