@@ -1,50 +1,7 @@
 <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
-<div class="sticky-bar">
-  <ul>
-    <li class="apply-now-outer">
-      <a target="_blank" href="https://admission.lpu.in/" data-gtm-section="sticky">
-        <span class="apply-now">Apply Now</span>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" href="https://iviewd.com/lpu2/" data-gtm-section="sticky">
-        <img width="auto" height="auto" src="https://www.lpu.in/lpu-assets/images/icons/360-view-w.svg"
-          alt="new-call-icon">
-        <span class="st-label">Virtual Tour</span>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" href="" class="ppwnd" data-gtm-section="sticky">
-        <img width="auto" height="auto" src="https://www.lpu.in/lpu-assets/images/icons/phone-full.svg"
-          alt="new-call-icon">
-        <span class="st-label">Schedule a Call</span>
-      </a>
-    </li>
-    <li>
-      <a target="_blank"
-        href="https://api.whatsapp.com/send?phone=+919852569000&amp;text=Hi%2C%20I%20need%20assistance%20for%20Admissions%202024."
-        data-gtm-section="sticky">
-        <img width="auto" height="auto" src="https://www.lpu.in/lpu-assets/images/icons/whatsapp-white.svg"
-          alt="new-whatsapp-icon">
-        <span class="st-label">Whatsapp only <br>+919852569000</span>
-      </a>
-    </li>
-    <li>
-      <a target="_blank" href="#" data-bs-toggle="modal" data-bs-target="#live-video-counselling">
-        <img width="auto" height="auto" src="https://www.lpu.in/lpu-assets/images/icons/live-video.svg"
-          alt="new-video-chat">
-        <span class="st-label">Live Video <br>Counselling</span>
-      </a>
-    </li>
-    <li><a href="https://www.lpu.in/admission/lpu-in-your-town.php#lpu-town" data-gtm-section="sticky">
-        <img width="auto" height="auto" src="https://www.lpu.in/lpu-assets/images/icons/town.svg"
-          alt="new-location-icon">
-        <span class="st-label">LPU in Your Town</span></a>
-    </li>
-  </ul>
-</div>
+ 
 
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
   <div class="custom-spinner-overlay" *ngIf="isLoading">
     <div class="custom-spinner-content text-center">
       <img src="assets/images/spinner.gif" alt="Loading..." />
@@ -65,10 +22,10 @@
         <img src="https://www.lpu.in/lpu-assets/images/cif/login-left.png" alt="CIF Login" />
       </div>
 
-      <div class="col-md-6 reg-div" >
+      <div class="col-md-6 reg-div">
 
 
-        <form [formGroup]="cifUserForm" (ngSubmit)="Onsubmit()" class="forms-sample" >
+        <form [formGroup]="cifUserForm" (ngSubmit)="Onsubmit()" class="forms-sample">
           <div class="cif-register">
             <div class="row">
               <div class="col-md-12 mb-3">
@@ -202,7 +159,6 @@
                   class="invalid-feedback">Passwords do not match</div>
               </div>
 
-              <!-- Role -->
               <div class="col-md-6 mb-3">
                 <label for="UserRole">Role</label>
                 <select id="UserRole" formControlName="UserRole" class="form-select"
@@ -248,9 +204,16 @@
         measurements, structure determination and chemical analysis. Click on the instrument name in the
         following table to view their description.</p>
     </div>
-    <div class="row cif-facilties"  >
+    <div class="row cif-facilties">
       <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index" [attr.data-index]="i">
-        <div class="mb-4">
+         <div class="cif-img-frame" *ngIf="InstrumentData.instrumentId">
+                    <img [src]="'assets/images/Instrument-Images/' + InstrumentData.instrumentId + '.jpg'"
+                         [alt]="InstrumentData.instrumentName" 
+                         class="cif-fit-img img-fluid imgSize" 
+                         loading="eager" 
+                         fetchpriority="high" />
+                </div>
+        <!-- <div class="mb-4">
 
           <div *ngIf="loadingStates[i]"
             class="spinner-border text-primary position-absolute top-50 start-50 translate-middle" role="status">
@@ -258,41 +221,37 @@
           </div>
           <img [src]="InstrumentData.imageUrl" alt="{{InstrumentData.instrumentName}}" class="img-fluid" loading="lazy"
             (load)="onImageLoad(i)" (error)="onImageError($event, i)" />
-        </div>
+        </div> -->
         <div class="mb-5">
           <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id, InstrumentData.categoryId)"
             data-is-active="instrument.isActive ? 'true' : 'false'}">
             {{InstrumentData.instrumentName}}
           </a>
-          <!-- <a
-                      (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id, InstrumentData.categoryId)">
-                      {{InstrumentData.instrumentName}}
-                  </a> -->
         </div>
       </div>
     </div>
   </div>
 </section>
 <ng-template #ErrorCard>
-   <div class="text-center" >
-        <h3 class="text-center fs-2 m-5 text-danger pt-5 "> No Record ! </h3>
-        <div class="row mt-4 mb-4">
-            <div class="col-sm-12 text-center">
-                <div class="mb-3 p-4">
-                    <Label class="form-label fs-4 text-danger ">No Data Found.</Label>
-                </div>
-            </div>
+  <div class="text-center">
+    <h3 class="text-center fs-2 m-5 text-danger pt-5 "> No Record ! </h3>
+    <div class="row mt-4 mb-4">
+      <div class="col-sm-12 text-center">
+        <div class="mb-3 p-4">
+          <Label class="form-label fs-4 text-danger ">No Data Found.</Label>
         </div>
+      </div>
     </div>
+  </div>
   <!-- <div class="col-md-6 login-div alert alert-danger card mt-3" role="alert">
     <div class="card-body text-center">
       <h5 class="card-title">Server Connection Error</h5>
-      <p class="card-text">Data Server Connection error , Try again later</p>
+      <p class="card-text">Error</p>
     </div>
   </div> -->
 </ng-template>
 
-<section class="section bg-dark-yellow">
+<section class="section">
   <div class="container">
     <div class="heading-wraper">
       <div class="main-head">

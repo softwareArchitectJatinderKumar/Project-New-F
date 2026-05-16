@@ -119,7 +119,7 @@ OnReset(): void {
             this.serverConnectionError = true;
             swal.fire({
               title: 'Server Connection Error',
-              text: 'Data Server Connection error , Try again later',
+              text: 'Error',
               icon: 'error',
             });
             return;
@@ -383,7 +383,7 @@ OnReset(): void {
           this.tmpsInstrumentsDataData = this.InstrumentsDataData.slice(0, this.InstrumentsDataData.length);
           this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
                this.serverConnectionError = true;
-        // this.loginError = 'Data Server Connection error , Try again later';
+        // this.loginError = 'Error';
         }
         const elapsed = new Date().getTime() - startTime;
         const remainingDelay = Math.max(2500 - elapsed, 0); // wait at least 5s
@@ -398,7 +398,7 @@ OnReset(): void {
         this.loadingStates = Array(this.tmpsInstrumentsDataData.length).fill(true); // Initialize loading states
         this.loadingIndicator = false;
         this.serverConnectionError = true;
-        // this.loginError = 'Data Server Connection error , Try again later';
+        // this.loginError = 'Error';
         console.error(err);
       }
     });

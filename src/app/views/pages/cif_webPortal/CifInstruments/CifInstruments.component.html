@@ -58,13 +58,14 @@
                     <strong>{{ isInstrumentActive ? 'Instrument is Active' : 'Instrument is Inactive' }}</strong>
                 </div>
                 <div class="mb-5">
-                    <img [src]="ImageUrl" alt="Instrument Image" class="ImageSizes" />
+                    <!-- <img [src]="ImageUrl" alt="Instrument Image" class="ImageSizes" /> -->
+                     <img [src]="'assets/images/Instrument-Images/' + this.InstrumentId + '.jpg'" class="ImageSizes" >
                 </div>
                 <p [innerHTML]="Description" style="text-align: justify;"></p>
             </div>
             <div class="col-lg-3">
-                <div class="section-light-red p-3">
-                    <h4 class="font-primary white mb-3">Specifications:</h4>
+                <div class="section-light-red p-3"  *ngIf="specifications.length>0">
+                    <h4 class="font-primary white mb-3" >Specifications:</h4>
                     <ul class="specifications lpu-list white" id="specificationsList">
                         <li *ngFor="let spec of specifications">
                             <strong class="d-block">{{ spec.keyName }}:</strong> {{ spec.keyValue }}

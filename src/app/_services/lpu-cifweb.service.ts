@@ -36,7 +36,7 @@ export class LpuCIFWebService {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed:`, error);
       // Return the fallback value with user-friendly error message to prevent UI crashes
-      const userFriendlyMessage = 'Data Server Connection error , Try again later';
+      const userFriendlyMessage = 'Error';
 
       // For array fallbacks, return the empty array with error flag
       if (Array.isArray(fallbackValue)) {
@@ -57,6 +57,17 @@ export class LpuCIFWebService {
 
   getFolderUrl(): string {
     return this.folderUrl;
+  }
+
+
+    getLpuHeader(): Observable<any> {
+    // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuHeader');
+    return this.http.get( 'https://webapi.lpu.in/cif/api/LpuCIFHeaderFooter/GetLpuHeader');
+  }
+
+  getLpuFooter(): Observable<any> {
+    // return this.http.get('https://localhost:7125/api/LpuCIFHeaderFooter/GetLpuFooter');
+    return this.http.get( 'https://webapi.lpu.in/cif/api/LpuCIFHeaderFooter/GetLpuFooter');
   }
 
   downloadFile(fileUrl: string): Observable<Blob> {
@@ -723,7 +734,7 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       AUTH_API_LOCAL + 'api/LpuCIF/GetUserDataIdWise', loginData, { headers }
-    ).pipe(catchError(this.handleError('GetAuthoriseUserData', { success: false, message: 'Data Server Connection error , Try again later' })));
+    ).pipe(catchError(this.handleError('GetAuthoriseUserData', { success: false, message: 'Error' })));
   }
 
   // New Logic for Internal user login
@@ -733,7 +744,7 @@ export class LpuCIFWebService {
       .set('Authorization', 'Bearer ' + this.authToken)
     return this.http.post(
       AUTH_API_LOCAL + 'api/LpuCIF/CreateCIFUserAccount', newUserData, { headers }
-    ).pipe(catchError(this.handleError('NewUserRecord', { success: false, message: 'Data Server Connection error , Try again later' })));
+    ).pipe(catchError(this.handleError('NewUserRecord', { success: false, message: 'Error' })));
   }
 
   NewUserSignUp(newUserData: FormData): Observable<any> {

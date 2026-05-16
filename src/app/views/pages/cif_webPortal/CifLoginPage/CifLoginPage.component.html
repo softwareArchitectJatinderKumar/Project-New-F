@@ -1,7 +1,7 @@
 <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
 
 
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
     <div class="custom-spinner-overlay" *ngIf="isLoading">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
@@ -191,7 +191,7 @@
     <!-- <div class="col-md-6 login-div alert alert-danger card mt-3" role="alert">
         <div class="card-body text-center">
             <h5 class="card-title">Server Connection Error</h5>
-            <p class="card-text">Data Server Connection error , Try again later</p>
+            <p class="card-text">Error</p>
              
         </div>
     </div> -->
@@ -252,7 +252,7 @@
                         loading="lazy" (load)="onImageLoad(i)" (error)="onImageError($event, i)" />
                 </div>
                 <div class="mb-5">
-                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id, InstrumentData.categoryId)"
+                    <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.instrumenId, InstrumentData.categoryId)"
                         data-is-active="instrument.isActive ? 'true' : 'false'}">
                         {{InstrumentData.instrumentName}}
                     </a>

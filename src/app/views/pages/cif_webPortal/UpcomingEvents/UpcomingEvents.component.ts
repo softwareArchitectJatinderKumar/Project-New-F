@@ -126,7 +126,7 @@ export class UpcomingEventsComponent implements OnInit {
     //         error: err => {
     //             this.loadingIndicator = false;
     //             this.serverError = true;
-    //             this.errorMessage = 'Data Server Connection error , Try again later';
+    //             this.errorMessage = 'Error';
     //             console.error(err);
     //             // Fallback to static events and chunk them
     //             this.events = [];

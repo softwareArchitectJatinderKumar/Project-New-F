@@ -155,7 +155,7 @@ const routes: Routes = [
  
   
   {
-    path: "SearchBookings", component: SearchBookingsComponent,
+    path: "SearchBookings",
     loadChildren: () => import('./views/pages/InternalUserDashboard/search-bookings/search-bookings.module').then(m => m.SearchBookingsModule),
   },
 

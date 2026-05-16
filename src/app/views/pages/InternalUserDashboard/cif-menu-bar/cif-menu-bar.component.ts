@@ -14,7 +14,7 @@ import { LoginSessionService } from 'src/app/_services/login-session.service';
 })
 export class CifMenuBarComponent implements OnInit {
 
-  UserSessionData: any;   UserRole: any;    user_Email: any;  supervisorName: any;  departmentName: any;  candidateName: any;
+  UserSessionData: any; UserRole: any; user_Email: any; supervisorName: any; departmentName: any; candidateName: any;
   constructor(
     public formBuilder: UntypedFormBuilder,
     private AuthSession: LoginSessionService,
@@ -28,12 +28,12 @@ export class CifMenuBarComponent implements OnInit {
       });
       this.router.navigate(['']);
     }
-   }
- 
-openSampleInstructions() {
-  swal.fire({
-    title: 'Send Samples at the following Address :',
-    html: `
+  }
+
+  openSampleInstructions() {
+    swal.fire({
+      title: 'Send Samples at the following Address :',
+      html: `
          <address>
           <div class="contact-text">
            Central Instrumentation Facility (CIF) <br/>
@@ -45,18 +45,18 @@ openSampleInstructions() {
           Email : cif@lpu.co.in<br>
           </div>
          </address>`,
-    icon: 'info'
-  });   
+      icon: 'info'
+    });
   }
   showBlink = true;
-  
- 
+
+
   ngOnInit(): void {
 
     const GetCookieData = this.cookieService.get('InternalUserAuthData');
     const retrievedCookies = JSON.parse(GetCookieData);
 
-    this.UserRole = retrievedCookies.UserRole ;//?.length > 0 ? retrievedCookies.userRole : 'Internal User';
+    this.UserRole = retrievedCookies.UserRole;//?.length > 0 ? retrievedCookies.userRole : 'Internal User';
     this.user_Email = retrievedCookies.EmailId;
     this.supervisorName = retrievedCookies.SupervisorName;
     this.departmentName = retrievedCookies.DepartmentName;
@@ -73,7 +73,7 @@ openSampleInstructions() {
   }
 
   CheckUser(): boolean {
-    return this.UserRole==400000 ? true : false;  
+    return this.UserRole == 400000 ? true : false;
   }
 
   goto(val: any) {
@@ -97,24 +97,24 @@ openSampleInstructions() {
   //     this.router.navigate(['/Login']);
   //   }, remainingDelay);
   //   // this.goto('Login'); // adjust to your login path
-   
+
   // }
 
-  LogoutUser () {
-    this.loadingIndicator = true;
-  
+  LogoutUser() {
+    // this.loadingIndicator = true;
+
     // Clear cookies and session immediately
     this.cookieService.delete('InternalUserAuthData');
     this.AuthSession.clearSession();
-  
+
     // Wait 1 second before navigating (adjust delay as needed)
     setTimeout(() => {
-      this.loadingIndicator = false;
-      this.router.navigate(['Home'], { replaceUrl: true }).then(() => {        
+      // this.loadingIndicator = false;
+      this.router.navigate(['Home'], { replaceUrl: true }).then(() => {
         window.location.reload();
-      });          
-       
+      });
+
     }, 1000);
   }
-  
+
 }

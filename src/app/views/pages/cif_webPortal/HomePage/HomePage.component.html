@@ -1,7 +1,7 @@
 <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
 
 
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
     <div class="custom-spinner-overlay" *ngIf="isLoading">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />
@@ -91,15 +91,22 @@
              *ngIf="areFacilityImagesLoaded && tmpsInstrumentsDataData.length > 1; else ErrorCard">
             <div class="col-md-3" *ngFor="let InstrumentData of tmpsInstrumentsDataData; let i = index"
                 [attr.data-index]="i">
-                <div class="mb-4">
+                 <div class="cif-img-frame" *ngIf="InstrumentData.instrumentId">
+                    <img [src]="'assets/images/Instrument-Images/' + InstrumentData.instrumentId + '.jpg'"
+                         [alt]="InstrumentData.instrumentName" 
+                         class="cif-fit-img img-fluid imgSize" 
+                         loading="eager" 
+                         fetchpriority="high" />
+                </div>
+                <!-- <div class="mb-4">
                 <img [src]="InstrumentData.cachedImageUrl || InstrumentData.imageUrl"
                     alt="{{InstrumentData.instrumentName}}"
                     class="img-fluid"
                     loading="eager"
                     (error)="onImageTagError($event, InstrumentData)" />
-                </div>
+                </div> -->
                 <div class="mb-5" id="InstrumentsPage">
-                      <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.id || InstrumentData.instrumentId, InstrumentData.categoryId); $event.preventDefault()"
+                      <a (click)="VisitUrl('/ourInstruments',InstrumentData.instrumentName.slice(0,10), InstrumentData.instrumentId || InstrumentData.instrumentId, InstrumentData.categoryId); $event.preventDefault()"
                         [attr.data-is-active]="InstrumentData.isActive ? 'true' : 'false'">
                         {{InstrumentData.instrumentName}}
                     </a>
@@ -154,7 +161,7 @@
 <!-- <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
 
 
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
     <div class="custom-spinner-overlay" *ngIf="isLoading">
         <div class="custom-spinner-content text-center">
             <img src="assets/images/spinner.gif" alt="Loading..." />

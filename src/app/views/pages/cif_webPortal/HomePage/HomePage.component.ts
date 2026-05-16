@@ -342,7 +342,7 @@ export class HomePageComponent implements OnInit {
         });
 
         this.serverError = true;
-        this.errorMessage = 'Data Server Connection error , Try again later';
+        this.errorMessage = 'Error';
         console.error(err);
       }
     });

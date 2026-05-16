@@ -287,7 +287,7 @@ export class HomePageComponent implements OnInit {
         // Check if response has error flag from service
         if (response && response.error) {
           this.serverError = true;
-          this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+          this.errorMessage = response.message || 'Error';
           this.loadingIndicator = false;
           this.GetAllEventDetails();
           return;
@@ -310,7 +310,7 @@ export class HomePageComponent implements OnInit {
       error: err => {
         this.loadingIndicator = false;
         this.serverError = true;
-        this.errorMessage = 'Data Server Connection error , Try again later';
+        this.errorMessage = 'Error';
         console.error(err);
       }
     });
@@ -423,7 +423,7 @@ export class HomePageComponent implements OnInit {
         // Check if response has error flag from service
         if (response && response.error) {
           this.serverError = true;
-          this.errorMessage = response.message || 'Data Server Connection error , Try again later';
+          this.errorMessage = response.message || 'Error';
           this.loadingIndicator = false;
           return;
         }
@@ -445,7 +445,7 @@ export class HomePageComponent implements OnInit {
       error: err => {
         this.loadingIndicator = false;
         this.serverError = true;
-        this.errorMessage = 'Data Server Connection error , Try again later';
+        this.errorMessage = 'Error';
         console.error(err);
         // Fallback to static events and chunk them
         this.events = this.Staticevents;

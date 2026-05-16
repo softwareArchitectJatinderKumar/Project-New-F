@@ -1,6 +1,6 @@
 <app-HomePageTopBar (facilitiesClicked)="gotoFacilities()"></app-HomePageTopBar>
 
-<div *ngIf="loadingIndicator" class="fullscreen-loader">
+<div *ngIf="loadingIndicator" class="fullscreen-loader d-none">
   <div class="custom-spinner-overlay" *ngIf="loadingIndicator">
     <div class="custom-spinner-content text-center">
       <img src="assets/images/spinner.gif" alt="Loading..." />
@@ -113,7 +113,7 @@
   <!-- <div class="alert alert-danger card mt-3" role="alert">
                 <div class="card-body text-center">
                     <h5 class="card-title">Server Connection Error</h5>
-                    <p class="card-text">Data Server Connection error , Try again later</p>
+                    <p class="card-text">Error</p>
                      
                 </div>
             </div> -->
